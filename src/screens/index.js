@@ -4,13 +4,17 @@ import Registration from "./Registration"
 import ForgetPassword from "./ForgetPassword"
 import Verification from "./Verification"
 import ResetPassword from "./ResetPassword"
-import Settings from "./Settings"
+
+import Settings from "./SettingProfile/Settings"
+import SettingProfile from "./SettingProfile/SettingProfile"
+
 import GroupChat from "./GroupChat/GroupChat"
+import MessengerGroup from "./MessengerGroup/MessengerGroup"
 
 import Friends from "./Friends/Friends"
-import AllNotification from "./AllNotification/AllNotification"
 import Messenger from "./Messenger/Messenger"
-import MessengerGroup from "./MessengerGroup/MessengerGroup"
+
+import AllNotification from "./AllNotification/AllNotification"
 
 export {
     Welcome,
@@ -20,6 +24,7 @@ export {
     Verification,
     ResetPassword,
     Settings,
+    SettingProfile,
     GroupChat,
     Friends,
     AllNotification,

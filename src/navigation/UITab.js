@@ -16,7 +16,7 @@
  * yarn add react-native-screens
  * 
  * >>For api
- * yarn add react-native-screens
+ * yarn add axios
  */
 
 import * as React from 'react';

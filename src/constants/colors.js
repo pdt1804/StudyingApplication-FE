@@ -2,10 +2,12 @@ export default {
     PrimaryBorder: '#B00000',
     PrimaryBackgroundButton: '#DF5151',
     PlaceHolder: 'rgba(0,0,0,0.4)',
+    placeholder: 'rgba(0,0,0,0.4)',
 
     mainBackground: '#D7FFFD',
-    myWhite: 'rgb(240, 250, 255)',
-    noImportantText: 'rgba(190, 200, 210, 0.85)',
+    myWhite: 'rgb(20, 250, 255)',
+    backgroundWhite: 'rgb(250, 250, 255)',
+    noImportantText: 'rgba(145, 160, 160, 0.75)',
 
     inactive: 'rgba(182, 205, 212, 0.75)',
     active: 'rgb(88, 155, 238)',
@@ -20,4 +22,6 @@ export default {
 
     CommonButton: 'orange',
     CommonButtonBorder: 'gray',
+
+    UIHeaderTextAndIcon: '#f6f6f6'
 }

@@ -13,52 +13,18 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
-import { isValidEmail, isValidPassword } from "../utilies/Validation";
-//import { user_login } from '../api/user_api';
-
-import axios from "axios";
 
 const Login = (props) => {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
-  //navigation
-  const { navigation, route } = props;
   //function of navigation to/back
-  const { navigate, goBack } = navigation;
+  const { navigate, goBack } = props.navigation;
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     navigate("UITab");
-    /* var newUser = {
-      userName : username,
-      passWord : password
-    }
-
-    try {
-      if (true)
-      {
-
-        const response = await axios.post('http://localhost:8080/api/v1/user/Authenticate', newUser);
-
-        if (response.status == 200)
-        {
-          //successful
-          console.log(response.data);
-          alert('dis con me may')
-        }
-        else
-        {
-          //unsuccessful
-          console.log(response.data);
-          alert(`${response.data}`)
-        }
-      }
-    }
-    catch {
-
-    } */
   };
 
   useEffect(() => {
