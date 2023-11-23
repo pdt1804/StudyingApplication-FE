@@ -14,10 +14,17 @@ import { UIHeader } from "../../components";
 import { CommonButton } from "../../components";
 
 function Settings(props) {
-  const [text, setText] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [newEmail, setNewEmail] = useState("");
 
   //function of navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  const handleSettings = async () => {
+    //đẩy mấy cái new xuống database tại đây
+    navigate("Settings");
+  };
 
   return (
     <SafeAreaView style={styles.fullView}>
@@ -35,8 +42,8 @@ function Settings(props) {
         <View /* username */ style={styles.textInputView}>
           <Image source={images.personIcon} style={styles.textInputImage} />
           <TextInput
-            onChangeText={setText}
-            value={text}
+            onChangeText={setNewUsername}
+            value={newUsername}
             placeholder="Your new Username"
             placeholderTextColor={colors.placeholder}
           />
@@ -45,8 +52,8 @@ function Settings(props) {
         <View /* phone number */ style={styles.textInputView}>
           <Image source={images.phoneIcon} style={styles.textInputImage} />
           <TextInput
-            onChangeText={setText}
-            value={text}
+            onChangeText={setNewPhoneNumber}
+            value={newPhoneNumber}
             placeholder="Your new Phone number"
             placeholderTextColor={colors.placeholder}
           />
@@ -55,15 +62,23 @@ function Settings(props) {
         <View /* email */ style={styles.textInputView}>
           <Image source={images.emailIcon} style={styles.textInputImage} />
           <TextInput
-            onChangeText={setText}
-            value={text}
+            onChangeText={setNewEmail}
+            value={newEmail}
             placeholder="Your new Email"
             placeholderTextColor={colors.placeholder}
           />
         </View>
 
-        <CommonButton onPress={()=>{alert('haha')}} title={"Thay mới".toUpperCase()} />
-        <CommonButton onPress={()=>{alert('dismemay')}} title={"Hủy".toUpperCase()} />
+        <CommonButton
+          onPress={handleSettings}
+          title={"Thay mới".toUpperCase()}
+        />
+        <CommonButton
+          onPress={() => {
+            navigate("Settings");
+          }}
+          title={"Hủy".toUpperCase()}
+        />
       </ScrollView>
     </SafeAreaView>
   );
