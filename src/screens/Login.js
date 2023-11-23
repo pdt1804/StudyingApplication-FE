@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -9,26 +9,28 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-} from 'react-native';
-import {images, colors, fontSizes} from '../constants/index';
-import {isValidEmail, isValidPassword} from '../utilies/Validation';
+  StyleSheet,
+} from "react-native";
+import { images, colors, fontSizes } from "../constants/index";
+import { CommonButton } from "../components";
+import { isValidEmail, isValidPassword } from "../utilies/Validation";
 //import { user_login } from '../api/user_api';
 
-import axios from 'axios';
+import axios from "axios";
 
-const Login = props => {
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);  
+const Login = (props) => {
+  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
 
   //navigation
-  const {navigation, route} = props;
+  const { navigation, route } = props;
   //function of navigation to/back
-  const {navigate, goBack} = navigation;
+  const { navigate, goBack } = navigation;
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    navigate('UITab')
+    navigate("UITab");
     /* var newUser = {
       userName : username,
       passWord : password
@@ -57,88 +59,34 @@ const Login = props => {
     catch {
 
     } */
-  }
+  };
 
   useEffect(() => {
-    //componentDidMount
-    Keyboard.addListener('keyboardDidShow', () => {
+    Keyboard.addListener("keyboardDidShow", () => {
       setKeyboardIsShown(true);
     });
-    Keyboard.addListener('keyboardDidHide', () => {
+    Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardIsShown(false);
     });
   });
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{
-        backgroundColor: '#D7FFFD',
-        flex: 100,
-      }}>
-      <View
-        style={{
-          flex: 15,
-          backgroundColor: null,
-        }}></View>
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.fullView}
+    >
+      <View style={styles.partitionTop} />
 
-      <View
-        style={{
-          flex: 60,
-          flexDirection: null,
-          width: '100%',
-          backgroundColor: null,
-        }}>
-        <View
-          style={{
-            flex: 20,
-            flexDirection: null,
-            width: '95%',
-            backgroundColor: null,
-            alignSelf: 'center',
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: fontSizes.h1,
-              fontWeight: 'bold',
-            }}>
-            Welcome!!
-          </Text>
+      <View style={styles.partitionMiddle}>
+        <View style={styles.welcomeView}>
+          <Text style={styles.welcomeText}>Welcome!!</Text>
         </View>
 
-        <View
-          style={{
-            flex: 80,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 2,
-            borderRadius: 50,
-            backgroundColor: 'rgba(250,250,250,0.8)',
-            alignSelf: 'center',
-          }}>
-          <View /* username */
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              marginVertical: 40,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: null,
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.personIcon}
-              style={{
-                width: 25,
-                height: 25,
-                marginRight: 10,
-                marginLeft: 10,
-              }}
-            />
+        <View style={styles.mainView}>
+          <View /* username */ style={styles.textInputView}>
+            <Image source={images.personIcon} style={styles.textInputImage} />
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setUsername(text);
               }}
               placeholder="Username"
@@ -146,27 +94,10 @@ const Login = props => {
             />
           </View>
 
-          <View /* password */
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: null,
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.keyIcon}
-              style={{
-                width: 25,
-                height: 25,
-                marginRight: 10,
-                marginLeft: 10,
-              }}
-            />
+          <View /* password */ style={styles.textInputView}>
+            <Image source={images.keyIcon} style={styles.textInputImage} />
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setPassword(text);
               }}
               placeholder="Password"
@@ -177,71 +108,26 @@ const Login = props => {
           {keyboardIsShown == false && (
             <TouchableOpacity /* forget password */
               onPress={() => {
-                navigate('ForgetPassword');
+                navigate("ForgetPassword");
               }}
-              style={{
-                marginHorizontal: 5,
-                marginBottom: 25,
-                backgroundColor: null,
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <Text
-                style={{
-                  padding: 1,
-                  fontSize: fontSizes.h6,
-                  fontWeight: 'bold',
-                  color: 'blue',
-                }}>
-                Forget Password?
-              </Text>
+              style={styles.forgetPassword}
+            >
+              <Text style={styles.forgetPasswordText}>Forget Password?</Text>
             </TouchableOpacity>
           )}
 
           {keyboardIsShown == false && (
-            <TouchableOpacity
-            onPress={handleLogin}
-              style={{
-                marginHorizontal: 55,
-                marginTop: 20,
-                marginBottom: 5,
-                borderColor: 'gray',
-                borderWidth: 2,
-                borderRadius: 30,
-                backgroundColor: 'orange',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  padding: 11,
-                  fontSize: fontSizes.h3,
-                  fontWeight: 'bold',
-                }}>
-                {'Login'.toUpperCase()}
-              </Text>
-            </TouchableOpacity>
+            <CommonButton onPress={handleLogin} title={"Login".toUpperCase()} />
           )}
 
           {keyboardIsShown == false && (
             <TouchableOpacity
               onPress={() => {
-                navigate('Registration');
+                navigate("Registration");
               }}
-              style={{
-                marginHorizontal: 55,
-                marginBottom: 5,
-                backgroundColor: null,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  padding: 11,
-                  fontSize: fontSizes.h6,
-                  fontWeight: 'bold',
-                  color: 'orange',
-                }}>
+              style={styles.registerNavigate}
+            >
+              <Text style={styles.registerNavigateText}>
                 Don't have a Account? Register
               </Text>
             </TouchableOpacity>
@@ -249,13 +135,84 @@ const Login = props => {
         </View>
       </View>
 
-      <View
-        style={{
-          flex: 15,
-          backgroundColor: null,
-        }}></View>
+      <View style={styles.partitionBottom}></View>
     </KeyboardAvoidingView>
   );
 };
-
 export default Login;
+
+const styles = StyleSheet.create({
+  fullView: {
+    backgroundColor: "#D7FFFD",
+    flex: 1,
+  },
+  partitionTop: {
+    flex: 15,
+  },
+  partitionMiddle: {
+    flex: 60,
+    width: "100%",
+  },
+  partitionBottom: {
+    flex: 15,
+    backgroundColor: null,
+  },
+  welcomeView: {
+    flex: 20,
+    width: "95%",
+    alignSelf: "center",
+  },
+  welcomeText: {
+    color: "black",
+    fontSize: fontSizes.h1,
+    fontWeight: "bold",
+  },
+  mainView: {
+    flex: 80,
+    width: "90%",
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 50,
+    backgroundColor: "rgba(250,250,250,0.8)",
+    alignSelf: "center",
+  },
+  textInputView: {
+    flexDirection: "row",
+    marginHorizontal: 15,
+    marginTop: 40,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  textInputImage: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  forgetPassword: {
+    marginHorizontal: 5,
+    marginBottom: 25,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  forgetPasswordText: {
+    padding: 1,
+    fontSize: fontSizes.h6,
+    fontWeight: "bold",
+    color: "blue",
+  },
+  registerNavigate: {
+    marginHorizontal: 55,
+    marginBottom: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  registerNavigateText: {
+    padding: 11,
+    fontSize: fontSizes.h6,
+    fontWeight: "bold",
+    color: "orange",
+  },
+});

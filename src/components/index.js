@@ -1,6 +1,6 @@
-import UIButton from "./UIButton"
+import CommonButton from "./CommonButton"
 import UIHeader from "./UIHeader"
 export {
-    UIButton,
+    CommonButton,
     UIHeader,
 }

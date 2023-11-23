@@ -17,4 +17,7 @@ export default {
     Offline: 'red',
 
     message: 'rgba(175, 225, 250, 0.9)',
+
+    CommonButton: 'orange',
+    CommonButtonBorder: 'gray',
 }
