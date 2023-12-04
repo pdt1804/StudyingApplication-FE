@@ -76,7 +76,7 @@ const tabBarLabelStyles = {
 
 function UITab(props) {
   return (
-    <Tab.Navigator initialRouteName="GroupChat" screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName="Friends" screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Settings"
         component={Settings}

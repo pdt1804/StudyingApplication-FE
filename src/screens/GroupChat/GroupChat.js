@@ -107,17 +107,19 @@ function GroupChat(props) {
     <View style={styles.container}>
       <UIHeader title={"Nhóm học tập"} />
 
-      <View /* Search bar */ style={styles.searchBarView}>
-        <TextInput
-          autoCorrect={false}
-          inputMode="search"
-          onChangeText={(text) => {
-            setSearchText(text);
-          }}
-          style={styles.searchBarTypingArea}
-        />
-        <Image source={images.searchIcon} style={styles.searchBarImage} />
-      </View>
+<View /* Search bar */ style={styles.searchBarView}>
+  <TextInput
+    style={styles.searchBarTypingArea}
+    autoCorrect={false}
+    inputMode="search"
+    onChangeText={(text) => {
+      setSearchText(text);
+    }}
+    placeholder="Tìm kiếm..."
+    placeholderTextColor={colors.inactive}
+  />
+  <Image source={images.searchIcon} style={styles.searchBarImage} />
+</View>
 
       <View style={styles.blackLine} />
 
@@ -147,24 +149,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   searchBarView: {
-    height: "10%",
-    marginHorizontal: 15,
+    height: "7%",
+    paddingHorizontal: 7,
     flexDirection: "row",
     paddingTop: 10,
+    backgroundColor: colors.transparentWhite,
   },
   searchBarTypingArea: {
-    backgroundColor: colors.inactive,
-    height: "75%",
+    height: "95%",
     flex: 1,
-    borderRadius: 90,
     paddingStart: 45,
   },
   searchBarImage: {
-    width: "8%",
-    height: "40%",
+    width: 20,
+    height: 20,
     position: "absolute",
-    top: "30%",
-    left: 8,
+    top: "45%",
+    left: "6%",
+    tintColor: colors.inactive,
   },
-  blackLine: { backgroundColor: "black", height: 1 },
+  blackLine: {
+    backgroundColor: colors.inactive,
+    height: 1,
+    width: "95%",
+    alignSelf: "center",
+  },
 });

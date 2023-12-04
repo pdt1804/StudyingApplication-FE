@@ -20,6 +20,7 @@ function CommonButton(props) {
           padding: 11,
           fontSize: fontSizeTitle,
           fontWeight: "bold",
+          color: colors.CommonButtonText,
         }}
       >
         {title}

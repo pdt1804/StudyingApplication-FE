@@ -4,9 +4,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../constants';
 
@@ -17,50 +15,53 @@ function _getColorFromStatus(status) {
 }
 
 function FriendItems(props) {
-  let {name, imageUrl, status} = props.group;
+  let {name, imageUrl, status} = props.friend;
   const {onPress} = props;
   
-  let fontSizeName = fontSizes.h3;
-  if (name.length > 22) {
-    fontSizeName = fontSizes.h4;
+  let fontSizeName = fontSizes.h5;
+  if (name.length > 10) {
+    fontSizeName = fontSizes.h6;
   }
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{
-        height: 100,
-        paddingTop: 20,
-        paddingStart: 10,
-        flexDirection: 'row',
-      }}>
+      style={styles.container}>
       <Image
-        style={{
-          width: 55,
-          height: 55,
-          resizeMode: 'cover',
-          borderRadius: 90,
-          marginRight: 15,
-        }}
+        style={styles.avatarImage}
         source={{
           uri: imageUrl,
         }}
       />
-      <View
-        style={{
-          flex: 1,
-          marginRight: 10,
-        }}>
         <Text
           style={{
             color: 'black',
             fontSize: fontSizeName,
-            fontWeight: 'bold',
           }}>
           {name}
         </Text>
-      </View>
     </TouchableOpacity>
   );
 }
 export default FriendItems;
+
+
+const styles = StyleSheet.create({
+  container: {
+    width: '33%',
+    height: 150,
+    paddingStart: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarImage: {
+    width: 75,
+    height: 75,
+    resizeMode: 'cover',
+    borderRadius: 90,
+    borderColor: colors.inactive,
+    borderWidth:2,
+    marginRight: 15,
+  },
+});

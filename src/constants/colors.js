@@ -1,8 +1,6 @@
 export default {
     PrimaryBorder: '#B00000',
     PrimaryBackgroundButton: '#DF5151',
-    PlaceHolder: 'rgba(0,0,0,0.4)',
-    placeholder: 'rgba(0,0,0,0.4)',
 
     mainBackground: '#D7FFFD',
     myWhite: 'rgb(20, 250, 255)',
@@ -20,8 +18,14 @@ export default {
 
     message: 'rgba(175, 225, 250, 0.9)',
 
-    CommonButton: 'orange',
+    CommonButton: 'blue',
+    CommonButtonText: 'white',
     CommonButtonBorder: 'gray',
 
-    UIHeaderTextAndIcon: '#f6f6f6'
+    UIHeaderTextAndIcon: '#f6f6f6',
+
+    transparentWhite: "rgba(250,250,250,0.8)",
+    blueIcon: 'blue',
+
+    placeholderTextColor: 'rgba(0, 0, 255, 0.85)'
 }

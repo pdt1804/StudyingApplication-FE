@@ -15,13 +15,13 @@ const Login = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
- //Login component and function, use for api
+  //Login component and function, use for api
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
     navigate("UITab");
   };
-  
+
   //turn off unimportant things when typing
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
   useEffect(() => {
@@ -39,61 +39,68 @@ const Login = (props) => {
 
       <View style={styles.partitionMiddle}>
         <View style={styles.welcomeView}>
-          <Text style={styles.welcomeText}>Welcome!!</Text>
+          <Image source={images.uitLogo} style={styles.imageUIT} />
         </View>
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
             <Image source={images.personIcon} style={styles.textInputImage} />
-            <TextInput
-              style={styles.textInputTypingArea}
-              inputMode="text"
-              onChangeText={(text) => {
-                setUsername(text);
-              }}
-              placeholder="Username"
-              placeholderTextColor={colors.placeholder}
-            />
+            <View>
+              <TextInput
+                style={styles.textInputTypingArea}
+                inputMode="text"
+                onChangeText={(text) => {
+                  setUsername(text);
+                }}
+                placeholder="Username"
+                placeholderTextColor={colors.placeholderTextColor}
+              />
+              <View style={styles.blackLine} />
+            </View>
           </View>
 
           <View /* password */ style={styles.textInputView}>
             <Image source={images.keyIcon} style={styles.textInputImage} />
-            <TextInput
-              style={styles.textInputTypingArea}
-              secureTextEntry={true} // * the password
-              inputMode="text"
-              onChangeText={(text) => {
-                setPassword(text);
-              }}
-              placeholder="Password"
-              placeholderTextColor={colors.placeholder}
-            />
+            <View>
+              <TextInput
+                style={styles.textInputTypingArea}
+                secureTextEntry={true} // * the password
+                inputMode="text"
+                onChangeText={(text) => {
+                  setPassword(text);
+                }}
+                placeholder="Password"
+                placeholderTextColor={colors.placeholderTextColor}
+              />
+              <View style={styles.blackLine} />
+            </View>
           </View>
 
           <View style={styles.navigateTextView}>
-            <TouchableOpacity
-              onPress={() => {
-                navigate("Registration");
-              }}
-              style={styles.register}
-            >
-              <Text style={styles.navigateTextText}>Register</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 navigate("ForgetPassword");
               }}
               style={styles.forgetPassword}
             >
-              <Text style={styles.navigateTextText}>Forget Password?</Text>
+              <Text style={styles.navigateTextText}>Quên mật khẩu?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigate("Registration");
+              }}
+              style={styles.register}
+            >
+              <Text style={styles.navigateTextText}>Đăng ký</Text>
             </TouchableOpacity>
           </View>
 
-          <CommonButton onPress={handleLogin} title={"Login".toUpperCase()} />
+          <CommonButton
+            onPress={handleLogin}
+            title={"Đăng nhập".toUpperCase()}
+          />
         </View>
       </View>
-
-      {keyboardIsShown == false && <View style={styles.partitionBottom} />}
     </View>
   );
 };
@@ -105,57 +112,64 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   partitionTop: {
-    flex: 3,
+    flex: 1,
   },
   partitionMiddle: {
-    flex: 8,
+    flex: 9,
     width: "100%",
   },
-  partitionBottom: {
-    flex: 4,
-  },
+  /*   partitionBottom: {
+    flex: 2,
+  }, */
   welcomeView: {
-    flex: 1,
-    width: "95%",
+    flex: 3,
+    flexDirection: "column",
+    width: "100%",
+    alignItems: "center",
     alignSelf: "center",
   },
-  welcomeText: {
-    color: "black",
-    fontSize: fontSizes.h1,
-    fontWeight: "bold",
+  imageUIT: {
+    width: 200,
+    height: 200,
   },
   mainView: {
-    flex: 4,
-    width: "90%",
-    borderColor: "gray",
+    flex: 7,
+    width: "99%",
+    paddingTop: 40,
+    borderColor: colors.transparentWhite,
     borderWidth: 2,
-    borderRadius: 50,
-    backgroundColor: "rgba(250,250,250,0.8)",
+    borderTopEndRadius: 50,
+    borderTopStartRadius: 50,
+    backgroundColor: colors.transparentWhite,
     alignSelf: "center",
   },
   textInputView: {
     flexDirection: "row",
-    marginHorizontal: 15,
-    marginTop: 40,
-    borderColor: "gray",
-    borderWidth: 2,
-    borderRadius: 20,
+    marginLeft: 20,
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 40,
     alignItems: "center",
   },
   textInputImage: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     marginRight: 10,
     marginLeft: 10,
+    tintColor: colors.blueIcon,
   },
   textInputTypingArea: {
-    width: 250,
-    height: 35,
+    width: 300,
+    height: 55,
+  },
+  blackLine: {
+    height: 1,
+    backgroundColor: "black",
   },
   navigateTextView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    paddingEnd: 10,
   },
   navigateTextText: {
     padding: 1,
@@ -165,14 +179,14 @@ const styles = StyleSheet.create({
   },
   forgetPassword: {
     marginHorizontal: 5,
-    marginBottom: 25,
+    marginBottom: 15,
     justifyContent: "center",
     alignItems: "flex-end",
   },
   register: {
-    marginHorizontal: 25,
-    marginBottom: 25,
+    marginHorizontal: 5,
+    marginBottom: 15,
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
   },
 });

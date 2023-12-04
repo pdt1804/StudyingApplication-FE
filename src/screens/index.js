@@ -1,4 +1,3 @@
-import Welcome from "./Welcome"
 import Login from "./Login"
 import Registration from "./Registration"
 import ForgetPassword from "./ForgetPassword"
@@ -17,7 +16,6 @@ import Messenger from "./Messenger/Messenger"
 import AllNotification from "./AllNotification/AllNotification"
 
 export {
-    Welcome,
     Login,
     Registration,
     ForgetPassword,

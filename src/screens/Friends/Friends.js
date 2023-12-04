@@ -41,6 +41,56 @@ function Friends(props) {
       name: "My dog",
       imageUrl: "https://i.pravatar.cc/1004",
     },
+    {
+      ID: "06",
+      name: "Tom",
+      imageUrl: "https://i.pravatar.cc/1005",
+    },
+    {
+      ID: "07",
+      name: "Jerry",
+      imageUrl: "https://i.pravatar.cc/1006",
+    },
+    {
+      ID: "08",
+      name: "Edison",
+      imageUrl: "https://i.pravatar.cc/1007",
+    },
+    {
+      ID: "09",
+      name: "Anh So Tanh",
+      imageUrl: "https://i.pravatar.cc/1008",
+    },
+    {
+      ID: "10",
+      name: "My dog",
+      imageUrl: "https://i.pravatar.cc/1009",
+    },
+    {
+      ID: "11",
+      name: "Tom",
+      imageUrl: "https://i.pravatar.cc/1010",
+    },
+    {
+      ID: "12",
+      name: "Jerry",
+      imageUrl: "https://i.pravatar.cc/1011",
+    },
+    {
+      ID: "13",
+      name: "Edison",
+      imageUrl: "https://i.pravatar.cc/1012",
+    },
+    {
+      ID: "14",
+      name: "Anh So Tanh",
+      imageUrl: "https://i.pravatar.cc/1013",
+    },
+    {
+      ID: "15",
+      name: "My dog",
+      imageUrl: "https://i.pravatar.cc/1014",
+    },
   ]);
 
   //use for search bar (textInput)
@@ -55,33 +105,35 @@ function Friends(props) {
 
       <View /* Search bar */ style={styles.searchBarView}>
         <TextInput
+          style={styles.searchBarTypingArea}
           autoCorrect={false}
           inputMode="search"
           onChangeText={(text) => {
             setSearchText(text);
           }}
-          style={styles.searchBarTypingArea}
+          placeholder="Tìm kiếm..."
+          placeholderTextColor={colors.inactive}
         />
         <Image source={images.searchIcon} style={styles.searchBarImage} />
       </View>
 
       <View style={styles.blackLine} />
 
-      <ScrollView>
-        {groups
-          .filter((eachGroup) =>
-            eachGroup.name.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((eachGroup) => (
-            <FriendItems
-              group={eachGroup}
-              key={eachGroup.ID}
-              onPress={() => {
-                navigate("Messenger", { user: eachGroup });
-              }}
-            />
-          ))}
-      </ScrollView>
+      <FlatList
+        data={groups.filter((item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        )}
+        numColumns={3}
+        renderItem={({ item, index }) => (
+          <FriendItems
+            friend={item}
+            key={item.ID}
+            onPress={() => {
+              navigate("Messenger", { user: item });
+            }}
+          />
+        )}
+      />
     </View>
   );
 }
@@ -93,24 +145,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   searchBarView: {
-    height: "10%",
-    marginHorizontal: 15,
+    height: "7%",
+    paddingHorizontal: 7,
     flexDirection: "row",
     paddingTop: 10,
+    backgroundColor: colors.transparentWhite,
   },
   searchBarTypingArea: {
-    backgroundColor: colors.inactive,
-    height: "75%",
+    height: "95%",
     flex: 1,
-    borderRadius: 90,
     paddingStart: 45,
   },
   searchBarImage: {
-    width: "8%",
-    height: "40%",
+    width: 20,
+    height: 20,
     position: "absolute",
-    top: "30%",
-    left: 8,
+    top: "45%",
+    left: "6%",
+    tintColor: colors.inactive,
   },
-  blackLine: { backgroundColor: "black", height: 1 },
+  blackLine: {
+    backgroundColor: colors.inactive,
+    height: 1,
+    width: "95%",
+    alignSelf: "center",
+  },
 });

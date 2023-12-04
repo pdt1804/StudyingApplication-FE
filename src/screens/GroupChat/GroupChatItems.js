@@ -4,9 +4,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../constants';
 
@@ -90,7 +87,7 @@ function GroupChatItems(props) {
             color: colors.inactive,
             fontSize: fontSizes.h6,
           }}>
-          {/**newestMessage*/ 'Hello, Àm Fai Thank You, Àn you?'}
+          {/**newestMessage*/ 'Slogan của nhóm...'}
         </Text>
       </View>
 
