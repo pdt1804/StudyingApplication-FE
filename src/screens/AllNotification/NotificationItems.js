@@ -7,46 +7,56 @@ import {
   TextInput,
   FlatList,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../constants';
 
 function NotificationItems(props) {
-  let {name, imageUrl, status} = props.group;
+  let {title, type} = props.group;
   const {onPress} = props;
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{
-        height: 100,
-        paddingTop: 20,
-        paddingStart: 10,
-        flexDirection: 'row',
-      }}>
+      style={styles.container}>
       <Image
-        style={{
-          width: 55,
-          height: 55,
-          resizeMode: 'cover',
-          borderRadius: 90,
-          marginRight: 15,
-        }}
-        source={images.atSignIcon}
+        style={styles.img}
+        source={type == 'hệ thống' ?
+          images.globeIcon : images.personIcon}
       />
       <View
-        style={{
-          flex: 1,
-          marginRight: 10,
-        }}>
+        style={styles.textView}>
         <Text
-          style={{
-            color: 'black',
-            fontSize: fontSizes.h2,
-            fontWeight: 'bold',
-          }}>
-          {name}
+          style={styles.text}>
+          {title}
         </Text>
       </View>
     </TouchableOpacity>
   );
 }
 export default NotificationItems;
+
+
+const styles = StyleSheet.create({
+  container: {
+    height: 50,
+    paddingTop: 20,
+    paddingStart: 10,
+    flexDirection: 'row',
+  },
+  img: {
+    width: 30,
+    height: 30,
+    resizeMode: 'cover',
+    borderRadius: 90,
+    marginRight: 15,
+  },
+  textView: {
+    flex: 1,
+    marginRight: 10,
+  },
+  text: {
+    color: 'black',
+    fontSize: fontSizes.h5,
+    fontWeight: 'bold',
+  },
+})

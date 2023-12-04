@@ -58,13 +58,9 @@ function Settings(props) {
   const { navigate, goBack, push } = props.navigation;
 
   return (
-    <SafeAreaView style={styles.fullView}>
+    <SafeAreaView style={styles.container}>
       <UIHeader
         title={"Tài khoản"}
-        leftIconName={null}
-        rightIconName={null}
-        onPressLeftIcon={() => {}}
-        onPressRightIcon={() => {}}
       />
 
       <ScrollView>
@@ -109,7 +105,7 @@ function Settings(props) {
 export default Settings;
 
 const styles = StyleSheet.create({
-  fullView: {
+  container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },

@@ -1,181 +1,122 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   Text,
   View,
   Image,
-  Alert,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import {images, colors, fontSizes} from '../constants/index';
-import {UIButton} from '../components/index';
-import {isValidEmail, isValidPassword} from '../utilies/Validation';
+  StyleSheet,
+} from "react-native";
+import { images, colors, fontSizes } from "../constants/index";
+import { CommonButton } from "../components";
 
-const ResetPassword = props => {
-  //states for validating
-  const [errorEmail, setErrorEmail] = useState('');
-  const [errorPassword, setErrorPassword] = useState('');
-  //states to store email/password
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const ResetPassword = (props) => {
+  //navigation to/back
+  const { navigate, goBack } = props.navigation;
 
-  //navigation
-  const {navigation, route} = props;
-  //function of navigation to/back
-  const {navigate, goBack} = navigation;
+  //use for api
+  const handleResetPassword = async () => {
+    navigate("Login");
+  };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{
-        backgroundColor: '#D7FFFD',
-        flex: 100,
-      }}>
-      <View
-        style={{
-          flex: 15,
-          backgroundColor: null,
-        }}></View>
+    <View style={styles.container}>
+      <View style={styles.partitionTop} />
 
-      <View
-        style={{
-          flex: 60,
-          flexDirection: null,
-          width: '100%',
-          backgroundColor: null,
-        }}>
-        <View
-          style={{
-            flex: 20,
-            flexDirection: null,
-            width: '95%',
-            backgroundColor: null,
-            alignSelf: 'center',
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: fontSizes.h1,
-              fontWeight: 'bold',
-            }}>
-            ResetPassword!!
-          </Text>
+      <View style={styles.partitionMiddle}>
+        <View style={styles.verificationView}>
+          <Text style={styles.verificationText}>ResetPassword!!</Text>
         </View>
 
-        <View
-          style={{
-            flex: 80,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 2,
-            borderRadius: 50,
-            backgroundColor: 'rgba(250,250,250,0.8)',
-            alignSelf: 'center',
-          }}>
-          <View /* username */
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              marginVertical: 40,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: null,
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.keyIcon}
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+        <View style={styles.mainView}>
+          <View /* new password */ style={styles.textInputView}>
+            <Image source={images.keyIcon} style={styles.textInputImage} />
             <TextInput
-              onChangeText={text => {
-                /*
-                if (isValidEmail(text) == false) {
-                  setErrorEmail('Email not in correct format');
-                } else setErrorEmail('');
-              */
-                setErrorEmail(
-                  isValidEmail(text) == true
-                    ? ''
-                    : 'Email not in correct format',
-                );
-                setEmail(text);
-              }}
-              placeholder="Password"
+              style={styles.textInputTypingArea}
+              secureTextEntry={true} // * the password
+              inputMode="text"
+              placeholder="Your new Password"
               placeholderTextColor={colors.placeholder}
             />
           </View>
 
-          <View /* password */
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: null,
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.keyIcon}
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+          <View /* re-enter password */ style={styles.textInputView}>
+            <Image source={images.keyIcon} style={styles.textInputImage} />
             <TextInput
-              onChangeText={text => {
-                setErrorPassword(
-                  isValidPassword(text) == true
-                    ? ''
-                    : 'Password must be at least 3 characters',
-                );
-                setPassword(text);
-              }}
+              style={styles.textInputTypingArea}
+              secureTextEntry={true} // * the password
+              inputMode="text"
               placeholder="Re-enter Password"
               placeholderTextColor={colors.placeholder}
             />
           </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              navigate('Login');
-            }}
-            style={{
-              marginHorizontal: 55,
-              marginTop: 20,
-              marginBottom: 5,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 30,
-              backgroundColor: 'orange',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                padding: 11,
-                fontSize: fontSizes.h4,
-                fontWeight: 'bold',
-              }}>
-              {'ResetPassword'.toUpperCase()}
-            </Text>
-          </TouchableOpacity>
+          <CommonButton
+            onPress={handleResetPassword}
+            title={"ResetPassword".toUpperCase()}
+          />
         </View>
       </View>
 
-      <View
-        style={{
-          flex: 15,
-          backgroundColor: null,
-        }}></View>
-    </KeyboardAvoidingView>
+      <View style={styles.partitionBottom} />
+    </View>
   );
 };
 
 export default ResetPassword;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.mainBackground,
+    flex: 1,
+  },
+  partitionTop: {
+    flex: 3,
+  },
+  partitionMiddle: {
+    flex: 4,
+    width: "100%",
+  },
+  partitionBottom: {
+    flex: 3,
+  },
+  verificationView: {
+    flex: 1,
+    width: "90%",
+    alignSelf: "center",
+  },
+  verificationText: {
+    color: "black",
+    fontSize: fontSizes.h1,
+    fontWeight: "bold",
+  },
+  mainView: {
+    flex: 4,
+    width: "90%",
+    paddingTop: 30,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 50,
+    backgroundColor: "rgba(250,250,250,0.8)",
+    alignSelf: "center",
+  },
+  textInputView: {
+    flexDirection: "row",
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  textInputImage: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  textInputTypingArea: {
+    width: 250,
+    height: 35,
+  },
+});

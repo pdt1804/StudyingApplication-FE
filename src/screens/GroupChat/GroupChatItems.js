@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../constants';
 
-function _getColorFromStatus(status) {
+/* function _getColorFromStatus(status) {
   if (status.toLowerCase().trim() == 'online') {
     return colors.Online;
   } else return colors.Offline;
@@ -20,7 +20,7 @@ function _getIconFromStatus(status) {
   if (status.toLowerCase().trim() == 'online') {
     return images.checkMarkIcon;
   } else return images.cancelIcon;
-}
+} */
 
 function GroupChatItems(props) {
   let {name, imageUrl, newestMessage, status} = props.group;

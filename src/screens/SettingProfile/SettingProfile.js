@@ -27,7 +27,7 @@ function Settings(props) {
   };
 
   return (
-    <SafeAreaView style={styles.fullView}>
+    <SafeAreaView style={styles.container}>
       <UIHeader
         title={"Tùy chỉnh"}
         leftIconName={images.backIcon}
@@ -86,7 +86,7 @@ function Settings(props) {
 export default Settings;
 
 const styles = StyleSheet.create({
-  fullView: {
+  container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },

@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
@@ -20,7 +20,7 @@ function App(props) {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="SettingProfile"
+        initialRouteName="Registration"
         screenOptions={{
           headerShown: false,
         }}>

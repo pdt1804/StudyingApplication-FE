@@ -1,126 +1,109 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   Text,
   View,
   Image,
-  Alert,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import {images, colors, fontSizes} from '../constants/index';
+  StyleSheet,
+} from "react-native";
+import { images, colors, fontSizes } from "../constants/index";
+import { CommonButton } from "../components";
 
-const ForgetPassword = props => {
-  //navigation
-  const {navigation, route} = props;
-  //function of navigation to/back
-  const {navigate, goBack} = navigation;
+const ForgetPassword = (props) => {
+  //navigation to/back
+  const { navigate, goBack } = props.navigation;
 
+  //use for api
+  const handleForgetPassword = async () => {
+    navigate("Verification");
+  };
+  
   return (
-    <KeyboardAvoidingView
-      style={{
-        backgroundColor: '#D7FFFD',
-        flex: 100,
-      }}>
-      <View
-        style={{
-          flex: 30,
-          backgroundColor: null,
-        }}></View>
+    <View style={styles.container}>
+      <View style={styles.partitionTop} />
 
-      <View
-        style={{
-          flex: 50,
-          width: '100%',
-          backgroundColor: null,
-        }}>
-        <View
-          style={{
-            flex: 8,
-            flexDirection: null,
-            width: '90%',
-            backgroundColor: null,
-            alignSelf: 'center',
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: fontSizes.h1,
-              fontWeight: 'bold',
-            }}>
-            ForgetPassword
-          </Text>
+      <View style={styles.partitionMiddle}>
+        <View style={styles.forgetPasswordView}>
+          <Text style={styles.forgetPasswordText}>ForgetPassword</Text>
         </View>
 
-        <View
-          style={{
-            flex: 10,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 2,
-            borderRadius: 50,
-            backgroundColor: 'rgba(250,250,250,0.8)',
-            alignSelf: 'center',
-          }}>
-          <View /* username */
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              marginTop: 30,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: null,
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.personIcon}
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+        <View style={styles.mainView}>
+          <View /* username */ style={styles.textInputView}>
+            <Image source={images.personIcon} style={styles.textInputImage} />
             <TextInput
+              style={styles.textInputTypingArea}
+              inputMode="text"
               placeholder="Username"
               placeholderTextColor={colors.placeholder}
             />
           </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              navigate('Verification');
-            }}
-            style={{
-              marginHorizontal: 55,
-              marginTop: 20,
-              marginBottom: 5,
-              borderColor: 'gray',
-              borderWidth: 2,
-              borderRadius: 30,
-              backgroundColor: 'orange',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                padding: 11,
-                fontSize: fontSizes.h4,
-                fontWeight: 'bold',
-              }}>
-              {'continue'.toUpperCase()}
-            </Text>
-          </TouchableOpacity>
+          <CommonButton
+            onPress={handleForgetPassword}
+            title={"continue".toUpperCase()}
+          />
         </View>
       </View>
 
-      <View
-        style={{
-          flex: 20,
-          backgroundColor: null,
-        }}></View>
-    </KeyboardAvoidingView>
+      <View style={styles.partitionBottom} />
+    </View>
   );
 };
-
 export default ForgetPassword;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.mainBackground,
+    flex: 1,
+  },
+  partitionTop: {
+    flex: 3,
+  },
+  partitionMiddle: {
+    flex: 4,
+    width: "100%",
+  },
+  partitionBottom: {
+    flex: 3,
+  },
+  forgetPasswordView: {
+    flex: 1,
+    width: "90%",
+    alignSelf: "center",
+  },
+  forgetPasswordText: {
+    color: "black",
+    fontSize: fontSizes.h1,
+    fontWeight: "bold",
+  },
+  mainView: {
+    flex: 4,
+    width: "90%",
+    paddingTop: 30,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 50,
+    backgroundColor: "rgba(250,250,250,0.8)",
+    alignSelf: "center",
+  },
+  textInputView: {
+    flexDirection: "row",
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  textInputImage: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  textInputTypingArea: {
+    width: 250,
+    height: 35,
+  },
+});

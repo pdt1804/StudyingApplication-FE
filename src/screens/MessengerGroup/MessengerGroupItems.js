@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../constants';
 
@@ -16,85 +17,35 @@ function MessengerGroupItems(props) {
 
   return isSender == false ? (
     <View
-      style={{
-        height: 90,
-        paddingTop: 20,
-        paddingStart: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
+      style={styles.container}>
       <Image /** Avatar */
-        style={{
-          width: 55,
-          height: 55,
-          resizeMode: 'cover',
-          borderRadius: 90,
-          marginRight: 15,
-          alignSelf: 'center',
-        }}
+        style={styles.avatarImg}
         source={{
           uri: imageUrl,
         }}
       />
 
       <View
-        style={{
-          flexDirection: 'row',
-          flex: 1,
-          marginRight: 10,
-          justifyContent: 'flex-start',
-        }}>
+        style={styles.messageViewLeft}>
         <Text /** Message */
-          style={{
-            color: 'black',
-            fontSize: fontSizes.h6,
-            paddingVertical: 7,
-            paddingHorizontal: 7,
-            backgroundColor: colors.message,
-            borderRadius: 10,
-          }}>
+          style={styles.messageText}>
           {message}
         </Text>
       </View>
     </View>
   ) : (
     <View /** isSender = true */
-      style={{
-        height: 90,
-        paddingTop: 20,
-        paddingStart: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
+      style={styles.container}>
       <View
-        style={{
-          flexDirection: 'row',
-          flex: 1,
-          marginRight: 10,
-          justifyContent: 'flex-end',
-        }}>
+        style={styles.messageViewRight}>
         <Text /** Message */
-          style={{
-            color: 'black',
-            fontSize: fontSizes.h6,
-            paddingVertical: 7,
-            paddingHorizontal: 7,
-            backgroundColor: colors.message,
-            borderRadius: 10,
-          }}>
+          style={styles.messageText}>
           {message}
         </Text>
       </View>
 
       <Image /** Avatar */
-        style={{
-          width: 55,
-          height: 55,
-          resizeMode: 'cover',
-          borderRadius: 90,
-          marginRight: 15,
-          alignSelf: 'center',
-        }}
+        style={styles.avatarImg}
         source={{
           uri: imageUrl,
         }}
@@ -103,3 +54,42 @@ function MessengerGroupItems(props) {
   );
 }
 export default MessengerGroupItems;
+
+
+const styles = StyleSheet.create({
+  container: {
+    height: 90,
+    paddingTop: 20,
+    paddingStart: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatarImg: {
+    width: 55,
+    height: 55,
+    resizeMode: 'cover',
+    borderRadius: 90,
+    marginRight: 15,
+    alignSelf: 'center',
+  },
+  messageViewLeft: {
+    flexDirection: 'row',
+    flex: 1,
+    marginRight: 10,
+    justifyContent: 'flex-start',
+  },
+  messageViewRight: {
+    flexDirection: 'row',
+    flex: 1,
+    marginRight: 10,
+    justifyContent: 'flex-end',
+  },
+  messageText: {
+    color: 'black',
+    fontSize: fontSizes.h6,
+    paddingVertical: 7,
+    paddingHorizontal: 7,
+    backgroundColor: colors.message,
+    borderRadius: 10,
+  },
+})

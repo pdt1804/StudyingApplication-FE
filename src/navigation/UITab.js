@@ -14,12 +14,12 @@
  *
  * >>Don't know why but it solve the error
  * yarn add react-native-screens
- * 
+ *
  * >>For api
  * yarn add axios
  */
 
-import * as React from 'react';
+import * as React from "react";
 import {
   Text,
   View,
@@ -29,28 +29,28 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import {Settings, GroupChat, Friends, AllNotification} from '../screens';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {images, colors, fontSizes} from '../constants';
+} from "react-native";
+import { Settings, GroupChat, Friends, AllNotification } from "../screens";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { images, colors, fontSizes } from "../constants";
 
 const Tab = createBottomTabNavigator();
 
-const ScreenOptions = ({route}) => ({
+const ScreenOptions = ({ route }) => ({
   headerShown: false,
   tabBarActiveTintColor: colors.active,
   tabBarInactiveTintColor: colors.inactive,
-  tabBarActiveBackgroundColor: colors.myWhite,
-  tabBarInactiveBackgroundColor: colors.myWhite,
+  tabBarActiveBackgroundColor: colors.backgroundWhite,
+  tabBarInactiveBackgroundColor: colors.backgroundWhite,
 
-  tabBarIcon: ({focused, color, size}) => {
+  tabBarIcon: ({ focused, color, size }) => {
     let screenName = route.name;
     let iconName = images.personIcon;
-    if (screenName == 'GroupChat') {
+    if (screenName == "GroupChat") {
       iconName = images.groupIcon;
-    } else if (screenName == 'Friends') {
+    } else if (screenName == "Friends") {
       iconName = images.chatIcon;
-    } else if (screenName == 'Notifications') {
+    } else if (screenName == "Notifications") {
       iconName = images.bellIcon;
     }
 
@@ -58,58 +58,55 @@ const ScreenOptions = ({route}) => ({
       <Image
         source={iconName}
         style={{
-          width: 22,
-          height: 22,
+          width: 20,
+          height: 20,
           tintColor: focused ? colors.active : colors.inactive,
+          marginTop: '10%',
         }}
       />
     );
   },
 });
 
-function UITab(props) {
-  const fontSizeTabs = fontSizes.h6;
+const tabBarLabelStyles = {
+  fontSize: fontSizes.h7,
+  marginTop: '5%',
+  marginBottom: '5%',
+};
 
+function UITab(props) {
   return (
-    <Tab.Navigator initialRouteName="Settings" screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName="GroupChat" screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Settings"
         component={Settings}
         options={{
-          tabBarLabel: 'Tài khoản',
-          tabBarLabelStyle: {
-            fontSize: fontSizeTabs,
-          },
+          tabBarLabel: "Tài khoản",
+          tabBarLabelStyle: tabBarLabelStyles,
         }}
       />
       <Tab.Screen
         name="Friends"
         component={Friends}
         options={{
-          tabBarLabel: 'Bạn bè',
-          tabBarLabelStyle: {
-            fontSize: fontSizeTabs,
-          },
+          tabBarLabel: "Bạn bè",
+          tabBarLabelStyle: tabBarLabelStyles,
         }}
       />
       <Tab.Screen
         name="GroupChat"
         component={GroupChat}
         options={{
-          tabBarLabel: 'Nhóm học tập',
-          tabBarLabelStyle: {
-            fontSize: fontSizeTabs,
-          },
+          tabBarLabel: "Nhóm học tập",
+          tabBarLabelStyle: tabBarLabelStyles,
         }}
       />
       <Tab.Screen
         name="Notifications"
         component={AllNotification}
         options={{
-          tabBarLabel: 'Thông báo',
-          tabBarLabelStyle: {
-            fontSize: fontSizeTabs,
-          },
+          tabBarLabel: "Thông báo",
+          tabBarLabelStyle: tabBarLabelStyles,
         }}
       />
     </Tab.Navigator>
