@@ -30,4 +30,5 @@ export default {
   backIcon: require('../assets/icon/Back.png'),
   checkMarkIcon: require('../assets/icon/CheckMark.png'),
   cancelIcon: require('../assets/icon/Cancel.png'),
+  blogSearchIcon: require('../assets/icon/GoogleBlogSearch.png'),
 };

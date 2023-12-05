@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 90,
     marginRight: 15,
+    tintColor: colors.notificationIcon,
   },
   textView: {
     flex: 1,
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'black',
-    fontSize: fontSizes.h5,
-    fontWeight: 'bold',
+    fontSize: fontSizes.h7,
   },
 })

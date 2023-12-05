@@ -1,113 +1,65 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {images, colors, icons, fontSizes} from '../../constants';
+import React, { useState, useEffect } from "react";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { images, colors, icons, fontSizes } from "../../constants";
 
-/* function _getColorFromStatus(status) {
-  if (status.toLowerCase().trim() == 'online') {
-    return colors.Online;
-  } else return colors.Offline;
-}
-
-function _getIconFromStatus(status) {
-  if (status.toLowerCase().trim() == 'online') {
-    return images.checkMarkIcon;
-  } else return images.cancelIcon;
-} */
+const generateColor = () => {
+  const randomColor = Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, '0');
+  return `#${randomColor}`;
+};
 
 function GroupChatItems(props) {
-  let {name, imageUrl, newestMessage, status} = props.group;
-  const {onPress} = props;
+  let { name, imageUrl, newestMessage, status } = props.group;
+  const { onPress } = props;
 
-  let fontSizeName = fontSizes.h3;
+  let fontSizeName = fontSizes.h5;
   if (name.length > 22) {
-    fontSizeName = fontSizes.h5;
+    fontSizeName = fontSizes.h6;
   }
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        height: 90,
-        paddingTop: 20,
-        paddingStart: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
-      <View>
-        <Image /** Avatar */
-          style={{
-            width: 55,
-            height: 55,
-            resizeMode: 'cover',
-            borderRadius: 90,
-            marginRight: 15,
-            alignSelf: 'center',
-          }}
-          source={{
-            uri: imageUrl,
-          }}
-        />
-        {/* <Image /** Status 
-          style={{
-            width: 17,
-            height: 17,
-            resizeMode: 'cover',
-            borderRadius: 90,
-            marginRight: 15,
-            position: 'absolute',
-            right: 0,
-            bottom: 0,
-            tintColor: _getColorFromStatus(status),
-          }}
-          source={_getIconFromStatus(status)}
-        /> */}
-      </View>
-
-      <View
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      <Image /** Avatar */
+        style={[styles.avatarImage, {borderColor: generateColor()}]}
+        source={{
+          uri: imageUrl,
+        }}
+      />
+      <Text /** Name */
         style={{
-          flexDirection: 'column',
-          flex:4,
-          marginRight: 10,
-        }}>
-        <Text /** Name */
-          style={{
-            color: 'black',
-            fontSize: fontSizeName,
-            fontWeight: 'bold',
-          }}>
-          {name}
-        </Text>
-        <Text /** Message */
-          style={{
-            color: colors.inactive,
-            fontSize: fontSizes.h6,
-          }}>
-          {/**newestMessage*/ 'Slogan của nhóm...'}
-        </Text>
-      </View>
-
-      <View
-        style={{
-          flexDirection: 'column',
-          flex:0,
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-        }}>
-        {/* <Text /** Minute ago 
-          style={{
-            color: 'black',
-            fontSize: fontSizes.h6 * 0.8,
-            marginRight: 10,
-          }}>
-          5 phút trước
-        </Text> */}
-      </View>
+          width: '80%',
+          color: "black",
+          fontSize: fontSizeName,
+        }}
+      >
+        {name}
+      </Text>
     </TouchableOpacity>
   );
 }
 export default GroupChatItems;
+
+const styles = StyleSheet.create({
+  container: {
+    height: 90,
+    marginVertical:'2%',
+    marginHorizontal: '4%',
+    paddingStart: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 10,
+    borderColor: colors.inactive,
+    borderWidth:1,
+    backgroundColor: colors.transparentWhite,
+  },
+  avatarImage: {
+    width: 65,
+    height: 65,
+    resizeMode: "cover",
+    borderRadius: 10,
+    marginRight: 15,
+    alignSelf: "center",
+    borderWidth:3,
+  },
+});

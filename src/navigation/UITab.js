@@ -78,14 +78,6 @@ function UITab(props) {
   return (
     <Tab.Navigator initialRouteName="Friends" screenOptions={ScreenOptions}>
       <Tab.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          tabBarLabel: "Tài khoản",
-          tabBarLabelStyle: tabBarLabelStyles,
-        }}
-      />
-      <Tab.Screen
         name="Friends"
         component={Friends}
         options={{
@@ -106,6 +98,14 @@ function UITab(props) {
         component={AllNotification}
         options={{
           tabBarLabel: "Thông báo",
+          tabBarLabelStyle: tabBarLabelStyles,
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarLabel: "Tài khoản",
           tabBarLabelStyle: tabBarLabelStyles,
         }}
       />

@@ -18,28 +18,33 @@ function AllNotification(props) {
   const [notifications, setNotifications] = useState([
     {
       ID: "01",
-      title: "Thông báo hệ thống 1",
+      title: "Thông báo update 1/12",
       type: "hệ thống",
+      status: 'chưa đọc'
     },
     {
       ID: "02",
-      title: "Thông báo hệ thống 2",
+      title: "Thông báo update 8/3",
       type: "hệ thống",
+      status: 'chưa đọc'
     },
     {
       ID: "03",
-      title: "Thông báo người dùng 3",
+      title: "Thông báo Tuyển thành viên",
       type: "người dùng",
+      status: 'chưa đọc'
     },
     {
       ID: "04",
-      title: "Thông báo hệ thống 4",
+      title: "Thông báo bảo trì",
       type: "hệ thống",
+      status: 'đã đọc'
     },
     {
       ID: "05",
-      title: "Thông báo người dùng 5",
+      title: "Thông báo Nghỉ học",
       type: "người dùng",
+      status: 'đã đọc'
     },
   ]);
 

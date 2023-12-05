@@ -27,5 +27,8 @@ export default {
     transparentWhite: "rgba(250,250,250,0.8)",
     blueIcon: 'blue',
 
-    placeholderTextColor: 'rgba(0, 0, 255, 0.85)'
+    placeholderTextColor: 'rgba(0, 0, 255, 0.85)',
+
+    blogIcon: 'rgba(38, 103, 243, 0.85)',
+    notificationIcon: 'rgb(108, 169, 243)',
 }
