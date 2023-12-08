@@ -3,7 +3,6 @@ export default {
     PrimaryBackgroundButton: '#DF5151',
 
     mainBackground: '#D7FFFD',
-    myWhite: 'rgb(20, 250, 255)',
     backgroundWhite: 'rgb(250, 250, 255)',
     noImportantText: 'rgba(145, 160, 160, 0.75)',
 
@@ -18,17 +17,20 @@ export default {
 
     message: 'rgba(175, 225, 250, 0.9)',
 
-    CommonButton: 'blue',
+    CommonButton: '#0f6fc5',
     CommonButtonText: 'white',
-    CommonButtonBorder: 'gray',
+    CommonButtonBorder: '#0f6fc5',
 
     UIHeaderTextAndIcon: '#f6f6f6',
 
     transparentWhite: "rgba(250,250,250,0.8)",
-    blueIcon: 'blue',
+    blueIcon: '#1D81D5',
 
     placeholderTextColor: 'rgba(0, 0, 255, 0.85)',
 
     blogIcon: 'rgba(38, 103, 243, 0.85)',
     notificationIcon: 'rgb(108, 169, 243)',
+
+    borderedView: '#1D81D5',
+    titleScreen: '#667085',
 }

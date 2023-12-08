@@ -117,6 +117,7 @@ function TabNotification(props) {
         <TouchableOpacity style={styles.buttonContainer}>
           <Text
             style={{
+              color: 'white',
               paddingHorizontal: 11,
               fontSize: fontSizes.h7,
               fontWeight: "bold",
@@ -153,49 +154,56 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   searchBarAndButtonView: {
-    height: "11%",
+    height: 100,
     flexDirection: "row",
+    justifyContent: 'space-between', 
+    alignItems: 'center',
   },
   searchBarView: {
-    flex: 1,
+    width: '50%',
+    height: "85%",
     marginHorizontal: 10,
     paddingTop: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
   },
   searchBarTypingArea: {
-    backgroundColor: colors.inactive,
+    backgroundColor: colors.transparentWhite,
     height: "75%",
     flex: 1,
+    borderColor: "black",
+    borderWidth: 2,
     borderRadius: 90,
-    paddingStart: 45,
+    paddingStart: 55,
   },
   searchBarImage: {
-    width: "8%",
-    height: "40%",
+    width: '20%',
+    height: '50%',
     position: "absolute",
-    top: "30%",
+    resizeMode: 'stretch',
+    top: "25%",
     left: 8,
   },
   buttonContainer: {
+    width: 'auto',
+    height: "55%",
+
     marginRight: 10,
-    marginTop: 15,
+    marginTop: 5,
     marginBottom: 15,
 
-    borderColor: "black",
-    borderWidth: 2,
-    borderRadius: 5,
+    borderRadius: 20,
 
-    backgroundColor: "lightblue",
+    backgroundColor: colors.active,
 
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
   listContainer: {
     flex: 1,
     margin: 10,
     borderColor: "black",
     borderWidth: 2,
-    borderRadius: 5,
+    borderRadius: 25,
   },
 });

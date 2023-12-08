@@ -5,9 +5,9 @@ import { images, colors, fontSizes } from "../constants/index";
 function CommonButton(props) {
   const { onPress, title } = props;
 
-  let fontSizeTitle = fontSizes.h3;
+  let fontSizeTitle = fontSizes.h4;
   if (title.length > 10) {
-    fontSizeTitle = fontSizes.h5;
+    fontSizeTitle = fontSizes.h6;
   }
 
   return (
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
 
     borderColor: colors.CommonButtonBorder,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 30,
 
     backgroundColor: colors.CommonButton,

@@ -1,6 +1,8 @@
 export default {
   background: require('../assets/background.jpg'),
   uitLogo: require('../assets/Logo_UIT_Web_Transparent.png'),
+  decorStuff01: require('../assets/DecorStuff01.png'),
+  decorStuff02: require('../assets/DecorStuff02.png'),
   
   personIcon: require('../assets/icon/Person.png'),
   keyIcon: require('../assets/icon/Key.png'),
@@ -31,4 +33,11 @@ export default {
   checkMarkIcon: require('../assets/icon/CheckMark.png'),
   cancelIcon: require('../assets/icon/Cancel.png'),
   blogSearchIcon: require('../assets/icon/GoogleBlogSearch.png'),
+  personCircleIcon: require('../assets/icon/PersonCircle.png'),
+  emailCheckMarkIcon: require('../assets/icon/EmailCheckMark.png'),
+  typePasswordIcon: require('../assets/icon/TypePassword.png'),
+  reTypePasswordIcon: require('../assets/icon/ReTypePassword.png'),
+  phoneRingCircleIcon: require('../assets/icon/PhoneRingCircle.png'),
+  sendingEmailIcon: require('../assets/icon/SendingEmail.png'),
+  sendMessageCursorIcon: require('../assets/icon/SendMessageCursor.png'),
 };

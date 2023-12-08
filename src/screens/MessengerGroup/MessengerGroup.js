@@ -11,7 +11,6 @@ import {
   StyleSheet,
 } from "react-native";
 import MessengerGroupItems from "./MessengerGroupItems";
-import TabLeader from "./Tabs/TabLeader";
 import TabDiscussion from "./Tabs/TabDiscussion";
 import TabNotification from "./Tabs/TabNotification";
 import { images, colors, fontSizes } from "../../constants";
@@ -88,22 +87,14 @@ function MessengerGroup(props) {
     {
       ID: "0",
       name: "Trò chuyện",
-      usedByLeaderOnly: false,
     },
     {
       ID: "1",
-      name: "Nhóm trưởng",
-      usedByLeaderOnly: true,
+      name: "Thảo luận",
     },
     {
       ID: "2",
-      name: "Thảo luận",
-      usedByLeaderOnly: false,
-    },
-    {
-      ID: "3",
       name: "Thông báo",
-      usedByLeaderOnly: false,
     },
   ]);
 
@@ -114,28 +105,23 @@ function MessengerGroup(props) {
 
   //Check if user is Leader or not
   const [isLeader, setIsLeader] = useState(true);
-  //filter tabs (if isLeader then show all)
-  const filteredChatTabs = () =>
-    chatTab.filter((eachTab) => eachTab.usedByLeaderOnly == false);
 
   return (
     <View style={styles.container}>
       <UIHeader
         title={name}
         leftIconName={images.backIcon}
-        rightIconName={images.globeIcon}
+        rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => {
-          isLeader ? setIsLeader(false) : setIsLeader(true);
-        }}
+        onPressRightIcon={null}
       />
 
       <View /* Tabs */ style={styles.tabsContainer}>
         <FlatList
           horizontal={true}
-          data={isLeader ? chatTab : filteredChatTabs()}
+          data={chatTab}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
@@ -155,17 +141,39 @@ function MessengerGroup(props) {
 
       <View style={styles.displayView}>
         {navigateTab == "0" ? (
-          <ScrollView /* Chat */>
-            {chatHistory.map((eachItem) => (
-              <MessengerGroupItems item={eachItem} key={eachItem.timestamp} />
-            ))}
-          </ScrollView>
+          <View>
+            <ScrollView /* Chat */>
+              {chatHistory.map((eachItem) => (
+                <MessengerGroupItems item={eachItem} key={eachItem.timestamp} />
+              ))}
+            </ScrollView>
+
+            <View /* enter your message */ style={styles.enterYourMessageView}>
+              <TextInput
+                onChangeText={
+                  null /* (typedText) => {
+                  setTypedText(typedText)
+              } */
+                }
+                style={styles.enterYourMessageTextInput}
+                placeholder="Enter your message here"
+                //value={typedText}
+                placeholderTextColor={colors.placeholder}
+              />
+              <TouchableOpacity
+                onPress={() => alert("gửi tin nhắn thành công")}
+              >
+                <Image
+                  source={images.sendMessageCursorIcon}
+                  style={styles.sendMessageCursorIcon}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         ) : navigateTab == "1" ? (
-          <TabLeader/>
-        ) : navigateTab == "2" ? (
-          <TabDiscussion/>
+          <TabDiscussion />
         ) : (
-          <TabNotification/>
+          <TabNotification />
         )}
       </View>
     </View>
@@ -174,7 +182,7 @@ function MessengerGroup(props) {
 export default MessengerGroup;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white" },
+  container: { flex: 1, backgroundColor: colors.backgroundWhite },
   tabsContainer: {
     height: 50,
   },
@@ -184,15 +192,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   eachTabText: {
-    color: "black",
+    color: 'white',
     fontSize: fontSizes.h6,
+    fontWeight: 'bold',
     paddingVertical: 7,
-    paddingHorizontal: 17,
-    backgroundColor: colors.message,
-    borderRadius: 3,
+    paddingHorizontal: 21,
+    backgroundColor: colors.active,
+    borderRadius: 13,
   },
   flatList: { flex: 1 },
   displayView: {
     flex: 1,
+    flexDirection: "column",
+  },
+  enterYourMessageView: {
+    height: 50,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: colors.backgroundWhite,
+  },
+  enterYourMessageTextInput: {
+    width: "85%",
+    color: "black",
+    paddingStart: 10,
+  },
+  sendMessageCursorIcon: {
+    width: 25,
+    height: 25,
+    resizeMode: "stretch",
+    padding: 10,
+    marginHorizontal: 10,
   },
 });

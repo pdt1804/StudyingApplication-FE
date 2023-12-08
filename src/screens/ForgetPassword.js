@@ -4,7 +4,6 @@ import {
   View,
   Image,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
@@ -21,32 +20,34 @@ const ForgetPassword = (props) => {
   
   return (
     <View style={styles.container}>
-      <View style={styles.partitionTop} />
+      <Image source={images.decorStuff01} style={styles.decorStuffTop} />
 
       <View style={styles.partitionMiddle}>
         <View style={styles.forgetPasswordView}>
-          <Text style={styles.forgetPasswordText}>ForgetPassword</Text>
+          <Text style={styles.forgetPasswordText}>Quên mật khẩu?</Text>
         </View>
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
-            <Image source={images.personIcon} style={styles.textInputImage} />
+            <Image source={images.personCircleIcon} style={styles.textInputImage} />
+            <View>
+              <Text>Tên đăng nhập:</Text>
             <TextInput
               style={styles.textInputTypingArea}
               inputMode="text"
-              placeholder="Username"
-              placeholderTextColor={colors.placeholder}
-            />
+              placeholder="Nhập tên đăng nhập của bạn"
+              placeholderTextColor={colors.noImportantText}
+            /></View>
           </View>
 
           <CommonButton
             onPress={handleForgetPassword}
-            title={"continue".toUpperCase()}
+            title={"tiếp tục".toUpperCase()}
           />
         </View>
       </View>
 
-      <View style={styles.partitionBottom} />
+      <Image source={images.decorStuff02} style={styles.decorStuffBottom} />
     </View>
   );
 };
@@ -54,56 +55,75 @@ export default ForgetPassword;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.mainBackground,
+    backgroundColor: colors.backgroundWhite,
     flex: 1,
-  },
-  partitionTop: {
-    flex: 3,
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
   partitionMiddle: {
-    flex: 4,
     width: "100%",
   },
-  partitionBottom: {
-    flex: 3,
-  },
   forgetPasswordView: {
-    flex: 1,
     width: "90%",
+    marginVertical: 10,
     alignSelf: "center",
   },
   forgetPasswordText: {
-    color: "black",
+    color: colors.titleScreen,
     fontSize: fontSizes.h1,
     fontWeight: "bold",
+    alignSelf: 'center',
   },
   mainView: {
-    flex: 4,
     width: "90%",
-    paddingTop: 30,
-    borderColor: "gray",
+    height: 350,
+    padding: 15,
+    backgroundColor: colors.transparentWhite,
+    borderColor: colors.borderedView,
     borderWidth: 2,
     borderRadius: 50,
-    backgroundColor: "rgba(250,250,250,0.8)",
     alignSelf: "center",
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
   textInputView: {
     flexDirection: "row",
     marginHorizontal: 15,
-    marginTop: 15,
-    borderColor: "gray",
-    borderWidth: 2,
-    borderRadius: 20,
+    marginBottom: 20,
     alignItems: "center",
   },
   textInputImage: {
-    width: 25,
-    height: 25,
+    width: 55,
+    height: 55,
     marginRight: 10,
-    marginLeft: 10,
+    marginTop: 25,
+    tintColor: colors.blueIcon,
   },
   textInputTypingArea: {
     width: 250,
-    height: 35,
+    height: 55,
+    marginTop:5,
+    paddingLeft: 20,
+    borderColor: colors.noImportantText,
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+  decorStuffTop: {
+    width: 250,
+    height: 120,
+    opacity: 0.5,
+    resizeMode: 'stretch',
+    top: '10%',
+    left: 0,
+    position: 'absolute',
+  },
+  decorStuffBottom: {
+    width: 250,
+    height: 120,
+    opacity: 0.5,
+    resizeMode: 'stretch',
+    bottom: '10%',
+    right: 0,
+    position: 'absolute',
   },
 });

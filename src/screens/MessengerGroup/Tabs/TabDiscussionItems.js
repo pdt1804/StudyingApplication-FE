@@ -22,24 +22,26 @@ function TabDiscussionItems(props) {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View>
-        <Image /** Avatar */
-          style={styles.blogIcon}
-          source={images.blogSearchIcon}
-        />
-      </View>
+      <View style={styles.mainContainer}>
+        <View>
+          <Image /** Avatar */
+            style={styles.blogIcon}
+            source={images.blogSearchIcon}
+          />
+        </View>
 
-      <View style={styles.textView}>
-        <Text /** Name */
-          style={{
-            color: "black",
-            fontSize: fontSizeName,
-            fontWeight: "bold",
-          }}
-        >
-          {name}
-        </Text>
+        <View style={styles.textView}>
+          <Text /** Name */
+            style={{
+              color: "black",
+              fontSize: fontSizeName,
+            }}
+          >
+            {name}
+          </Text>
+        </View>
       </View>
+      <View style={styles.bottomLine} />
     </TouchableOpacity>
   );
 }
@@ -48,14 +50,17 @@ export default TabDiscussionItems;
 const styles = StyleSheet.create({
   container: {
     height: 60,
-    paddingTop: 20,
+    flexDirection: "column",
+  },
+  mainContainer: {
+    paddingTop: 15,
     paddingStart: 10,
     flexDirection: "row",
     alignItems: "center",
   },
   blogIcon: {
-    width: 55,
-    height: 55,
+    width: 50,
+    height: 50,
     resizeMode: "cover",
     borderRadius: 90,
     marginRight: 15,
@@ -66,5 +71,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 4,
     marginRight: 10,
+  },
+  bottomLine: {
+    backgroundColor: colors.inactive,
+    height: 1,
+    marginTop: 5,
   },
 });
