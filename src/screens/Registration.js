@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
+import axios from "axios";
+import { API_BASE_URL } from "../../DomainAPI";
 
 const Registration = (props) => {
   //navigation to/back
@@ -30,28 +32,36 @@ const Registration = (props) => {
   const [rePassword, setrePassword] = useState("");
 
   const handleRegister = async () => {
-    var newUser = {
+    
+    let newUser = {
       userName: username,
       passWord: password,
       Email: email,
     };
 
-    try {
-      if (password === rePassword) {
-        const response = await axios.post(
-          "http://192.168.249.41:8080/api/v1/user/CreateAccount",
-          newUser
-        );
-
-        if (response.status == 200) {
-          //successful
-          console.log(response.data);
-        } else {
-          //unsuccessful
-          console.log(response.data);
+    if (username.length > 5 && password.length > 5)
+    {
+      try {
+        if (password === rePassword) {
+          const response = await axios.post(
+            API_BASE_URL + "/api/v1/user/CreateAccount", newUser
+          );
+          if (response.data == username) {
+            alert('Welcome to my application !!! :)');
+            navigate("Login")
+          } else {
+            //unsuccessful
+            alert('Username is existed, please choose another username !!! :)');
+          }
         }
+      } catch (catchError) {
+        console.error(catchError.message);
       }
-    } catch {}
+    }
+    else
+    {
+      alert("Your username and password must have at least 5 characters");
+    }
   };
 
   //turn off unimportant things when typing

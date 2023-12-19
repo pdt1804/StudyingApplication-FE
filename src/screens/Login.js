@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
+import { API_BASE_URL } from "../../DomainAPI";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = (props) => {
   //navigation to/back
@@ -19,7 +22,38 @@ const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
-    navigate("UITab");
+
+    try{
+
+      if (username != null && password != null)
+      {
+      
+        const response = await axios.get(API_BASE_URL + "/api/v1/user/Authenticate?userName=" + username + "&passWord=" + password);
+
+        if (response.data == username)
+        {
+          await AsyncStorage.setItem('username', username);
+          navigate("UITab");
+        }
+        else
+        {
+          alert("Username or password aren't correct")
+        }
+
+      }
+      else
+      {
+        alert("Username or password aren't correct")
+      } 
+    } 
+    catch (error) {
+      //alert(error.message);
+      //alert(error.name);
+      console.error(error.message);
+      console.error(error.name);
+      alert("Username or password aren't correct")
+    }
+
   };
 
   //turn off unimportant things when typing

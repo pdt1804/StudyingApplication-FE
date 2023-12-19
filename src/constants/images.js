@@ -3,6 +3,7 @@ export default {
   uitLogo: require('../assets/Logo_UIT_Web_Transparent.png'),
   decorStuff01: require('../assets/DecorStuff01.png'),
   decorStuff02: require('../assets/DecorStuff02.png'),
+  banner: require('../assets/banner.jpeg'),
   
   personIcon: require('../assets/icon/Person.png'),
   keyIcon: require('../assets/icon/Key.png'),

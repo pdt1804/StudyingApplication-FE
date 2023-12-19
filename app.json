@@ -1,5 +1,11 @@
 {
   "expo": {
+    "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera",
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library"
+      }
+    },
     "name": "ChatGroupUITProject",
     "slug": "ChatGroupUITProject",
     "version": "1.0.0",

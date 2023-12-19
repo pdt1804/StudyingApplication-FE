@@ -9,6 +9,7 @@ import SettingProfile from "./SettingProfile/SettingProfile"
 
 import GroupChat from "./GroupChat/GroupChat"
 import MessengerGroup from "./MessengerGroup/MessengerGroup"
+import ResetPasswordInSetting from "./SettingProfile/ResetPasswordInSetting"
 
 import Friends from "./Friends/Friends"
 import Messenger from "./Messenger/Messenger"
@@ -27,5 +28,6 @@ export {
     Friends,
     AllNotification,
     Messenger,
-    MessengerGroup
+    MessengerGroup,
+    ResetPasswordInSetting,
 }

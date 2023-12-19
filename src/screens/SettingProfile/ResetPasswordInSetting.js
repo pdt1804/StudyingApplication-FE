@@ -6,16 +6,14 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
+import { images, colors, fontSizes } from "../../constants/index";
+import { CommonButton } from "../../components";
 import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
+import { API_BASE_URL } from "../../../DomainAPI";
 
-const ResetPassword = (props) => {
+const ResetPasswordInSetting = (props) => {
 
   const { navigate, goBack } = props.navigation;
-
-  const { userName } = props.route.params;
 
   const [password, setPassword] = useState('none');
   const [rePassword, setRePassword] = useState('none');
@@ -66,6 +64,23 @@ const ResetPassword = (props) => {
               style={styles.textInputImage}
             />
             <View>
+              <Text>Mật khẩu hiện tại:</Text>
+              <TextInput
+                style={styles.textInputTypingArea}
+                secureTextEntry={true} // * the password
+                inputMode="text"
+                placeholder="Nhập mật khẩu hiện tại"
+                placeholderTextColor={colors.noImportantText}
+                onChangeText={p => setPassword(p)}
+              />
+            </View>
+          </View>
+          <View /* Password */ style={styles.textInputView}>
+            <Image
+              source={images.typePasswordIcon}
+              style={styles.textInputImage}
+            />
+            <View>
               <Text>Mật khẩu mới:</Text>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -106,7 +121,7 @@ const ResetPassword = (props) => {
     </View>
   );
 };
-export default ResetPassword;
+export default ResetPasswordInSetting;
 
 
 const styles = StyleSheet.create({
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     width: "90%",
-    height: 350,
+    height: 450,
     padding: 15,
     backgroundColor: colors.transparentWhite,
     borderColor: colors.borderedView,

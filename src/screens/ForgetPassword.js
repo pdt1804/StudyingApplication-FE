@@ -8,14 +8,37 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
+import axios from "axios";
+import { API_BASE_URL } from "../../DomainAPI";
 
 const ForgetPassword = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
+  const [username, setUsername] = useState('.')
+
   //use for api
   const handleForgetPassword = async () => {
-    navigate("Verification");
+    
+    try 
+    {
+
+      const response = await axios.get(API_BASE_URL + "/api/v1/user/GetRecoveryCode?userName=" + username)
+      if (response.status == 200) {
+        navigate("Verification", {
+          OTP: response.data,
+          userName: username,
+        });
+        
+      } else {
+        alert("Maybe user of this username didn't set email for this account");
+        alert("Please contact us to get more helps");
+      }
+    } 
+    catch (Error)
+    {
+      console.error(Error.message);
+    }
   };
   
   return (
@@ -37,6 +60,7 @@ const ForgetPassword = (props) => {
               inputMode="text"
               placeholder="Nhập tên đăng nhập của bạn"
               placeholderTextColor={colors.noImportantText}
+              onChangeText={p => setUsername(p)}
             /></View>
           </View>
 

@@ -11,11 +11,26 @@ import { CommonButton } from "../components";
 
 const Verification = (props) => {
   //navigation to/back
+  const [otp, setOTP] = useState('-1');
+
+  //navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  const { OTP, userName } = props.route.params;
 
   //use for api
   const handleVerification = async () => {
-    navigate("ResetPassword");
+    
+    if (OTP == otp)
+    {
+      navigate("ResetPassword", {
+        userName: userName,
+      });
+    }
+    else
+    {
+      alert('OTP is not correct');
+    }
   };
 
   return (
@@ -41,6 +56,7 @@ const Verification = (props) => {
                 inputMode='numeric'
                 placeholder="Nhập mã xác thực"
                 placeholderTextColor={colors.noImportantText}
+                onChangeText={p => setOTP(p)}
               />
             </View>
           </View>
