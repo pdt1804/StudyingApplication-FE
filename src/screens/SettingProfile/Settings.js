@@ -60,14 +60,6 @@ function Settings(props) {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
-  /* //example for api
-  const [profile, setProfile] = useState({
-    userName: "Dù sớ nèm (👍゜▽゜)👍",
-    imageUrl: "https://i.pravatar.cc/100"
-    phoneNumber: "190010 không thấy",
-    email: "aaakm331@gmail.com",
-  }); */
-
   useEffect(() => {
     const fetchData = async () => {
       try {
