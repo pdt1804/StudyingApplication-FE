@@ -14,6 +14,7 @@ import { images, colors, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageBar, MessengerItems } from "../../components";
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
+import { useRef } from "react";
 
 function Messenger(props) {
   //list of example = state
@@ -65,7 +66,7 @@ function Messenger(props) {
       />
 
       <SafeAreaView style={styles.displayView}>
-        <ScrollView /* Chat */>
+      <ScrollView>
           {chatHistory.map((eachItem) => (
             <MessengerItems item={eachItem} key={eachItem.id} />
           ))}

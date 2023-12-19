@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabSuggestionsItems(props) {
-  let { name, imageUrl } = props.group;
+  let { image, fulName } = props.invitation.information;
+  let { userName } = props.invitation;
+
   const { onPress } = props;
+  
+  const [myUsername, setMyUsername] = useState("")
+  const [friendUsername, setFriendUsername] = useState(userName)
+
 
   const handleAddFriend = async () => {
-    alert("Bạn đã đồng ý");
+    
+    setMyUsername(await AsyncStorage.getItem('username'));
+    
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
   };
 
   const handleCancel = async () => {
-    alert("Từ chối kết bạn");
+    setMyUsername(await AsyncStorage.getItem('username'));
+    
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
   };
 
   return (
@@ -19,12 +33,12 @@ function TabSuggestionsItems(props) {
       <Image /** Avatar */
         style={styles.avatarImage}
         source={{
-          uri: imageUrl,
+          uri: image,
         }}
       />
       <View style={styles.rightArea}>
         <Text /** Name */ style={styles.nameText} numberOfLines={1}>
-          {name}
+          {fulName}
         </Text>
         <View style={styles.buttonsView}>
           <TouchableOpacity
