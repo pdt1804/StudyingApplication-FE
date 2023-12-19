@@ -49,9 +49,9 @@ const ScreenOptions = ({ route }) => ({
     if (screenName == "GroupChat") {
       iconName = images.groupIcon;
     } else if (screenName == "Friends") {
-      iconName = images.chatIcon;
+      iconName = images.activeChatMessageIcon;
     } else if (screenName == "Notifications") {
-      iconName = images.bellIcon;
+      iconName = images.activeBellAlarm;
     }
 
     return (
@@ -60,7 +60,8 @@ const ScreenOptions = ({ route }) => ({
         style={{
           width: 20,
           height: 20,
-          tintColor: focused ? colors.active : colors.inactive,
+          //tintColor: focused ? colors.active : colors.inactive,
+          tintColor: color,
           marginTop: '10%',
         }}
       />
@@ -76,7 +77,7 @@ const tabBarLabelStyles = {
 
 function UITab(props) {
   return (
-    <Tab.Navigator initialRouteName="Settings" screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName="Friends" screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Friends"
         component={Friends}

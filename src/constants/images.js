@@ -1,9 +1,9 @@
 export default {
   background: require('../assets/background.jpg'),
   uitLogo: require('../assets/Logo_UIT_Web_Transparent.png'),
+  avatarBorder: require('../assets/AvatarBorder.png'),
   decorStuff01: require('../assets/DecorStuff01.png'),
   decorStuff02: require('../assets/DecorStuff02.png'),
-  banner: require('../assets/banner.jpeg'),
   
   personIcon: require('../assets/icon/Person.png'),
   keyIcon: require('../assets/icon/Key.png'),
@@ -23,8 +23,8 @@ export default {
   menuIcon: require('../assets/icon/Menu.png'),
   searchIcon: require('../assets/icon/Search.png'),
   groupIcon: require('../assets/icon/People.png'),
-  chatIcon: require('../assets/icon/Chat.png'),
-  bellIcon: require('../assets/icon/Notification.png'),
+  //chatIcon: require('../assets/icon/Chat.png'),
+  //bellIcon: require('../assets/icon/Notification.png'),
   darkModeIcon: require('../assets/icon/Eclipse.png'),
   questionMarkIcon: require('../assets/icon/Question_Mark.png'),
   errorIcon: require('../assets/icon/Error.png'),
@@ -33,7 +33,6 @@ export default {
   backIcon: require('../assets/icon/Back.png'),
   checkMarkIcon: require('../assets/icon/CheckMark.png'),
   cancelIcon: require('../assets/icon/Cancel.png'),
-  blogSearchIcon: require('../assets/icon/GoogleBlogSearch.png'),
   personCircleIcon: require('../assets/icon/PersonCircle.png'),
   emailCheckMarkIcon: require('../assets/icon/EmailCheckMark.png'),
   typePasswordIcon: require('../assets/icon/TypePassword.png'),
@@ -41,4 +40,11 @@ export default {
   phoneRingCircleIcon: require('../assets/icon/PhoneRingCircle.png'),
   sendingEmailIcon: require('../assets/icon/SendingEmail.png'),
   sendMessageCursorIcon: require('../assets/icon/SendMessageCursor.png'),
+
+  activeBellAlarm: require('../assets/icon/ActiveBellAlarm.png'),
+  inactiveBellAlarm: require('../assets/icon/InactiveBellAlarm.png'),
+  activeBlogSearchIcon: require('../assets/icon/ActiveGoogleBlogSearch.png'),
+  inactiveBlogSearchIcon: require('../assets/icon/InactiveGoogleBlogSearch.png'),
+  activeChatMessageIcon: require('../assets/icon/ActiveChatMessage.png'),
+  inactiveChatMessageIcon: require('../assets/icon/InactiveChatMessage.png'),
 };

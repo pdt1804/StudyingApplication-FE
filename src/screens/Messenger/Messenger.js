@@ -10,10 +10,8 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import MessengerItems from "./MessengerItems";
 import { images, colors, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
-import Verification from "../Verification";
+import { UIHeader, EnterMessageBar, MessengerItems } from "../../components";
 
 function Messenger(props) {
   //list of example = state
@@ -75,7 +73,7 @@ function Messenger(props) {
     {
       imageUrl: "https://i.pravatar.cc/500",
       isSender: true,
-      message: "Are you a morning person or a night person?",
+      message: "Are you a morning person or a night person? I finally finished w/my class work 4 hours in straight. this was relaxing and kept me in the game to finish. thank you and may GOD bless you",
       timestamp: 1700112783,
     },
   ]);
@@ -92,7 +90,7 @@ function Messenger(props) {
     chatTab.filter((eachTab) => eachTab.usedByLeaderOnly == false);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={styles.container}>
       <UIHeader
         title={name}
         leftIconName={images.backIcon}
@@ -100,90 +98,27 @@ function Messenger(props) {
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => {}}
+        onPressRightIcon={null}
       />
 
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
+      <View style={styles.displayView}>
         <ScrollView /* Chat */>
           {chatHistory.map((eachItem) => (
             <MessengerItems item={eachItem} key={eachItem.timestamp} />
           ))}
         </ScrollView>
 
-        <View /* enter your message */ style={styles.enterYourMessageView}>
-          <TextInput
-            onChangeText={
-              null /* (typedText) => {
-      setTypedText(typedText)
-  } */
-            }
-            style={styles.enterYourMessageTextInput}
-            placeholder="Enter your message here"
-            //value={typedText}
-            placeholderTextColor={colors.placeholder}
-          />
-          <TouchableOpacity onPress={() => alert("gửi tin nhắn thành công")}>
-            <Image
-              source={images.sendMessageCursorIcon}
-              style={styles.sendMessageCursorIcon}
-            />
-          </TouchableOpacity>
-        </View>
+        <EnterMessageBar />
       </View>
     </View>
   );
 }
 export default Messenger;
 
-
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.backgroundWhite },
-  tabsContainer: {
-    height: 50,
-  },
-  eachTabView: {
-    padding: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  eachTabText: {
-    color: "black",
-    fontSize: fontSizes.h6,
-    paddingVertical: 7,
-    paddingHorizontal: 17,
-    backgroundColor: colors.message,
-    borderRadius: 3,
-  },
-  flatList: { flex: 1 },
-  displayView: {
+  container: {
     flex: 1,
-    flexDirection: "column",
-  },
-  enterYourMessageView: {
-    height: 50,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     backgroundColor: colors.backgroundWhite,
   },
-  enterYourMessageTextInput: {
-    width: "85%",
-    color: "black",
-    paddingStart: 10,
-  },
-  sendMessageCursorIcon: {
-    width: 25,
-    height: 25,
-    resizeMode: "stretch",
-    padding: 10,
-    marginHorizontal: 10,
-  },
+  displayView: { flex: 1 },
 });

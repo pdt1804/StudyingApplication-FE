@@ -12,17 +12,15 @@ import {
 import { images, colors, icons, fontSizes } from "../../../constants";
 
 function TabNotificationItems(props) {
-  let { title } = props.notification;
+  let { title, content } = props.notification;
   const { onPress } = props;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View style={styles.mainContainer}>
         <Image style={styles.img} source={images.personCircleIcon} />
         <View style={styles.textView}>
-          <Text style={styles.text}>{title}</Text>
+          <Text style={styles.titleText} numberOfLines={1}>{title}</Text>
+          <Text style={styles.contentText} numberOfLines={2}>{content}</Text>
         </View>
-      </View>
-      <View style={styles.bottomLine} />
     </TouchableOpacity>
   );
 }
@@ -30,34 +28,30 @@ export default TabNotificationItems;
 
 const styles = StyleSheet.create({
   container: {
-    height: 55,
-    flexDirection: "column",
-  },
-  mainContainer: {
-    paddingTop: 15,
-    paddingStart: 10,
+    height: 63,
+    marginBottom:15,
     flexDirection: "row",
-    alignItems: "center",
   },
   img: {
-    width: 30,
-    height: 30,
-    resizeMode: "cover",
-    borderRadius: 90,
-    marginRight: 15,
-    tintColor: colors.blogIcon,
+    width: 33,
+    height: 33,
+    resizeMode: 'stretch',
+    marginTop: 11,
+    marginHorizontal: 10,
+    tintColor: colors.active,
   },
   textView: {
     flex: 1,
     marginRight: 10,
   },
-  text: {
-    color: "black",
-    fontSize: fontSizes.h5,
+  titleText: {
+    color: colors.active,
+    fontSize: fontSizes.h6,
+    fontWeight: '400',
   },
-  bottomLine: {
-    backgroundColor: colors.inactive,
-    height: 1,
-    marginTop: 11,
+  contentText: {
+    color: "black",
+    fontSize: fontSizes.h7,
+    fontWeight: '300',
   },
 });

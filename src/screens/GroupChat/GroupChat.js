@@ -4,116 +4,55 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
-  FlatList,
-  ScrollView,
   StyleSheet,
 } from "react-native";
-import GroupChatItems from "./GroupChatItems";
+import TabYourGroups from "./Tabs/TabYourGroups";
+import TabSuggestions from "./Tabs/TabSuggestions";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+const Tab = createMaterialTopTabNavigator();
+
+const ScreenOptions = ({ route }) => ({
+  tabBarShowLabel: true,
+  tabBarActiveTintColor: colors.active,
+  tabBarInactiveTintColor: colors.inactive,
+  tabBarActiveBackgroundColor: colors.backgroundWhite,
+  tabBarInactiveBackgroundColor: colors.backgroundWhite,
+});
+
+const tabBarLabelStyles = {
+  fontSize: fontSizes.h6,
+};
 
 function GroupChat(props) {
-  //list of group example = state
-  const [groups, setGroups] = useState([
-    {
-      ID: "01",
-      name: "Tự học bất cứ điều gì",
-      imageUrl: "https://i.pravatar.cc/100",
-    },
-    {
-      ID: "02",
-      name: "Kỹ năng Lu3",
-      imageUrl: "https://i.pravatar.cc/200",
-    },
-    {
-      ID: "03",
-      name: "Tóm tắt video",
-      imageUrl: "https://i.pravatar.cc/300",
-    },
-    {
-      ID: "04",
-      name: "Tokyo Lofi Healing",
-      imageUrl: "https://i.pravatar.cc/400",
-    },
-    {
-      ID: "05",
-      name: "Xung đột Israel đánh nta trước .nta đánh lại thì lại kêu",
-      imageUrl: "https://i.pravatar.cc/500",
-    },
-    {
-      ID: "06",
-      name: "Tư Duy Ngược",
-      imageUrl: "https://i.pravatar.cc/301",
-    },
-    {
-      ID: "07",
-      name: "Cách Tôi Làm Việc",
-      imageUrl: "https://i.pravatar.cc/302",
-    },
-    {
-      ID: "08",
-      name: "Statistical Thinking",
-      imageUrl: "https://i.pravatar.cc/303",
-    },
-    {
-      ID: "09",
-      name: "Speak English",
-      imageUrl: "https://i.pravatar.cc/304",
-    },
-    {
-      ID: "10",
-      name: "Vô văn hóa",
-      imageUrl: "https://i.pravatar.cc/305",
-    },
-    {
-      ID: "11",
-      name: "Wa???Wa???",
-      imageUrl: "https://i.pravatar.cc/306",
-    },
-  ]);
-
-  //use for search bar (textInput)
-  const [searchText, setSearchText] = useState("");
-
-  //navigation to/back
-  const { navigate, goBack } = props.navigation;
-
   return (
     <View style={styles.container}>
       <UIHeader title={"Nhóm học tập"} />
 
-<View /* Search bar */ style={styles.searchBarView}>
-  <TextInput
-    style={styles.searchBarTypingArea}
-    autoCorrect={false}
-    inputMode="search"
-    onChangeText={(text) => {
-      setSearchText(text);
-    }}
-    placeholder="Tìm kiếm..."
-    placeholderTextColor={colors.inactive}
-  />
-  <Image source={images.searchIcon} style={styles.searchBarImage} />
-</View>
-
-      <View style={styles.blackLine} />
-
-      <ScrollView>
-        {groups
-          .filter((eachGroup) =>
-            eachGroup.name.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((eachGroup) => (
-            <GroupChatItems
-              group={eachGroup}
-              key={eachGroup.ID}
-              onPress={() => {
-                navigate("MessengerGroup", { user: eachGroup });
-              }}
-            />
-          ))}
-      </ScrollView>
+      <View style={styles.displayView}><Tab.Navigator
+          initialRouteName="TabYourGroups"
+          screenOptions={ScreenOptions}
+        >
+          <Tab.Screen
+            name="TabYourGroups"
+            component={TabYourGroups}
+            options={{
+              tabBarLabel: "Đã tham gia",
+              tabBarLabelStyle: tabBarLabelStyles,
+            }}
+          />
+          <Tab.Screen
+            name="TabSuggestions"
+            component={TabSuggestions}
+            options={{
+              tabBarLabel: "Gợi ý nhóm",
+              tabBarLabelStyle: tabBarLabelStyles,
+            }}
+          />
+        </Tab.Navigator>
+        </View>
     </View>
   );
 }
@@ -131,23 +70,22 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: colors.transparentWhite,
   },
-  searchBarTypingArea: {
-    height: "95%",
+  eachTabView: {
+    padding: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  eachTabText: {
+    color: "white",
+    fontSize: fontSizes.h6,
+    fontWeight: "bold",
+    paddingVertical: 7,
+    paddingHorizontal: 21,
+    backgroundColor: colors.active,
+    borderRadius: 13,
+  },
+  displayView: {
     flex: 1,
-    paddingStart: 45,
-  },
-  searchBarImage: {
-    width: 20,
-    height: 20,
-    position: "absolute",
-    top: "45%",
-    left: "6%",
-    tintColor: colors.inactive,
-  },
-  blackLine: {
-    backgroundColor: colors.inactive,
-    height: 1,
-    width: "95%",
-    alignSelf: "center",
+    flexDirection: "column",
   },
 });

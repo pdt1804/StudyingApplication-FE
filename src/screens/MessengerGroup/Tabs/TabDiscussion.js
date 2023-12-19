@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Text,
   View,
@@ -8,100 +8,163 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import TabDiscussionItems from "./TabDiscussionItems";
+
+const typePost = [
+  { label: "Tất cả", value: "0" },
+  { label: "Tin tức", value: "1" },
+  { label: "Hỏi đáp", value: "2" },
+  { label: "Đánh giá", value: "3" },
+  { label: "Thảo Luận", value: "4" },
+];
 
 function TabDiscussion(props) {
   //list of example = state
   const [topics, setTopics] = useState([
     {
       ID: "01",
-      name: "Cách để bay lên",
+      type: "Tin tức",
+      content: `J2EE là một nền tảng phát triển ứng dụng web và doanh nghiệp được phát triển bởi Oracle. Nền tảng này đã được sử dụng rộng rãi trong nhiều năm qua và vẫn là một lựa chọn phổ biến cho các nhà phát triển ứng dụng doanh nghiệp.
+
+        Trong tương lai gần, J2EE dự kiến sẽ tiếp tục phát triển theo các xu hướng sau:
+        
+        Tăng cường tích hợp với các công nghệ mới: J2EE đang tích hợp ngày càng sâu với các công nghệ mới như đám mây, trí tuệ nhân tạo (AI), và máy học (ML). Điều này sẽ giúp các nhà phát triển xây dựng các ứng dụng doanh nghiệp hiện đại và có khả năng mở rộng hơn.
+        Tập trung vào trải nghiệm người dùng: J2EE đang tập trung vào việc cải thiện trải nghiệm người dùng (UX) của các ứng dụng doanh nghiệp. Điều này bao gồm việc sử dụng các công nghệ mới như HTML5, CSS3, và JavaScript.
+        Tăng cường bảo mật: Bảo mật là một vấn đề quan trọng đối với các ứng dụng doanh nghiệp. J2EE đang tích hợp các tính năng bảo mật mới để giúp các nhà phát triển xây dựng các ứng dụng an toàn hơn.`,
     },
     {
       ID: "02",
-      name: "Chong chóng tre nè nobita",
+      type: "Thảo Luận",
+      content: "Chong chóng tre nè nobita",
     },
     {
       ID: "03",
-      name: "Hello world",
+      type: "Hỏi đáp",
+      content: "Hello world",
     },
     {
       ID: "04",
-      name: "Nơi lữu trữ các câu hỏi đáp cũ",
+      type: "Đánh giá",
+      content: "Nơi lữu trữ các câu hỏi đáp cũ",
     },
     {
       ID: "05",
-      name: "Xét tuyển vào ngày",
+      type: "Thảo Luận",
+      content: "Xét tuyển vào ngày",
     },
     {
       ID: "06",
-      name: "Công nghệ thông tin",
+      type: "Thảo Luận",
+      content: "Công nghệ thông tin",
     },
     {
       ID: "07",
-      name: "Trường nào để học?",
+      type: "Hỏi đáp",
+      content: "Trường nào để học?",
     },
     {
+      type: "Tin tức",
       ID: "08",
-      name: "Sơ yếu lí lịch vậy ạ",
+      content: "Sơ yếu lí lịch vậy ạ",
     },
     {
       ID: "09",
-      name: "Ở đâu trên tramg web vậy?",
+      type: "Thảo Luận",
+      content: "Ở đâu trên tramg web vậy?",
     },
     {
       ID: "10",
-      name: "Còn gì nữa đâu mà khóc với sầu",
+      type: "Đánh giá",
+      content: "Còn gì nữa đâu mà khóc với sầu",
     },
   ]);
 
-  //use for search bar (textInput)
-  const [searchText, setSearchText] = useState("");
+  const getFilteredTopics = useMemo(() => {
+    if (!typeOfPost || typeOfPost === "Tất cả") {
+      return topics;
+    }
+    return topics.filter((eachTopic) => eachTopic.type === typeOfPost);
+  }, [typeOfPost]);
+
+  //navigation
+  const { navigate, goBack } = props.navigation;
+
+  //DropdownComponent --> filter type of post
+  const [valueDropdown, setValueDropdown] = useState(null);
+  const [typeOfPost, setTypeOfPost] = useState(null);
+  const [isFocusDropdown, setIsFocusDropdown] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.searchBarAndButtonView}>
-        <View /* Search bar */ style={styles.searchBarView}>
-          <TextInput
-            autoCorrect={false}
-            inputMode="search"
-            onChangeText={(text) => {
-              setSearchText(text);
+        <View /* Filter bar */ style={styles.searchBarView}>
+          <Dropdown
+            style={[
+              styles.dropdown,
+              isFocusDropdown && { borderColor: "blue" },
+            ]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            iconStyle={styles.iconStyle}
+            data={typePost}
+            //search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocusDropdown ? "Chuyên mục" : "..."}
+            value={valueDropdown}
+            onFocus={() => setIsFocusDropdown(true)}
+            onBlur={() => setIsFocusDropdown(false)}
+            onChange={(item) => {
+              setValueDropdown(item.value);
+              setTypeOfPost(item.label);
+              setIsFocusDropdown(false);
             }}
-            style={styles.searchBarTypingArea}
+            renderLeftIcon={() => (
+              <Image
+                source={images.searchIcon}
+                style={styles.icon}
+                color={isFocusDropdown ? "blue" : "black"}
+                name="Safety"
+              />
+            )}
           />
-          <Image source={images.searchIcon} style={styles.searchBarImage} />
         </View>
 
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Text
-            style={{
-              color: 'white',
-              paddingHorizontal: 11,
-              fontSize: fontSizes.h7,
-              fontWeight: "bold",
-            }}
-          >
-            {"Tạo bài đăng"}
-          </Text>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => {
+            navigate("CreatePost");
+          }}
+        >
+          <Text style={styles.buttonText}>{"Tạo bài đăng"}</Text>
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.listContainer}>
-        {topics
-          .filter((eachTopic) =>
-            eachTopic.name.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((eachTopic) => (
-            <TabDiscussionItems
-              topic={eachTopic}
-              key={eachTopic.ID}
-              /* onPress={() => {
-                  navigate("MessengerGroup", { user: eachTopic });
-                }} */
-            />
-          ))}
+        {typeOfPost == "Tất cả" || typeOfPost == null
+          ? topics.map((eachTopic) => (
+              <TabDiscussionItems
+                topic={eachTopic}
+                key={eachTopic.ID}
+                onPress={() => {
+                  navigate("ShowPost", { topic: eachTopic });
+                }}
+              />
+            ))
+          : topics
+              .filter((eachTopic) => eachTopic.type == typeOfPost)
+              .map((eachTopic) => (
+                <TabDiscussionItems
+                  topic={eachTopic}
+                  key={eachTopic.ID}
+                  onPress={() => {
+                    navigate("ShowPost", { topic: eachTopic });
+                  }}
+                />
+              ))}
       </ScrollView>
     </View>
   );
@@ -114,43 +177,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   searchBarAndButtonView: {
-    height: 100,
+    height: 70,
     flexDirection: "row",
-    justifyContent: 'space-between', 
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   searchBarView: {
-    width: '50%',
+    width: "50%",
     height: "85%",
     marginHorizontal: 10,
     paddingTop: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
   },
-  searchBarTypingArea: {
-    backgroundColor: colors.transparentWhite,
-    height: "75%",
-    flex: 1,
-    borderColor: "black",
-    borderWidth: 2,
-    borderRadius: 90,
-    paddingStart: 55,
-  },
-  searchBarImage: {
-    width: '20%',
-    height: '50%',
-    position: "absolute",
-    resizeMode: 'stretch',
-    top: "25%",
-    left: 8,
-  },
   buttonContainer: {
-    width: 'auto',
-    height: "55%",
+    width: "auto",
+    height: "65%",
 
     marginRight: 10,
-    marginTop: 5,
-    marginBottom: 15,
+    marginTop: 12,
 
     borderRadius: 20,
 
@@ -159,11 +204,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  buttonText: {
+    color: "white",
+    paddingHorizontal: 11,
+    fontSize: fontSizes.h7,
+    fontWeight: "bold",
+  },
   listContainer: {
     flex: 1,
-    margin: 10,
-    borderColor: "black",
-    borderWidth: 2,
-    borderRadius: 25,
+    margin: 7,
+  },
+  dropdown: {
+    flex: 1,
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: colors.backgroundWhite,
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
   },
 });

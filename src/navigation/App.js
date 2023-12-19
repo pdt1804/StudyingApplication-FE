@@ -10,8 +10,11 @@ import {
   Messenger,
   MessengerGroup,
   SettingProfile,
-  Settings,
-  ResetPasswordInSetting
+  CreatePost,
+  CreateNotification,
+  ShowPost,
+  ShowProfile,
+  ResetPasswordInSetting,
 } from '../screens';
 import UITab from './UITab';
 
@@ -31,14 +34,18 @@ function App(props) {
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        <Stack.Screen name="ResetPasswordInSetting" component={ResetPasswordInSetting} />
-
 
         <Stack.Screen name="UITab" component={UITab} />
         <Stack.Screen name="Messenger" component={Messenger} />
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
-        <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="ResetPasswordInSetting" component={ResetPasswordInSetting} />
+        
+        <Stack.Screen name="CreatePost" component={CreatePost} />
+        <Stack.Screen name="CreateNotification" component={CreateNotification} />
+        
+        <Stack.Screen name="ShowPost" component={ShowPost} />
+        <Stack.Screen name="ShowProfile" component={ShowProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

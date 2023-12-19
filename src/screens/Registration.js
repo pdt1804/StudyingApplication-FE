@@ -17,11 +17,6 @@ const Registration = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  /*   //use for api
-  const handleRegister = async () => {
-    navigate("Login");
-  }; */
-
   //states for validating
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
@@ -31,35 +26,33 @@ const Registration = (props) => {
   const [password, setPassword] = useState("");
   const [rePassword, setrePassword] = useState("");
 
+  //use for api
   const handleRegister = async () => {
-    
     let newUser = {
       userName: username,
       passWord: password,
       Email: email,
     };
 
-    if (username.length > 5 && password.length > 5)
-    {
+    if (username.length > 5 && password.length > 5) {
       try {
         if (password === rePassword) {
           const response = await axios.post(
-            API_BASE_URL + "/api/v1/user/CreateAccount", newUser
+            API_BASE_URL + "/api/v1/user/CreateAccount",
+            newUser
           );
           if (response.data == username) {
-            alert('Welcome to my application !!! :)');
-            navigate("Login")
+            alert("Welcome to my application !!! :)");
+            navigate("Login");
           } else {
             //unsuccessful
-            alert('Username is existed, please choose another username !!! :)');
+            alert("Username is existed, please choose another username !!! :)");
           }
         }
       } catch (catchError) {
         console.error(catchError.message);
       }
-    }
-    else
-    {
+    } else {
       alert("Your username and password must have at least 5 characters");
     }
   };

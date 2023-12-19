@@ -12,36 +12,30 @@ import {
 import { images, colors, icons, fontSizes } from "../../../constants";
 
 function TabDiscussionItems(props) {
-  let { name } = props.topic;
+  let { type, content } = props.topic;
   const { onPress } = props;
 
-  let fontSizeName = fontSizes.h5;
-  if (name.length > 22) {
-    fontSizeName = fontSizes.h6;
-  }
+  const _getIcon = () => {
+    let iconName = null;
+    type == "Tin tức"
+      ? (iconName = images.activeBlogSearchIcon)
+      : type == "Hỏi đáp"
+      ? (iconName = images.questionMarkIcon)
+      : type == "Đánh giá"
+      ? (iconName = images.checkMarkIcon)
+      : type == "Thảo Luận"
+      ? (iconName = images.activeChatMessageIcon)
+      : (iconName = images.warningShieldIcon);
+    return <Image source={iconName} style={styles.icon} />;
+  };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View style={styles.mainContainer}>
-        <View>
-          <Image /** Avatar */
-            style={styles.blogIcon}
-            source={images.blogSearchIcon}
-          />
-        </View>
-
-        <View style={styles.textView}>
-          <Text /** Name */
-            style={{
-              color: "black",
-              fontSize: fontSizeName,
-            }}
-          >
-            {name}
-          </Text>
-        </View>
+      <View style={styles.topView}>
+        {_getIcon()}
+        <Text /** Name */ style={styles.text}>{type}</Text>
       </View>
-      <View style={styles.bottomLine} />
+      <Text style={styles.content} numberOfLines={5} >{content}</Text>
     </TouchableOpacity>
   );
 }
@@ -49,32 +43,35 @@ export default TabDiscussionItems;
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
-    flexDirection: "column",
-  },
-  mainContainer: {
+    height: 160,
+    margin: 10,
     paddingTop: 15,
     paddingStart: 10,
+    flexDirection: 'column',
+    borderRadius: 10,
+    elevation: 8,
+    backgroundColor: colors.ShadowedItems,
+  },
+  topView: {
     flexDirection: "row",
-    alignItems: "center",
   },
-  blogIcon: {
-    width: 50,
-    height: 50,
-    resizeMode: "cover",
-    borderRadius: 90,
-    marginRight: 15,
-    alignSelf: "center",
-    tintColor: colors.blogIcon,
+  icon: {
+    width: 30,
+    height: 30,
+    margin: 5,
+    resizeMode: "stretch",
+    tintColor: colors.postIcon,
   },
-  textView: {
-    flexDirection: "column",
-    flex: 4,
-    marginRight: 10,
-  },
-  bottomLine: {
-    backgroundColor: colors.inactive,
-    height: 1,
+  text: {
     marginTop: 5,
+    marginLeft: 5,
+    color: "black",
+    fontSize: fontSizes.h5,
   },
+  content: {
+    marginLeft: 7,
+    marginRight: 10,
+    color: "black",
+    fontSize: fontSizes.h7,
+  }
 });

@@ -9,29 +9,44 @@ function UIHeader(props) {
     rightIconName,
     onPressLeftIcon,
     onPressRightIcon,
+    mainStyle,
+    iconStyle,
+    iconLeftStyle,
+    iconRightStyle,
   } = props;
 
   return (
-    <View style={styles.fullView}>
+    <View style={[styles.fullView, mainStyle]}>
       <View style={styles.safeAreaView} />
+
       <View style={styles.mainView}>
         {leftIconName != undefined ? (
           <TouchableOpacity
-            style={styles.iconClickable}
+            style={[styles.iconClickable, iconStyle]}
             onPress={onPressLeftIcon}
           >
-            <Image source={leftIconName} style={styles.iconDisplayedLeft} />
+            <Image
+              source={leftIconName}
+              style={[styles.iconDisplayedLeft, iconStyle, iconLeftStyle]}
+            />
           </TouchableOpacity>
         ) : (
           <View style={styles.iconBlank} />
         )}
-        <Text style={styles.textDisplayed}>{title}</Text>
+
+        <Text style={styles.textDisplayed} numberOfLines={1}>
+          {title}
+        </Text>
+
         {rightIconName != undefined ? (
           <TouchableOpacity
             style={styles.iconClickable}
             onPress={onPressRightIcon}
           >
-            <Image source={rightIconName} style={styles.iconDisplayedRight} />
+            <Image
+              source={rightIconName}
+              style={[styles.iconDisplayedRight, iconStyle, iconRightStyle]}
+            />
           </TouchableOpacity>
         ) : (
           <View style={styles.iconBlank} />
@@ -52,32 +67,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconClickable: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     flexDirection: "row",
     alignItems: "center",
   },
   iconBlank: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
+    //backgroundColor: 'pink'
   },
   iconDisplayedLeft: {
-    width: 35,
-    height: 35,
+    top: 10,
+    width: 30,
+    height: 30,
     marginStart: 10,
     tintColor: colors.UIHeaderTextAndIcon,
   },
   iconDisplayedRight: {
-    width: 35,
-    height: 35,
+    top: 10,
+    width: 30,
+    height: 30,
     marginEnd: 10,
     tintColor: colors.UIHeaderTextAndIcon,
   },
   textDisplayed: {
+    top: 10,
+    width: "60%",
     fontWeight: "bold",
-    fontSize: fontSizes.h2,
+    fontSize: fontSizes.h2 * 0.9,
+    textAlign: 'center',
     alignSelf: "center",
-    lineHeight: 45,
     color: colors.UIHeaderTextAndIcon,
+    //backgroundColor: 'pink'
   },
 });
