@@ -11,72 +11,41 @@ import {
 } from "react-native";
 import TabSuggestionsItems from "./TabSuggestionsItems";
 import { images, colors, fontSizes } from "../../../constants";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabSuggestions(props) {
   //list of group example = state
-  const [groups, setGroups] = useState([
-    {
-      ID: "01",
-      name: "Công Tằng Tôn Vũ Tạ Văn Huy",
-      imageUrl: "https://i.pravatar.cc/1001",
-    },
-    {
-      ID: "02",
-      name: "Khang",
-      imageUrl: "https://i.pravatar.cc/23070",
-    },
-    {
-      ID: "03",
-      name: "Bảo",
-      imageUrl: "https://i.pravatar.cc/3000",
-    },
-    {
-      ID: "04",
-      name: "Phúc",
-      imageUrl: "https://i.pravatar.cc/4090",
-    },
-    {
-      ID: "05",
-      name: "Minh",
-      imageUrl: "https://i.pravatar.cc/580",
-    },
-    {
-      ID: "06",
-      name: "Khoa",
-      imageUrl: "https://i.pravatar.cc/3071",
-    },
-    {
-      ID: "07",
-      name: "Anh",
-      imageUrl: "https://i.pravatar.cc/3602",
-    },
-    {
-      ID: "08",
-      name: "Đạt",
-      imageUrl: "https://i.pravatar.cc/3503",
-    },
-    {
-      ID: "09",
-      name: "Duy",
-      imageUrl: "https://i.pravatar.cc/3044",
-    },
-    {
-      ID: "10",
-      name: "Guy",
-      imageUrl: "https://i.pravatar.cc/3035",
-    },
-    {
-      ID: "11",
-      name: "Quy",
-      imageUrl: "https://i.pravatar.cc/3026",
-    },
-  ]);
+  const [invitation, setInvitation] = useState([]);
 
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
+  const [username, setUsername] = useState("")
 
   //navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const username = await AsyncStorage.getItem('username');
+        setUsername(username);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
+
+        setInvitation(response.data)
+        console.log(response.data)
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [props.userName]);
 
   return (
     <View style={styles.container}>
@@ -97,14 +66,14 @@ function TabSuggestions(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {groups
-          .filter((eachGroup) =>
-            eachGroup.name.toLowerCase().includes(searchText.toLowerCase())
+        {invitation
+          .filter((eachInvitation) =>
+            eachInvitation.userName.toLowerCase().includes(searchText.toLowerCase())
           )
-          .map((eachGroup) => (
+          .map((eachInvitation) => (
             <TabSuggestionsItems
-              group={eachGroup}
-              key={eachGroup.ID}
+              invitation={eachInvitation}
+              key={eachInvitation.ID}
               onPress={() => {
                 navigate("ShowProfileStranger", { user: eachGroup });
               }}

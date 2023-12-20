@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {
   Text,
@@ -8,12 +9,19 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors } from "../constants";
+import { API_BASE_URL } from "../../DomainAPI";
 
-function EnterMessageBar(props) {
+function EnterMessageBar({myUsername, friendUsername}) {
   const [typedText, setTypedText] = useState("");
   const handleSendMessage = async () => {
-    alert(`Gửi tin nhắn thành công: ${typedText}`);
-    setTypedText(""); //use for re-new the typedText
+    
+    const message = {
+      content: typedText,
+    }
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=" + myUsername + "&toUserName=" + friendUsername, message)
+    setTypedText(""); 
+
   };
 
   return (

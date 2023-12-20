@@ -11,6 +11,9 @@ import TabSuggestions from "./Tabs/TabSuggestions";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import axios from "axios";
+import { API_BASE_URL } from "../../../DomainAPI";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -27,10 +30,42 @@ const tabBarLabelStyles = {
 };
 
 function GroupChat(props) {
+  //list of group example = state
+  const [groups, setGroups] = useState([]);
+
+  //use for search bar (textInput)
+  const [searchText, setSearchText] = useState("");
+  const [username, setUsername] = useState("")
+
+  //navigation to/back
+  const { navigate, goBack } = props.navigation;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const username = await AsyncStorage.getItem('username');
+        setUsername(username);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser?myUserName=" + username);
+
+        console.log(response.data);
+        setGroups(response.data);
+
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [props.userName]);
+
   return (
     <View style={styles.container}>
       <UIHeader title={"Nhóm học tập"} />
-
       <View style={styles.displayView}><Tab.Navigator
           initialRouteName="TabYourGroups"
           screenOptions={ScreenOptions}
@@ -52,10 +87,11 @@ function GroupChat(props) {
             }}
           />
         </Tab.Navigator>
-        </View>
+      </View>
     </View>
-  );
+  )
 }
+
 export default GroupChat;
 
 const styles = StyleSheet.create({

@@ -12,42 +12,47 @@ import {
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { CommonButton } from "../../components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 
 function Settings(props) {
+  
   const [newUsername, setNewUsername] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [newYearOfBirth, setNewYearOfBirth] = useState("");
+  const [newDateOfBirth, setNewDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
 
-  const handleSettings = async () => {
-    const username = await AsyncStorage.getItem("username");
 
-    const response = await axios.get(
-      API_BASE_URL + "/api/v1/user/GetUser?userName=" + username
-    );
+  //function of navigation to/back
+  const { navigate, goBack, push } = props.navigation;
+
+  const handleSettings = async () => {
+    
+    const username = await AsyncStorage.getItem('username');
+
+    const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
 
     let updateInformation = {
       infoID: response.data.information.infoID,
       fulName: newUsername,
       phoneNumber: newPhoneNumber,
-      yearOfBirth: newYearOfBirth,
+      yearOfBirth: newDateOfBirth,
       gender: gender,
-    };
+    }
 
-    const responseUpdate = await axios.post(
-      API_BASE_URL + "/api/v1/information/updateInformation",
-      updateInformation
-    );
+    const responseUpdate = await axios.post(API_BASE_URL + "/api/v1/information/updateInformation", updateInformation);
 
-    if (responseUpdate.status == 200) {
+    if (responseUpdate.status == 200)
+    {
       push("UITab");
-    } else {
+    }
+    else
+    {
       alert("Error!");
     }
+
   };
 
   const handleCancel = async () => {
@@ -57,29 +62,27 @@ function Settings(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const username = await AsyncStorage.getItem("username");
 
-        const response = await axios.get(
-          API_BASE_URL + "/api/v1/user/GetUser?userName=" + username
-        );
+        const username = await AsyncStorage.getItem('username');
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
 
         setNewUsername(response.data.information.fulName);
-        setNewEmail(response.data.email);
-        setNewPhoneNumber(response.data.information.phoneNumber.toString());
-        setNewYearOfBirth(response.data.information.yearOfBirth.toString());
+        setNewEmail(response.data.email)
+        setNewPhoneNumber(response.data.information.phoneNumber.toString())
+        setNewDateOfBirth(response.data.information.yearOfBirth.toString())
         setGender(response.data.information.gender);
+        
+                
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
         setLoading(false);
       }
     };
 
     fetchData();
   }, [props.userName]);
-
-  //function of navigation to/back
-  const { navigate, goBack, push } = props.navigation;
 
   return (
     <View style={styles.container}>
@@ -105,14 +108,17 @@ function Settings(props) {
                   source={images.personCircleIcon}
                   style={styles.textInputImageNoTitle}
                 />
-                <TextInput
-                  style={styles.textInputTypingArea}
-                  inputMode="text"
-                  onChangeText={text => setNewUsername(text)}
-                  value={newUsername}
-                  placeholder="Nhập tên người dùng mới"
-                  placeholderTextColor={colors.noImportantText}
-                />
+                <View>
+                  <Text>Họ và tên:</Text>
+                  <TextInput
+                    style={styles.textInputTypingArea}
+                    inputMode="text"
+                    onChangeText={p => setNewUsername(p)}
+                    value={newUsername}
+                    placeholder="Nhập tên người dùng mới"
+                    placeholderTextColor={colors.noImportantText}
+                  />
+                </View>
               </View>
               <View /* new phone number */ style={styles.textInputView}>
                 <Image
@@ -124,7 +130,7 @@ function Settings(props) {
                   <TextInput
                     style={styles.textInputTypingArea}
                     inputMode="numeric"
-                    onChangeText={text => setNewPhoneNumber(text)}
+                    onChangeText={p => setNewPhoneNumber(p)}
                     value={newPhoneNumber}
                     placeholder="Nhập số điện thoại mới"
                     placeholderTextColor={colors.noImportantText}
@@ -137,14 +143,31 @@ function Settings(props) {
                   style={styles.textInputImage}
                 />
                 <View>
-                  <Text>Email:</Text>
+                  <Text>Gender:</Text>
                   <TextInput
                     style={styles.textInputTypingArea}
-                    secureTextEntry={true} // * the password
-                    inputMode="email"
-                    onChangeText={text => setNewEmail(text)}
-                    value={newEmail}
-                    placeholder="Nhập địa chỉ email mới"
+                    inputMode="text"
+                    onChangeText={p => setGender(p)}
+                    value={gender}
+                    placeholder="Giới tính"
+                    placeholderTextColor={colors.noImportantText}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.textInputView}>
+                <Image
+                  source={images.sendingEmailIcon}
+                  style={styles.textInputImage}
+                />
+                <View>
+                  <Text>Year of Birth:</Text>
+                  <TextInput
+                    style={styles.textInputTypingArea}
+                    inputMode="numeric"
+                    onChangeText={p => setNewDateOfBirth(p)}
+                    value={newDateOfBirth}
+                    placeholder="Năm sinh"
                     placeholderTextColor={colors.noImportantText}
                   />
                 </View>
@@ -154,21 +177,11 @@ function Settings(props) {
                 onPress={handleSettings}
                 title={"Lưu thay đổi".toUpperCase()}
               />
-              <CommonButton
-                onPress={handleCancel}
-                title={"Hủy bỏ".toUpperCase()}
-              />
             </View>
           </View>
 
-          <Image
-            source={images.decorStuff01}
-            style={styles.decorStuffBottomLeft}
-          />
-          <Image
-            source={images.decorStuff02}
-            style={styles.decorStuffBottomRight}
-          />
+          <Image source={images.decorStuff01} style={styles.decorStuffBottomLeft} />
+          <Image source={images.decorStuff02} style={styles.decorStuffBottomRight} />
         </View>
       </ScrollView>
     </View>
@@ -196,7 +209,7 @@ const styles = StyleSheet.create({
   },
   yourInformationText: {
     color: colors.titleScreen,
-    fontSize: fontSizes.h2 * 0.9,
+    fontSize: fontSizes.h2*0.9,
     fontWeight: "bold",
     alignSelf: "center",
   },

@@ -5,8 +5,10 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  push,
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function _getColorFromStatus(status) {
   if (status.toLowerCase().trim() == 'online') {
@@ -15,22 +17,35 @@ function _getColorFromStatus(status) {
 }
 
 function TabYourFriendsItems(props) {
-  let {name, imageUrl, status} = props.friend;
+  let {fulName, yearOfBirth, image} = props.friend.information;
+  let {userName} = props.friend;
   const {onPress} = props;
   
   let fontSizeName = fontSizes.h5;
-  if (name.length > 10) {
+  if (true) {
     fontSizeName = fontSizes.h6;
+  }
+
+  const ToMessage = async () => {
+    
+    try
+    {
+      onPress(await AsyncStorage.getItem('username'), userName);
+    }
+    catch (exception)
+    {
+      console.error(exception.message)
+    }
   }
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={ToMessage}
       style={styles.container}>
       <Image
         style={styles.avatarImage}
         source={{
-          uri: imageUrl,
+          uri: image,
         }}
       />
       {/* <Image
@@ -41,8 +56,10 @@ function TabYourFriendsItems(props) {
           style={{
             color: 'black',
             fontSize: fontSizeName,
+            marginTop: 5,
+            marginRight: 15,
           }}>
-          {name}
+          {fulName}
         </Text>
     </TouchableOpacity>
   );

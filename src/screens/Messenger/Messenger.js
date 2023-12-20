@@ -12,73 +12,17 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageBar, MessengerItems } from "../../components";
+import { API_BASE_URL } from "../../../DomainAPI";
+import axios from "axios";
+import { useRef } from "react";
 
 function Messenger(props) {
   //list of example = state
-  const [chatHistory, setChatHistory] = useState([
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Hello.",
-      timestamp: 1668135552,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/505",
-      isSender: false,
-      message: "Hi. How are you?",
-      timestamp: 1696993152,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Im fine thank you, and you?",
-      timestamp: 1699585152,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/505",
-      isSender: false,
-      message: "No.",
-      timestamp: 1699667952,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/505",
-      isSender: false,
-      message: "Im in heaven.",
-      timestamp: 1699671552,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Whats your favorite TV show?",
-      timestamp: 1700098383,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Whats your favorite movie?",
-      timestamp: 1700101983,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Whats your favorite book?",
-      timestamp: 1700105583,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "What are you doing this weekend?",
-      timestamp: 1700109183,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Are you a morning person or a night person? I finally finished w/my class work 4 hours in straight. this was relaxing and kept me in the game to finish. thank you and may GOD bless you",
-      timestamp: 1700112783,
-    },
-  ]);
+  const [chatHistory, setChatHistory] = useState([]);
 
-  const { imageUrl, name } = props.route.params.user;
+  //const { imageUrl, name } = props.route.params.user;
+
+  const {myUsername, friendUsername} = props.route.params;
 
   //navigation
   const { navigation, route } = props;
@@ -89,10 +33,30 @@ function Messenger(props) {
   const filteredChatTabs = () =>
     chatTab.filter((eachTab) => eachTab.usedByLeaderOnly == false);
 
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/loadMessageforUser?myUserName=" + myUsername + "&toUserName=" + friendUsername);
+        console.log(response.data);
+        setChatHistory(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchData(); // Gọi lần đầu tiên khi component được render
+  
+      const intervalId = setInterval(() => {
+        fetchData(); // Gọi lại sau mỗi 2 giây
+      }, 1000);
+  
+      return () => clearInterval(intervalId); // Xóa interval khi component bị unmount hoặc dependencies thay đổi
+    }, [props.userName]);
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={name}
+        title={friendUsername}
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
@@ -101,15 +65,15 @@ function Messenger(props) {
         onPressRightIcon={null}
       />
 
-      <View style={styles.displayView}>
-        <ScrollView /* Chat */>
+      <SafeAreaView style={styles.displayView}>
+      <ScrollView>
           {chatHistory.map((eachItem) => (
-            <MessengerItems item={eachItem} key={eachItem.timestamp} />
+            <MessengerItems item={eachItem} key={eachItem.id} />
           ))}
         </ScrollView>
 
-        <EnterMessageBar />
-      </View>
+        <EnterMessageBar myUsername={myUsername} friendUsername={friendUsername}/>
+      </SafeAreaView>
     </View>
   );
 }
