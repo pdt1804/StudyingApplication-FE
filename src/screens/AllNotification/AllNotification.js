@@ -14,51 +14,41 @@ import {
 import NotificationItems from "./NotificationItems";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../DomainAPI";
+
 
 function AllNotification(props) {
-  const [notifications, setNotifications] = useState([
-    {
-      ID: "01",
-      title: "Thông báo update 1/12",
-      type: "hệ thống",
-      status: 'chưa đọc',
-      content: "You're sitting beneath an ancient tree whose trunk is so wide you cannot reach around it. The sun is hot on your skin, and you can hear the sounds of the birds in the foliage over your head. This is the place you like to come to be on your own and connect with the land around you. It makes you feel closer to your ancestors, which is essential for a Karadji shaman such as yourself.",
-    },
-    {
-      ID: "02",
-      title: "Thông báo update 8/3",
-      type: "hệ thống",
-      status: 'chưa đọc',
-      content: "Suddenly, you hear the cries of your people, and you jump to your feet to see them gathering along the shore, thrusting their spears in the air. You race to the top of the sand dune and see what looks like a strange, white cloud drifting across the water toward the shore. You walk across the sand, and your people part to let you through. They're looking to you to know what to do.",
-    },
-    {
-      ID: "03",
-      title: "Thông báo Tuyển thành viên",
-      type: "người dùng",
-      status: 'chưa đọc',
-      content: "As the white cloud nears, you see that it's something else entirely: a vessel of some sort bringing a group of strange looking men to your shores. You close your eyes, focus your mind, and try to perceive the future. When the vision strikes you, you fall to your knees. These men will bring sickness and destruction to your land. They will label you and your kind Aboriginal Australians and will subjugate your people for generations. You now know what you must do.",
-    },
-    {
-      ID: "04",
-      title: "Thông báo bảo trì",
-      type: "hệ thống",
-      status: 'đã đọc',
-      content: "",
-    },
-    {
-      ID: "05",
-      title: "Thông báo Nghỉ học",
-      type: "người dùng",
-      status: 'đã đọc',
-      content: "",
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [username, setUsername] = useState("");
 
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
 
   //navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const userName = await AsyncStorage.getItem('username');
+        setUsername(userName);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyUserName?userName" + username);
+        setNotifications(response.data)
+        console.log(response.data);
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [props.userName]);
 
   return (
     <View style={styles.container}>
@@ -81,18 +71,13 @@ function AllNotification(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {notifications
-          .filter((eachNotification) =>
-            eachNotification.title
-              .toLowerCase()
-              .includes(searchText.toLowerCase())
-          )
-          .map((eachNotification) => (
+        {
+          notifications.map((eachNotification) => (
             <NotificationItems
-              group={eachNotification}
-              key={eachNotification.ID}
+              notification={eachNotification}
+              key={eachNotification.notifycationID}
               onPress={() => {
-                Alert.alert(eachNotification.title, eachNotification.content, [
+                Alert.alert(eachNotification.header, eachNotification.content, [
                   {
                     text: 'Đóng thông báo',
                     onPress: () => console.log('Đóng thông báo pressed'),

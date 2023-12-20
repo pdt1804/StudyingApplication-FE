@@ -13,6 +13,7 @@ function UIHeader(props) {
     iconStyle,
     iconLeftStyle,
     iconRightStyle,
+    onPressTitle,
   } = props;
 
   return (
@@ -34,7 +35,7 @@ function UIHeader(props) {
           <View style={styles.iconBlank} />
         )}
 
-        <Text style={styles.textDisplayed} numberOfLines={1}>
+        <Text style={styles.textDisplayed} numberOfLines={1} onPress={onPressTitle}>
           {title}
         </Text>
 
