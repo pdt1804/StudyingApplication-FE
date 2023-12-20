@@ -75,7 +75,7 @@ function TabSuggestions(props) {
               invitation={eachInvitation}
               key={eachInvitation.ID}
               onPress={() => {
-                navigate("ShowProfile", { user: eachGroup });
+                navigate("ShowProfileStranger", { user: eachGroup });
               }}
             />
           ))}

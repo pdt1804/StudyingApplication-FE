@@ -66,8 +66,8 @@ function Settings(props) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null)
-  
+  const [data, setData] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {

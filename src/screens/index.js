@@ -1,45 +1,48 @@
-import Login from "./Login"
-import Registration from "./Registration"
-import ForgetPassword from "./ForgetPassword"
-import Verification from "./Verification"
-import ResetPassword from "./ResetPassword"
+import Login from "./Login";
+import Registration from "./Registration";
+import ForgetPassword from "./ForgetPassword";
+import Verification from "./Verification";
+import ResetPassword from "./ResetPassword";
 
-import Settings from "./SettingProfile/Settings"
-import SettingProfile from "./SettingProfile/SettingProfile"
-import ResetPasswordInSetting from "./SettingProfile/ResetPasswordInSetting"
+import Settings from "./SettingProfile/Settings";
+import SettingProfile from "./SettingProfile/SettingProfile";
+import ResetPasswordInSetting from "./SettingProfile/ResetPasswordInSetting";
 
-import GroupChat from "./GroupChat/GroupChat"
-import MessengerGroup from "./MessengerGroup/MessengerGroup"
+import GroupChat from "./GroupChat/GroupChat";
+import MessengerGroup from "./MessengerGroup/MessengerGroup";
 
-import Friends from "./Friends/Friends"
-import Messenger from "./Messenger/Messenger"
+import Friends from "./Friends/Friends";
+import Messenger from "./Messenger/Messenger";
 
-import AllNotification from "./AllNotification/AllNotification"
+import AllNotification from "./AllNotification/AllNotification";
 
-import CreatePost from "./EssentialScreens/CreatePost"
-import CreateNotification from "./EssentialScreens/CreateNotification"
+import CreatePost from "./EssentialScreens/CreatePost";
+import CreateNotification from "./EssentialScreens/CreateNotification";
 
-import ShowPost from "./EssentialScreens/ShowPost"
-import ShowProfile from "./EssentialScreens/ShowProfile"
+import ShowPost from "./EssentialScreens/ShowPost";
+
+import ShowProfileFriend from "./EssentialScreens/ShowProfiles/ShowProfileFriend";
+import ShowProfileRequest from "./EssentialScreens/ShowProfiles/ShowProfileRequest";
+import ShowProfileStranger from "./EssentialScreens/ShowProfiles/ShowProfileStranger";
 
 export {
-    Login,
-    Registration,
-    ForgetPassword,
-    Verification,
-    ResetPassword,
-    Settings,
-    SettingProfile,
-    GroupChat,
-    Friends,
-    AllNotification,
-    Messenger,
-    MessengerGroup,
-
-    CreatePost,
-    CreateNotification,
-
-    ShowPost,
-    ShowProfile,
-    ResetPasswordInSetting,
-}
+  Login,
+  Registration,
+  ForgetPassword,
+  Verification,
+  ResetPassword,
+  Settings,
+  SettingProfile,
+  GroupChat,
+  Friends,
+  AllNotification,
+  Messenger,
+  MessengerGroup,
+  CreatePost,
+  CreateNotification,
+  ShowPost,
+  ResetPasswordInSetting,
+  ShowProfileFriend,
+  ShowProfileRequest,
+  ShowProfileStranger,
+};
