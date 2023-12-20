@@ -14,31 +14,21 @@ import {
 import NotificationItems from "./NotificationItems";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
+import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../DomainAPI";
-
 
 function AllNotification(props) {
   const [notifications, setNotifications] = useState([]);
-  const [username, setUsername] = useState("");
-
-  //use for search bar (textInput)
-  const [searchText, setSearchText] = useState("");
-
-  //navigation to/back
-  const { navigate, goBack } = props.navigation;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
 
         const userName = await AsyncStorage.getItem('username');
-        setUsername(userName);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyUserName?userName" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyUserName?userName=" + userName);
         setNotifications(response.data)
-        console.log(response.data);
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -49,6 +39,11 @@ function AllNotification(props) {
 
     fetchData();
   }, [props.userName]);
+  //use for search bar (textInput)
+  const [searchText, setSearchText] = useState("");
+
+  //navigation to/back
+  const { navigate, goBack } = props.navigation;
 
   return (
     <View style={styles.container}>
@@ -71,13 +66,18 @@ function AllNotification(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {
-          notifications.map((eachNotification) => (
+        {notifications
+          .filter((eachNotification) =>
+            eachNotification.header
+              .toLowerCase()
+              .includes(searchText.toLowerCase())
+          )
+          .map((eachNotification) => (
             <NotificationItems
-              notification={eachNotification}
+              group={eachNotification}
               key={eachNotification.notifycationID}
               onPress={() => {
-                Alert.alert(eachNotification.header, eachNotification.content, [
+                Alert.alert(eachNotification.header, eachNotification.notifycationType, eachNotification.content, [
                   {
                     text: 'Đóng thông báo',
                     onPress: () => console.log('Đóng thông báo pressed'),

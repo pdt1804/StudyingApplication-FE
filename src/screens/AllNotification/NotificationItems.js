@@ -12,7 +12,7 @@ import {
 import {images, colors, icons, fontSizes} from '../../constants';
 
 function NotificationItems(props) {
-  let {title, type, content, status} = props.group;
+  let {header, notifycationType, content} = props.group;
   const {onPress} = props;
   return (
     <TouchableOpacity
@@ -20,11 +20,11 @@ function NotificationItems(props) {
       style={styles.container}>
       <Image
         style={styles.img}
-        source={type == 'hệ thống' ?
+        source={notifycationType == 'admin' ?
           images.globeIcon : images.personCircleIcon}
       />
       <View style={styles.textView}>
-        <Text style={styles.titleText} numberOfLines={1}>{title}</Text>
+        <Text style={styles.titleText} numberOfLines={1}>{header}</Text>
         <Text style={styles.contentText} numberOfLines={2}>{content}</Text>
       </View>
     </TouchableOpacity>
