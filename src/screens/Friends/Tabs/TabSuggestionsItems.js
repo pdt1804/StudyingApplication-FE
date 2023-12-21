@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabSuggestionsItems(props) {
-  let { image, fulName } = props.invitation/* .information */;
+  let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
 
   const { onPress } = props;
@@ -16,8 +16,10 @@ function TabSuggestionsItems(props) {
 
 
   const handleAddFriend = async () => {
-    alert('thêm bạn bè thành công')
-  };
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+
+  }
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>

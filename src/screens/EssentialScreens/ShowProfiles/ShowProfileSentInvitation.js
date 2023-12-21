@@ -55,7 +55,7 @@ const generateColor = () => {
   return `#${randomColor}`;
 };
 
-const ShowProfileStranger = (props) => {
+const ShowProfileSentInvitation = (props) => {
   
   let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } = props.route.params;
 
@@ -65,10 +65,11 @@ const ShowProfileStranger = (props) => {
   //handle button here  
   const handleButton = async () => {}
 
-  const AddFriend = async () => {
+  const UndoAddFriend = async () => {
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
-  }
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/undoInvitationFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+
+}
 
   return (
     <View style={styles.container}>
@@ -88,8 +89,8 @@ const ShowProfileStranger = (props) => {
           <EachOptionViewOnly icon={images.documentBlackIcon} text={"Year Of Birth: " + yearOfBirth} />
 
           <CommonButton
-            onPress={AddFriend}
-            title={"Thêm bạn".toUpperCase()}
+            onPress={UndoAddFriend}
+            title={"Thu hồi".toUpperCase()}
           />
         </View>
       </ScrollView>
@@ -108,7 +109,7 @@ const ShowProfileStranger = (props) => {
     </View>
   );
 };
-export default ShowProfileStranger;
+export default ShowProfileSentInvitation;
 
 const styles = StyleSheet.create({
   container: {

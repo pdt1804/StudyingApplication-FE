@@ -17,8 +17,8 @@ function _getColorFromStatus(status) {
 }
 
 function TabYourFriendsItems(props) {
-  let {fulName, image} = props.friend; //fake data
-  //let {fulName, yearOfBirth, image} = props.friend.information;
+  
+  let {fulName, yearOfBirth, image} = props.friend.information;
   let {userName} = props.friend;
   const {onPress} = props;
   

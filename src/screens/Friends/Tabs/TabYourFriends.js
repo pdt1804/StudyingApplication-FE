@@ -17,32 +17,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabYourFriends(props) {
   //list of group example = state
-  const [g, setG] = useState([ // fake data
-    {
-      ID: "01",
-      fulName: "Tom",
-      image: "https://i.pravatar.cc/1000",
-    },
-    {
-      ID: "02",
-      fulName: "Jerry",
-      image: "https://i.pravatar.cc/1001",
-    },
-    {
-      ID: "03",
-      fulName: "Edison",
-      image: "https://i.pravatar.cc/1002",
-    },
-    {
-      ID: "04",
-      fulName: "Anh So Tanh",
-      image: "https://i.pravatar.cc/1003",
-    },
-    {
-      ID: "05",
-      fulName: "My dog",
-      image: "https://i.pravatar.cc/1004",
-    },]);
   const [friends, setFriends] = useState([]);
   const [username, setUsername] = useState("");
 
@@ -81,7 +55,7 @@ function TabYourFriends(props) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={g}
+        data={friends}
         numColumns={3}
         renderItem={({ item, index }) => (
           <TabYourFriendsItems

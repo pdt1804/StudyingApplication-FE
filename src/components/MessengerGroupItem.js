@@ -30,7 +30,7 @@ function MessengerGroupItems(props) {
         // alert("sentUsername: " + sentUsername)
 
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error.message);
         setError('Error fetching data');
         setLoading(false);
       }

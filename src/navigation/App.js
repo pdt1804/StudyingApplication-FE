@@ -18,6 +18,7 @@ import {
   ShowProfileFriend,
   ShowProfileRequest,
   ShowProfileStranger,
+  ShowProfileSentInvitation,
 } from '../screens';
 import UITab from './UITab';
 
@@ -52,6 +53,7 @@ function App(props) {
         <Stack.Screen name="ShowProfileFriend" component={ShowProfileFriend} />
         <Stack.Screen name="ShowProfileRequest" component={ShowProfileRequest} />
         <Stack.Screen name="ShowProfileStranger" component={ShowProfileStranger} />
+        <Stack.Screen name="ShowProfileSentInvitation" component={ShowProfileSentInvitation} />
       </Stack.Navigator>
     </NavigationContainer>
   );

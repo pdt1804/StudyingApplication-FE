@@ -17,63 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabSentRequests(props) {
   //list of group example = state
-  const [g, setG] = useState([ //fake data
-    {
-      ID: "01",
-      fulName: "Muốn kết bạn",
-      image: "https://i.pravatar.cc/10301",
-    },
-    {
-      ID: "02",
-      fulName: "Khang",
-      image: "https://i.pravatar.cc/23070",
-    },
-    {
-      ID: "03",
-      fulName: "Bảo",
-      image: "https://i.pravatar.cc/3000",
-    },
-    {
-      ID: "04",
-      fulName: "Phúc",
-      image: "https://i.pravatar.cc/4090",
-    },
-    {
-      ID: "05",
-      fulName: "Minh",
-      image: "https://i.pravatar.cc/580",
-    },
-    {
-      ID: "06",
-      fulName: "Khoa",
-      image: "https://i.pravatar.cc/3071",
-    },
-    {
-      ID: "07",
-      fulName: "Anh",
-      image: "https://i.pravatar.cc/3602",
-    },
-    {
-      ID: "08",
-      fulName: "Đạt",
-      image: "https://i.pravatar.cc/3503",
-    },
-    {
-      ID: "09",
-      fulName: "Duy",
-      image: "https://i.pravatar.cc/3044",
-    },
-    {
-      ID: "10",
-      fulName: "Guy",
-      image: "https://i.pravatar.cc/3035",
-    },
-    {
-      ID: "11",
-      fulName: "Quy",
-      image: "https://i.pravatar.cc/3026",
-    },
-  ]);
+  
   const [invitation, setInvitation] = useState([]);
 
   //use for search bar (textInput)
@@ -90,7 +34,7 @@ function TabSentRequests(props) {
         const username = await AsyncStorage.getItem('username');
         setUsername(username);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllSentInvitationList?myUserName=" + username);
 
         setInvitation(response.data)
         console.log(response.data)
@@ -123,16 +67,24 @@ function TabSentRequests(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {g
-          /* .filter((eachInvitation) =>
+        {invitation
+          .filter((eachInvitation) =>
             eachInvitation.userName.toLowerCase().includes(searchText.toLowerCase())
-          ) */
+          ) 
           .map((eachInvitation) => (
             <TabSentRequestsItems
               invitation={eachInvitation}
-              key={eachInvitation.ID}
+              key={eachInvitation.information.infoID}
               onPress={() => {
-                navigate("ShowProfileStranger", { user: eachGroup });
+                navigate("ShowProfileSentInvitation", { 
+                  userName: eachInvitation.userName,
+                  image: eachInvitation.information.image, 
+                  fulName: eachInvitation.information.fulName, 
+                  phoneNumber: eachInvitation.information.phoneNumber, 
+                  gender: eachInvitation.information.gender, 
+                  yearOfBirth: eachInvitation.information.yearOfBirth,
+                  email: eachInvitation.email 
+                });
               }}
             />
           ))}

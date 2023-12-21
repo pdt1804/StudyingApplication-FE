@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = (props) => {
   //navigation to/back
-  const { navigate, goBack } = props.navigation;
+  const { navigate, goBack, push } = props.navigation;
 
   //Login component and function, use for api
   const [username, setUsername] = useState("");
@@ -34,7 +34,7 @@ const Login = (props) => {
 
         if (response.data == username) {
           await AsyncStorage.setItem("username", username);
-          navigate("UITab");
+          push("UITab");
         } else {
           alert("Username or password aren't correct");
         }

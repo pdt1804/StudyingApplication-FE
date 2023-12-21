@@ -25,6 +25,7 @@ import ShowNotification from "./EssentialScreens/ShowNotification";
 import ShowProfileFriend from "./EssentialScreens/ShowProfiles/ShowProfileFriend";
 import ShowProfileRequest from "./EssentialScreens/ShowProfiles/ShowProfileRequest";
 import ShowProfileStranger from "./EssentialScreens/ShowProfiles/ShowProfileStranger";
+import ShowProfileSentInvitation from "./EssentialScreens/ShowProfiles/ShowProfileSentInvitation";
 
 export {
   Login,
@@ -47,4 +48,5 @@ export {
   ShowProfileFriend,
   ShowProfileRequest,
   ShowProfileStranger,
+  ShowProfileSentInvitation,
 };

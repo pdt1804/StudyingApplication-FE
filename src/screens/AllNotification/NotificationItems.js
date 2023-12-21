@@ -13,7 +13,9 @@ import { images, colors, icons, fontSizes } from "../../constants";
 
 function NotificationItems(props) {
 
-  let {header, notifycationType, content} = props.group;
+  let {header, notifycationType, content, dateSent} = props.group;
+  
+  const dateSentNotification = new Date(dateSent)
   const {onPress} = props;
 
   return (
@@ -27,7 +29,7 @@ function NotificationItems(props) {
         <Text style={styles.titleText} numberOfLines={1}>{header}</Text>
         <Text style={styles.contentText} numberOfLines={2}>{content}</Text>
       </View>
-      <Text style={styles.timeText}>{timeSent}</Text>
+      <Text style={styles.timeText}>{dateSentNotification.getHours()}:{dateSentNotification.getMinutes()} {dateSentNotification.getDate()}/{dateSentNotification.getMonth() + 1}</Text>
     </TouchableOpacity>
   );
 }
@@ -71,5 +73,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "right",
     color: colors.inactive,
+    marginBottom: 15,
+    marginTop: -10,
   },
 });

@@ -36,7 +36,7 @@ function UIHeader(props) {
           <View style={styles.iconBlank} />
         )}
 
-        <Text style={[styles.textDisplayed, textStyle]} numberOfLines={1}>
+        <Text style={[styles.textDisplayed, textStyle]} numberOfLines={1} onPress={onPressTitle}>
           {title}
         </Text>
 

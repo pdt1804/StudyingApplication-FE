@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabSentRequestsItems(props) {
-  let { image, fulName } = props.invitation/* .information */;
+  let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
 
   const { onPress } = props;
@@ -16,7 +16,9 @@ function TabSentRequestsItems(props) {
 
 
   const handleCancel = async () => {
-    alert('hủy thành công')
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/undoInvitationFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+
   };
 
   return (
@@ -33,7 +35,7 @@ function TabSentRequestsItems(props) {
         </Text>
         <View style={styles.buttonsView}>
           <TouchableOpacity onPress={handleCancel} style={styles.buttons}>
-            <Text style={styles.buttonsText}>Hủy</Text>
+            <Text style={styles.buttonsText}>Thu hồi</Text>
           </TouchableOpacity>
         </View>
       </View>

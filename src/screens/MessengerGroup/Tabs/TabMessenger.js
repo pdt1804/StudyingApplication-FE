@@ -36,7 +36,7 @@ function TabMessenger(props) {
         setChatHistory(response.data);
   
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data: ', error.message);
         setError('Error fetching data');
         setLoading(false);
       }
@@ -62,7 +62,7 @@ function TabMessenger(props) {
     <View style={styles.displayView}>
       <ScrollView /* Chat */ ref={scrollRef}>
         {chatHistory.map((eachItem) => (
-          <MessengerItems item={eachItem} key={eachItem.id} />
+          <MessengerGroupItems item={eachItem} key={eachItem.id} />
         ))}
       </ScrollView>
 

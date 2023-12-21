@@ -17,64 +17,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabSuggestions(props) {
   //list of group example = state
-  const [g, setG] = useState([ //fake data
-    {
-      ID: "01",
-      fulName: "Công Tằng Tôn Vũ Tạ Văn Huy",
-      image: "https://i.pravatar.cc/1001",
-    },
-    {
-      ID: "02",
-      fulName: "Khang",
-      image: "https://i.pravatar.cc/23070",
-    },
-    {
-      ID: "03",
-      fulName: "Bảo",
-      image: "https://i.pravatar.cc/3000",
-    },
-    {
-      ID: "04",
-      fulName: "Phúc",
-      image: "https://i.pravatar.cc/4090",
-    },
-    {
-      ID: "05",
-      fulName: "Minh",
-      image: "https://i.pravatar.cc/580",
-    },
-    {
-      ID: "06",
-      fulName: "Khoa",
-      image: "https://i.pravatar.cc/3071",
-    },
-    {
-      ID: "07",
-      fulName: "Anh",
-      image: "https://i.pravatar.cc/3602",
-    },
-    {
-      ID: "08",
-      fulName: "Đạt",
-      image: "https://i.pravatar.cc/3503",
-    },
-    {
-      ID: "09",
-      fulName: "Duy",
-      image: "https://i.pravatar.cc/3044",
-    },
-    {
-      ID: "10",
-      fulName: "Guy",
-      image: "https://i.pravatar.cc/3035",
-    },
-    {
-      ID: "11",
-      fulName: "Quy",
-      image: "https://i.pravatar.cc/3026",
-    },
-  ]);
-  const [invitation, setInvitation] = useState([]);
 
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
@@ -83,6 +25,8 @@ function TabSuggestions(props) {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
+  const [invitation, setInvitation] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -90,8 +34,7 @@ function TabSuggestions(props) {
         setUsername(await AsyncStorage.getItem('username'));
 
         if (searchText.length === 0) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
-          setInvitation(response.data);
+          setInvitation([]);
 
         } else if (searchText.length >= 1) {
           const response = await axios.get(API_BASE_URL + "/api/v1/friendship/findAllFriendByInputName?input=" + searchText + "&userName=" + username);
@@ -142,7 +85,7 @@ function TabSuggestions(props) {
               invitation={eachInvitation}
               key={eachInvitation.information.infoID}
               onPress={() => {
-                navigate("ShowProfileRequest", { 
+                navigate("ShowProfileStranger", { 
                   userName: eachInvitation.userName,
                   image: eachInvitation.information.image, 
                   fulName: eachInvitation.information.fulName, 
