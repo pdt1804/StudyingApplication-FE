@@ -73,15 +73,7 @@ function MessengerGroup(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        if (await AsyncStorage.getItem('groupID'))
-        {
-          await AsyncStorage.removeItem("groupID", groupID);
-          await AsyncStorage.setItem("groupID", groupID);
-        }
-        alert(id);
-        setID(groupID);
-                
+        alert(groupID)
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
@@ -109,9 +101,9 @@ function MessengerGroup(props) {
           initialRouteName="TabMessenger"
           screenOptions={ScreenOptions}
         >
-          <Tab.Screen name="TabMessenger" component={TabMessenger} />
-          <Tab.Screen name="TabDiscussion" component={TabDiscussion} />
-          <Tab.Screen name="TabNotification" component={TabNotification} />
+          <Tab.Screen name="TabMessenger" component={TabMessenger} initialParams={groupID}/>
+          <Tab.Screen name="TabDiscussion" component={TabDiscussion} initialParams={groupID}/>
+          <Tab.Screen name="TabNotification" component={TabNotification} initialParams={groupID}/>
         </Tab.Navigator>
       </View>
     </View>
