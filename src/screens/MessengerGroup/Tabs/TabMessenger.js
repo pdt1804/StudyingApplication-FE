@@ -9,21 +9,58 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import { EnterMessageBar, MessengerItems } from "../../../components";
+import { EnterMessageBar, MessengerItems, MessengerGroupItems } from "../../../components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import EnterMessageGroupBar from "../../../components/EnterMessageGroupBar";
+
+const getGroupID = async () =>
+{
+  return await AsyncStorage.getItem('groupID')
+}
 
 function TabMessenger(props) {
   //list of example = state
   const [chatHistory, setChatHistory] = useState([]);
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setUserName((await AsyncStorage.getItem('username')).toString());
+  
+        const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/loadMessageInGroup?myUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'));
+  
+        console.log(response.data);
+        setChatHistory(response.data);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+  
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+  
+    // Sử dụng setInterval để gọi lại fetchData mỗi giây
+      const intervalId = setInterval(fetchData, 3000);
+    
+      // Hủy interval khi component bị unmounted
+      return () => clearInterval(intervalId);
+  }, [props.userName, userName])
+
 
   return (
     <View style={styles.displayView}>
       <ScrollView /* Chat */>
         {chatHistory.map((eachItem) => (
-          <MessengerItems item={eachItem} key={eachItem.timestamp} />
+          <MessengerItems item={eachItem} key={eachItem.id} />
         ))}
       </ScrollView>
 
-      <EnterMessageBar />
+      <EnterMessageGroupBar userName={userName}/>
     </View>
   );
 }

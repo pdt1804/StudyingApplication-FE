@@ -119,8 +119,6 @@ function TabNotification(props) {
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
 
-  const {groupID} = props.route.params;
-
   //navigation
   const { navigate, goBack } = props.navigation;
 

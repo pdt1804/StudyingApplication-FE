@@ -68,17 +68,10 @@ function MessengerGroup(props) {
 
   //navigation
   const { navigate, goBack } = props.navigation;
-  const [id, setID] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        alert(groupID)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
-      }
+      
     };
 
     fetchData();
@@ -101,9 +94,9 @@ function MessengerGroup(props) {
           initialRouteName="TabMessenger"
           screenOptions={ScreenOptions}
         >
-          <Tab.Screen name="TabMessenger" component={TabMessenger} initialParams={groupID}/>
-          <Tab.Screen name="TabDiscussion" component={TabDiscussion} initialParams={groupID}/>
-          <Tab.Screen name="TabNotification" component={TabNotification} initialParams={groupID}/>
+          <Tab.Screen name="TabMessenger" component={TabMessenger}/>
+          <Tab.Screen name="TabDiscussion" component={TabDiscussion}/>
+          <Tab.Screen name="TabNotification" component={TabNotification}/>
         </Tab.Navigator>
       </View>
     </View>

@@ -51,6 +51,22 @@ function TabYourGroups(props) {
     fetchData();
   }, [props.userName]);
 
+  const SelectedGroup = async (eachGroup) => {
+
+    try {
+          
+      await AsyncStorage.removeItem("groupID")
+      await AsyncStorage.setItem("groupID", eachGroup.groupID.toString());
+      navigate("MessengerGroup", { group: eachGroup });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Error fetching data');
+      setLoading(false);
+    }
+  
+  }
+
 
   return (
     <View style={styles.container}>
@@ -79,9 +95,7 @@ function TabYourGroups(props) {
             <TabYourGroupsItems
               group={eachGroup}
               key={eachGroup.groupID}
-              onPress={() => {
-                navigate("MessengerGroup", { group: eachGroup });
-              }}
+              onPress={() => { SelectedGroup(eachGroup) }}
             />
           ))}
       </ScrollView>
