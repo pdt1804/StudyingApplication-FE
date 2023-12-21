@@ -16,6 +16,10 @@ import TabNotification from "./Tabs/TabNotification";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import axios from "axios";
+import { API_BASE_URL } from "../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -60,15 +64,38 @@ const ScreenOptions = ({ route }) => ({
 
 function MessengerGroup(props) {
   //I forget what's' this
-  const { imageUrl, name } = props.route.params.user;
+  const { imageGroup, nameGroup, groupID } = props.route.params.group;
 
   //navigation
   const { navigate, goBack } = props.navigation;
+  const [id, setID] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        if (await AsyncStorage.getItem('groupID'))
+        {
+          await AsyncStorage.removeItem("groupID", groupID);
+          await AsyncStorage.setItem("groupID", groupID);
+        }
+        alert(id);
+        setID(groupID);
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [props.userName]);
 
   return (
     <View style={styles.container}>
       <UIHeader
-        title={name}
+        title={nameGroup}
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {

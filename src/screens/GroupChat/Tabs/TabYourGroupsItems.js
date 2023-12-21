@@ -10,11 +10,11 @@ const generateColor = () => {
 };
 
 function TabYourGroupsItems(props) {
-  let { name, imageUrl, newestMessage, status } = props.group;
+  let { nameGroup, imageGroup, newestMessage, status } = props.group;
   const { onPress } = props;
 
   let fontSizeName = fontSizes.h5;
-  if (name.length > 22) {
+  if (nameGroup.length > 22) {
     fontSizeName = fontSizes.h6;
   }
 
@@ -23,7 +23,7 @@ function TabYourGroupsItems(props) {
       <Image /** Avatar */
         style={[styles.avatarImage, {borderColor: generateColor()}]}
         source={{
-          uri: imageUrl,
+          uri: imageGroup,
         }}
       />
       <Text /** Name */
@@ -33,7 +33,7 @@ function TabYourGroupsItems(props) {
           fontSize: fontSizeName,
         }}
       >
-        {name}
+        {nameGroup}
       </Text>
     </TouchableOpacity>
   );
