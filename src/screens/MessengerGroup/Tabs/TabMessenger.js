@@ -9,73 +9,48 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import { EnterMessageBar, MessengerItems } from "../../../components";
+import { EnterMessageBar, MessengerItems, MessengerGroupItems } from "../../../components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import EnterMessageGroupBar from "../../../components/EnterMessageGroupBar";
+
+const getGroupID = async () =>
+{
+  return await AsyncStorage.getItem('groupID')
+}
 
 function TabMessenger(props) {
   //list of example = state
-  const [chatHistory, setChatHistory] = useState([
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message:
-        "Hello.",
-      timestamp: 1668135552,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/5055",
-      isSender: false,
-      message: "Hi. How are you? ",
-      timestamp: 1696993152,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Im fine thank you, and you?",
-      timestamp: 1699585152,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/5055",
-      isSender: false,
-      message: "No.",
-      timestamp: 1699667952,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/5075",
-      isSender: false,
-      message: "Im in heaven.",
-      timestamp: 1699671552,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Whats your favorite TV show?",
-      timestamp: 1700098383,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Whats your favorite movie?",
-      timestamp: 1700101983,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/5075",
-      isSender: false,
-      message: "Whats your favorite book?",
-      timestamp: 1700105583,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "What are you doing this weekend?",
-      timestamp: 1700109183,
-    },
-    {
-      imageUrl: "https://i.pravatar.cc/500",
-      isSender: true,
-      message: "Are you a morning person or a night person?",
-      timestamp: 1700112783,
-    },
-  ]);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setUserName((await AsyncStorage.getItem('username')).toString());
+  
+        const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/loadMessageInGroup?myUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'));
+  
+        console.log(response.data);
+        setChatHistory(response.data);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+  
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+  
+    // Sử dụng setInterval để gọi lại fetchData mỗi giây
+      const intervalId = setInterval(fetchData, 3000);
+    
+      // Hủy interval khi component bị unmounted
+      return () => clearInterval(intervalId);
+  }, [props.userName, userName])
+
 
   const scrollRef = useRef(null);
   useEffect(() => {
@@ -87,11 +62,11 @@ function TabMessenger(props) {
     <View style={styles.displayView}>
       <ScrollView /* Chat */ ref={scrollRef}>
         {chatHistory.map((eachItem) => (
-          <MessengerItems item={eachItem} key={eachItem.timestamp} />
+          <MessengerItems item={eachItem} key={eachItem.id} />
         ))}
       </ScrollView>
 
-      <EnterMessageBar />
+      <EnterMessageGroupBar userName={userName}/>
     </View>
   );
 }

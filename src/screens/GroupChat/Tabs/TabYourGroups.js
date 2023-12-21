@@ -11,72 +11,62 @@ import {
 } from "react-native";
 import TabYourGroupsItems from "./TabYourGroupsItems";
 import { images, colors, fontSizes } from "../../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import axios from "axios";
+
 
 function TabYourGroups(props) {
   //list of group example = state
-  const [groups, setGroups] = useState([
-    {
-      ID: "01",
-      name: "Tự học bất cứ điều gì",
-      imageUrl: "https://i.pravatar.cc/100",
-    },
-    {
-      ID: "02",
-      name: "Kỹ năng Lu3",
-      imageUrl: "https://i.pravatar.cc/200",
-    },
-    {
-      ID: "03",
-      name: "Tóm tắt video",
-      imageUrl: "https://i.pravatar.cc/300",
-    },
-    {
-      ID: "04",
-      name: "Tokyo Lofi Healing",
-      imageUrl: "https://i.pravatar.cc/400",
-    },
-    {
-      ID: "05",
-      name: "Danh sách đầy đủ 100 tên phổ biến nhất ở nam kèm tỷ lệ trong nhóm nam giới",
-      imageUrl: "https://i.pravatar.cc/500",
-    },
-    {
-      ID: "06",
-      name: "Tư Duy Ngược",
-      imageUrl: "https://i.pravatar.cc/301",
-    },
-    {
-      ID: "07",
-      name: "Cách Tôi Làm Việc",
-      imageUrl: "https://i.pravatar.cc/302",
-    },
-    {
-      ID: "08",
-      name: "Statistical Thinking",
-      imageUrl: "https://i.pravatar.cc/303",
-    },
-    {
-      ID: "09",
-      name: "Speak English",
-      imageUrl: "https://i.pravatar.cc/304",
-    },
-    {
-      ID: "10",
-      name: "Vô văn hóa",
-      imageUrl: "https://i.pravatar.cc/305",
-    },
-    {
-      ID: "11",
-      name: "Wa???Wa???",
-      imageUrl: "https://i.pravatar.cc/306",
-    },
-  ]);
+  const [groups, setGroups] = useState([]);
 
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
 
   //navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  const [username, setUsername] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const username = await AsyncStorage.getItem('username');
+        setUsername(username);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser?myUserName=" + username);
+
+        console.log(response.data);
+        setGroups(response.data);
+
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [props.userName]);
+
+  const SelectedGroup = async (eachGroup) => {
+
+    try {
+          
+      await AsyncStorage.removeItem("groupID")
+      await AsyncStorage.setItem("groupID", eachGroup.groupID.toString());
+      navigate("MessengerGroup", { group: eachGroup });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Error fetching data');
+      setLoading(false);
+    }
+  
+  }
+
 
   return (
     <View style={styles.container}>
@@ -99,15 +89,13 @@ function TabYourGroups(props) {
       <ScrollView>
         {groups
           .filter((eachGroup) =>
-            eachGroup.name.toLowerCase().includes(searchText.toLowerCase())
+            eachGroup.nameGroup.toLowerCase().includes(searchText.toLowerCase())
           )
           .map((eachGroup) => (
             <TabYourGroupsItems
               group={eachGroup}
-              key={eachGroup.ID}
-              onPress={() => {
-                navigate("MessengerGroup", { user: eachGroup });
-              }}
+              key={eachGroup.groupID}
+              onPress={() => { SelectedGroup(eachGroup) }}
             />
           ))}
       </ScrollView>

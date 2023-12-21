@@ -87,22 +87,35 @@ function TabSuggestions(props) {
     const fetchData = async () => {
       try {
 
-        const username = await AsyncStorage.getItem('username');
-        setUsername(username);
+        setUsername(await AsyncStorage.getItem('username'));
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
+        if (searchText.length === 0) {
+          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
+          setInvitation(response.data);
 
-        setInvitation(response.data)
-        console.log(response.data)
-                
+        } else if (searchText.length >= 1) {
+          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/findAllFriendByInputName?input=" + searchText + "&userName=" + username);
+          setInvitation(response.data);
+
+        }
+  
+        console.log(invitation);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
         setLoading(false);
       }
     };
-    fetchData();
-  }, [props.userName]);
+  
+    // Thực hiện fetch dữ liệu sau khi ngừng nhập trong 2 giây
+    const timeoutId = setTimeout(() => {
+      fetchData();
+    }, 1);
+  
+    // Hủy timeout nếu có sự kiện thay đổi trong khoảng 2 giây
+    return () => clearTimeout(timeoutId);
+  }, [searchText, username]);
+
 
   return (
     <View style={styles.container}>
@@ -123,16 +136,21 @@ function TabSuggestions(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {g
-          /* .filter((eachInvitation) =>
-            eachInvitation.userName.toLowerCase().includes(searchText.toLowerCase())
-          ) */
+        {invitation
           .map((eachInvitation) => (
             <TabSuggestionsItems
               invitation={eachInvitation}
-              key={eachInvitation.ID}
+              key={eachInvitation.information.infoID}
               onPress={() => {
-                navigate("ShowProfileStranger", { user: eachInvitation });
+                navigate("ShowProfileRequest", { 
+                  userName: eachInvitation.userName,
+                  image: eachInvitation.information.image, 
+                  fulName: eachInvitation.information.fulName, 
+                  phoneNumber: eachInvitation.information.phoneNumber, 
+                  gender: eachInvitation.information.gender, 
+                  yearOfBirth: eachInvitation.information.yearOfBirth,
+                  email: eachInvitation.email 
+                });
               }}
             />
           ))}
@@ -140,6 +158,7 @@ function TabSuggestions(props) {
     </View>
   );
 }
+
 export default TabSuggestions;
 
 const styles = StyleSheet.create({

@@ -15,6 +15,7 @@ const ResetPasswordInSetting = (props) => {
 
   const { navigate, goBack } = props.navigation;
 
+  const [currentPassword, setCurrentPassword] = useState("")
   const [password, setPassword] = useState('none');
   const [rePassword, setRePassword] = useState('none');
 
@@ -94,7 +95,7 @@ const ResetPasswordInSetting = (props) => {
           </View>
 
           <CommonButton
-            onPress={handleResetPassword}
+            onPress={ResetPasswordInSetting}
             title={"tiếp tục".toUpperCase()}
           />
         </View>

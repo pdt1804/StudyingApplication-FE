@@ -14,6 +14,7 @@ function UIHeader(props) {
     iconLeftStyle,
     iconRightStyle,
     textStyle,
+    onPressTitle,
   } = props;
 
   return (

@@ -16,6 +16,10 @@ import TabNotification from "./Tabs/TabNotification";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import axios from "axios";
+import { API_BASE_URL } from "../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -60,15 +64,23 @@ const ScreenOptions = ({ route }) => ({
 
 function MessengerGroup(props) {
   //I forget what's' this
-  const { imageUrl, name } = props.route.params.user;
+  const { imageGroup, nameGroup, groupID } = props.route.params.group;
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      
+    };
+
+    fetchData();
+  }, [props.userName]);
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={name}
+        title={nameGroup}
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
@@ -82,9 +94,9 @@ function MessengerGroup(props) {
           initialRouteName="TabMessenger"
           screenOptions={ScreenOptions}
         >
-          <Tab.Screen name="TabMessenger" component={TabMessenger} />
-          <Tab.Screen name="TabDiscussion" component={TabDiscussion} />
-          <Tab.Screen name="TabNotification" component={TabNotification} />
+          <Tab.Screen name="TabMessenger" component={TabMessenger}/>
+          <Tab.Screen name="TabDiscussion" component={TabDiscussion}/>
+          <Tab.Screen name="TabNotification" component={TabNotification}/>
         </Tab.Navigator>
       </View>
     </View>
