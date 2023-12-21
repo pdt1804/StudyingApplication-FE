@@ -19,6 +19,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AllNotification(props) {
+
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -77,12 +78,7 @@ function AllNotification(props) {
               group={eachNotification}
               key={eachNotification.notifycationID}
               onPress={() => {
-                Alert.alert(eachNotification.header, eachNotification.notifycationType, eachNotification.content, [
-                  {
-                    text: 'Đóng thông báo',
-                    onPress: () => console.log('Đóng thông báo pressed'),
-                  },
-                ]);
+                navigate("ShowNotification", { notification: eachNotification });
               }}
             />
           ))}

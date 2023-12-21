@@ -9,19 +9,19 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabSuggestionsItems from "./TabSuggestionsItems";
+import TabFriendRequestsItems from "./TabFriendRequestsItems";
 import { images, colors, fontSizes } from "../../../constants";
 import { API_BASE_URL } from "../../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function TabSuggestions(props) {
+function TabFriendRequests(props) {
   //list of group example = state
   const [g, setG] = useState([ //fake data
     {
       ID: "01",
-      fulName: "Công Tằng Tôn Vũ Tạ Văn Huy",
-      image: "https://i.pravatar.cc/1001",
+      fulName: "Linh Mờ Inh",
+      image: "https://i.pravatar.cc/100551",
     },
     {
       ID: "02",
@@ -87,35 +87,22 @@ function TabSuggestions(props) {
     const fetchData = async () => {
       try {
 
-        setUsername(await AsyncStorage.getItem('username'));
+        const username = await AsyncStorage.getItem('username');
+        setUsername(username);
 
-        if (searchText.length === 0) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
-          setInvitation(response.data);
+        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
 
-        } else if (searchText.length >= 1) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/findAllFriendByInputName?input=" + searchText + "&userName=" + username);
-          setInvitation(response.data);
-
-        }
-  
-        console.log(invitation);
+        setInvitation(response.data)
+        console.log(response.data)
+                
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
         setLoading(false);
       }
     };
-  
-    // Thực hiện fetch dữ liệu sau khi ngừng nhập trong 2 giây
-    const timeoutId = setTimeout(() => {
-      fetchData();
-    }, 1);
-  
-    // Hủy timeout nếu có sự kiện thay đổi trong khoảng 2 giây
-    return () => clearTimeout(timeoutId);
-  }, [searchText, username]);
-
+    fetchData();
+  }, [props.userName]);
 
   return (
     <View style={styles.container}>
@@ -136,21 +123,16 @@ function TabSuggestions(props) {
       <View style={styles.blackLine} />
 
       <ScrollView>
-        {invitation
+        {g
+          /* .filter((eachInvitation) =>
+            eachInvitation.userName.toLowerCase().includes(searchText.toLowerCase())
+          ) */
           .map((eachInvitation) => (
-            <TabSuggestionsItems
+            <TabFriendRequestsItems
               invitation={eachInvitation}
-              key={eachInvitation.information.infoID}
+              key={eachInvitation.ID}
               onPress={() => {
-                navigate("ShowProfileRequest", { 
-                  userName: eachInvitation.userName,
-                  image: eachInvitation.information.image, 
-                  fulName: eachInvitation.information.fulName, 
-                  phoneNumber: eachInvitation.information.phoneNumber, 
-                  gender: eachInvitation.information.gender, 
-                  yearOfBirth: eachInvitation.information.yearOfBirth,
-                  email: eachInvitation.email 
-                });
+                navigate("ShowProfileStranger", { user: eachGroup });
               }}
             />
           ))}
@@ -158,8 +140,7 @@ function TabSuggestions(props) {
     </View>
   );
 }
-
-export default TabSuggestions;
+export default TabFriendRequests;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,24 +1,3 @@
-/**
- * yarn add react-native-vector-icons
- *
- * >>Prepare...
- * yarn add react-navigation
- * yarn add react-native-safe-area-context
- *
- * >>Bottom tabs
- * yarn add @react-navigation/bottom-tabs
- *
- * >> Next/Back
- * yarn add @react-navigation/native
- * yarn add @react-navigation/native-stack
- *
- * >>Don't know why but it solve the error
- * yarn add react-native-screens
- *
- * >>For api
- * yarn add axios
- */
-
 import * as React from "react";
 import {
   Text,
@@ -77,7 +56,7 @@ const tabBarLabelStyles = {
 
 function UITab(props) {
   return (
-    <Tab.Navigator initialRouteName="Settings" screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName="Friends" screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Friends"
         component={Friends}
