@@ -31,7 +31,7 @@ const CreateNotification = (props) => {
   return (
     <View style={styles.container}>
       <UIHeader
-        title={null}
+        title={'Tạo thông báo'}
         leftIconName={blankContent ? images.backIcon : images.cancelIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
@@ -40,8 +40,9 @@ const CreateNotification = (props) => {
         onPressRightIcon={() => {
           handleCreatePost();
         }}
-        mainStyle={{ backgroundColor: colors.backgroundWhite }}
+        mainStyle={{ backgroundColor: colors.backgroundWhite, paddingBottom: 20, }}
         iconStyle={{ tintColor: colors.active }}
+        textStyle={{ color: colors.active }}
       />
 
       <ScrollView>
@@ -50,9 +51,9 @@ const CreateNotification = (props) => {
           inputMode="text"
           maxLength={180}
           onChangeText={(text) => {
-            setContentText(text);
+            setTitleText(text);
           }}
-          value={contentText}
+          value={titleText}
           placeholder={"Tiêu đề"}
           placeholderTextColor={colors.inactive}
         />

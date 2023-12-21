@@ -13,6 +13,7 @@ import {
   CreatePost,
   CreateNotification,
   ShowPost,
+  ShowNotification,
   ResetPasswordInSetting,
   ShowProfileFriend,
   ShowProfileRequest,
@@ -26,7 +27,7 @@ function App(props) {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="UITab"
         screenOptions={{
           headerShown: false,
         }}>
@@ -47,6 +48,7 @@ function App(props) {
         <Stack.Screen name="CreateNotification" component={CreateNotification} />
         
         <Stack.Screen name="ShowPost" component={ShowPost} />
+        <Stack.Screen name="ShowNotification" component={ShowNotification} />
         <Stack.Screen name="ShowProfileFriend" component={ShowProfileFriend} />
         <Stack.Screen name="ShowProfileRequest" component={ShowProfileRequest} />
         <Stack.Screen name="ShowProfileStranger" component={ShowProfileStranger} />

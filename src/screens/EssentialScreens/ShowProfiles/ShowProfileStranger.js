@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import { UIHeader, CommonButton } from "../../../components";
+import { UIHeader, CommonButton, DoubleCommonButton } from "../../../components";
 
 function GroupOption(props) {
   const { text } = props;
@@ -78,9 +78,11 @@ const ShowProfileStranger = (props) => {
           <EachOptionViewOnly icon={images.personIcon} text={"gender"} />
           <EachOptionViewOnly icon={images.documentBlackIcon} text={"yearOfBirth"} />
 
-          <CommonButton
-            onPress={handleButton}
-            title={"tên button".toUpperCase()}
+          <DoubleCommonButton
+            onPressLeft={handleButton}
+            onPressRight={handleButton}
+            titleLeft={"tên".toUpperCase()}
+            titleRight={"buttons".toUpperCase()}
           />
         </View>
       </ScrollView>

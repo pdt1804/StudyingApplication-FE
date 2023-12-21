@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Alert,
   ScrollView,
   StyleSheet,
 } from "react-native";
@@ -17,101 +16,121 @@ function TabNotification(props) {
     {
       ID: "01",
       title: "Thông báo 1111111111111111111111111111111",
+      timeSent: '20/04',
       content: "You're sitting beneath an ancient tree whose trunk is so wide you cannot reach around it. The sun is hot on your skin, and you can hear the sounds of the birds in the foliage over your head. This is the place you like to come to be on your own and connect with the land around you. It makes you feel closer to your ancestors, which is essential for a Karadji shaman such as yourself.",
     },
     {
       ID: "02",
       title: "Thông báo 2",
+      timeSent: '20/04',
       content: "Suddenly, you hear the cries of your people, and you jump to your feet to see them gathering along the shore, thrusting their spears in the air. You race to the top of the sand dune and see what looks like a strange, white cloud drifting across the water toward the shore. You walk across the sand, and your people part to let you through. They're looking to you to know what to do.",
     },
     {
       ID: "03",
       title: "Thông báo 3",
+      timeSent: '20/04',
       content: "As the white cloud nears, you see that it's something else entirely: a vessel of some sort bringing a group of strange looking men to your shores. You close your eyes, focus your mind, and try to perceive the future. When the vision strikes you, you fall to your knees. These men will bring sickness and destruction to your land. They will label you and your kind Aboriginal Australians and will subjugate your people for generations. You now know what you must do.",
     },
     {
       ID: "04",
       title: "Thông báo 4",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "05",
       title: "Thông báo 5",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "06",
       title: "Thông báo 6",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "07",
       title: "Thông báo 12",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "08",
       title: "Thông báo 23",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "09",
       title: "Thông báo 24",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "10",
       title: "Thông báo 45",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "11",
       title: "Thông báo 761",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "12",
       title: "Thông báo 92",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "13",
       title: "Thông báo 233",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "14",
       title: "Thông báo 7654",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "15",
       title: "Thông báo 15",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "16",
       title: "Thông báo 41",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "17",
       title: "Thông báo 32",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "18",
       title: "Thông báo 36",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "19",
       title: "Thông báo 1234",
+      timeSent: '20/04',
       content: "",
     },
     {
       ID: "20",
       title: "Thông báo 435",
+      timeSent: '20/04',
       content: "",
     },
   ]);
@@ -159,12 +178,7 @@ function TabNotification(props) {
               notification={eachNotification}
               key={eachNotification.ID}
               onPress={() => {
-                Alert.alert(eachNotification.title, eachNotification.content, [
-                  {
-                    text: 'Đóng thông báo',
-                    onPress: () => console.log('Đóng thông báo pressed'),
-                  },
-                ]);
+                navigate("ShowNotification", { notification: eachNotification });
               }}
             />
           ))}

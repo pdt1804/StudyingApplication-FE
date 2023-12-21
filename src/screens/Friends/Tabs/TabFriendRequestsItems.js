@@ -5,7 +5,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
-function TabSuggestionsItems(props) {
+function TabFriendRequestsItems(props) {
   let { image, fulName } = props.invitation/* .information */;
   let { userName } = props.invitation;
 
@@ -16,7 +16,16 @@ function TabSuggestionsItems(props) {
 
 
   const handleAddFriend = async () => {
-    alert('thêm bạn bè thành công')
+    
+    setMyUsername(await AsyncStorage.getItem('username'));
+    
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
+  };
+
+  const handleCancel = async () => {
+    setMyUsername(await AsyncStorage.getItem('username'));
+    
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
   };
 
   return (
@@ -32,15 +41,21 @@ function TabSuggestionsItems(props) {
           {fulName}
         </Text>
         <View style={styles.buttonsView}>
-          <TouchableOpacity onPress={handleAddFriend} style={styles.buttons}>
-            <Text style={styles.buttonsText}>Thêm bạn bè</Text>
+          <TouchableOpacity
+            onPress={handleAddFriend}
+            style={[styles.buttons, styles.addFriend]}
+          >
+            <Text style={[styles.buttonsText, styles.addFriend]}>Chấp nhận</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleCancel} style={styles.buttons}>
+            <Text style={styles.buttonsText}>Từ chối</Text>
           </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
   );
 }
-export default TabSuggestionsItems;
+export default TabFriendRequestsItems;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,24 +95,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttons: {
-    flex:1,
     paddingHorizontal: 20,
     marginVertical: 5,
 
     borderRadius: 8,
-    backgroundColor: "blue",
+    backgroundColor: "lightgray",
 
     justifyContent: "center",
     alignItems: "center",
   },
   addFriend: {
+    paddingHorizontal:10,
+    color: "white",
+    backgroundColor: "blue",
   },
   buttonsText: {
     padding: 7,
     paddingVertical:7,
-    paddingHorizontal:10,
-    color: "white",
     fontSize: fontSizes.h7,
     fontWeight: "bold",
+    color: "black",
   },
 });

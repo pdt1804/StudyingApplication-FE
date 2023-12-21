@@ -17,7 +17,8 @@ function _getColorFromStatus(status) {
 }
 
 function TabYourFriendsItems(props) {
-  let {fulName, yearOfBirth, image} = props.friend.information;
+  let {fulName, image} = props.friend; //fake data
+  //let {fulName, yearOfBirth, image} = props.friend.information;
   let {userName} = props.friend;
   const {onPress} = props;
   
@@ -48,10 +49,6 @@ function TabYourFriendsItems(props) {
           uri: image,
         }}
       />
-      {/* <Image
-        style={styles.avatarBorder}
-        source={images.avatarBorder}
-      /> */}
         <Text
           style={{
             color: 'black',
@@ -85,11 +82,4 @@ const styles = StyleSheet.create({
     borderWidth:2,
     marginRight: 15,
   },
-  avatarBorder: {
-    width: 110,
-    height: 110,
-    resizeMode: 'stretch',
-    position: 'absolute',
-    top: '5%',
-  }
 });

@@ -13,6 +13,7 @@ function UIHeader(props) {
     iconStyle,
     iconLeftStyle,
     iconRightStyle,
+    textStyle,
   } = props;
 
   return (
@@ -34,7 +35,7 @@ function UIHeader(props) {
           <View style={styles.iconBlank} />
         )}
 
-        <Text style={styles.textDisplayed} numberOfLines={1}>
+        <Text style={[styles.textDisplayed, textStyle]} numberOfLines={1}>
           {title}
         </Text>
 
@@ -99,6 +100,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: "center",
     color: colors.UIHeaderTextAndIcon,
-    //backgroundColor: 'pink'
   },
 });

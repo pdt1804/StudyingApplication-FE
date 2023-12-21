@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -77,9 +77,15 @@ function TabMessenger(props) {
     },
   ]);
 
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    // Scroll to bottom after rendering
+    scrollRef.current.scrollToEnd({ animated: true });
+  }, []);
+
   return (
     <View style={styles.displayView}>
-      <ScrollView /* Chat */>
+      <ScrollView /* Chat */ ref={scrollRef}>
         {chatHistory.map((eachItem) => (
           <MessengerItems item={eachItem} key={eachItem.timestamp} />
         ))}

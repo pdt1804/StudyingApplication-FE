@@ -9,19 +9,19 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabSuggestionsItems from "./TabSuggestionsItems";
+import TabFriendRequestsItems from "./TabFriendRequestsItems";
 import { images, colors, fontSizes } from "../../../constants";
 import { API_BASE_URL } from "../../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function TabSuggestions(props) {
+function TabFriendRequests(props) {
   //list of group example = state
   const [g, setG] = useState([ //fake data
     {
       ID: "01",
-      fulName: "Công Tằng Tôn Vũ Tạ Văn Huy",
-      image: "https://i.pravatar.cc/1001",
+      fulName: "Linh Mờ Inh",
+      image: "https://i.pravatar.cc/100551",
     },
     {
       ID: "02",
@@ -128,11 +128,11 @@ function TabSuggestions(props) {
             eachInvitation.userName.toLowerCase().includes(searchText.toLowerCase())
           ) */
           .map((eachInvitation) => (
-            <TabSuggestionsItems
+            <TabFriendRequestsItems
               invitation={eachInvitation}
               key={eachInvitation.ID}
               onPress={() => {
-                navigate("ShowProfileStranger", { user: eachInvitation });
+                navigate("ShowProfileStranger", { user: eachGroup });
               }}
             />
           ))}
@@ -140,7 +140,7 @@ function TabSuggestions(props) {
     </View>
   );
 }
-export default TabSuggestions;
+export default TabFriendRequests;
 
 const styles = StyleSheet.create({
   container: {
