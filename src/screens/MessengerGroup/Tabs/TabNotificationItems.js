@@ -12,20 +12,23 @@ import {
 import { images, colors, icons, fontSizes } from "../../../constants";
 
 function TabNotificationItems(props) {
-  let { title, content, timeSent } = props.notification;
+  let { header, content, dateSent } = props.notification;
+
+  const date = new Date(dateSent)
+
   const { onPress } = props;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image style={styles.img} source={images.personCircleIcon} />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
-          {title}
+          {header}
         </Text>
         <Text style={styles.contentText} numberOfLines={2}>
           {content}
         </Text>
       </View>
-      <Text style={styles.timeText}>{timeSent}</Text>
+      <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
     </TouchableOpacity>
   );
 }
@@ -69,5 +72,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "right",
     color: colors.inactive,
+    marginTop: -15,
   },
 });

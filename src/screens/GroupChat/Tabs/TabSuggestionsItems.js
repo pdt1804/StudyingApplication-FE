@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../../DomainAPI";
 
 const generateColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215)
@@ -10,10 +13,12 @@ const generateColor = () => {
 };
 
 function TabSuggestionsItems(props) {
-  let { name, imageUrl, newestMessage, status } = props.group;
+  let { nameGroup, imageGroup, groupID } = props.group;
 
-  const handleAddFriend = async () => {
-    alert('Đã tham gia thành công')
+  const handleJoinGroup = async () => {
+    
+    const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup?myUserName=" + await AsyncStorage.getItem("username") + "&groupID=" + groupID)
+
   };
 
   return (
@@ -21,16 +26,16 @@ function TabSuggestionsItems(props) {
       <Image /** Avatar */
         style={[styles.avatarImage, {borderColor: generateColor()}]}
         source={{
-          uri: imageUrl,
+          uri: imageGroup,
         }}
       />
       <View style={styles.rightArea}>
         <Text /** Name */ style={styles.nameText} numberOfLines={1}>
-          {name}
+          {nameGroup}
         </Text>
         <View style={styles.buttonsView}>
           <TouchableOpacity
-            onPress={handleAddFriend}
+            onPress={handleJoinGroup}
             style={[styles.buttons, styles.addFriend]}
           >
             <Text

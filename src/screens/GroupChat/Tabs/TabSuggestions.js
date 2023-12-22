@@ -11,27 +11,49 @@ import {
 } from "react-native";
 import TabSuggestionsItems from "./TabSuggestionsItems";
 import { images, colors, fontSizes } from "../../../constants";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabSuggestions(props) {
   //list of group example = state
-  const [groups, setGroups] = useState([
-    {
-      ID: "01",
-      name: "Luận đàm vũ trụ",
-      imageUrl: "https://i.pravatar.cc/10022",
-    },
-    {
-      ID: "02",
-      name: "Người máy biết bay không?",
-      imageUrl: "https://i.pravatar.cc/20033",
-    },
-  ]);
+  const [groups, setGroups] = useState([]);
 
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
 
   //navigation to/back
   const { navigate, goBack } = props.navigation;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+
+        if (searchText.length === 0) {
+          setGroups([]);
+
+        } else if (searchText.length >= 1) {
+          const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyName?nameGroup=" + searchText + "&userName=" + await AsyncStorage.getItem('username'));
+          setGroups(response.data);
+
+        }
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+  
+    // Thực hiện fetch dữ liệu sau khi ngừng nhập trong 2 giây
+    const timeoutId = setTimeout(() => {
+      fetchData();
+    }, 1);
+  
+    // Hủy timeout nếu có sự kiện thay đổi trong khoảng 2 giây
+    return () => clearTimeout(timeoutId);
+  }, [searchText,]);
 
   return (
     <View style={styles.container}>
@@ -54,12 +76,12 @@ function TabSuggestions(props) {
       <ScrollView>
         {groups
           .filter((eachGroup) =>
-            eachGroup.name.toLowerCase().includes(searchText.toLowerCase())
+            eachGroup.nameGroup.toLowerCase().includes(searchText.toLowerCase())
           )
           .map((eachGroup) => (
             <TabSuggestionsItems
               group={eachGroup}
-              key={eachGroup.ID}
+              key={eachGroup.groupID}
               onPress={() => {
                 navigate("MessengerGroup", { user: eachGroup });
               }}

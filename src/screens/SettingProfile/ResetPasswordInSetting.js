@@ -10,11 +10,13 @@ import { images, colors, fontSizes } from "../../constants/index";
 import { CommonButton } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ResetPasswordInSetting = (props) => {
 
-  const { navigate, goBack } = props.navigation;
+  const { navigate, goBack, push } = props.navigation;
 
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState('none');
   const [rePassword, setRePassword] = useState('none');
 
@@ -22,24 +24,35 @@ const ResetPasswordInSetting = (props) => {
   const handleResetPassword = async () => {
     try
     {
-      if (password == rePassword && password.length > 5)
+    
+      const responseUserPassWord = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + await AsyncStorage.getItem('username'))
+
+      console.log(responseUserPassWord.data.passWord)
+
+      if (currentPassword == responseUserPassWord.data.passWord)
       {
-        
-        const response = await axios.post(API_BASE_URL + "/api/v1/user/ChangePasswordAfterOTP?userName=" + userName + "&passWord=" + password)
-        
-        if (response.data == true)
+        if (password == rePassword && password.length > 5)
         {
-          alert('Change password successfully');
-          navigate("Login");
+            const response = await axios.post(API_BASE_URL + "/api/v1/user/ChangePasswordAfterOTP?userName=" + await AsyncStorage.getItem('username') + "&passWord=" + password)
+            
+            if (response.data == true)
+            {
+               alert('Đổi thành công');
+               push("UITab")
+            }
+            else
+            {
+               alert('Lỗi mạng !');
+            }
         }
         else
         {
-          alert('Network Error !');
+            alert("Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 5 ký tự")
         }
       }
       else
       {
-        alert('New password and re-enter password are not same and the password must have at least 5 characters');
+        alert("Mật khẩu bạn nhập không đúng với mật khẩu hiện tại")
       }
     }
     catch (Error)
@@ -71,7 +84,7 @@ const ResetPasswordInSetting = (props) => {
                 inputMode="text"
                 placeholder="Nhập mật khẩu hiện tại"
                 placeholderTextColor={colors.noImportantText}
-                onChangeText={p => setPassword(p)}
+                onChangeText={p => setCurrentPassword(p)}
               />
             </View>
           </View>
@@ -112,7 +125,7 @@ const ResetPasswordInSetting = (props) => {
 
           <CommonButton
             onPress={handleResetPassword}
-            title={"tiếp tục".toUpperCase()}
+            title={"Đổi mật khẩu".toUpperCase()}
           />
         </View>
       </View>

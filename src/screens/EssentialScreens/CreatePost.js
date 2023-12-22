@@ -10,13 +10,24 @@ import {
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
+import { API_BASE_URL } from "../../../DomainAPI";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
 
   const handleCreatePost = async () => {
-    alert("Tạo bài đăng thành công");
+    
+    let blog = {
+      content: contentText
+    }
+
+    const response = await axios.post(API_BASE_URL + '/api/v1/blog/createNewBlog?groupID=' + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'), blog)
+
+    goBack();
+
   };
 
   //navigation
@@ -30,7 +41,7 @@ const CreatePost = (props) => {
   return (
     <View style={styles.container}>
       <UIHeader
-        title={null}
+        title={"Tạo thảo luận"}
         leftIconName={blankContent ? images.backIcon : images.cancelIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
@@ -39,8 +50,8 @@ const CreatePost = (props) => {
         onPressRightIcon={() => {
           handleCreatePost();
         }}
-        mainStyle={{ backgroundColor: colors.backgroundWhite }}
-        iconStyle={{ tintColor: colors.active }}
+        //mainStyle={{ backgroundColor: colors.backgroundWhite }}
+        //iconStyle={{ tintColor: colors.active }}
       />
 
       <ScrollView /* content */>
@@ -68,5 +79,7 @@ const styles = StyleSheet.create({
   },
   contentTextInput: {
     padding: 10,
+    marginTop: 30,
+    height: 1000
   },
 });

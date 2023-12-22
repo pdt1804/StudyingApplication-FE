@@ -11,6 +11,9 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import TabDiscussionItems from "./TabDiscussionItems";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const typePost = [
   { label: "Tất cả", value: "0" },
@@ -22,64 +25,7 @@ const typePost = [
 
 function TabDiscussion(props) {
   //list of example = state
-  const [topics, setTopics] = useState([
-    {
-      ID: "01",
-      type: "Tin tức",
-      content: `J2EE là một nền tảng phát triển ứng dụng web và doanh nghiệp được phát triển bởi Oracle. Nền tảng này đã được sử dụng rộng rãi trong nhiều năm qua và vẫn là một lựa chọn phổ biến cho các nhà phát triển ứng dụng doanh nghiệp.
-
-        Trong tương lai gần, J2EE dự kiến sẽ tiếp tục phát triển theo các xu hướng sau:
-        
-        Tăng cường tích hợp với các công nghệ mới: J2EE đang tích hợp ngày càng sâu với các công nghệ mới như đám mây, trí tuệ nhân tạo (AI), và máy học (ML). Điều này sẽ giúp các nhà phát triển xây dựng các ứng dụng doanh nghiệp hiện đại và có khả năng mở rộng hơn.
-        Tập trung vào trải nghiệm người dùng: J2EE đang tập trung vào việc cải thiện trải nghiệm người dùng (UX) của các ứng dụng doanh nghiệp. Điều này bao gồm việc sử dụng các công nghệ mới như HTML5, CSS3, và JavaScript.
-        Tăng cường bảo mật: Bảo mật là một vấn đề quan trọng đối với các ứng dụng doanh nghiệp. J2EE đang tích hợp các tính năng bảo mật mới để giúp các nhà phát triển xây dựng các ứng dụng an toàn hơn.`,
-    },
-    {
-      ID: "02",
-      type: "Thảo Luận",
-      content: "Chong chóng tre nè nobita",
-    },
-    {
-      ID: "03",
-      type: "Hỏi đáp",
-      content: "Hello world",
-    },
-    {
-      ID: "04",
-      type: "Đánh giá",
-      content: "Nơi lữu trữ các câu hỏi đáp cũ",
-    },
-    {
-      ID: "05",
-      type: "Thảo Luận",
-      content: "Xét tuyển vào ngày",
-    },
-    {
-      ID: "06",
-      type: "Thảo Luận",
-      content: "Công nghệ thông tin",
-    },
-    {
-      ID: "07",
-      type: "Hỏi đáp",
-      content: "Trường nào để học?",
-    },
-    {
-      type: "Tin tức",
-      ID: "08",
-      content: "Sơ yếu lí lịch vậy ạ",
-    },
-    {
-      ID: "09",
-      type: "Thảo Luận",
-      content: "Ở đâu trên tramg web vậy?",
-    },
-    {
-      ID: "10",
-      type: "Đánh giá",
-      content: "Còn gì nữa đâu mà khóc với sầu",
-    },
-  ]);
+  const [topics, setTopics] = useState([]);
 
   const getFilteredTopics = useMemo(() => {
     if (!typeOfPost || typeOfPost === "Tất cả") {
@@ -95,6 +41,29 @@ function TabDiscussion(props) {
   const [valueDropdown, setValueDropdown] = useState(null);
   const [typeOfPost, setTypeOfPost] = useState(null);
   const [isFocusDropdown, setIsFocusDropdown] = useState(false);
+
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+     
+        setUsername(await AsyncStorage.getItem('username').toString())
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllBlog?groupID=" + await AsyncStorage.getItem('groupID'));
+  
+        const responseSubject = await axios.get(API_BASE_URL + "/api/v1/blog/getAllSubject?groupID=" + await AsyncStorage.getItem('groupID'))
+        
+        setTopics(response.data);
+    };
+  
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+  
+    // Sử dụng setInterval để gọi lại fetchData mỗi giây
+       const intervalId = setInterval(fetchData, 3000);
+    
+      // // Hủy interval khi component bị unmounted
+       return () => clearInterval(intervalId);
+    }, [props.userName, username])
 
   return (
     <View style={styles.container}>
@@ -148,7 +117,7 @@ function TabDiscussion(props) {
           ? topics.map((eachTopic) => (
               <TabDiscussionItems
                 topic={eachTopic}
-                key={eachTopic.ID}
+                key={eachTopic.blogID}
                 onPress={() => {
                   navigate("ShowPost", { topic: eachTopic });
                 }}
@@ -159,7 +128,7 @@ function TabDiscussion(props) {
               .map((eachTopic) => (
                 <TabDiscussionItems
                   topic={eachTopic}
-                  key={eachTopic.ID}
+                  key={eachTopic.blogID}
                   onPress={() => {
                     navigate("ShowPost", { topic: eachTopic });
                   }}

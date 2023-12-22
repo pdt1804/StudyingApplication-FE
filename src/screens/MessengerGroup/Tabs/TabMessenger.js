@@ -27,19 +27,11 @@ function TabMessenger(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setUserName((await AsyncStorage.getItem('username')).toString());
+      setUserName((await AsyncStorage.getItem('username')).toString());
   
         const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/loadMessageInGroup?myUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'));
   
-        console.log(response.data);
         setChatHistory(response.data);
-  
-      } catch (error) {
-        console.error('Error fetching data: ', error.message);
-        setError('Error fetching data');
-        setLoading(false);
-      }
     };
   
     fetchData(); // Gọi fetchData ngay sau khi component được mount

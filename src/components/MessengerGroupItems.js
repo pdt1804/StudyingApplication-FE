@@ -6,7 +6,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 
 function MessengerGroupItems(props) {
-  let { content, dateSent, id, status } = props.item;
+  let { content, dateSent, id } = props.item;
 
   const [image, setImage] = useState(null);
 
@@ -20,13 +20,17 @@ function MessengerGroupItems(props) {
       try {
 
         setUsername(await AsyncStorage.getItem('username'));
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id);
+        const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id);
         setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
-                
+           
+        // alert("id message: " + id)
+        // alert("username: " + username)
+        // alert("sentUsername: " + sentUsername)
+
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error.message);
         setError('Error fetching data');
         setLoading(false);
       }
@@ -48,7 +52,7 @@ function MessengerGroupItems(props) {
   }
 
   return CheckIsSender() == false ? (
-    <View style={styles.container}>
+    <View /** isSender = false --> avatar > message */ style={styles.container}>
       <Image style={styles.avatar} source={{ uri: image }} />
 
       <View style={styles.leftView}>
@@ -56,7 +60,7 @@ function MessengerGroupItems(props) {
       </View>
     </View>
   ) : (
-    <View style={styles.container}>
+    <View /** isSender = true --> message > avatar */ style={styles.container}>
       <View style={styles.rightView}>
         <Text style={styles.message}>{content}</Text>
       </View>
@@ -106,4 +110,3 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
- 
