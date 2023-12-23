@@ -22,8 +22,6 @@ export default {
 
   message: "#DFF3FF",
 
-  UIHeaderTextAndIcon: "#f6f6f6",
-
   transparentWhite: "rgba(250,250,250,0.8)",
   blueIcon: "#1D81D5",
 
