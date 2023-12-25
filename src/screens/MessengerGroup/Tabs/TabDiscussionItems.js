@@ -19,6 +19,8 @@ function TabDiscussionItems(props) {
   let { userName } = props.topic.userCreated;
   let { fulName } = props.topic.userCreated.information;
 
+  //alert(fulName);
+
   const { onPress } = props;
 
   const _getIcon = () => {

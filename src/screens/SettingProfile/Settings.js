@@ -80,7 +80,7 @@ function Settings(props) {
 
         setFulName(response.data.information.fulName);
         setEmail(response.data.email);
-        setPhoneNumber(response.data.information.phoneNumber);
+        setPhoneNumber("0"+response.data.information.phoneNumber);
         
         const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?userName=" + username)
         

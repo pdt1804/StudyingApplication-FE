@@ -37,7 +37,6 @@ function TabSentRequests(props) {
         const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllSentInvitationList?myUserName=" + username);
 
         setInvitation(response.data)
-        console.log(response.data)
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -46,6 +45,13 @@ function TabSentRequests(props) {
       }
     };
     fetchData();
+
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
   }, [props.userName]);
 
   return (

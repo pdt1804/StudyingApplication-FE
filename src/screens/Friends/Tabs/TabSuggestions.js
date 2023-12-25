@@ -42,7 +42,6 @@ function TabSuggestions(props) {
 
         }
   
-        console.log(invitation);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');

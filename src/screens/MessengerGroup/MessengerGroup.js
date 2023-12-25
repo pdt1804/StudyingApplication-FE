@@ -12,7 +12,9 @@ import {
 } from "react-native";
 import TabMessenger from "./Tabs/TabMessenger";
 import TabDiscussion from "./Tabs/TabDiscussion";
+import TabTypePost from "./Tabs/TabTypePost";
 import TabNotification from "./Tabs/TabNotification";
+import TabDocument from "./Tabs/TabDocument";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -40,12 +42,18 @@ const ScreenOptions = ({ route }) => ({
         ? (iconName = images.activeChatMessageIcon)
         : screenName == "TabDiscussion"
         ? (iconName = images.activeBlogSearchIcon)
+        : screenName == "TabTypePost"
+        ? (iconName = images.cloudIcon)
         : (iconName = images.activeBellAlarm)
       : screenName == "TabMessenger"
       ? (iconName = images.inactiveChatMessageIcon)
       : screenName == "TabDiscussion"
       ? (iconName = images.inactiveBlogSearchIcon)
-      : (iconName = images.inactiveBellAlarm);
+      : screenName == "TabTypePost"
+      ? (iconName = images.cloudIcon)
+      : (iconName = images.inactiveBellAlarm)
+      
+      
     return (
       <Image
         source={iconName}
@@ -96,7 +104,9 @@ function MessengerGroup(props) {
         >
           <Tab.Screen name="TabMessenger" component={TabMessenger}/>
           <Tab.Screen name="TabDiscussion" component={TabDiscussion}/>
+          <Tab.Screen name="TabTypePost" component={TabTypePost}/>
           <Tab.Screen name="TabNotification" component={TabNotification}/>
+          <Tab.Screen name="TabDocument" component={TabDocument}/>
         </Tab.Navigator>
       </View>
     </View>

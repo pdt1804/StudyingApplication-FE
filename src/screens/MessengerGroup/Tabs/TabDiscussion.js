@@ -17,7 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const typePost = [
   { label: "Tất cả", value: "0" },
-  { label: "Tin tức", value: "1" },
+  { label: "Math", value: "1" },
   { label: "Hỏi đáp", value: "2" },
   { label: "Đánh giá", value: "3" },
   { label: "Thảo Luận", value: "4" },
@@ -26,13 +26,6 @@ const typePost = [
 function TabDiscussion(props) {
   //list of example = state
   const [topics, setTopics] = useState([]);
-
-  const getFilteredTopics = useMemo(() => {
-    if (!typeOfPost || typeOfPost === "Tất cả") {
-      return topics;
-    }
-    return topics.filter((eachTopic) => eachTopic.type === typeOfPost);
-  }, [typeOfPost]);
 
   //navigation
   const { navigate, goBack } = props.navigation;
@@ -59,10 +52,10 @@ function TabDiscussion(props) {
     fetchData(); // Gọi fetchData ngay sau khi component được mount
   
     // Sử dụng setInterval để gọi lại fetchData mỗi giây
-       const intervalId = setInterval(fetchData, 3000);
+      //  const intervalId = setInterval(fetchData, 3000);
     
-      // // Hủy interval khi component bị unmounted
-       return () => clearInterval(intervalId);
+      // // // Hủy interval khi component bị unmounted
+      //  return () => clearInterval(intervalId);
     }, [props.userName, username])
 
   return (

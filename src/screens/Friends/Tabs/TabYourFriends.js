@@ -42,6 +42,13 @@ function TabYourFriends(props) {
     };
 
     fetchData();
+
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
   }, [props.userName]);
 
   function SelectedFriend(myUsername, friendUsername)

@@ -27,6 +27,8 @@ import ShowProfileRequest from "./EssentialScreens/ShowProfiles/ShowProfileReque
 import ShowProfileStranger from "./EssentialScreens/ShowProfiles/ShowProfileStranger";
 import ShowProfileSentInvitation from "./EssentialScreens/ShowProfiles/ShowProfileSentInvitation";
 
+import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
+
 export {
   Login,
   Registration,
@@ -49,4 +51,5 @@ export {
   ShowProfileRequest,
   ShowProfileStranger,
   ShowProfileSentInvitation,
+  TabDiscussionFiltered,
 };

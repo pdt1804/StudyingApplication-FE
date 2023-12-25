@@ -25,7 +25,7 @@ function TabFriendRequests(props) {
   const [username, setUsername] = useState("")
 
   //navigation to/back
-  const { navigate, goBack } = props.navigation;
+  const { navigate, goBack, push } = props.navigation;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +37,6 @@ function TabFriendRequests(props) {
         const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllInvitationFriendList?myUserName=" + username);
 
         setInvitation(response.data)
-        console.log(response.data)
 
                 
       } catch (error) {
@@ -47,6 +46,13 @@ function TabFriendRequests(props) {
       }
     };
     fetchData();
+
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
   }, [props.userName]);
 
   return (
@@ -83,6 +89,12 @@ function TabFriendRequests(props) {
                   yearOfBirth: eachInvitation.information.yearOfBirth,
                   email: eachInvitation.email 
                 });
+              }}
+              onPressButtonLeft={()=> {
+                push('UITab')
+              }}
+              onPressButtonRightr={()=> {
+                push('UITab')
               }}
             />
           ))}

@@ -39,6 +39,12 @@ function AllNotification(props) {
     };
 
     fetchData();
+
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+    const intervalId = setInterval(fetchData, 3000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
   }, [props.userName]);
   //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");

@@ -6,10 +6,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabFriendRequestsItems(props) {
-  let { image, fulName } = props.invitation/* .information */;
+  let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
 
-  const { onPress } = props;
+  const { onPress, onPressButtonLeft, onPressButtonRight } = props;
   
   const [myUsername, setMyUsername] = useState("")
   const [friendUsername, setFriendUsername] = useState(userName)
@@ -20,12 +20,16 @@ function TabFriendRequestsItems(props) {
     setMyUsername(await AsyncStorage.getItem('username'));
     
     const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
+  
+    {onPressButtonLeft}
   };
 
   const handleCancel = async () => {
     setMyUsername(await AsyncStorage.getItem('username'));
     
     const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
+  
+    {onPressButtonRight}
   };
 
   return (
