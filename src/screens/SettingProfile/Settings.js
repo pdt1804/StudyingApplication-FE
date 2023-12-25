@@ -11,8 +11,6 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { usname } from "../Login";
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -237,7 +235,6 @@ const styles = StyleSheet.create({
   profileView: {
     height: 200,
     alignItems: "center",
-    backgroundColor: 'transparent'
   },
   profileImage: {
     width: 100,
@@ -278,7 +275,7 @@ const styles = StyleSheet.create({
     paddingStart: 15,
   },
   button: {
-    backgroundColor: colors.blueIcon, // Màu xanh
+    backgroundColor: colors.PrimaryBackground,
     padding: 10,
     borderRadius: 10,
     marginBottom: 10,
@@ -288,7 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white', // Chữ trắng
-    fontSize: 12,
+    color: 'white',
+    fontSize: fontSizes.h7,
   },
 });

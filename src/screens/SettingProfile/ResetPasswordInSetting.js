@@ -1,69 +1,62 @@
 import React, { useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, colors, fontSizes } from "../../constants/index";
-import { CommonButton } from "../../components";
+import { UIHeader, CommonButton } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ResetPasswordInSetting = (props) => {
-
   const { navigate, goBack, push } = props.navigation;
 
   const [currentPassword, setCurrentPassword] = useState("");
-  const [password, setPassword] = useState('none');
-  const [rePassword, setRePassword] = useState('none');
+  const [password, setPassword] = useState("none");
+  const [rePassword, setRePassword] = useState("none");
 
   //use for api
   const handleResetPassword = async () => {
-    try
-    {
-    
-      const responseUserPassWord = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + await AsyncStorage.getItem('username'))
+    try {
+      const responseUserPassWord = await axios.get(
+        API_BASE_URL +
+          "/api/v1/user/GetUser?userName=" +
+          (await AsyncStorage.getItem("username"))
+      );
 
-      console.log(responseUserPassWord.data.passWord)
+      console.log(responseUserPassWord.data.passWord);
 
-      if (currentPassword == responseUserPassWord.data.passWord)
-      {
-        if (password == rePassword && password.length > 5)
-        {
-            const response = await axios.post(API_BASE_URL + "/api/v1/user/ChangePasswordAfterOTP?userName=" + await AsyncStorage.getItem('username') + "&passWord=" + password)
-            
-            if (response.data == true)
-            {
-               alert('Đổi thành công');
-               push("UITab")
-            }
-            else
-            {
-               alert('Lỗi mạng !');
-            }
+      if (currentPassword == responseUserPassWord.data.passWord) {
+        if (password == rePassword && password.length > 5) {
+          const response = await axios.post(
+            API_BASE_URL +
+              "/api/v1/user/ChangePasswordAfterOTP?userName=" +
+              (await AsyncStorage.getItem("username")) +
+              "&passWord=" +
+              password
+          );
+
+          if (response.data == true) {
+            alert("Đổi thành công");
+            push("UITab");
+          } else {
+            alert("Lỗi mạng !");
+          }
+        } else {
+          alert(
+            "Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 5 ký tự"
+          );
         }
-        else
-        {
-            alert("Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 5 ký tự")
-        }
+      } else {
+        alert("Mật khẩu bạn nhập không đúng với mật khẩu hiện tại");
       }
-      else
-      {
-        alert("Mật khẩu bạn nhập không đúng với mật khẩu hiện tại")
-      }
-    }
-    catch (Error)
-    {
+    } catch (Error) {
       console.error(Error.message);
     }
   };
 
   return (
     <View style={styles.container}>
-        <Image source={images.decorStuff01} style={styles.decorStuffTop} />
+      <Image source={images.decorStuff01} style={styles.decorStuffTop} />
+      <Image source={images.decorStuff02} style={styles.decorStuffBottom} />
 
       <View style={styles.partitionMiddle}>
         <View style={styles.forgetPasswordView}>
@@ -84,7 +77,7 @@ const ResetPasswordInSetting = (props) => {
                 inputMode="text"
                 placeholder="Nhập mật khẩu hiện tại"
                 placeholderTextColor={colors.noImportantText}
-                onChangeText={p => setCurrentPassword(p)}
+                onChangeText={(p) => setCurrentPassword(p)}
               />
             </View>
           </View>
@@ -101,7 +94,7 @@ const ResetPasswordInSetting = (props) => {
                 inputMode="text"
                 placeholder="Nhập mật khẩu mới"
                 placeholderTextColor={colors.noImportantText}
-                onChangeText={p => setPassword(p)}
+                onChangeText={(p) => setPassword(p)}
               />
             </View>
           </View>
@@ -118,7 +111,7 @@ const ResetPasswordInSetting = (props) => {
                 inputMode="text"
                 placeholder="Nhập lại mật khẩu"
                 placeholderTextColor={colors.noImportantText}
-                onChangeText={p => setRePassword(p)}
+                onChangeText={(p) => setRePassword(p)}
               />
             </View>
           </View>
@@ -130,45 +123,62 @@ const ResetPasswordInSetting = (props) => {
         </View>
       </View>
 
-        <Image source={images.decorStuff02} style={styles.decorStuffBottom} />
+      <UIHeader
+        title={null}
+        leftIconName={images.backIcon}
+        rightIconName={null}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
+        onPressRightIcon={null}
+        mainStyle={styles.UIHeaderMainStyle}
+        iconStyle={styles.UIHeaderIconStyle}
+      />
     </View>
   );
 };
 export default ResetPasswordInSetting;
 
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.backgroundWhite,
     flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   partitionMiddle: {
     width: "100%",
   },
+  UIHeaderMainStyle: {
+    top: 0,
+    left: 0,
+    right: 0,
+    position: "absolute",
+    backgroundColor: null,
+  },
+  UIHeaderIconStyle: { tintColor: colors.inactive },
   forgetPasswordView: {
     width: "90%",
     marginVertical: 10,
     alignSelf: "center",
   },
   forgetPasswordText: {
-    color: colors.titleScreen,
+    color: colors.PrimaryOnContainerAndFixed,
     fontSize: fontSizes.h1,
     fontWeight: "bold",
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   mainView: {
     width: "90%",
     height: 450,
     padding: 15,
     backgroundColor: colors.transparentWhite,
-    borderColor: colors.borderedView,
+    borderColor: colors.PrimaryOnContainerAndFixed,
     borderWidth: 2,
     borderRadius: 50,
     alignSelf: "center",
-    justifyContent: 'center', 
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   textInputView: {
     flexDirection: "row",
@@ -181,12 +191,12 @@ const styles = StyleSheet.create({
     height: 55,
     marginRight: 10,
     marginTop: 25,
-    tintColor: colors.blueIcon,
+    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,
     height: 55,
-    marginTop:5,
+    marginTop: 5,
     paddingLeft: 20,
     borderColor: colors.noImportantText,
     borderWidth: 2,
@@ -196,18 +206,18 @@ const styles = StyleSheet.create({
     width: 250,
     height: 120,
     opacity: 0.5,
-    resizeMode: 'stretch',
-    top: '10%',
+    resizeMode: "stretch",
+    top: "10%",
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
   decorStuffBottom: {
     width: 250,
     height: 120,
     opacity: 0.5,
-    resizeMode: 'stretch',
-    bottom: '10%',
+    resizeMode: "stretch",
+    bottom: "10%",
     right: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });
