@@ -14,24 +14,10 @@ export default {
   TertiaryContainer: '#C4EED0',
   TertiaryOnContainerAndFixed: '#072711',
 
-  backgroundWhite: "rgb(250, 250, 255)",
+  backgroundWhite: "#fafaff",
+  transparentWhite: "rgba(250,250,250,0.8)",
   noImportantText: "rgba(145, 160, 160, 0.75)",
 
   inactive: "rgba(182, 205, 212, 0.75)",
   active: "rgb(88, 155, 238)",
-
-  message: "#DFF3FF",
-
-  transparentWhite: "rgba(250,250,250,0.8)",
-  blueIcon: "#1D81D5",
-
-  placeholderTextColor: "rgba(0, 0, 255, 0.85)",
-
-  postIcon: "#2667f3",
-  notificationIcon: "rgb(108, 169, 243)",
-
-  borderedView: "#1D81D5",
-  titleScreen: "#667085",
-
-  ShadowedItems: "#feffff",
 };

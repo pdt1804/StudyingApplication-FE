@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 5,
     resizeMode: "stretch",
-    tintColor: colors.postIcon,
+    tintColor: colors.PrimaryBackground,
   },
   text: {
     marginTop: 5,
