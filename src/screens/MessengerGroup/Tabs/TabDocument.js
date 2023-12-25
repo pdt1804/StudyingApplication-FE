@@ -13,7 +13,7 @@ import TabNotificationItems from "./TabNotificationItems";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
-import TabDocumentItem from "./TabDocumentItem";
+//import TabDocumentItem from "./TabDocumentItem";
 
 
 function TabDocument(props) {
@@ -50,8 +50,8 @@ function TabDocument(props) {
 
   return (
     <View style={styles.container}>
-    <View style={styles.searchBarAndButtonView}>
-        <View /* Search bar */ style={styles.searchBarView}>
+{/*     <View style={styles.searchBarAndButtonView}>
+        <View /* Search bar style={styles.searchBarView}>
           <Image source={images.searchIcon} style={styles.searchBarImage} />
           <TextInput
             autoCorrect={false}
@@ -89,7 +89,7 @@ function TabDocument(props) {
               }}
             />
           ))}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 }
