@@ -49,6 +49,12 @@ function TabYourGroups(props) {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
   }, [props.userName]);
 
   const SelectedGroup = async (eachGroup) => {

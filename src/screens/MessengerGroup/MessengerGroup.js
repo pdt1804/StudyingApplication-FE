@@ -72,29 +72,42 @@ const ScreenOptions = ({ route }) => ({
 
 function MessengerGroup(props) {
   //I forget what's' this
-  const { imageGroup, nameGroup, groupID } = props.route.params.group;
+  //const { imageGroup, nameGroup, groupID } = props.route.params.group;
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
+  const [group, setGroup] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       
+      const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+      setGroup(response.data);
+
     };
 
     fetchData();
   }, [props.userName]);
 
+
+  const ShowGroupInfo = async () => {
+
+    navigate('GroupInfo');
+
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={nameGroup}
+        title={group.nameGroup}
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
         }}
         onPressRightIcon={null}
+        onPressTitle={ShowGroupInfo}
       />
 
       <View style={styles.displayView}>

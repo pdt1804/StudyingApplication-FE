@@ -20,6 +20,12 @@ import {
   ShowProfileStranger,
   ShowProfileSentInvitation,
   TabDiscussionFiltered,
+  ShowDocument,
+  GroupInfo,
+  GroupInformationDetail,
+  MembersInGroup,
+  ShowProfileMember,
+  MemberToChangeRole,
 } from '../screens';
 import UITab from './UITab';
 
@@ -50,11 +56,17 @@ function App(props) {
         <Stack.Screen name="CreateNotification" component={CreateNotification} />
         
         <Stack.Screen name="ShowPost" component={ShowPost} />
+        <Stack.Screen name="ShowDocument" component={ShowDocument} />
         <Stack.Screen name="ShowNotification" component={ShowNotification} />
         <Stack.Screen name="ShowProfileFriend" component={ShowProfileFriend} />
+        <Stack.Screen name="ShowProfileMember" component={ShowProfileMember} />
         <Stack.Screen name="ShowProfileRequest" component={ShowProfileRequest} />
         <Stack.Screen name="ShowProfileStranger" component={ShowProfileStranger} />
         <Stack.Screen name="ShowProfileSentInvitation" component={ShowProfileSentInvitation} />
+        <Stack.Screen name="GroupInfo" component={GroupInfo} />
+        <Stack.Screen name="GroupInformationDetail" component={GroupInformationDetail} />
+        <Stack.Screen name="MembersInGroup" component={MembersInGroup} />
+        <Stack.Screen name="MemberToChangeRole" component={MemberToChangeRole} />
 
         <Stack.Screen name="TabDiscussionFiltered" component={TabDiscussionFiltered} />
       </Stack.Navigator>
