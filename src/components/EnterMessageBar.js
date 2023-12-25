@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
     padding: 10,
     marginHorizontal: 10,
-    tintColor: colors.blueIcon
+    tintColor: colors.PrimaryBackground
   },
 });

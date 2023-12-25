@@ -10,12 +10,6 @@ import {
 import {images, colors, icons, fontSizes} from '../../../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function _getColorFromStatus(status) {
-  if (status.toLowerCase().trim() == 'online') {
-    return colors.Online;
-  } else return colors.Offline;
-}
-
 function TabYourFriendsItems(props) {
   
   let {fulName, yearOfBirth, image} = props.friend.information;
