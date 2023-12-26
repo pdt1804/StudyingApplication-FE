@@ -37,6 +37,9 @@ import AddMember from "./MessengerGroup/AddMember";
  
 import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
 
+import Comment from "./Comments/Comment";
+import Reply from "./Comments/Reply";
+
 export {
   Login,
   Registration,
@@ -68,4 +71,6 @@ export {
   MemberToChangeRole,
   CreateGroup,
   AddMember,
+  Comment,
+  Reply,
 };

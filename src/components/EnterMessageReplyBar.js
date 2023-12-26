@@ -11,7 +11,7 @@ import {
 import { images, colors } from "../constants";
 import { API_BASE_URL } from "../../DomainAPI";
 
-function EnterMessageBar({myUsername, friendUsername}) {
+function EnterMessageReplyBar({myUsername, friendUsername}) {
   const [typedText, setTypedText] = useState("");
   const handleSendMessage = async () => {
     
@@ -42,7 +42,7 @@ function EnterMessageBar({myUsername, friendUsername}) {
     </View>
   );
 }
-export default EnterMessageBar;
+export default EnterMessageReplyBar;
 
 const styles = StyleSheet.create({
   container: {

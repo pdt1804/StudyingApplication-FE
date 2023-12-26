@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     paddingStart: 10,
     flexDirection: 'column',
     borderRadius: 10,
-    elevation: 8,
+    borderColor: 'black',
+    borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
   topView: {
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 5,
     resizeMode: "stretch",
-    tintColor: colors.postIcon,
+    tintColor: colors.PrimaryBackground,
   },
   text: {
     marginTop: 5,

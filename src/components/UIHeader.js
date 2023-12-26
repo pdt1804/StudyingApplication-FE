@@ -60,7 +60,7 @@ function UIHeader(props) {
 export default UIHeader;
 
 const styles = StyleSheet.create({
-  fullView: { backgroundColor: colors.active },
+  fullView: { backgroundColor: colors.PrimaryBackground },
   safeAreaView: { height: 25 },
   mainView: {
     height: 75,
@@ -84,14 +84,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginStart: 10,
-    tintColor: colors.UIHeaderTextAndIcon,
+    tintColor: colors.PrimaryObjects,
   },
   iconDisplayedRight: {
     top: 10,
     width: 30,
     height: 30,
     marginEnd: 10,
-    tintColor: colors.UIHeaderTextAndIcon,
+    tintColor: colors.PrimaryObjects,
   },
   textDisplayed: {
     top: 10,
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h2 * 0.9,
     textAlign: 'center',
     alignSelf: "center",
-    color: colors.UIHeaderTextAndIcon,
+    color: colors.PrimaryObjects,
   },
 });
