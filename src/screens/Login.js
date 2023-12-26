@@ -34,7 +34,7 @@ const Login = (props) => {
 
         if (response.data == username) {
           await AsyncStorage.setItem("username", username);
-          push("UITab");
+          push("UITab", {tabName: "Settings"});
         } else {
           alert("Username or password aren't correct");
         }

@@ -30,6 +30,8 @@ function TabDiscussion(props) {
   //navigation
   const { navigate, goBack } = props.navigation;
 
+  const [searchText, setSearchText] = useState('')
+
   //DropdownComponent --> filter type of post
   const [valueDropdown, setValueDropdown] = useState(null);
   const [typeOfPost, setTypeOfPost] = useState(null);
@@ -52,46 +54,24 @@ function TabDiscussion(props) {
     fetchData(); // Gọi fetchData ngay sau khi component được mount
   
     // Sử dụng setInterval để gọi lại fetchData mỗi giây
-      //  const intervalId = setInterval(fetchData, 3000);
+       const intervalId = setInterval(fetchData, 3000);
     
-      // // // Hủy interval khi component bị unmounted
-      //  return () => clearInterval(intervalId);
+      // // Hủy interval khi component bị unmounted
+       return () => clearInterval(intervalId);
     }, [props.userName, username])
 
   return (
     <View style={styles.container}>
       <View style={styles.searchBarAndButtonView}>
-        <View /* Filter bar */ style={styles.searchBarView}>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              isFocusDropdown && { borderColor: "blue" },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            iconStyle={styles.iconStyle}
-            data={typePost}
-            //search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocusDropdown ? "Chuyên mục" : "..."}
-            value={valueDropdown}
-            onFocus={() => setIsFocusDropdown(true)}
-            onBlur={() => setIsFocusDropdown(false)}
-            onChange={(item) => {
-              setValueDropdown(item.value);
-              setTypeOfPost(item.label);
-              setIsFocusDropdown(false);
+      <View /* Search bar */ style={styles.searchBarView}>
+          <Image source={images.searchIcon} style={styles.searchBarImage} />
+          <TextInput
+            autoCorrect={false}
+            inputMode="search"
+            onChangeText={(text) => {
+              setSearchText(text);
             }}
-            renderLeftIcon={() => (
-              <Image
-                source={images.searchIcon}
-                style={styles.icon}
-                color={isFocusDropdown ? "blue" : "black"}
-                name="Safety"
-              />
-            )}
+            style={styles.searchBarTypingArea}
           />
         </View>
 
@@ -106,8 +86,11 @@ function TabDiscussion(props) {
       </View>
 
       <ScrollView style={styles.listContainer}>
-        {typeOfPost == "Tất cả" || typeOfPost == null
-          ? topics.map((eachTopic) => (
+        {topics
+            .filter((eachTopic) => eachTopic.content
+              .toLowerCase()
+              .includes(searchText.toLowerCase()))
+            .map((eachTopic) => (
               <TabDiscussionItems
                 topic={eachTopic}
                 key={eachTopic.blogID}
@@ -115,18 +98,8 @@ function TabDiscussion(props) {
                   navigate("ShowPost", { topic: eachTopic });
                 }}
               />
-            ))
-          : topics
-              .filter((eachTopic) => eachTopic.type == typeOfPost)
-              .map((eachTopic) => (
-                <TabDiscussionItems
-                  topic={eachTopic}
-                  key={eachTopic.blogID}
-                  onPress={() => {
-                    navigate("ShowPost", { topic: eachTopic });
-                  }}
-                />
-              ))}
+            ))}
+              
       </ScrollView>
     </View>
   );
@@ -203,5 +176,55 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
+  },
+  searchBarAndButtonView: {
+    height: 70,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  searchBarView: {
+    width: "50%",
+    height: "65%",
+    marginHorizontal: 10,
+    marginTop: 10,    
+    borderColor: "black",
+    borderWidth: 2,
+    borderRadius: 90,    
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.transparentWhite,
+  },
+  searchBarTypingArea: {
+    height: "75%",
+    flex: 1,
+    marginRight: 10,
+  },
+  searchBarImage: {
+    width: 22,
+    height: 22,
+    resizeMode: "stretch",
+    marginHorizontal: 8,
+  },
+  buttonContainer: {
+    width: "auto",
+    height: "65%",
+
+    marginRight: 10,
+    marginTop: 12,
+
+    borderRadius: 20,
+
+    backgroundColor: colors.active,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    paddingHorizontal: 11,
+    fontSize: fontSizes.h7,
+    fontWeight: "bold",
   },
 });
