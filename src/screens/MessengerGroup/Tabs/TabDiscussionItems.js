@@ -37,35 +37,37 @@ function TabDiscussionItems(props) {
     return <Image source={iconName} style={styles.icon} />;
   };
 
-  const [username, setUserName] = useState("")
+  const [username, setUserName] = useState("");
   const date = new Date(dateCreated);
 
-
-  const [blog, setBlog] = useState('');
+  const [blog, setBlog] = useState("");
   useEffect(() => {
     const fetchData = async () => {
-  
-        setUserName(await AsyncStorage.getItem('username'))
-        //const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + blogID);
-  
+      setUserName(await AsyncStorage.getItem("username"));
+      //const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + blogID);
 
-        //setNotifications(response.data);
-        //console.log(response.data)
+      //setNotifications(response.data);
+      //console.log(response.data)
     };
-  
+
     fetchData(); // Gọi fetchData ngay sau khi component được mount
-  
+
     // Sử dụng setInterval để gọi lại fetchData mỗi giây
-      // 
-  }, [props.userName, username])
+    //
+  }, [props.userName, username]);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.topView}>
-        {_getIcon()}
-        <Text /** Name */ style={styles.text}>{fulName}                                      bình luận: {comments.length}</Text>
+        <View style={{ flexDirection: "row" }}>
+          {_getIcon()}
+          <Text style={styles.text}>{fulName}</Text>
+        </View>
+        <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
       </View>
-      <Text style={styles.content} numberOfLines={5} >{content}</Text>
+      <Text style={styles.content} numberOfLines={5}>
+        {content}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -77,14 +79,15 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingTop: 15,
     paddingStart: 10,
-    flexDirection: 'column',
+    flexDirection: "column",
     borderRadius: 10,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
   topView: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   icon: {
     width: 30,
@@ -104,5 +107,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: "black",
     fontSize: fontSizes.h7,
-  }
+  },
+  rightSideText: {
+    width: 70,
+    padding: 10,
+    paddingLeft: 0,
+    color: "black",
+    fontSize: fontSizes.h8,
+    fontWeight: "500",
+    alignSelf: "center",
+    textAlign: "right",
+    color: colors.inactive,
+    marginTop: -15,
+  },
 });
