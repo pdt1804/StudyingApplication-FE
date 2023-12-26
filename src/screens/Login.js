@@ -79,7 +79,7 @@ const Login = (props) => {
                   setUsername(text);
                 }}
                 placeholder="Username"
-                placeholderTextColor={colors.placeholderTextColor}
+                placeholderTextColor={colors.PrimaryBackground}
               />
               <View style={styles.blackLine} />
             </View>
@@ -96,7 +96,7 @@ const Login = (props) => {
                   setPassword(text);
                 }}
                 placeholder="Password"
-                placeholderTextColor={colors.placeholderTextColor}
+                placeholderTextColor={colors.PrimaryBackground}
               />
               <View style={styles.blackLine} />
             </View>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 10,
     marginLeft: 10,
-    tintColor: colors.blueIcon,
+    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 300,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     padding: 1,
     fontSize: fontSizes.h6,
     fontWeight: "bold",
-    color: "blue",
+    color: colors.PrimaryBackground,
   },
   forgetPassword: {
     marginHorizontal: 5,

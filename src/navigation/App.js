@@ -20,6 +20,8 @@ import {
   ShowProfileStranger,
   ShowProfileSentInvitation,
   TabDiscussionFiltered,
+  Comment,
+  Reply,
 } from '../screens';
 import UITab from './UITab';
 
@@ -57,6 +59,9 @@ function App(props) {
         <Stack.Screen name="ShowProfileSentInvitation" component={ShowProfileSentInvitation} />
 
         <Stack.Screen name="TabDiscussionFiltered" component={TabDiscussionFiltered} />
+
+        <Stack.Screen name="Comment" component={Comment} />
+        <Stack.Screen name="Reply" component={Reply} />
       </Stack.Navigator>
     </NavigationContainer>
   );

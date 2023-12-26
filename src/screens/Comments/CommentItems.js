@@ -9,47 +9,54 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
+import { images, colors, icons, fontSizes } from "../../constants";
 
-import { images, colors, icons, fontSizes } from "../../../constants";
-//import { openDoc, isDoc, filePath } from 'react-native-doc-viewer';
+function CommentItems(props) {
+  let { avatar, fulname, content, dateSent, reply } = props.comment;
 
-
-function TabDocumentItem(props) {
-  let { header, type, dateUploaded, documentID } = props.doc;
-
-  const date = new Date(dateUploaded)
+  //const date = new Date(dateSent)
 
   const { onPress } = props;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image style={styles.img} source={images.personCircleIcon} />
+      <Image
+        style={styles.img}
+        source={{
+          uri: avatar,
+        }}
+      />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
-          {header}
+          {fulname}
         </Text>
-        <Text style={styles.contentText} numberOfLines={2}>
-          {type.toString().toUp}
+        <Text style={styles.contentText} numberOfLines={4}>
+          {content}
         </Text>
       </View>
-      <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
+      {/* <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text> */}
+      <View style={styles.rightSideView}>
+      <Text style={styles.rightSideText}>{dateSent}</Text>
+      <Text style={styles.rightSideText}>{reply} phản hồi</Text>
+      </View>
     </TouchableOpacity>
   );
 }
-export default TabDocumentItem;
+export default CommentItems;
 
 const styles = StyleSheet.create({
   container: {
-    height: 63,
+    minHeight: 65,
+    maxHeight: 150,
     marginBottom: 15,
     flexDirection: "row",
   },
   img: {
-    width: 33,
-    height: 33,
+    width: 55,
+    height: 55,
     resizeMode: "stretch",
+    borderRadius: 15,
     marginTop: 11,
     marginHorizontal: 10,
-    tintColor: colors.active,
   },
   textView: {
     flex: 1,
@@ -65,7 +72,11 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
     fontWeight: "300",
   },
-  timeText: {
+  rightSideView: {
+    flexDirection: 'column',
+    paddingTop: 10,
+  },
+  rightSideText: {
     width: 70,
     padding: 10,
     paddingLeft: 0,

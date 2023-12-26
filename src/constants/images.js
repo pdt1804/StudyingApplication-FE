@@ -41,6 +41,8 @@ export default {
   phoneRingCircleIcon: require(ICON_BASE_URL + 'PhoneRingCircle.png'),
   sendingEmailIcon: require(ICON_BASE_URL + 'SendingEmail.png'),
   sendMessageCursorIcon: require(ICON_BASE_URL + 'SendMessageCursor.png'),
+  clockIcon: require(ICON_BASE_URL + 'Clock.png'),
+  priceTagIcon: require(ICON_BASE_URL + 'PriceTag.png'),
 
   activeBellAlarm: require(ICON_BASE_URL + 'ActiveBellAlarm.png'),
   inactiveBellAlarm: require(ICON_BASE_URL + 'InactiveBellAlarm.png'),
