@@ -32,7 +32,9 @@ import GroupInfo from "./MessengerGroup/GroupInformation";
 import GroupInformationDetail from "./MessengerGroup/GroupInformationDetail";
 import ShowProfileMember from "./EssentialScreens/ShowProfiles/ShowProfileMember";
 import MembersInGroup from "./MessengerGroup/MembersInGroup";
-
+import CreateGroup from "./MessengerGroup/CreateGroup";
+import AddMember from "./MessengerGroup/AddMember";
+ 
 import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
 
 export {
@@ -64,4 +66,6 @@ export {
   GroupInformationDetail,
   MembersInGroup,
   MemberToChangeRole,
+  CreateGroup,
+  AddMember,
 };

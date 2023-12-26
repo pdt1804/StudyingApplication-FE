@@ -121,7 +121,7 @@ function GroupInfo(props) {
         }
         else
         {
-            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + username + "&groupID=" + group.groupID)
+            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + username + "&groupID=" + group.groupID)
             if (response.status == 200)
             {
                 //await AsyncStorage.removeItem('groupID');
@@ -131,7 +131,7 @@ function GroupInfo(props) {
       }
       else
       {
-        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + await AsyncStorage.getItem('username') + "&groupID=" + group.groupID)
+        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + await AsyncStorage.getItem('username') + "&groupID=" + group.groupID)
         if (response.status == 200)
         {
             //await AsyncStorage.removeItem('groupID');
@@ -221,6 +221,19 @@ function GroupInfo(props) {
         alert('Bạn không phải trưởng nhóm.')
     }
   }
+
+  const AddMembers = async () => {
+
+    if (username == await AsyncStorage.getItem('username'))
+    {
+        navigate('AddMember')
+    }
+    else
+    {
+        alert('Bạn không phải trưởng nhóm.')
+    }
+    
+  }
   
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
@@ -261,6 +274,12 @@ function GroupInfo(props) {
           icon={images.personIcon}
           text={"Đổi thông tin nhóm"}
           onPress={ChangeInformationGroup}
+        />
+
+        <EachOptionNavigate
+          icon={images.keyIcon}
+          text={"Thêm thành viên"}
+          onPress={AddMembers}
         />
 
         <EachOptionNavigate
