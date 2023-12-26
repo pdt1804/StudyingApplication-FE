@@ -79,6 +79,9 @@ function TabSuggestions(props) {
 
       <ScrollView>
         {invitation
+          .filter((eachInvitation) =>
+            eachInvitation.information.fulName.toLowerCase().includes(searchText.toLowerCase())
+          ) 
           .map((eachInvitation) => (
             <TabSuggestionsItems
               invitation={eachInvitation}

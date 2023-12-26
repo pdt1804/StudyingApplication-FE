@@ -55,8 +55,11 @@ const tabBarLabelStyles = {
 };
 
 function UITab(props) {
+
+  const { tabName } = props.route.params;
+
   return (
-    <Tab.Navigator initialRouteName="Settings" screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName= {tabName == null ? "Settings" : tabName} screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Friends"
         component={Friends}

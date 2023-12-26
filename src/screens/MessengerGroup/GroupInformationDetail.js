@@ -15,65 +15,47 @@ import { CommonButton } from "../../components";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
+import GroupInfo from "./GroupInformation";
 
-function Settings(props) {
+function GroupInformationDetail(props) {
   
-  const [newUsername, setNewUsername] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newDateOfBirth, setNewDateOfBirth] = useState("");
-  const [gender, setGender] = useState("");
-
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
   const handleSettings = async () => {
     
-    const username = await AsyncStorage.getItem('username');
-
-    const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
-
-    let updateInformation = {
-      infoID: response.data.information.infoID,
-      fulName: newUsername,
-      phoneNumber: newPhoneNumber,
-      yearOfBirth: newDateOfBirth,
-      gender: gender,
+    let group = {
+        groupID: await AsyncStorage.getItem('groupID'),
+        nameGroup: newGroupName,
+        passWord: newPassword,
     }
-
-    const responseUpdate = await axios.post(API_BASE_URL + "/api/v1/information/updateInformation", updateInformation);
-
-    if (responseUpdate.status == 200)
+    
+    const response = await axios.put(API_BASE_URL + "/api/v1/groupStudying/updateGroup", group);
+    
+    if (response.status == 200)
     {
-      navigate("UITab", {tabName: "Settings"});
+        push("GroupInfo");
     }
     else
     {
-      alert("Error!");
+        alert("Đã có lỗi mạng xảy ra")
     }
 
-  };
-
-  const handleCancel = async () => {
-    navigate("Settings");
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
 
-        const username = await AsyncStorage.getItem('username');
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
-
-        setNewUsername(response.data.information.fulName);
-        setNewEmail(response.data.email)
-        setNewPhoneNumber(response.data.information.phoneNumber.toString())
-        setNewDateOfBirth(response.data.information.yearOfBirth.toString())
-        setGender(response.data.information.gender);
+        setNewGroupName(response.data.nameGroup);
+        setNewPassword(response.data.passWord);
         
-                
+                        
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
@@ -83,6 +65,10 @@ function Settings(props) {
 
     fetchData();
   }, [props.userName]);
+
+  const handleCancel = async () => {
+    navigate("Settings");
+  };
 
   return (
     <View style={styles.container}>
@@ -109,13 +95,13 @@ function Settings(props) {
                   style={styles.textInputImageNoTitle}
                 />
                 <View>
-                  <Text>Họ và tên:</Text>
+                  <Text>Tên nhóm:</Text>
                   <TextInput
                     style={styles.textInputTypingArea}
                     inputMode="text"
-                    onChangeText={p => setNewUsername(p)}
-                    value={newUsername}
-                    placeholder="Nhập tên người dùng mới"
+                    onChangeText={p => setNewGroupName(p)}
+                    value={newGroupName}
+                    placeholder="Nhập tên nhóm mới"
                     placeholderTextColor={colors.noImportantText}
                   />
                 </View>
@@ -126,48 +112,13 @@ function Settings(props) {
                   style={styles.textInputImage}
                 />
                 <View>
-                  <Text>Số điện thoại:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="numeric"
-                    onChangeText={p => setNewPhoneNumber(p)}
-                    value={newPhoneNumber}
-                    placeholder="Nhập số điện thoại mới"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
-              <View /* new email */ style={styles.textInputView}>
-                <Image
-                  source={images.sendingEmailIcon}
-                  style={styles.textInputImage}
-                />
-                <View>
-                  <Text>Gender:</Text>
+                  <Text>Mật khẩu gia nhập nhóm:</Text>
                   <TextInput
                     style={styles.textInputTypingArea}
                     inputMode="text"
-                    onChangeText={p => setGender(p)}
-                    value={gender}
-                    placeholder="Giới tính"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.textInputView}>
-                <Image
-                  source={images.sendingEmailIcon}
-                  style={styles.textInputImage}
-                />
-                <View>
-                  <Text>Year of Birth:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="numeric"
-                    onChangeText={p => setNewDateOfBirth(p)}
-                    value={newDateOfBirth}
-                    placeholder="Năm sinh"
+                    onChangeText={p => setNewPassword(p)}
+                    value={newPassword}
+                    placeholder="Nhập mật khẩu mới"
                     placeholderTextColor={colors.noImportantText}
                   />
                 </View>
@@ -187,7 +138,7 @@ function Settings(props) {
     </View>
   );
 }
-export default Settings;
+export default GroupInformationDetail;
 
 const styles = StyleSheet.create({
   container: {
@@ -208,7 +159,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   yourInformationText: {
-    color: colors.PrimaryOnContainerAndFixed,
+    color: colors.titleScreen,
     fontSize: fontSizes.h2*0.9,
     fontWeight: "bold",
     alignSelf: "center",
@@ -219,7 +170,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: "50%",
     backgroundColor: colors.transparentWhite,
-    borderColor: colors.PrimaryOnContainerAndFixed,
+    borderColor: colors.borderedView,
     borderWidth: 2,
     borderRadius: 50,
     alignSelf: "center",
@@ -236,14 +187,14 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     marginRight: 10,
-    tintColor: colors.PrimaryBackground,
+    tintColor: colors.blueIcon,
   },
   textInputImage: {
     width: 55,
     height: 55,
     marginRight: 10,
     marginTop: 25,
-    tintColor: colors.PrimaryBackground,
+    tintColor: colors.blueIcon,
   },
   textInputTypingArea: {
     width: 250,

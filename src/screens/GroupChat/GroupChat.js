@@ -49,8 +49,7 @@ function GroupChat(props) {
         setUsername(username);
 
         const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser?myUserName=" + username);
-
-        console.log(response.data);
+        console.log(response.data)
         setGroups(response.data);
 
                 
@@ -62,6 +61,12 @@ function GroupChat(props) {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
   }, [props.userName]);
 
   return (

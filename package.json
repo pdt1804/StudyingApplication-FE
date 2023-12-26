@@ -17,6 +17,7 @@
     "Buffer": "^0.0.0",
     "axios": "^1.6.2",
     "base-64": "^1.0.0",
+    "base64-js": "^1.5.1",
     "expo": "^49.0.21",
     "expo-document-picker": "^11.7.0",
     "expo-file-system": "^15.6.0",
@@ -24,15 +25,16 @@
     "expo-image-picker": "~14.3.2",
     "expo-linear-gradient": "^12.5.0",
     "expo-status-bar": "~1.6.0",
+    "install": "^0.13.0",
+    "npm": "^10.2.5",
     "pusher-js": "^8.4.0-rc2",
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-datepicker": "^1.7.2",
     "react-native-doc-viewer": "^2.7.8",
-    "react-native-document-viewer": "^1.0.6",
+    "react-native-doc-viewer-new": "^2.7.11",
     "react-native-element-dropdown": "^2.10.1",
     "react-native-fetch-blob": "^0.10.8",
-    "react-native-file-viewer": "^2.1.5",
     "react-native-image-picker": "^7.1.0",
     "react-native-pager-view": "^6.2.3",
     "react-native-pdf": "^6.7.4",
@@ -40,7 +42,9 @@
     "react-native-screens": "~3.22.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.2",
-    "react-navigation": "^5.0.0"
+    "react-navigation": "^5.0.0",
+    "react-pdf": "^7.6.0",
+    "utf8": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

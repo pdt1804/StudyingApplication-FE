@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,12 +13,68 @@ const generateColor = () => {
 };
 
 function TabSuggestionsItems(props) {
-  let { nameGroup, imageGroup, groupID } = props.group;
+  let { nameGroup, imageGroup, groupID, passWord } = props.group;
+
+  const [nameTask, setNameTask] = useState('Tham gia');
+
+  const [editPassword, setEditPassword] = useState('');
+ 
+  const showTextInputAlert = () => {
+    Alert.prompt(
+      'Xác thực mật khẩu',
+      'Nhập mật khẩu nhóm:',
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async (text) => {
+            if (text === passWord) {
+              const response = await axios.post(
+                API_BASE_URL +
+                  '/api/v1/groupStudying/joinInGroup?myUserName=' +
+                  (await AsyncStorage.getItem('username')) +
+                  '&groupID=' +
+                  groupID
+              );
+              if (response.status === 200) {
+                setNameTask('Đã tham gia');
+              }
+            } else {
+              alert('Nhập sai mật khẩu nhóm');
+            }
+          },
+        },
+      ],
+      'plain-text',
+      '',
+      'default'
+    );
+  };
+  
 
   const handleJoinGroup = async () => {
     
-    const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup?myUserName=" + await AsyncStorage.getItem("username") + "&groupID=" + groupID)
-
+    if (passWord == "")
+    {
+      if (nameTask == "Tham gia")
+      {
+        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup?myUserName=" + await AsyncStorage.getItem("username") + "&groupID=" + groupID)
+        if (response.status == 200)
+        {
+          setNameTask('Đã tham gia')
+        }
+      }
+    }
+    else
+    {
+      if (nameTask == "Tham gia")
+      {
+        showTextInputAlert();
+      }
+    }
   };
 
   return (
@@ -41,7 +97,7 @@ function TabSuggestionsItems(props) {
             <Text
               style={[styles.buttonsText, styles.addFriend]}
             >
-              Tham gia
+              {nameTask}
             </Text>
           </TouchableOpacity>
         </View>
