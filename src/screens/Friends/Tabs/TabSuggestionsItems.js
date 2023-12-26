@@ -12,13 +12,18 @@ function TabSuggestionsItems(props) {
   const { onPress } = props;
   
   const [myUsername, setMyUsername] = useState("")
+  const [buttonName, setButtonName] = useState("Thêm bạn bè")
+
   const [friendUsername, setFriendUsername] = useState(userName)
 
 
   const handleAddFriend = async () => {
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
-
+    if (buttonName == "Thêm bạn bè")
+    {
+      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+      setButtonName("Đã gửi lời mời kết bạn")
+    }
   }
 
   return (
@@ -35,7 +40,7 @@ function TabSuggestionsItems(props) {
         </Text>
         <View style={styles.buttonsView}>
           <TouchableOpacity onPress={handleAddFriend} style={styles.buttons}>
-            <Text style={styles.buttonsText}>Thêm bạn bè</Text>
+            <Text style={styles.buttonsText}>{buttonName}</Text>
           </TouchableOpacity>
         </View>
       </View>

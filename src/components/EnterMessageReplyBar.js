@@ -10,19 +10,29 @@ import {
 } from "react-native";
 import { images, colors } from "../constants";
 import { API_BASE_URL } from "../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function EnterMessageReplyBar({myUsername, friendUsername}) {
+function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
+  
   const [typedText, setTypedText] = useState("");
-  const handleSendMessage = async () => {
-    
-    const message = {
+
+  const ReplyComment = async () => {
+
+    let reply = {
       content: typedText,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=" + myUsername + "&toUserName=" + friendUsername, message)
-    setTypedText(""); 
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/replyComment?commentID=" + commentID + "&userName=" + await AsyncStorage.getItem('username'), reply)
 
-  };
+    if (response.status != 200)
+    {
+      alert('Lỗi mạng, không thể phản hồi bình luận')
+    }
+    else
+    {
+      setTypedText("");
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -36,7 +46,7 @@ function EnterMessageReplyBar({myUsername, friendUsername}) {
         placeholder="Nhắn tin"
         placeholderTextColor={colors.placeholder}
       />
-      <TouchableOpacity onPress={handleSendMessage}>
+      <TouchableOpacity onPress={ReplyComment}>
         <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
       </TouchableOpacity>
     </View>

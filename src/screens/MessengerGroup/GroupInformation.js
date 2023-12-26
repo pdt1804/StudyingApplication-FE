@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
     paddingStart: 15,
   },
   button: {
-    backgroundColor: colors.blueIcon, // Màu xanh
+    backgroundColor: "blue", // Màu xanh
     padding: 10,
     borderRadius: 10,
     marginBottom: 10,

@@ -67,6 +67,8 @@ const ShowProfileRequest = (props) => {
     const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + userName + "&myUserName=" + await AsyncStorage.getItem('username'));
 
     console.log(response.status)
+    goBack();
+
 
   }
 
@@ -75,6 +77,8 @@ const ShowProfileRequest = (props) => {
     const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + userName + "&myUserName=" + await AsyncStorage.getItem('username'));
 
     console.log(response.status)
+    goBack();
+
 
   }
 

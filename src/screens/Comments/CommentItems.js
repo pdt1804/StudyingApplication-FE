@@ -12,9 +12,9 @@ import {
 import { images, colors, icons, fontSizes } from "../../constants";
 
 function CommentItems(props) {
-  let { avatar, fulname, content, dateSent, reply } = props.comment;
+  let { commentID, dateComment, userComment, content, replies } = props.comment;
 
-  //const date = new Date(dateSent)
+  const date = new Date(dateComment)
 
   const { onPress } = props;
   return (
@@ -22,12 +22,12 @@ function CommentItems(props) {
       <Image
         style={styles.img}
         source={{
-          uri: avatar,
+          uri: userComment.information.image,
         }}
       />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
-          {fulname}
+          {userComment.information.fulName}
         </Text>
         <Text style={styles.contentText} numberOfLines={4}>
           {content}
@@ -35,8 +35,8 @@ function CommentItems(props) {
       </View>
       {/* <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text> */}
       <View style={styles.rightSideView}>
-      <Text style={styles.rightSideText}>{dateSent}</Text>
-      <Text style={styles.rightSideText}>{reply} phản hồi</Text>
+      <Text style={styles.rightSideText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
+      <Text style={styles.rightSideText}>{replies.length} phản hồi</Text>
       </View>
     </TouchableOpacity>
   );
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   textView: {
     flex: 1,
     marginRight: 10,
+    marginTop: 15,
   },
   titleText: {
     color: colors.active,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   rightSideText: {
-    width: 70,
+    width: 100,
     padding: 10,
     paddingLeft: 0,
     color: "black",
@@ -86,6 +87,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "right",
     color: colors.inactive,
-    marginTop: -15,
+    marginTop: -10,
   },
 });

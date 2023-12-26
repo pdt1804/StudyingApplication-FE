@@ -17,6 +17,26 @@ import { API_BASE_URL } from "../../../../DomainAPI";
 function TabTypePostItems(props) {
   let { nameSubject, subjectID } = props.type;
 
+  const [numberOfBlogBySubject, setNumberOfBlogBySubject] = useState('')
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" + subjectID + "&groupID=" + await AsyncStorage.getItem('groupID'));
+              
+        console.log(response.data)
+        setNumberOfBlogBySubject(response.data)
+    };
+
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+
+    // Sử dụng setInterval để gọi lại fetchData mỗi giây
+       const intervalId = setInterval(fetchData, 15000);
+
+      // // Hủy interval khi component bị unmounted
+       return () => clearInterval(intervalId);
+    }, [props.userName, ])
+
   const { onPress } = props;
 
   return (
@@ -25,7 +45,7 @@ function TabTypePostItems(props) {
       <Image source={images.activeChatMessageIcon} style={styles.icon} />
         <Text style={styles.text}>{nameSubject}</Text>
       </View>
-      <Text style={styles.content} numberOfLines={5} >Số bài đăng: 1</Text>
+      <Text style={styles.content} numberOfLines={5} >Số bài đăng: {numberOfBlogBySubject}</Text>
     </TouchableOpacity>
   );
 }

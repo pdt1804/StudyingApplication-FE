@@ -26,11 +26,18 @@ function MemberItems(props) {
 
   const handleLeaveGroup = async () => {
 
-    const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'))
-
-    if (response.status == 200)
+    if (userName != await AsyncStorage.getItem('username'))
     {
-        alert('Xoá thành công')
+      const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'))
+
+      if (response.status == 200)
+      {
+          alert('Xoá thành công')
+      }
+    }
+    else
+    {
+      alert("Bạn không thể tự xoá bạn")
     }
 
   };

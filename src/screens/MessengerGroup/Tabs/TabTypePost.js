@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
+  Alert
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import TabTypePostItems from "./TabTypePostItems";
@@ -26,24 +27,73 @@ function TabTypePost(props) {
 
   const [username, setUsername] = useState('');
 
+  const [group, setGroup] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
 
         setUsername(await AsyncStorage.getItem('username').toString())
 
         const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllSubject?groupID=" + await AsyncStorage.getItem('groupID'));
-
+      
+        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        
+        setGroup(responseGroup.data)
         setTypes(response.data);
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount
 
     // Sử dụng setInterval để gọi lại fetchData mỗi giây
-      //  const intervalId = setInterval(fetchData, 3000);
+       const intervalId = setInterval(fetchData, 3000);
 
-      // // // Hủy interval khi component bị unmounted
-      //  return () => clearInterval(intervalId);
+      // // Hủy interval khi component bị unmounted
+       return () => clearInterval(intervalId);
     }, [props.userName, username])
+
+
+    const showTextInputAlert = () => {
+      Alert.prompt(
+        'Tạo chủ đề mới',
+        'Hãy nhập tên chủ đề:',
+        [
+          {
+            text: 'Hủy',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async (text) => {
+              if (group.leaderOfGroup.userName == await AsyncStorage.getItem('username')) {
+                const response = await axios.post(
+                  API_BASE_URL +
+                    '/api/v1/blog/createNewSubject?groupID=' +
+                    (await AsyncStorage.getItem('groupID')) +
+                    '&nameSubject=' +
+                    text
+                );
+                if (response.status == 200) {
+                  alert("Thêm thành công")
+                }
+                else
+                {
+                  alert("Đã có lỗi xảy ra")
+                }
+              } else {
+                alert('Bạn không phải trưởng nhóm');
+              }
+            },
+          },
+        ],
+        'plain-text',
+        '',
+        'default'
+      );
+    };
+
+  const CreateSubject = async () => {
+    showTextInputAlert();
+  }
 
   return (
     <View style={styles.container}>
@@ -62,11 +112,9 @@ function TabTypePost(props) {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => {
-            navigate("CreatePost");
-          }}
+          onPress={CreateSubject}
         >
-          <Text style={styles.buttonText}>{"Tạo bài đăng"}</Text>
+          <Text style={styles.buttonText}>{"Tạo chủ đề mới"}</Text>
         </TouchableOpacity>
       </View>
 

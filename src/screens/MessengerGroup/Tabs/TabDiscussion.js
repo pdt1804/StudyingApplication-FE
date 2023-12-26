@@ -64,25 +64,18 @@ function TabDiscussion(props) {
     <View style={styles.container}>
       <View style={styles.searchBarAndButtonView}>
       <View /* Search bar */ style={styles.searchBarView}>
-          <Image source={images.searchIcon} style={styles.searchBarImage} />
-          <TextInput
-            autoCorrect={false}
-            inputMode="search"
-            onChangeText={(text) => {
-              setSearchText(text);
-            }}
-            style={styles.searchBarTypingArea}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => {
-            navigate("CreatePost");
+        <TextInput
+          style={styles.searchBarTypingArea}
+          autoCorrect={false}
+          inputMode="search"
+          onChangeText={(text) => {
+            setSearchText(text);
           }}
-        >
-          <Text style={styles.buttonText}>{"Tạo bài đăng"}</Text>
-        </TouchableOpacity>
+          placeholder="Tìm kiếm..."
+          placeholderTextColor={colors.inactive}
+        />
+        <Image source={images.searchIcon} style={styles.searchBarImage} />
+      </View>
       </View>
 
       <ScrollView style={styles.listContainer}>
@@ -118,12 +111,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   searchBarView: {
-    width: "50%",
-    height: "85%",
-    marginHorizontal: 10,
-    paddingTop: 10,
+    height: "7%",
+    paddingHorizontal: 7,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    paddingTop: 10,
+    backgroundColor: colors.transparentWhite,
   },
   buttonContainer: {
     width: "auto",

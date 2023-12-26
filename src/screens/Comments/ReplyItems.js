@@ -12,21 +12,21 @@ import {
 import { images, colors, icons, fontSizes } from "../../constants";
 
 function ReplyItems(props) {
-  let { avatar, fulname, content, dateSent } = props.comment;
+  let { userReplied, dateReplied, content, replyID } = props.comment;
 
-  //const date = new Date(dateSent)
+  const date = new Date(dateReplied)
 
   return (
     <View style={styles.container}>
       <Image
         style={styles.img}
         source={{
-          uri: avatar,
+          uri: userReplied.information.image,
         }}
       />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
-          {fulname}
+          {userReplied.information.fulName}
         </Text>
         <Text style={styles.contentText}>
           {content}
@@ -34,7 +34,7 @@ function ReplyItems(props) {
       </View>
       {/* <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text> */}
       <View style={styles.rightSideView}>
-      <Text style={styles.rightSideText}>{dateSent}</Text>
+      <Text style={styles.rightSideText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
       </View>
     </View>
   );
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   textView: {
     flex: 1,
     marginRight: 10,
+    marginTop: 10,
   },
   titleText: {
     color: colors.active,
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
   rightSideView: {
     flexDirection: 'column',
     paddingTop: 10,
+    marginTop: 10,
   },
   rightSideText: {
     width: 70,

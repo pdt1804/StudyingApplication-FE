@@ -38,10 +38,11 @@ function ContentBox(props) {
 }
 
 const ShowPost = (props) => {
-  let { blogID, content, dateCreated, comments } = props.route.params.topic;
+  let { blogID, content, dateCreated, comments, subject } = props.route.params.topic;
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
 
+  
   const date = new Date(dateCreated);
   const hour = date.getHours();
   const minute = date.getMinutes();
@@ -76,6 +77,12 @@ const ShowPost = (props) => {
           title="Thời gian tạo"
           content={sendingTime}
         />
+        
+        <SubjectBox
+          icon={images.menuIcon}
+          title="Chủ đề"
+          content={subject.nameSubject}
+        />
 
         <ContentBox
           icon={images.documentBlackIcon}
@@ -87,7 +94,7 @@ const ShowPost = (props) => {
       <TouchableOpacity
         style={styles.commentBar}
         onPress={() => {
-          navigate('Comment');
+          navigate('Comment', {blogID: blogID});
         }}
       >
         <Text        style={styles.commentBarText}

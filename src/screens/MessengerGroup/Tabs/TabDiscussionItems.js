@@ -66,7 +66,7 @@ function TabDiscussionItems(props) {
         <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
       </View>
       <Text style={styles.content} numberOfLines={5}>
-        {content}
+        Nội dung: {content}
       </Text>
     </TouchableOpacity>
   );
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
   },
   rightSideText: {
-    width: 70,
+    width: 90,
     padding: 10,
     paddingLeft: 0,
     color: "black",

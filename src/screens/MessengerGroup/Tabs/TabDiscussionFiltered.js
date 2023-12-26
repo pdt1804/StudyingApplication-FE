@@ -62,7 +62,7 @@ function TabDiscussionFiltered(props) {
         onPressRightIcon={null}
       />
       <View style={styles.searchBarAndButtonView}>
-        <View /* Filter bar */ style={styles.searchBarView}>
+        <View style={styles.searchBarView}>
           <Image source={images.searchIcon} style={styles.searchBarImage} />
           <TextInput
             autoCorrect={false}
@@ -77,7 +77,7 @@ function TabDiscussionFiltered(props) {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
-            navigate("CreatePost");
+            navigate("CreatePost", {subjectID: subjectID});
           }}
         >
           <Text style={styles.buttonText}>{"Tạo bài đăng"}</Text>

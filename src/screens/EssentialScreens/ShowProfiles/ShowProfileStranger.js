@@ -68,6 +68,8 @@ const ShowProfileStranger = (props) => {
   const AddFriend = async () => {
 
     const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+    goBack();
+
   }
 
   return (

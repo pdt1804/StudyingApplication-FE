@@ -18,13 +18,15 @@ const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
 
+  let {subjectID} = props.route.params;
+
   const handleCreatePost = async () => {
     
     let blog = {
       content: contentText
     }
 
-    const response = await axios.post(API_BASE_URL + '/api/v1/blog/createNewBlog?groupID=' + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'), blog)
+    const response = await axios.post(API_BASE_URL + '/api/v1/blog/createNewBlog?groupID=' + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username') + "&subjectID=" + subjectID, blog)
 
     goBack();
 
@@ -32,6 +34,7 @@ const CreatePost = (props) => {
 
   //navigation
   const { navigate, goBack } = props.navigation;
+
 
   //Quickly delete written content
   useEffect(() => {

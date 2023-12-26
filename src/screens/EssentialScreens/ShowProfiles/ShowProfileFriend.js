@@ -99,6 +99,11 @@ const ShowProfileFriend = (props) => {
 
     const response = await axios.delete(API_BASE_URL + "/api/v1/friendship/deleteFriend?sentUserName=" + friendUsername + "&receivedUserName=" + await AsyncStorage.getItem('username'))
     
+    if (response.status)
+    {
+      alert('Xoá bạn thành công')
+      navigate('UITab', {tabName: "Friends"})
+    }
 
   }
 

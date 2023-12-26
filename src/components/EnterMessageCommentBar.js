@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { images, colors } from "../constants";
 import { API_BASE_URL } from "../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function EnterMessageCommentBar({myUsername, friendUsername}) {
+function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
   const [typedText, setTypedText] = useState("");
   const handleSendMessage = async () => {
     
@@ -23,6 +24,25 @@ function EnterMessageCommentBar({myUsername, friendUsername}) {
     setTypedText(""); 
 
   };
+
+  const commentBlog = async () => {
+
+    let comment = {
+      content: typedText,
+    }
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/commentBlog?blogID=" + blogID + "&userName=" + await AsyncStorage.getItem('username'), comment)
+
+    if (response.status != 200)
+    {
+      alert('Lỗi mạng, không thể comment')
+    }
+    else
+    {
+      setTypedText(""); 
+    }
+    
+  }
 
   return (
     <View style={styles.container}>
@@ -36,7 +56,7 @@ function EnterMessageCommentBar({myUsername, friendUsername}) {
         placeholder="Nhắn tin"
         placeholderTextColor={colors.placeholder}
       />
-      <TouchableOpacity onPress={handleSendMessage}>
+      <TouchableOpacity onPress={commentBlog}>
         <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
       </TouchableOpacity>
     </View>
