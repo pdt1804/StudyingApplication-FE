@@ -23,12 +23,7 @@ const ShowDocument = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        const arrayBuffer = new Uint8Array(file).buffer;
-        const text = decode(file);
-
-        console.log(text)
-        setContent(text);        
+     
 
       } catch (error) {
         console.error('Error fetching data:', error);

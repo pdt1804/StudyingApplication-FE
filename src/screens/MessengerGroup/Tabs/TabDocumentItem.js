@@ -29,7 +29,7 @@ function TabDocumentItem(props) {
           {header}
         </Text>
         <Text style={styles.contentText} numberOfLines={2}>
-          {type.toString()}
+          {type.toString().toUpperCase()}
         </Text>
       </View>
       <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>

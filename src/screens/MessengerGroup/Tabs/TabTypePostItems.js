@@ -24,7 +24,6 @@ function TabTypePostItems(props) {
 
         const response = await axios.get(API_BASE_URL + "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" + subjectID + "&groupID=" + await AsyncStorage.getItem('groupID'));
               
-        console.log(response.data)
         setNumberOfBlogBySubject(response.data)
     };
 

@@ -3,7 +3,10 @@
     "ios": {
       "infoPlist": {
         "NSCameraUsageDescription": "We need access to your camera",
-        "NSPhotoLibraryUsageDescription": "We need access to your photo library"
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library",
+        "NSPhotoLibraryAddUsageDescription": "Your description here",
+        "NSDocumentPickerUsageDescription": "Your usage description here.",
+        "supportsTablet": true
       }
     },
     "name": "ChatGroupUITProject",
@@ -20,9 +23,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -31,6 +31,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ]
+    ]
   }
 }

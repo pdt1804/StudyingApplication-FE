@@ -37,7 +37,7 @@ function TabDiscussionFiltered(props) {
 
       const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllBlogBySubject?groupID=" + await AsyncStorage.getItem('groupID') + "&subjectID=" + subjectID);
 
-      console.log(response.data)
+      //console.log(response.data)
       setTopics(response.data);
     };
 

@@ -13,7 +13,9 @@ import TabNotificationItems from "./TabNotificationItems";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
-//import TabDocumentItem from "./TabDocumentItem";
+import TabDocumentItem from "./TabDocumentItem";
+import * as DocumentPicker from 'expo-document-picker';
+//import DocumentViewer from 'expo-document-viewer';
 
 
 function TabDocument(props) {
@@ -27,6 +29,9 @@ function TabDocument(props) {
 
   const [userName, setUserName] = useState("")
 
+  const [group, setGroup] = useState("")
+
+
   useEffect(() => {
     const fetchData = async () => {
      
@@ -34,6 +39,10 @@ function TabDocument(props) {
   
         const response = await axios.get(API_BASE_URL + "/api/v1/document/getAllDocumentOfGroup?groupID=" + await AsyncStorage.getItem('groupID'));
   
+        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+
+        setGroup(responseGroup.data);
+
         setNotifications(response.data);
     };
   
@@ -46,11 +55,58 @@ function TabDocument(props) {
       return () => clearInterval(intervalId);
   }, [props.userName, userName])
 
+  const selectFile = async () => {
+
+    if (group.leaderOfGroup.userName == await AsyncStorage.getItem('username'))
+    {
+      try {
+        const fileResult = await DocumentPicker.getDocumentAsync({
+          type: '*/*', // Chọn tất cả các loại file
+        });
+        console.log(fileResult)
+
+        console.log(fileResult.assets[0].uri)
+        console.log(fileResult.assets[0].name)
+
+        const formData = new FormData();
+        formData.append('file', fileResult.assets[0].uri);
+        formData.append('groupID', await AsyncStorage.getItem('groupID'));
+        formData.append('userName', await AsyncStorage.getItem('username'));
+        formData.append('fileName', fileResult.assets[0].name);
+
+        const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData)
+
+        if (response.status == 200)
+        {
+          alert('Thêm tài liệu thành công')
+        }
+        else
+        {
+          alert('Đã có lỗi xảy ra, hãy kiểm tra lại mạng')
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    else
+    {
+      alert('Bạn không phải trưởng nhóm')
+    }
+  };
+
+  const openPDF = async (file) => {  
+    try {
+      await DocumentViewer.openAsync(fileUri);
+    } catch (error) {
+      console.error('Error opening PDF:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-{/*     <View style={styles.searchBarAndButtonView}>
-        <View /* Search bar style={styles.searchBarView}>
+    <View style={styles.searchBarAndButtonView}>
+        <View style={styles.searchBarView}>
           <Image source={images.searchIcon} style={styles.searchBarImage} />
           <TextInput
             autoCorrect={false}
@@ -64,11 +120,9 @@ function TabDocument(props) {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => {
-            navigate("CreateNotification");
-          }}
+          onPress={selectFile}
         >
-          <Text style={styles.buttonText}>{"Tạo thông báo"}</Text>
+          <Text style={styles.buttonText}>{"Thêm tài liệu"}</Text>
         </TouchableOpacity>
       </View>
 
@@ -84,11 +138,11 @@ function TabDocument(props) {
               doc={eachNotification}
               key={eachNotification.documentID}
               onPress={() => {
-                navigate("ShowDocument", { notification: eachNotification });
+                openPDF(eachNotification.file);
               }}
             />
           ))}
-      </ScrollView> */}
+      </ScrollView>
     </View>
   );
 }
