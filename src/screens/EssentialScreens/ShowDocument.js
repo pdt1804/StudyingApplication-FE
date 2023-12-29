@@ -13,6 +13,7 @@ import { UIHeader } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import { decode } from "base-64";
+import PdfReader from "rn-pdf-reader-js";
 
 
 const ShowDocument = (props) => {
@@ -55,11 +56,9 @@ const ShowDocument = (props) => {
         //textStyle={{ color: colors.active }}
       />
 
-      <ScrollView style={{marginTop: 20}}>
+      <PdfReader source={{ uri: file}}>
 
-        <Text style={styles.contentTextInput}>{content}</Text>
-
-      </ScrollView>
+      </PdfReader>
     </View>
   );
 };

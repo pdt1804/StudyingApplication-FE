@@ -12,6 +12,7 @@ import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
@@ -32,7 +33,7 @@ function ContentBox(props) {
     <View style={styles.ContentBoxView}>
       <View style={styles.ContentBoxTopView}>
         <Image source={icon} style={styles.icon} />
-        <Text style={styles.title}>{title}: </Text>
+        <Text style={styles.title} onPress={props.OnPressContent}>{title}: </Text>
       </View>
       <Text style={styles.ContentBoxContent}>{content}</Text>
     </View>
@@ -51,6 +52,7 @@ const ShowNotification = (props) => {
   const sendingTime = `${hour}:${minute} ${day}/${month}`;
   
   const [groupName, setGroupName] = useState("");
+  const [item, setItem] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +63,15 @@ const ShowNotification = (props) => {
             notifycationID
         );
         setGroupName(response.data);
+
+        const responseItem = await axios.get(
+          API_BASE_URL +
+            "/api/v1/notifycation/loadNotifycation?notifycationID=" +
+            notifycationID + "&myUserName=" + await AsyncStorage.getItem('username')
+        );
+
+        setItem(responseItem.data)
+
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -73,6 +84,44 @@ const ShowNotification = (props) => {
 
   //navigation
   const { navigate, goBack } = props.navigation;
+
+  const LoadItem = async () => {
+
+    if (item.documentID == -1)
+    {
+
+      const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID)
+
+      if (response.status == 200)
+      {
+        navigate('ShowPost', {topic: response.data})
+      }
+      else
+      {
+        alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
+      }
+
+    }
+    else if (item.blogID == -1)
+    {
+
+      const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID)
+
+      if (response.status == 200)
+      {
+        navigate('ShowDocument', {notification: response.data})
+      }
+      else
+      {
+        alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
+      }
+    }
+    else
+    {
+
+    }
+
+  }
 
   return (
     <View style={styles.container}>
@@ -101,15 +150,16 @@ const ShowNotification = (props) => {
         <SubjectBox
           icon={images.menuIcon}
           title="Loại thông báo"
-          content={notifycationType == "user" ? "Trưởng nhóm" : "Hệ thống"}
+          content={item.notifycationType == "user" ? "Trưởng nhóm" : "Hệ thống"}
         />
 
-        <SubjectBox icon={images.priceTagIcon} title="Tiêu đề" content={header} />
+        <SubjectBox icon={images.priceTagIcon} title="Tiêu đề" content={item.header} />
 
         <ContentBox
           icon={images.documentBlackIcon}
           title="Nội dung"
-          content={content}
+          content={item.content}
+          OnPressContent={() => {LoadItem()}}
         />
       </ScrollView>
     </View>

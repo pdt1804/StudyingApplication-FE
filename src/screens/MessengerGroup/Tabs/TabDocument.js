@@ -16,6 +16,8 @@ import { API_BASE_URL } from "../../../../DomainAPI";
 import TabDocumentItem from "./TabDocumentItem";
 import * as DocumentPicker from 'expo-document-picker';
 //import DocumentViewer from 'expo-document-viewer';
+import PdfReader from "rn-pdf-reader-js";
+
 
 
 function TabDocument(props) {
@@ -137,9 +139,7 @@ function TabDocument(props) {
             <TabDocumentItem
               doc={eachNotification}
               key={eachNotification.documentID}
-              onPress={() => {
-                openPDF(eachNotification.file);
-              }}
+              onPress={() => { navigate('ShowDocument', {notification: eachNotification})}}
             />
           ))}
       </ScrollView>

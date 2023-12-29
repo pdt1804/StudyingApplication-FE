@@ -19,6 +19,7 @@
     "base-64": "^1.0.0",
     "base64-js": "^1.5.1",
     "expo": "^49.0.21",
+    "expo-constants": "^14.4.2",
     "expo-document-picker": "^11.7.0",
     "expo-file-system": "^15.6.0",
     "expo-image": "^1.5.1",
@@ -47,8 +48,10 @@
     "react-native-share": "^10.0.2",
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.2",
+    "react-native-webview": "^13.6.3",
     "react-navigation": "^5.0.0",
     "react-pdf": "^7.6.0",
+    "rn-pdf-reader-js": "^4.1.1",
     "utf8": "^3.0.0"
   },
   "devDependencies": {
