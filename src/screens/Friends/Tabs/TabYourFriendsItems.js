@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {images, colors, icons, fontSizes} from '../../../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { API_BASE_URL } from '../../../../DomainAPI';
 
 function TabYourFriendsItems(props) {
   
@@ -21,10 +23,24 @@ function TabYourFriendsItems(props) {
     fontSizeName = fontSizes.h6;
   }
 
+  const [isNewNotification, setIsNewNotification] = useState(false);
+
+  useEffect(() => {
+    const checkNewNotification = async () => {
+      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/checkNewMessage?myUserName=" + await AsyncStorage.getItem('username') + "&fromUserName=" + userName);
+      
+      setIsNewNotification(response.data === true);
+    };
+
+    checkNewNotification();
+
+  }, []);
+
   const ToMessage = async () => {
     
     try
     {
+      setIsNewNotification(false);
       onPress(await AsyncStorage.getItem('username'), userName);
     }
     catch (exception)
@@ -44,7 +60,13 @@ function TabYourFriendsItems(props) {
         }}
       />
         <Text
-          style={{
+          style={isNewNotification ? {
+            color: 'black',
+            fontSize: fontSizeName,
+            marginTop: 5,
+            marginRight: 15,
+            fontWeight: 'bold',
+          } : {
             color: 'black',
             fontSize: fontSizeName,
             marginTop: 5,

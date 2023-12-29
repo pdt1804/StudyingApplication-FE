@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import axios from "axios";
+import { API_BASE_URL } from "../../../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const generateColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215)
@@ -10,7 +13,7 @@ const generateColor = () => {
 };
 
 function TabYourGroupsItems(props) {
-  let { nameGroup, imageGroup, newestMessage, status } = props.group;
+  let { nameGroup, imageGroup, newestMessage, status, groupID } = props.group;
   const { onPress } = props;
 
   let fontSizeName = fontSizes.h5;
@@ -18,8 +21,29 @@ function TabYourGroupsItems(props) {
     fontSizeName = fontSizes.h6;
   }
 
+  const [isNewNotification, setIsNewNotification] = useState(false);
+
+  useEffect(() => {
+    const checkNewNotification = async () => {
+      const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/checkNewMessage?myUserName=" + await AsyncStorage.getItem('username') + "&groupID=" + groupID);
+      
+      setIsNewNotification(response.data === true);
+    };
+
+    checkNewNotification();
+
+  }, [groupID]);
+
+  const handlePress = () => {
+    
+    setIsNewNotification(false)
+    onPress();
+
+  }
+
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Image /** Avatar */
         style={[styles.avatarImage, {borderColor: generateColor()}]}
         source={{
@@ -27,11 +51,7 @@ function TabYourGroupsItems(props) {
         }}
       />
       <Text /** Name */
-        style={{
-          width: '80%',
-          color: "black",
-          fontSize: fontSizeName,
-        }}
+        style={isNewNotification ? styles.textNameGroupWithOutSeen : styles.textNameGroup}
       >
         {nameGroup}
       </Text>
@@ -64,4 +84,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderWidth:3,
   },
+  textNameGroupWithOutSeen: {
+    width: '80%',
+    color: "black",
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  textNameGroup: {
+    width: '80%',
+    color: "black",
+    fontSize: 16,
+  }
 });
