@@ -13,28 +13,27 @@ import { UIHeader } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from 'expo-image-picker';
 
 const CreateNotification = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [titleText, setTitleText] = useState("");
   const [contentText, setContentText] = useState("");
+  const [path, setPath] = useState(null)
 
   const handleCreatePost = async () => {
     
     let notification = {
       header: titleText,
       content: contentText,
+      image: path,
     }
 
     const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/create?groupID=" + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'), notification)
     alert("Tạo thành công")
     goBack();
   };
-  
-  //Add/change image
-  const handleImage = async () => {
-    alert("đổi hình thành công");
-  };
+
 
   //navigation
   const { navigate, goBack } = props.navigation;
@@ -52,6 +51,27 @@ const CreateNotification = (props) => {
     }
   };
 
+  const selectImage = async () => {
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      
+      try {
+
+        setPath(result.uri);
+
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+
+  };
 
   return (
     <View style={styles.container}>
@@ -91,8 +111,8 @@ const CreateNotification = (props) => {
           placeholder={"Soạn thông báo"}
           placeholderTextColor={colors.inactive}
         />
-        <TouchableOpacity style={styles.imgClickable} onPress={handleImage}>
-          <Image source={images.blankImageLoading} style={styles.image} />
+        <TouchableOpacity style={styles.imgClickable} onPress={selectImage}>
+          <Image source={{uri: path}} style={styles.image} />
         </TouchableOpacity>
       </ScrollView>
     </View>

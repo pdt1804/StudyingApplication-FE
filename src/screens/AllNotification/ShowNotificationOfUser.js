@@ -41,8 +41,9 @@ function ContentBox(props) {
 }
 
 const ShowNotificationOfUser = (props) => {
-  let { header, content, notifycationType, dateSent, notifycationID } =
+  let { header, content, notifycationType, dateSent, notifycationID, image } =
     props.route.params.notification;
+
 
   const date = new Date(dateSent);
   const hour = date.getHours();
@@ -87,63 +88,71 @@ const ShowNotificationOfUser = (props) => {
 
   const LoadItem = async () => {
 
-    
-    try
+    console.log(notifycationType)
+    console.log(notifycationType != "user")
+    if (notifycationType == "user")
     {
-      if (item != null)
-      {
-        if (item.documentID == -1)
+
+    }
+    else
+    {
+        try
         {
-
-          const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID)
-
-          if (response.status == 200)
-          {
-            navigate('ShowPost', {topic: response.data})
-          }
-          else if (response.status == 500)
-          {
-            alert('Nội dung này có thể đã bị xoá')
-          }
-          else
-          {
-            alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-          }
-
-        }
-        else if (item.blogID == -1)
+        if (item != null)
         {
+            if (item.documentID == -1)
+            {
 
-          const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID)
+            const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID)
 
-          if (response.status == 200)
-          {
-            navigate('ShowDocument', {notification: response.data})
-          }
-          else if (response.status == 500)
-          {
-            alert('Nội dung này có thể đã bị xoá')
-          }
-          else
-          {
-            alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-          }
+            if (response.status == 200)
+            {
+                navigate('ShowPost', {topic: response.data})
+            }
+            else if (response.status == 500)
+            {
+                alert('Nội dung này có thể đã bị xoá')
+            }
+            else
+            {
+                alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
+            }
+
+            }
+            else if (item.blogID == -1)
+            {
+
+            const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID)
+
+            if (response.status == 200)
+            {
+                navigate('ShowDocument', {notification: response.data})
+            }
+            else if (response.status == 500)
+            {
+                alert('Nội dung này có thể đã bị xoá')
+            }
+            else
+            {
+                alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
+            }
+            }
+            else
+            {
+
+            }
         }
         else
         {
+            alert('Bài thảo luận hoặc tài liệu này đã bị xoá')
+        }
+        }
+        catch (error)
+        {
+        //console.error(error.message)
+        alert('Nội dung này đã bị xoá')
 
         }
-      }
-      else
-      {
-        alert('Bài thảo luận hoặc tài liệu này đã bị xoá')
-      }
-    }
-    catch (error)
-    {
-      //console.error(error.message)
-      alert('Nội dung này đã bị xoá')
-
     }
 
   }
@@ -186,6 +195,9 @@ const ShowNotificationOfUser = (props) => {
           content={item.content}
           OnPressContent={() => {LoadItem()}}
         />
+
+        <Image source={{uri: image != null ? image : null}} style={styles.image} />
+
       </ScrollView>
     </View>
   );
@@ -236,5 +248,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "black",
     fontSize: fontSizes.h6,
+  },
+  image: {
+    width: 350,
+    height: 350,
+    resizeMode: "cover",
+    margin: 15,
+    borderRadius: 5,
+    borderColor: "white",
+    borderWidth: 0,
+    alignSelf: "center",
   },
 });

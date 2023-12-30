@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabDiscussionItems(props) {
-  let { blogID, content, dateCreated, comments } = props.topic;
+  let { blogID, content, dateCreated, comments, likes } = props.topic;
   let { userName } = props.topic.userCreated;
   let { fulName } = props.topic.userCreated.information;
 
@@ -50,7 +50,7 @@ function TabDiscussionItems(props) {
           <Text style={styles.text}>{fulName}</Text>
         </View>
         <View style={styles.rightSideView}>
-        <Text style={styles.rightSideText}>Số lượt tương tác: {comments.length}</Text>
+        <Text style={styles.rightSideText}>Số lượt tương tác: {likes.length}</Text>
         <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
         </View>
       </View>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection:'column',
   },
   rightSideText: {
-    width: 110,
+    width: 120,
     padding: 10,
     paddingLeft: 0,
     color: "black",
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     alignSelf: "center",
     textAlign: "right",
-    color: colors.inactive,
+    color: colors.active,
     marginTop: -15,
   },
 });

@@ -14,6 +14,7 @@ import { UIHeader } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from 'expo-image-picker';
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
@@ -42,7 +43,7 @@ function ContentBox(props) {
 }
 
 const ShowNotification = (props) => {
-  let { header, content, notifycationType, dateSent, notifycationID } =
+  let { header, content, notifycationType, dateSent, notifycationID, image } =
     props.route.params.notification;
 
   const date = new Date(dateSent);
@@ -216,7 +217,7 @@ const ShowNotification = (props) => {
           content={item.content}
           OnPressContent={() => {LoadItem()}}
         />
-        <Image source={images.blankImageLoading} style={styles.image} />
+        <Image source={{uri: image != null ? image : null}} style={styles.image} />
       </ScrollView>
     </View>
   );

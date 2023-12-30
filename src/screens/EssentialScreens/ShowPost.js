@@ -17,8 +17,12 @@ import { API_BASE_URL } from "../../../DomainAPI";
 
 let likeStatus = false;
 
+let blogiD;
+
+
 function SubjectBox(props) {
   const { icon, title, content } = props;
+
 
   return (
     <View style={styles.SubjectBoxView}>
@@ -32,6 +36,27 @@ function SubjectBox(props) {
 function ContentBox(props) {
   const { icon, title, content } = props;
   const { onPress } = props;
+
+  const [likeStatus, setLikeStatus] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      const checkLike = await axios.get(API_BASE_URL + "/api/v1/blog/checkLikeBlog?userName=" + await AsyncStorage.getItem('username') + "&blogID=" + blogiD)
+
+      setLikeStatus(checkLike.data === true)
+      
+      console.log(likeStatus)
+    };
+
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+
+    const intervalId = setInterval(fetchData, 3000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+
+  }, [props.userName, ])
 
   return (
     <View style={styles.ContentBoxView}>
@@ -61,10 +86,14 @@ function ContentBox(props) {
 }
 
 const ShowPost = (props) => {
-  let { blogID, content, dateCreated, comments, subject } =
+  let { blogID, content, dateCreated, comments, subject, image } =
     props.route.params.topic;
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
+
+  blogiD = blogID
+
+  const [likeStatus, setLikeStatus] = useState(false);
 
   const date = new Date(dateCreated);
   const hour = date.getHours();
@@ -99,6 +128,7 @@ const ShowPost = (props) => {
     // // Hủy interval khi component bị unmounted
      return () => clearInterval(intervalId);
   }, [props.userName, username])
+
 
   const deletePost = () => {
     if (username != leaderOfGroup && username != userName)
@@ -151,11 +181,14 @@ const ShowPost = (props) => {
 
   //Xu li like
   const handleLike = async () => {
-    //..
+    
+    const likeBlog = await axios.post(API_BASE_URL + "/api/v1/blog/likeBlog?userName=" + await AsyncStorage.getItem('username') + "&blogID=" + blogiD)
 
-    likeStatus = !likeStatus;
-    setShouldReload(true);
-  };
+    if (likeBlog.status == 200)
+    {
+      setShouldReload(true);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -194,7 +227,7 @@ const ShowPost = (props) => {
           content={content}
           onPress={handleLike}
         />
-        <Image source={images.blankImageLoading} style={styles.image} />
+        <Image source={{uri: image != null ? image : null}} style={styles.image} />
       </ScrollView>
 
       <TouchableOpacity

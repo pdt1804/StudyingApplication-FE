@@ -13,31 +13,17 @@ import { UIHeader } from "../../components";
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from 'expo-image-picker';
+
 
 const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
 
+  const [filePath, setFilePath] = useState("images.blankImageLoading")
+
+
   let { subjectID } = props.route.params;
-
-  const handleCreatePost = async () => {
-    let blog = {
-      content: contentText,
-    };
-
-    const response = await axios.post(
-      API_BASE_URL +
-        "/api/v1/blog/createNewBlog?groupID=" +
-        (await AsyncStorage.getItem("groupID")) +
-        "&userName=" +
-        (await AsyncStorage.getItem("username")) +
-        "&subjectID=" +
-        subjectID,
-      blog
-    );
-
-    goBack();
-  };
   
   //Add/change image
   const handleImage = async () => {
@@ -60,6 +46,66 @@ const CreatePost = (props) => {
     }
   };
 
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const selectImage = async () => {
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      
+      try {
+
+        setFilePath(result.uri);
+
+        const username = await AsyncStorage.getItem('username');
+
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+
+  };
+
+  const handleCreatePost = async () => {
+    let blog = {
+      content: contentText,
+    };
+
+    const response = await axios.post(
+      API_BASE_URL +
+        "/api/v1/blog/createNewBlog?groupID=" +
+        (await AsyncStorage.getItem("groupID")) +
+        "&userName=" +
+        (await AsyncStorage.getItem("username")) +
+        "&subjectID=" +
+        subjectID,
+      blog
+    );
+
+    const formData = new FormData();
+    formData.append('blogID', response.data);
+    formData.append('file', filePath);
+  
+    const responseUpdateImage = await axios.post(API_BASE_URL + '/api/v1/blog/insertImageInBlog', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+        
+    if (responseUpdateImage.status == 200)
+    {
+      alert('Tạo thành công');
+    }
+
+    goBack();
+  };
 
   return (
     <View style={styles.container}>
@@ -88,8 +134,8 @@ const CreatePost = (props) => {
           placeholder={"Soạn bài đăng. Điền vào đây..."}
           placeholderTextColor={colors.inactive}
         />
-        <TouchableOpacity style={styles.imgClickable} onPress={handleImage}>
-          <Image source={images.blankImageLoading} style={styles.image} />
+        <TouchableOpacity style={styles.imgClickable} onPress={selectImage}>
+          <Image source={{uri: filePath}} style={styles.image} />
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -112,7 +158,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     margin: 15,
     borderRadius: 5,
-    borderColor: "white",
+    borderColor: "grey",
     borderWidth: 5,
     alignSelf: "center",
   },
