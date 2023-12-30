@@ -23,20 +23,6 @@ function TabDiscussionItems(props) {
 
   const { onPress } = props;
 
-  const _getIcon = () => {
-    let iconName = images.activeChatMessageIcon;
-    // type == "Tin tức"
-    //   ? (iconName = images.activeBlogSearchIcon)
-    //   : type == "Hỏi đáp"
-    //   ? (iconName = images.questionMarkIcon)
-    //   : type == "Đánh giá"
-    //   ? (iconName = images.checkMarkIcon)
-    //   : type == "Thảo Luận"
-    //   ? (iconName = images.activeChatMessageIcon)
-    //   : (iconName = images.warningShieldIcon);
-    return <Image source={iconName} style={styles.icon} />;
-  };
-
   const [username, setUserName] = useState("");
   const date = new Date(dateCreated);
 
@@ -59,11 +45,14 @@ function TabDiscussionItems(props) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.topView}>
-        <View style={{ flexDirection: "row" }}>
-          {_getIcon()}
+        <View style={styles.leftSideTopView}>
+          <Image source={images.activeChatMessageIcon} style={styles.icon} />
           <Text style={styles.text}>{fulName}</Text>
         </View>
+        <View style={styles.rightSideView}>
+        <Text style={styles.rightSideText}>Số lượt tương tác: {comments.length}</Text>
         <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
+        </View>
       </View>
       <Text style={styles.content} numberOfLines={5}>
         Nội dung: {content}
@@ -89,6 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  leftSideTopView: { flexDirection: "row" },
   icon: {
     width: 30,
     height: 30,
@@ -108,8 +98,11 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: fontSizes.h7,
   },
+  rightSideView: {
+    flexDirection:'column',
+  },
   rightSideText: {
-    width: 90,
+    width: 110,
     padding: 10,
     paddingLeft: 0,
     color: "black",

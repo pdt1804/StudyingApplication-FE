@@ -138,7 +138,7 @@ const ShowNotification = (props) => {
         }}
       />
 
-      <ScrollView style={{ marginTop: 20 }}>
+      <ScrollView style={styles.mainView}>
         <SubjectBox icon={images.groupIcon} title="Nhóm" content={groupName} />
 
         <SubjectBox
@@ -161,6 +161,7 @@ const ShowNotification = (props) => {
           content={item.content}
           OnPressContent={() => {LoadItem()}}
         />
+        <Image source={images.blankImageLoading} style={styles.image} />
       </ScrollView>
     </View>
   );
@@ -171,6 +172,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
+  },
+  mainView: {
+    marginTop: 20,
   },
   icon: {
     width: 25,
@@ -211,5 +215,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "black",
     fontSize: fontSizes.h6,
+  },
+  image: {
+    width: 350,
+    height: 350,
+    resizeMode: "cover",
+    margin: 15,
+    borderRadius: 5,
+    borderColor: "white",
+    borderWidth: 5,
+    alignSelf: "center",
   },
 });
