@@ -55,7 +55,12 @@ function MembersInGroup(props) {
 
   return (
     <View style={styles.container}>
-      <UIHeader title={"Thành viên"} />
+      <UIHeader title={"Thành viên"} 
+        leftIconName={images.backIcon}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
+      />
 
       <View /* Search bar */ style={styles.searchBarView}>
         <TextInput
