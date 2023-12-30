@@ -21,6 +21,7 @@ import CreateNotification from "./EssentialScreens/CreateNotification";
 
 import ShowPost from "./EssentialScreens/ShowPost";
 import ShowNotification from "./EssentialScreens/ShowNotification";
+import ShowNotificationOfUser from "./AllNotification/ShowNotificationOfUser";
 
 import MemberToChangeRole from "./MessengerGroup/MemberToChangeRole";
 import ShowDocument from "./EssentialScreens/ShowDocument";
@@ -73,4 +74,5 @@ export {
   AddMember,
   Comment,
   Reply,
+  ShowNotificationOfUser,
 };

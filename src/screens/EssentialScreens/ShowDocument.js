@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
@@ -33,7 +34,9 @@ const ShowDocument = (props) => {
      
         setUsername(await AsyncStorage.getItem('username'))
 
-        const response = await axios.get(API_BASE_URL + "/api")
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getGroupByDocumentID?documentID=" + documentID)
+
+        setGroup(response.data);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -47,7 +50,41 @@ const ShowDocument = (props) => {
 
   const deleteDocument = () => {
 
-    //if (username)
+    if (username != group.leaderOfGroup.userName)
+    {
+      alert('Bạn không phải nhóm trưởng')
+    }
+    else
+    {
+      Alert.alert(
+        'Xác nhận xoá',
+        'Bạn có chắc chắn muốn xoá?',
+        [
+          {
+            text: 'Huỷ',
+            style: 'cancel',
+          },
+          {
+            text: 'Xoá',
+            style: 'destructive',
+            onPress: async () => {
+
+              const response = await axios.delete(API_BASE_URL + "/api/v1/document/deleteDocument?groupID=" + group.groupID + "&documentID=" + documentID)
+
+              if (response.status == 200)
+              {
+                goBack();
+              }
+              else
+              {
+                alert('Kiểm tra lại mạng, xoá không thành công')
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
   }
 
   //navigation
@@ -56,12 +93,12 @@ const ShowDocument = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={'Nội dung file'}
-        leftIconName={images.backIcon}
         rightIconName={images.errorIcon}
+        leftIconName={images.backIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={null}
+        onPressRightIcon={() => deleteDocument()}
         mainStyle={{
           //backgroundColor: colors.backgroundWhite,
           paddingBottom: 20,

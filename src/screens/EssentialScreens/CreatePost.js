@@ -83,6 +83,5 @@ const styles = StyleSheet.create({
   contentTextInput: {
     padding: 10,
     marginTop: 30,
-    height: 1000
   },
 });

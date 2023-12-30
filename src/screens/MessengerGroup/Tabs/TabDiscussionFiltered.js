@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { images, colors, icons, fontSizes } from "../../../constants";
@@ -30,15 +31,25 @@ function TabDiscussionFiltered(props) {
 
   const [username, setUsername] = useState('');
 
+  const [leaderOfGroup, setLeaderOfGroup] = useState('');
+
+  const [groupID, setGroupID] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
 
-      setUsername(await AsyncStorage.getItem('username').toString())
+      setUsername(await AsyncStorage.getItem('username'))
 
       const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllBlogBySubject?groupID=" + await AsyncStorage.getItem('groupID') + "&subjectID=" + subjectID);
 
       //console.log(response.data)
       setTopics(response.data);
+
+      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+
+      setLeaderOfGroup(responseGroup.data.leaderOfGroup.userName)
+
+      setGroupID(responseGroup.data.groupID)
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount
@@ -50,16 +61,55 @@ function TabDiscussionFiltered(props) {
      return () => clearInterval(intervalId);
   }, [props.userName, username])
 
+  const deleteSubject = () => {
+
+    if (username != leaderOfGroup)
+    {
+      alert('Bạn không phải nhóm trưởng')
+    }
+    else
+    {
+      Alert.alert(
+        'Xác nhận xoá',
+        'Bạn có chắc chắn muốn xoá?',
+        [
+          {
+            text: 'Huỷ',
+            style: 'cancel',
+          },
+          {
+            text: 'Xoá',
+            style: 'destructive',
+            onPress: async () => {
+
+              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/sureToDeleteSubject?subjectID=" + subjectID + "&groupID=" + groupID)
+
+              if (response.status == 200)
+              {
+                goBack();
+              }
+              else
+              {
+                alert('Kiểm tra lại mạng, xoá không thành công')
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
         title={nameSubject}
         leftIconName={images.backIcon}
-        rightIconName={null}
+        rightIconName={images.cancelIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={null}
+        onPressRightIcon={() => deleteSubject()}
       />
       <View style={styles.searchBarAndButtonView}>
         <View style={styles.searchBarView}>

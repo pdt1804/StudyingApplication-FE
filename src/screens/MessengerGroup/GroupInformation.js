@@ -74,6 +74,8 @@ function GroupInfo(props) {
 
   const [dateCreated, setDateCreated] = useState('');
 
+  const [members, setMembers] = useState('')
+
 
   let date;
 
@@ -87,6 +89,7 @@ function GroupInfo(props) {
         setUsername(response.data.leaderOfGroup.userName)
         setNumberOfMembers(response.data.numberOfMembers)
         setImage(response.data.image)
+        setMembers("Số thành viên: " + response.data.numberOfMembers)
         
         date = new Date(response.data.dateCreated);
         setDateCreated("Ngày tạo nhóm:  " + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear())
@@ -242,6 +245,10 @@ function GroupInfo(props) {
     <View style={styles.container}>
       <UIHeader
         title={"Thiết lập"}
+        leftIconName={images.backIcon}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
       />
 
       <ScrollView>
@@ -266,6 +273,9 @@ function GroupInfo(props) {
           icon={images.phoneIcon}
           text={leader}
         />
+
+        <EachOptionViewOnly icon={images.personIcon} text={members} />
+
         <EachOptionViewOnly icon={images.emailIcon} text={dateCreated} />
 
         <GroupOption text={"Tùy chỉnh tài khoản"} />

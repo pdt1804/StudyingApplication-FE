@@ -7,9 +7,13 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../../../DomainAPI";
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
@@ -50,6 +54,71 @@ const ShowPost = (props) => {
   const month = date.getMonth() + 1;
   const sendingTime = `${hour}:${minute} ${day}/${month}`;
 
+  const [username, setUsername] = useState('')
+
+  const [leaderOfGroup, setLeaderOfGroup] = useState('');
+
+  const [groupID, setGroupID] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      setUsername(await AsyncStorage.getItem('username'))
+
+      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+
+      setLeaderOfGroup(responseGroup.data.leaderOfGroup.userName)
+
+      setGroupID(responseGroup.data.groupID)
+    };
+
+    fetchData(); // Gọi fetchData ngay sau khi component được mount
+
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+     const intervalId = setInterval(fetchData, 3000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
+  }, [props.userName, username])
+
+  const deletePost = () => {
+    if (username != leaderOfGroup && username != userName)
+    {
+      alert('Bạn không phải nhóm trưởng hoặc người tạo')
+    }
+    else
+    {
+      Alert.alert(
+        'Xác nhận xoá',
+        'Bạn có chắc chắn muốn xoá?',
+        [
+          {
+            text: 'Huỷ',
+            style: 'cancel',
+          },
+          {
+            text: 'Xoá',
+            style: 'destructive',
+            onPress: async () => {
+
+              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/deleteBlog?blogID=" + blogID)
+
+              if (response.status == 200)
+              {
+                goBack();
+              }
+              else
+              {
+                alert('Kiểm tra lại mạng, xoá không thành công')
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
   //navigation
   const { navigate, goBack } = props.navigation;
 
@@ -58,11 +127,11 @@ const ShowPost = (props) => {
       <UIHeader
         title={"Thảo luận"}
         leftIconName={images.backIcon}
-        rightIconName={null}
+        rightIconName={images.cancelIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={null}
+        onPressRightIcon={() => deletePost()}
       />
 
       <ScrollView>
