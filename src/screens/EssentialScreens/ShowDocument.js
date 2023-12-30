@@ -14,17 +14,26 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import { decode } from "base-64";
 import PdfReader from "rn-pdf-reader-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const ShowDocument = (props) => {
-  let { file } = props.route.params.notification;
+  let { file, documentID } = props.route.params.notification;
 
   const [content, setContent] = useState("");
+
+  const [username, setUsername] = useState("")
+
+  const [group, setGroup] = useState("")
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
      
+        setUsername(await AsyncStorage.getItem('username'))
+
+        const response = await axios.get(API_BASE_URL + "/api")
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,6 +45,11 @@ const ShowDocument = (props) => {
     fetchData();
   }, [props.userName]);
 
+  const deleteDocument = () => {
+
+    //if (username)
+  }
+
   //navigation
   const { navigate, goBack } = props.navigation;
   return (
@@ -43,7 +57,7 @@ const ShowDocument = (props) => {
       <UIHeader
         title={'Nội dung file'}
         leftIconName={images.backIcon}
-        rightIconName={null}
+        rightIconName={images.errorIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
