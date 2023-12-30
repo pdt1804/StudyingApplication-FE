@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -30,6 +30,11 @@ const CreateNotification = (props) => {
     alert("Tạo thành công")
     goBack();
   };
+  
+  //Add/change image
+  const handleImage = async () => {
+    alert("đổi hình thành công");
+  };
 
   //navigation
   const { navigate, goBack } = props.navigation;
@@ -38,6 +43,15 @@ const CreateNotification = (props) => {
   useEffect(() => {
     contentText == "" ? setBlankContent(true) : setBlankContent(false);
   });
+
+  //Auto focus on TextInput when the screen is touched
+  const textInputRef = useRef(null);
+  const handleTouch = () => {
+    if (textInputRef.current) {
+      textInputRef.current.focus();
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -51,12 +65,9 @@ const CreateNotification = (props) => {
         onPressRightIcon={() => {
           handleCreatePost();
         }}
-        //mainStyle={{ backgroundColor: colors.backgroundWhite, paddingBottom: 20, }}
-        //iconStyle={{ tintColor: colors.active }}
-        //textStyle={{ color: colors.active }}
       />
 
-      <ScrollView>
+      <ScrollView onTouchStart={handleTouch}>
         <TextInput /* title */
           style={styles.titleTextInput}
           inputMode="text"
@@ -69,6 +80,7 @@ const CreateNotification = (props) => {
           placeholderTextColor={colors.inactive}
         />
         <TextInput /* content */
+          ref={textInputRef}
           style={styles.contentTextInput}
           inputMode="text"
           multiline
@@ -79,6 +91,9 @@ const CreateNotification = (props) => {
           placeholder={"Soạn thông báo"}
           placeholderTextColor={colors.inactive}
         />
+        <TouchableOpacity style={styles.imgClickable} onPress={handleImage}>
+          <Image source={images.blankImageLoading} style={styles.image} />
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -93,7 +108,6 @@ const styles = StyleSheet.create({
   contentTextInput: {
     paddingStart: 15,
     padding: 10,
-    height: 1000,
   },
   titleTextInput: {
     paddingStart: 15,
@@ -103,5 +117,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 50,
     marginBottom: 20,
+  },
+  image: {
+    width: 350,
+    height: 350,
+    resizeMode: "cover",
+    margin: 15,
+    borderRadius: 5,
+    borderColor: "white",
+    borderWidth: 5,
+    alignSelf: "center",
+  },
+  imgClickable: {
+    backgroundColor: colors.transparentWhite,
   },
 });

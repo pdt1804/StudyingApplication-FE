@@ -7,6 +7,7 @@ export default {
   avatarBorder: require(IMG_BASE_URL + 'AvatarBorder.png'),
   decorStuff01: require(IMG_BASE_URL + 'DecorStuff01.png'),
   decorStuff02: require(IMG_BASE_URL + 'DecorStuff02.png'),
+  blankImageLoading: require(IMG_BASE_URL + 'blank-image-loading.jpg'),
   
   personIcon: require(ICON_BASE_URL + 'Person.png'),
   keyIcon: require(ICON_BASE_URL + 'Key.png'),
@@ -50,4 +51,6 @@ export default {
   inactiveBlogSearchIcon: require(ICON_BASE_URL + 'InactiveGoogleBlogSearch.png'),
   activeChatMessageIcon: require(ICON_BASE_URL + 'ActiveChatMessage.png'),
   inactiveChatMessageIcon: require(ICON_BASE_URL + 'InactiveChatMessage.png'),
+  activeLikeIcon: require(ICON_BASE_URL + 'ActiveLike.png'),
+  inactiveLikeIcon: require(ICON_BASE_URL + 'InactiveLike.png'),
 };

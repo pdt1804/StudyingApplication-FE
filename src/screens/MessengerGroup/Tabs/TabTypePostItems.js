@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: "center",
     borderRadius: 10,
-    elevation: 8,
+    borderColor: "black",
+    borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
   topView: {
