@@ -19,12 +19,6 @@ import { FloatingAction } from "react-native-floating-action";
 
 const floatingActions = [
   {
-    text: "Chỉnh sửa thông báo",
-    icon: images.pencilIcon,
-    name: "bt_edit",
-    position: 1,
-  },
-  {
     text: "Xóa thông báo",
     icon: images.trashCanIcon,
     name: "bt_delete",

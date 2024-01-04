@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     marginBottom:3,
-    color: colors.inactive,
+    color: colors.active,
     fontSize: fontSizes.h8,
     fontWeight: "500",
     alignSelf: 'flex-end',

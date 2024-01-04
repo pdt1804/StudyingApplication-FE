@@ -16,6 +16,11 @@ function EnterMessageGroupBar({userName}) {
   const [typedText, setTypedText] = useState("");
   const handleSendMessage = async () => {
     
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập tin nhắn")
+      return;
+    }
     const message = {
       content: typedText,
     }

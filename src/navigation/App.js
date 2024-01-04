@@ -31,6 +31,7 @@ import {
   Comment,
   Reply,
   ShowNotificationOfUser,
+  EditPost,
 } from '../screens';
 import UITab from './UITab';
 
@@ -60,6 +61,7 @@ function App(props) {
         <Stack.Screen name="CreatePost" component={CreatePost} />
         <Stack.Screen name="CreateNotification" component={CreateNotification} />
         
+        <Stack.Screen name="EditPost" component={EditPost} />
         <Stack.Screen name="ShowPost" component={ShowPost} />
         <Stack.Screen name="ShowDocument" component={ShowDocument} />
         <Stack.Screen name="ShowNotification" component={ShowNotification} />

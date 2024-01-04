@@ -64,6 +64,11 @@ function TabTypePost(props) {
           {
             text: 'OK',
             onPress: async (text) => {
+              if (text.length == 0)
+              {
+                alert('Tạo không thành công, hãy nhập tên chủ đề')
+                return;
+              }
               if (group.leaderOfGroup.userName == await AsyncStorage.getItem('username')) {
                 const response = await axios.post(
                   API_BASE_URL +

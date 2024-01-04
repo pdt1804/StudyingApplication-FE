@@ -27,6 +27,12 @@ function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
 
   const commentBlog = async () => {
 
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập bình luận")
+      return;
+    }
+
     let comment = {
       content: typedText,
     }

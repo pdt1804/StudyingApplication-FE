@@ -32,6 +32,7 @@ function TabMessenger(props) {
         const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/loadMessageInGroup?myUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'));
   
         setChatHistory(response.data);
+
     };
   
     fetchData(); // Gọi fetchData ngay sau khi component được mount

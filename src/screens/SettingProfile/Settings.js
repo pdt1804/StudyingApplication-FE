@@ -59,13 +59,12 @@ function Settings(props) {
   const [fulname, setFulName] = useState(null)
   const [email, setEmail] = useState(null)
   const [phoneNumber, setPhoneNumber] = useState(null)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState('https://haycafe.vn/wp-content/uploads/2022/02/Ảnh-avatar-trang-s%E1%BB%8Dc-tráng.jpg')
   const [username, setUsername] = useState(null)
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +81,10 @@ function Settings(props) {
         
         const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?userName=" + username)
         
-        setImage(responseAvatar.data);
+        if (responseAvatar.data == " ")
+        {
+          setImage(responseAvatar.data);
+        }
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -127,15 +129,15 @@ function Settings(props) {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
 
       try {
 
         const username = await AsyncStorage.getItem('username');
         
-        var imagePath = result.uri.toString()
+        var imagePath = result.assets[0].uri.toString()
 
         const formData = new FormData();
         formData.append('image', imagePath);

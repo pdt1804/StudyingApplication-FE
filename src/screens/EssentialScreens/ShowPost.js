@@ -60,7 +60,6 @@ function ContentBox(props) {
 
       setLikeStatus(checkLike.data === true)
       
-      console.log(likeStatus)
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount
@@ -100,8 +99,12 @@ function ContentBox(props) {
 }
 
 const ShowPost = (props) => {
+
+
   let { blogID, content, dateCreated, comments, subject, image } =
     props.route.params.topic;
+  let { nameSubject, subjectID } =
+    props.route.params;
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
 
@@ -109,18 +112,12 @@ const ShowPost = (props) => {
 
   const [likeStatus, setLikeStatus] = useState(false);
 
-  const date = new Date(dateCreated);
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const sendingTime = `${hour}:${minute} ${day}/${month}`;
-
   const [username, setUsername] = useState('')
 
   const [leaderOfGroup, setLeaderOfGroup] = useState('');
 
   const [groupID, setGroupID] = useState('');
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,6 +129,7 @@ const ShowPost = (props) => {
       setLeaderOfGroup(responseGroup.data.leaderOfGroup.userName)
 
       setGroupID(responseGroup.data.groupID)
+
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount
@@ -143,6 +141,12 @@ const ShowPost = (props) => {
      return () => clearInterval(intervalId);
   }, [props.userName, username])
 
+    const date = new Date(dateCreated);
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const sendingTime = `${hour}:${minute} ${day}/${month}`;
 
   const deletePost = () => {
     if (username != leaderOfGroup && username != userName)
@@ -204,6 +208,18 @@ const ShowPost = (props) => {
     }
   }
 
+  const updatePost = async () => {
+
+    if (username != leaderOfGroup && username != userName)
+    {
+      alert('Bạn không phải nhóm trưởng hoặc người tạo')
+    }
+    else 
+    {
+      navigate("EditPost", {blogID: blogID, content: content, image: image, nameSubject: nameSubject, subjectID: subjectID })
+    }
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -258,7 +274,7 @@ const ShowPost = (props) => {
   position="right"
   onPressItem={(name) => {
     name=='bt_edit' ? (
-      alert('handle edit')
+      updatePost()
     ) : (
       deletePost()
     );

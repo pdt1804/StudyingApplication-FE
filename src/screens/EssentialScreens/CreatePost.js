@@ -58,11 +58,11 @@ const CreatePost = (props) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       
       try {
 
-        setFilePath(result.uri);
+        setFilePath(result.assets[0].uri);
 
         const username = await AsyncStorage.getItem('username');
 
@@ -74,6 +74,13 @@ const CreatePost = (props) => {
   };
 
   const handleCreatePost = async () => {
+
+    if (contentText.length == 0)
+    {
+      alert('Hãy nhập nội dung')
+      return;
+    }
+
     let blog = {
       content: contentText,
     };

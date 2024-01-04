@@ -51,6 +51,8 @@ function TabDiscussionFiltered(props) {
 
   const [groupID, setGroupID] = useState('');
 
+  const [newSubjectName, setNewSubjectName] = useState(nameSubject)
+
   useEffect(() => {
     const fetchData = async () => {
 
@@ -116,10 +118,66 @@ function TabDiscussionFiltered(props) {
     }
   }
 
+  const showTextInputAlert = () => {
+    Alert.prompt(
+      'Sửa tên chủ đề',
+      'Hãy nhập tên chủ đề:',
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'Sửa',
+          onPress: async (text) => {
+            if (text.length == 0)
+            {
+                alert("Sửa không thành công, vui lòng nhập tên chủ đề")
+                return;
+            }
+            if (true) {
+              const response = await axios.put(
+                API_BASE_URL +
+                  '/api/v1/blog/updateSubject?subjectID=' +
+                   subjectID +
+                  '&newNameSubject=' +
+                   text
+              );
+              if (response.status == 200) {
+                alert("Sửa thành công")
+                setNewSubjectName(text);
+              }
+              else
+              {
+                alert("Đã có lỗi xảy ra")
+              }
+            } else {
+              alert('Bạn không phải trưởng nhóm');
+            }
+          },
+        },
+      ],
+      'plain-text',
+       nameSubject,
+      'default'
+    );
+  };
+
+  const updateSubject = () => {
+    if (username != leaderOfGroup)
+    {
+      alert('Bạn không phải nhóm trưởng')
+    }
+    else
+    {
+      showTextInputAlert();
+    }
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={nameSubject}
+        title={newSubjectName}
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
@@ -160,7 +218,7 @@ function TabDiscussionFiltered(props) {
               topic={eachTopic}
               key={eachTopic.blogID}
               onPress={() => {
-                navigate("ShowPost", { topic: eachTopic });
+                navigate("ShowPost", { topic: eachTopic, nameSubject: nameSubject, subjectID: subjectID });
               }}
             />
           ))}
@@ -171,7 +229,7 @@ function TabDiscussionFiltered(props) {
   position="right"
   onPressItem={(name) => {
     name=='bt_edit' ? (
-      alert('handle edit')
+      updateSubject()
     ) : (
       deleteSubject()
     );

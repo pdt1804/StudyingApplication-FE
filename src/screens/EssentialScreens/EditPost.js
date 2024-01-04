@@ -10,50 +10,42 @@ import {
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
-import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from 'expo-image-picker';
 
-const CreateNotification = (props) => {
+
+const EditPost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
-  const [titleText, setTitleText] = useState("");
-  const [contentText, setContentText] = useState("");
-  const [path, setPath] = useState(null)
 
-  const handleCreatePost = async () => {
-    
-    if (titleText.length == 0)
-    {
-      alert('Hãy nhập tiêu đề')
-      return;
-    }
-    
-    if (contentText.length == 0)
-    {
-      alert('Hãy nhập nội dung')
-      return;
-    }
+  const [filePath, setFilePath] = useState("images.blankImageLoading")
 
-    let notification = {
-      header: titleText,
-      content: contentText,
-      image: path,
-    }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/create?groupID=" + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'), notification)
-    alert("Tạo thành công")
-    goBack();
+  let { blogID, content, image, nameSubject, subjectID } = props.route.params;
+
+  const [contentText, setContentText] = useState(content);
+
+  
+  //Add/change image
+  const handleImage = async () => {
+    alert("đổi hình thành công");
   };
-
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
-  //Quickly delete written content
   useEffect(() => {
-    contentText == "" ? setBlankContent(true) : setBlankContent(false);
-  });
+    const fetchData = async () => {
+        if (image != " ")
+        {
+            setFilePath(image)
+        }
+        contentText == "" ? setBlankContent(true) : setBlankContent(false);
+    };
+
+    fetchData();
+  }, [props.userName]);
 
   //Auto focus on TextInput when the screen is touched
   const textInputRef = useRef(null);
@@ -62,6 +54,9 @@ const CreateNotification = (props) => {
       textInputRef.current.focus();
     }
   };
+
+
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const selectImage = async () => {
 
@@ -72,11 +67,11 @@ const CreateNotification = (props) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       
       try {
 
-        setPath(result.uri);
+        setFilePath(result.assets[0].uri);
 
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -85,52 +80,73 @@ const CreateNotification = (props) => {
 
   };
 
+  const handleUpdatePost = async () => {
+
+    if (contentText.length == 0)
+    {
+        alert("Vui lòng nhập nội dung thảo luận")
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('blogID', blogID);
+    formData.append('content', contentText);
+    formData.append('image', filePath)
+  
+    const response = await axios.put(API_BASE_URL + '/api/v1/blog/updateBlog', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+        
+    if (response.status == 200)
+    {
+      alert('Chỉnh sửa thành công');
+    }
+
+    const type = {
+        nameSubject: nameSubject,
+        subjectID: subjectID,
+    }
+
+    navigate("TabDiscussionFiltered", {type: type});
+  };
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={'Tạo thông báo'}
-        leftIconName={blankContent ? images.backIcon : images.cancelIcon}
+        title={"Sửa thảo luận"}
+        leftIconName={images.backIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
-          blankContent ? goBack() : (setContentText(""), setTitleText(""));
+          goBack()
         }}
         onPressRightIcon={() => {
-          handleCreatePost();
+          handleUpdatePost();
         }}
       />
 
-      <ScrollView onTouchStart={handleTouch}>
-        <TextInput /* title */
-          style={styles.titleTextInput}
-          inputMode="text"
-          maxLength={180}
-          onChangeText={(text) => {
-            setTitleText(text);
-          }}
-          value={titleText}
-          placeholder={"Tiêu đề"}
-          placeholderTextColor={colors.inactive}
-        />
-        <TextInput /* content */
+      <ScrollView /* content */ onTouchStart={handleTouch}>
+        <TextInput
           ref={textInputRef}
           style={styles.contentTextInput}
           inputMode="text"
-          multiline
+          multiline //if want to limit the lines can add: numberOfLines={100}
           onChangeText={(text) => {
             setContentText(text);
           }}
           value={contentText}
-          placeholder={"Soạn thông báo"}
+          placeholder={"Soạn bài đăng. Điền vào đây..."}
           placeholderTextColor={colors.inactive}
         />
         <TouchableOpacity style={styles.imgClickable} onPress={selectImage}>
-          <Image source={{uri: path}} style={styles.image} />
+          <Image source={{uri: filePath}} style={styles.image} />
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
-export default CreateNotification;
+export default EditPost;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,17 +154,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   contentTextInput: {
-    paddingStart: 15,
     padding: 10,
-  },
-  titleTextInput: {
-    paddingStart: 15,
-    padding: 10,
-    borderColor: colors.inactive,
-    borderBottomWidth: 1,
-    marginTop: 20,
-    height: 50,
-    marginBottom: 20,
+    marginTop: 30,
   },
   image: {
     width: 350,
@@ -156,7 +163,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     margin: 15,
     borderRadius: 5,
-    borderColor: "white",
+    borderColor: "grey",
     borderWidth: 5,
     alignSelf: "center",
   },

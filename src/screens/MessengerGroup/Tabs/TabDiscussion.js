@@ -47,6 +47,7 @@ function TabDiscussion(props) {
       );
 
       setTopics(response.data);
+
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount

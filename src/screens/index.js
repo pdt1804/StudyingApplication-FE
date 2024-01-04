@@ -18,6 +18,7 @@ import AllNotification from "./AllNotification/AllNotification";
 
 import CreatePost from "./EssentialScreens/CreatePost";
 import CreateNotification from "./EssentialScreens/CreateNotification";
+import EditPost from "./EssentialScreens/EditPost";
 
 import ShowPost from "./EssentialScreens/ShowPost";
 import ShowNotification from "./EssentialScreens/ShowNotification";
@@ -75,4 +76,5 @@ export {
   Comment,
   Reply,
   ShowNotificationOfUser,
+  EditPost,
 };

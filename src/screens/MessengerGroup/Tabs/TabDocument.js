@@ -65,6 +65,12 @@ function TabDocument(props) {
         const fileResult = await DocumentPicker.getDocumentAsync({
           type: '*/*', // Chọn tất cả các loại file
         });
+
+        if (fileResult.canceled == true)
+        {
+          return;
+        }
+
         console.log(fileResult)
 
         console.log(fileResult.assets[0].uri)

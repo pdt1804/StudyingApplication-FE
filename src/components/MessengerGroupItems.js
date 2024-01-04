@@ -6,7 +6,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 
 function MessengerGroupItems(props) {
-  let { content, dateSent, id } = props.item;
+  let { content, dateSent, id, user } = props.item;
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
@@ -30,6 +30,7 @@ function MessengerGroupItems(props) {
         setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
+
       } catch (error) {
         console.error("Error fetching data:", error.message);
         setError("Error fetching data");
@@ -54,7 +55,7 @@ function MessengerGroupItems(props) {
 
       <View style={styles.mainTextView}>
         <View style={styles.leftView}>
-          <Text style={styles.subText}>Tên người gửi | {timeSent}</Text>
+          <Text style={styles.subText}>{user.information.fulName} | {timeSent}</Text>
         </View>
         <View style={styles.leftView}>
           <Text style={styles.message}>{content}</Text>
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     marginBottom: 3,
-    color: colors.inactive,
+    color: colors.active,
     fontSize: fontSizes.h8,
     fontWeight: "500",
     alignSelf: "flex-end",

@@ -15,11 +15,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 
 function TabDiscussionItems(props) {
-  let { blogID, content, dateCreated, comments, likeCount } = props.topic;
+  let { blogID, content, dateCreated, comments, likes } = props.topic;
   let { userName } = props.topic.userCreated;
   let { fulName } = props.topic.userCreated.information;
 
-  //alert(fulName);
+
+  //alert(likeCount);
 
   const { onPress } = props;
 
@@ -50,7 +51,7 @@ function TabDiscussionItems(props) {
           <Text style={styles.text}>{fulName}</Text>
         </View>
         <View style={styles.rightSideView}>
-        <Text style={styles.rightSideText}>Số lượt tương tác: {likeCount}</Text>
+        <Text style={styles.rightSideText}>Số lượt tương tác: {likes.length}</Text>
         <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
         </View>
       </View>

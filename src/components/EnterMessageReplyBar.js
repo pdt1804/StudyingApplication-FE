@@ -18,6 +18,12 @@ function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
 
   const ReplyComment = async () => {
 
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập phản hồi")
+      return;
+    }
+
     let reply = {
       content: typedText,
     }
