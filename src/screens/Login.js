@@ -13,8 +13,15 @@ import { CommonButton } from "../components";
 import { API_BASE_URL } from "../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CryptoJS from "crypto-js";
 
 const Login = (props) => {
+
+  const hashPassword = (password) => {
+    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    return hashedPassword;
+  };
+
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
@@ -23,13 +30,14 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
     try {
+
       if (username != null && password != null) {
         const response = await axios.get(
           API_BASE_URL +
             "/api/v1/user/Authenticate?userName=" +
             username +
             "&passWord=" +
-            password
+            hashPassword(password)
         );
 
         if (response.data == username) {

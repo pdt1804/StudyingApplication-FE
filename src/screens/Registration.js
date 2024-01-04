@@ -11,9 +11,16 @@ import {
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
 import axios from "axios";
+import CryptoJS from "crypto-js";
 import { API_BASE_URL } from "../../DomainAPI";
 
 const Registration = (props) => {
+
+  const hashPassword = (password) => {
+    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    return hashedPassword;
+  };
+
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
@@ -30,7 +37,7 @@ const Registration = (props) => {
   const handleRegister = async () => {
     let newUser = {
       userName: username,
-      passWord: password,
+      passWord: hashPassword(password),
       Email: email,
     };
 
