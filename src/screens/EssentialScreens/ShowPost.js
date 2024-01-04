@@ -14,15 +14,29 @@ import { UIHeader } from "../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../DomainAPI";
+import { FloatingAction } from "react-native-floating-action";
 
 let likeStatus = false;
 
 let blogiD;
 
+const floatingActions = [
+  {
+    text: "Chỉnh sửa thảo luận",
+    icon: images.pencilIcon,
+    name: "bt_edit",
+    position: 1,
+  },
+  {
+    text: "Xóa thảo luận",
+    icon: images.trashCanIcon,
+    name: "bt_delete",
+    position: 2,
+  },
+];
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
-
 
   return (
     <View style={styles.SubjectBoxView}>
@@ -195,11 +209,11 @@ const ShowPost = (props) => {
       <UIHeader
         title={"Thảo luận"}
         leftIconName={images.backIcon}
-        rightIconName={images.cancelIcon}
+        rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => deletePost()}
+        onPressRightIcon={null}
       />
 
       <ScrollView style={styles.mainView}>
@@ -238,6 +252,18 @@ const ShowPost = (props) => {
       >
         <Text style={styles.commentBarText}>Xem bình luận</Text>
       </TouchableOpacity>
+
+<FloatingAction
+  actions={floatingActions}
+  position="right"
+  onPressItem={(name) => {
+    name=='bt_edit' ? (
+      alert('handle edit')
+    ) : (
+      deletePost()
+    );
+  }}
+/>
     </View>
   );
 };

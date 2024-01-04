@@ -139,17 +139,17 @@ function Settings(props) {
               </View>
               <View /* new email */ style={styles.textInputView}>
                 <Image
-                  source={images.sendingEmailIcon}
+                  source={images.genderEqualityIcon}
                   style={styles.textInputImage}
                 />
                 <View>
-                  <Text>Gender:</Text>
+                  <Text>Giới tính:</Text>
                   <TextInput
                     style={styles.textInputTypingArea}
                     inputMode="text"
                     onChangeText={p => setGender(p)}
                     value={gender}
-                    placeholder="Giới tính"
+                    placeholder="Nhập giới tính của bạn"
                     placeholderTextColor={colors.noImportantText}
                   />
                 </View>
@@ -157,17 +157,17 @@ function Settings(props) {
 
               <View style={styles.textInputView}>
                 <Image
-                  source={images.sendingEmailIcon}
+                  source={images.birthdayCakeIcon}
                   style={styles.textInputImage}
                 />
                 <View>
-                  <Text>Year of Birth:</Text>
+                  <Text>Năm sinh:</Text>
                   <TextInput
                     style={styles.textInputTypingArea}
                     inputMode="numeric"
                     onChangeText={p => setNewDateOfBirth(p)}
                     value={newDateOfBirth}
-                    placeholder="Năm sinh"
+                    placeholder="Nhập năm sinh của bạn"
                     placeholderTextColor={colors.noImportantText}
                   />
                 </View>

@@ -8,6 +8,11 @@ import { API_BASE_URL } from "../../DomainAPI";
 function MessengerItems(props) {
   let { content, dateSent, id, status } = props.item;
 
+  const date = new Date(dateSent);
+  const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
+    date.getMonth() + 1
+  }`;
+
   const [image, setImage] = useState(null);
 
   const [username, setUsername] = useState("")
@@ -48,18 +53,28 @@ function MessengerItems(props) {
   }
 
   return CheckIsSender() == false ? (
-    <View style={styles.container}>
+    <View /** isSender = false --> avatar > message */ style={styles.container}>
       <Image style={styles.avatar} source={{ uri: image }} />
 
+      <View style={styles.mainTextView}>
+      <View style={styles.leftView}>
+      <Text style={styles.timeText}>{timeSent}</Text>
+      </View>
       <View style={styles.leftView}>
         <Text style={styles.message}>{content}</Text>
       </View>
     </View>
+    </View>
   ) : (
-    <View style={styles.container}>
+    <View /** isSender = true --> message > avatar */ style={styles.container}>
+    <View style={styles.mainTextView}>
+      <View style={styles.rightView}>
+      <Text style={styles.timeText}>{timeSent}</Text>
+      </View>
       <View style={styles.rightView}>
         <Text style={styles.message}>{content}</Text>
       </View>
+    </View>
 
       <Image style={styles.avatar} source={{ uri: image }} />
     </View>
@@ -96,14 +111,25 @@ const styles = StyleSheet.create({
   leftView: {
     flexDirection: "row",
     flex: 1,
-    marginRight: 10,
     justifyContent: "flex-start",
   },
   rightView: {
     flexDirection: "row",
     flex: 1,
-    marginRight: 10,
     justifyContent: "flex-end",
+  },
+  mainTextView: {
+    flexDirection: 'column',
+    flex: 1,
+    marginRight: 10,
+  },
+  timeText: {
+    marginBottom:3,
+    color: colors.inactive,
+    fontSize: fontSizes.h8,
+    fontWeight: "500",
+    alignSelf: 'flex-end',
+    textAlign: "right",
   },
 });
  

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
+import { UIHeader, CommonButton } from "../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 
@@ -64,6 +64,18 @@ const ForgetPassword = (props) => {
           />
         </View>
       </View>
+
+<UIHeader
+  title={null}
+  leftIconName={images.backIcon}
+  rightIconName={null}
+  onPressLeftIcon={() => {
+    goBack();
+  }}
+  onPressRightIcon={null}
+  mainStyle={styles.UIHeaderMainStyle}
+  iconStyle={styles.UIHeaderIconStyle}
+/>
     </View>
   );
 };
@@ -78,6 +90,19 @@ const styles = StyleSheet.create({
   },
   partitionMiddle: {
     width: "100%",
+  },
+  UIHeaderMainStyle: {
+    top: 0,
+    left: 0,
+    right: 0,
+    position: "absolute",
+    backgroundColor: null,
+  },
+  UIHeaderIconStyle: { tintColor: colors.inactive },
+  forgetPasswordView: {
+    width: "90%",
+    marginVertical: 10,
+    alignSelf: "center",
   },
   forgetPasswordView: {
     width: "90%",
