@@ -83,7 +83,7 @@ const ResetPasswordInSetting = (props) => {
           </View>
           <View /* Password */ style={styles.textInputView}>
             <Image
-              source={images.typePasswordIcon}
+              source={images.typeNewPasswordIcon}
               style={styles.textInputImage}
             />
             <View>

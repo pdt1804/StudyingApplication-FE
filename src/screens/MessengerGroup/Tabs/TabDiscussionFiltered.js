@@ -16,6 +16,22 @@ import TabDiscussionItems from "./TabDiscussionItems";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FloatingAction } from "react-native-floating-action";
+
+const floatingActions = [
+  {
+    text: "Chỉnh sửa chủ đề",
+    icon: images.pencilIcon,
+    name: "bt_edit",
+    position: 1,
+  },
+  {
+    text: "Xóa chủ đề",
+    icon: images.trashCanIcon,
+    name: "bt_delete",
+    position: 2,
+  },
+];
 
 function TabDiscussionFiltered(props) {
   let { nameSubject, subjectID } = props.route.params.type;
@@ -105,11 +121,11 @@ function TabDiscussionFiltered(props) {
       <UIHeader
         title={nameSubject}
         leftIconName={images.backIcon}
-        rightIconName={images.cancelIcon}
+        rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => deleteSubject()}
+        onPressRightIcon={null}
       />
       <View style={styles.searchBarAndButtonView}>
         <View style={styles.searchBarView}>
@@ -149,6 +165,18 @@ function TabDiscussionFiltered(props) {
             />
           ))}
       </ScrollView>
+
+<FloatingAction
+  actions={floatingActions}
+  position="right"
+  onPressItem={(name) => {
+    name=='bt_edit' ? (
+      alert('handle edit')
+    ) : (
+      deleteSubject()
+    );
+  }}
+/>
     </View>
   );
 }

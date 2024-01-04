@@ -128,7 +128,7 @@ const Registration = (props) => {
           </View>
 
           <View /* re-enter password */ style={styles.textInputView}>
-            <Image source={images.keyIcon} style={styles.textInputImage} />
+            <Image source={images.addKeyIcon} style={styles.textInputImage} />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}

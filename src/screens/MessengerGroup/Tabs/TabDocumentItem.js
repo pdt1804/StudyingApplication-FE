@@ -23,7 +23,7 @@ function TabDocumentItem(props) {
   const { onPress } = props;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image style={styles.img} source={images.personCircleIcon} />
+      <Image style={styles.img} source={images.documentIcon} />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
           {header}

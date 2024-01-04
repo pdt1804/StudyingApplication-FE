@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, View, Image, StyleSheet } from "react-native";
-import { colors, fontSizes } from "../constants";
+import { images, colors, fontSizes } from "../constants";
 
 function UIHeader(props) {
   const {
@@ -36,7 +36,11 @@ function UIHeader(props) {
           <View style={styles.iconBlank} />
         )}
 
-        <Text style={[styles.textDisplayed, textStyle]} numberOfLines={1} onPress={onPressTitle}>
+        <Text
+          style={[styles.textDisplayed, textStyle]}
+          numberOfLines={1}
+          onPress={onPressTitle}
+        >
           {title}
         </Text>
 
@@ -98,7 +102,7 @@ const styles = StyleSheet.create({
     width: "60%",
     fontWeight: "bold",
     fontSize: fontSizes.h2 * 0.9,
-    textAlign: 'center',
+    textAlign: "center",
     alignSelf: "center",
     color: colors.PrimaryObjects,
   },

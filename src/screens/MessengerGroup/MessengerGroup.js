@@ -43,15 +43,19 @@ const ScreenOptions = ({ route }) => ({
         : screenName == "TabDiscussion"
         ? (iconName = images.activeBlogSearchIcon)
         : screenName == "TabTypePost"
-        ? (iconName = images.cloudIcon)
-        : (iconName = images.activeBellAlarm)
+        ? (iconName = images.activeFAQIcon)
+        : screenName == "TabNotification"
+        ? (iconName = images.activeBellAlarm)
+        : (iconName = images.documentBlackIcon)
       : screenName == "TabMessenger"
       ? (iconName = images.inactiveChatMessageIcon)
       : screenName == "TabDiscussion"
       ? (iconName = images.inactiveBlogSearchIcon)
       : screenName == "TabTypePost"
-      ? (iconName = images.cloudIcon)
-      : (iconName = images.inactiveBellAlarm)
+      ? (iconName = images.inactiveFAQIcon)
+      : screenName == "TabNotification"
+      ? (iconName = images.inactiveBellAlarm)
+      : (iconName = images.documentIcon)
       
       
     return (

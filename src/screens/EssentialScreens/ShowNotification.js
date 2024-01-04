@@ -14,7 +14,23 @@ import { UIHeader } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
+import { FloatingAction } from "react-native-floating-action";
+
+const floatingActions = [
+  {
+    text: "Chỉnh sửa thông báo",
+    icon: images.pencilIcon,
+    name: "bt_edit",
+    position: 1,
+  },
+  {
+    text: "Xóa thông báo",
+    icon: images.trashCanIcon,
+    name: "bt_delete",
+    position: 2,
+  },
+];
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
@@ -35,7 +51,9 @@ function ContentBox(props) {
     <View style={styles.ContentBoxView}>
       <View style={styles.ContentBoxTopView}>
         <Image source={icon} style={styles.icon} />
-        <Text style={styles.title} onPress={props.OnPressContent}>{title}: </Text>
+        <Text style={styles.title} onPress={props.OnPressContent}>
+          {title}:{" "}
+        </Text>
       </View>
       <Text style={styles.ContentBoxContent}>{content}</Text>
     </View>
@@ -52,17 +70,16 @@ const ShowNotification = (props) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const sendingTime = `${hour}:${minute} ${day}/${month}`;
-  
+
   const [groupName, setGroupName] = useState("");
   const [item, setItem] = useState("");
   const [group, setGroup] = useState("");
-  const [userName, setUsername] = useState("")
+  const [userName, setUsername] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        setUsername(await AsyncStorage.getItem('username'))
+        setUsername(await AsyncStorage.getItem("username"));
 
         const response = await axios.get(
           API_BASE_URL +
@@ -74,14 +91,19 @@ const ShowNotification = (props) => {
         const responseItem = await axios.get(
           API_BASE_URL +
             "/api/v1/notifycation/loadNotifycation?notifycationID=" +
-            notifycationID + "&myUserName=" + await AsyncStorage.getItem('username')
+            notifycationID +
+            "&myUserName=" +
+            (await AsyncStorage.getItem("username"))
         );
 
-        setItem(responseItem.data)
+        setItem(responseItem.data);
 
-        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
-        setGroup(responseGroup.data)
-
+        const responseGroup = await axios.get(
+          API_BASE_URL +
+            "/api/v1/groupStudying/findGroupbyId?groupID=" +
+            (await AsyncStorage.getItem("groupID"))
+        );
+        setGroup(responseGroup.data);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -96,80 +118,66 @@ const ShowNotification = (props) => {
   const { navigate, goBack } = props.navigation;
 
   const LoadItem = async () => {
+    try {
+      if (item.documentID == -1) {
+        const response = await axios.get(
+          API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID
+        );
 
-    try
-    {
-      if (item.documentID == -1)
-      {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID)
-
-        if (response.status == 200)
-        {
-          navigate('ShowPost', {topic: response.data})
+        if (response.status == 200) {
+          navigate("ShowPost", { topic: response.data });
+        } else {
+          alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
         }
-        else
-        {
-          alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-        }
+      } else if (item.blogID == -1) {
+        const response = await axios.get(
+          API_BASE_URL +
+            "/api/v1/document/getDocumentById?documentID=" +
+            item.documentID
+        );
 
+        if (response.status == 200) {
+          navigate("ShowDocument", { notification: response.data });
+        } else {
+          alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
+        }
+      } else {
       }
-      else if (item.blogID == -1)
-      {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID)
-
-        if (response.status == 200)
-        {
-          navigate('ShowDocument', {notification: response.data})
-        }
-        else
-        {
-          alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-        }
-      }
-      else
-      {
-
-      }
+    } catch (error) {
+      alert("Nội dung này đã bị xoá");
     }
-    catch (error)
-    {
-      alert('Nội dung này đã bị xoá')
-    }
-
-  }
+  };
 
   const deleleNotification = () => {
-
-    if (userName != group.leaderOfGroup.userName)
-    {
-      alert('Bạn không phải nhóm trưởng')
-    }
-    else
-    {
+    if (userName != group.leaderOfGroup.userName) {
+      alert("Bạn không phải nhóm trưởng");
+    } else {
       Alert.alert(
-        'Xác nhận xoá',
-        'Bạn có chắc chắn muốn xoá?',
+        "Xác nhận xoá",
+        "Bạn có chắc chắn muốn xoá?",
         [
           {
-            text: 'Huỷ',
-            style: 'cancel',
+            text: "Huỷ",
+            style: "cancel",
           },
           {
-            text: 'Xoá',
-            style: 'destructive',
+            text: "Xoá",
+            style: "destructive",
             onPress: async () => {
+              const response = await axios.delete(
+                API_BASE_URL +
+                  "/api/v1/notifycation/deleteNotifycationForAllMembers?userName=" +
+                  (await AsyncStorage.getItem("username")) +
+                  "&notifycationID=" +
+                  notifycationID +
+                  "&groupID=" +
+                  (await AsyncStorage.getItem("groupID"))
+              );
 
-              const response = await axios.delete(API_BASE_URL + "/api/v1/notifycation/deleteNotifycationForAllMembers?userName=" + await AsyncStorage.getItem('username') + "&notifycationID=" + notifycationID + "&groupID=" + await AsyncStorage.getItem('groupID'))
-
-              if (response.status == 200)
-              {
+              if (response.status == 200) {
                 goBack();
-              }
-              else
-              {
-                alert('Kiểm tra lại mạng, xoá không thành công')
+              } else {
+                alert("Kiểm tra lại mạng, xoá không thành công");
               }
             },
           },
@@ -177,18 +185,18 @@ const ShowNotification = (props) => {
         { cancelable: false }
       );
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <UIHeader
         title={"Thông báo"}
         leftIconName={images.backIcon}
-        rightIconName={images.cancelIcon}
+        rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => deleleNotification()}
+        onPressRightIcon={null}
         mainStyle={{
           paddingBottom: 20,
         }}
@@ -209,16 +217,37 @@ const ShowNotification = (props) => {
           content={item.notifycationType == "user" ? "Trưởng nhóm" : "Hệ thống"}
         />
 
-        <SubjectBox icon={images.priceTagIcon} title="Tiêu đề" content={item.header} />
+        <SubjectBox
+          icon={images.priceTagIcon}
+          title="Tiêu đề"
+          content={item.header}
+        />
 
         <ContentBox
           icon={images.documentBlackIcon}
           title="Nội dung"
           content={item.content}
-          OnPressContent={() => {LoadItem()}}
+          OnPressContent={() => {
+            LoadItem();
+          }}
         />
-        <Image source={{uri: image != null ? image : null}} style={styles.image} />
+        <Image
+          source={{ uri: image != null ? image : null }}
+          style={styles.image}
+        />
       </ScrollView>
+
+      <FloatingAction
+        actions={floatingActions}
+        position="right"
+        onPressItem={(name) => {
+          name=='bt_edit' ? (
+            alert('handle edit')
+          ) : (
+            deleleNotification()
+          );
+        }}
+      />
     </View>
   );
 };

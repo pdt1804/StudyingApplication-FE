@@ -8,30 +8,31 @@ import { API_BASE_URL } from "../../DomainAPI";
 function MessengerGroupItems(props) {
   let { content, dateSent, id } = props.item;
 
+  const date = new Date(dateSent);
+  const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
+    date.getMonth() + 1
+  }`;
+
   const [image, setImage] = useState(null);
 
-  const [username, setUsername] = useState("")
-  const [sentUsername, setSentUsername] = useState("")
+  const [username, setUsername] = useState("");
+  const [sentUsername, setSentUsername] = useState("");
 
-  const [response, setResponse] = useState("")
+  const [response, setResponse] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        setUsername(await AsyncStorage.getItem('username'));
-        const response = await axios.get(API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id);
+        setUsername(await AsyncStorage.getItem("username"));
+        const response = await axios.get(
+          API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id
+        );
         setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
-           
-        // alert("id message: " + id)
-        // alert("username: " + username)
-        // alert("sentUsername: " + sentUsername)
-
       } catch (error) {
-        console.error('Error fetching data:', error.message);
-        setError('Error fetching data');
+        console.error("Error fetching data:", error.message);
+        setError("Error fetching data");
         setLoading(false);
       }
     };
@@ -40,29 +41,35 @@ function MessengerGroupItems(props) {
   }, [props.userName]);
 
   const CheckIsSender = () => {
-
-    if(username == sentUsername)
-    {
+    if (username == sentUsername) {
       return true;
-    }
-    else
-    {
+    } else {
       return false;
     }
-  }
+  };
 
   return CheckIsSender() == false ? (
     <View /** isSender = false --> avatar > message */ style={styles.container}>
       <Image style={styles.avatar} source={{ uri: image }} />
 
-      <View style={styles.leftView}>
-        <Text style={styles.message}>{content}</Text>
+      <View style={styles.mainTextView}>
+        <View style={styles.leftView}>
+          <Text style={styles.subText}>Tên người gửi | {timeSent}</Text>
+        </View>
+        <View style={styles.leftView}>
+          <Text style={styles.message}>{content}</Text>
+        </View>
       </View>
     </View>
   ) : (
     <View /** isSender = true --> message > avatar */ style={styles.container}>
-      <View style={styles.rightView}>
-        <Text style={styles.message}>{content}</Text>
+      <View style={styles.mainTextView}>
+        <View style={styles.rightView}>
+          <Text style={styles.subText}>{timeSent}</Text>
+        </View>
+        <View style={styles.rightView}>
+          <Text style={styles.message}>{content}</Text>
+        </View>
       </View>
 
       <Image style={styles.avatar} source={{ uri: image }} />
@@ -73,7 +80,7 @@ export default MessengerGroupItems;
 
 const styles = StyleSheet.create({
   container: {
-    height: 'auto',
+    height: "auto",
     minHeight: 90,
     paddingTop: 20,
     paddingStart: 10,
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginTop: 9,
     marginRight: 15,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   message: {
     color: "black",
@@ -100,13 +107,24 @@ const styles = StyleSheet.create({
   leftView: {
     flexDirection: "row",
     flex: 1,
-    marginRight: 10,
     justifyContent: "flex-start",
   },
   rightView: {
     flexDirection: "row",
     flex: 1,
-    marginRight: 10,
     justifyContent: "flex-end",
+  },
+  mainTextView: {
+    flexDirection: "column",
+    flex: 1,
+    marginRight: 10,
+  },
+  subText: {
+    marginBottom: 3,
+    color: colors.inactive,
+    fontSize: fontSizes.h8,
+    fontWeight: "500",
+    alignSelf: "flex-end",
+    textAlign: "right",
   },
 });

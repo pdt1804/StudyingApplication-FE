@@ -4,7 +4,6 @@ const ICON_BASE_URL = '../assets/icon/';
 export default {
   background: require(IMG_BASE_URL + 'background.jpg'),
   uitLogo: require(IMG_BASE_URL + 'Logo_UIT_Web_Transparent.png'),
-  avatarBorder: require(IMG_BASE_URL + 'AvatarBorder.png'),
   decorStuff01: require(IMG_BASE_URL + 'DecorStuff01.png'),
   decorStuff02: require(IMG_BASE_URL + 'DecorStuff02.png'),
   blankImageLoading: require(IMG_BASE_URL + 'blank-image-loading.jpg'),
@@ -38,12 +37,17 @@ export default {
   personCircleIcon: require(ICON_BASE_URL + 'PersonCircle.png'),
   emailCheckMarkIcon: require(ICON_BASE_URL + 'EmailCheckMark.png'),
   typePasswordIcon: require(ICON_BASE_URL + 'TypePassword.png'),
+  typeNewPasswordIcon: require(ICON_BASE_URL + 'TypeNewPassword.png'),
   reTypePasswordIcon: require(ICON_BASE_URL + 'ReTypePassword.png'),
   phoneRingCircleIcon: require(ICON_BASE_URL + 'PhoneRingCircle.png'),
   sendingEmailIcon: require(ICON_BASE_URL + 'SendingEmail.png'),
   sendMessageCursorIcon: require(ICON_BASE_URL + 'SendMessageCursor.png'),
   clockIcon: require(ICON_BASE_URL + 'Clock.png'),
   priceTagIcon: require(ICON_BASE_URL + 'PriceTag.png'),
+  addKeyIcon: require(ICON_BASE_URL + 'AddKey.png'),
+  birthdayCakeIcon: require(ICON_BASE_URL + 'BirthdayCake.png'),
+  genderEqualityIcon: require(ICON_BASE_URL + 'GenderEquality.png'),
+  trashCanIcon: require(ICON_BASE_URL + 'TrashCan.png'),
 
   activeBellAlarm: require(ICON_BASE_URL + 'ActiveBellAlarm.png'),
   inactiveBellAlarm: require(ICON_BASE_URL + 'InactiveBellAlarm.png'),
@@ -53,4 +57,6 @@ export default {
   inactiveChatMessageIcon: require(ICON_BASE_URL + 'InactiveChatMessage.png'),
   activeLikeIcon: require(ICON_BASE_URL + 'ActiveLike.png'),
   inactiveLikeIcon: require(ICON_BASE_URL + 'InactiveLike.png'),
+  activeFAQIcon: require(ICON_BASE_URL + 'ActiveFAQ.png'),
+  inactiveFAQIcon: require(ICON_BASE_URL + 'InactiveFAQ.png'),
 };
