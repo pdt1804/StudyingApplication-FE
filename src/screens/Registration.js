@@ -41,15 +41,33 @@ const Registration = (props) => {
       Email: email,
     };
 
-    const checkUsername = await axios.get(API_BASE_URL + "/api/v1/user/checkUserName?userName=" + username)
-
-    if (checkUsername.data == true)
+    if (!email.endsWith("@gmail.com"))
     {
-      alert('Đã tồn tại username này')
-      return;
+      if (!email.endsWith("@gm.uit.edu.vn"))
+      {
+        alert("Định dạng email không đúng")
+        return;
+      }
     }
 
     if (username.length > 8 && password.length > 8) {
+
+      const checkUsername = await axios.get(API_BASE_URL + "/api/v1/user/checkUserName?userName=" + username)
+
+      if (checkUsername.data == true)
+      {
+        alert('Đã tồn tại username này')
+        return;
+      }
+  
+      const checkEmail = await axios.get(API_BASE_URL + "/api/v1/user/checkEmail?email=" + email)
+  
+      if (checkEmail.data == true)
+      {
+        alert('Đã tồn tại email này')
+        return;
+      }
+
       try {
         if (password === rePassword) {
           const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
