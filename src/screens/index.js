@@ -23,6 +23,7 @@ import EditPost from "./EssentialScreens/EditPost";
 import ShowPost from "./EssentialScreens/ShowPost";
 import ShowNotification from "./EssentialScreens/ShowNotification";
 import ShowNotificationOfUser from "./AllNotification/ShowNotificationOfUser";
+import VerificationToRegistration from "./VertificationToRegistartion";
 
 import MemberToChangeRole from "./MessengerGroup/MemberToChangeRole";
 import ShowDocument from "./EssentialScreens/ShowDocument";
@@ -41,6 +42,8 @@ import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
 
 import Comment from "./Comments/Comment";
 import Reply from "./Comments/Reply";
+import MessageBot from "./Chatbot/MessageBot";
+import GroupSuggestionInfo from "./GroupChat/GroupSuggestionsInformation";
 
 export {
   Login,
@@ -77,4 +80,7 @@ export {
   Reply,
   ShowNotificationOfUser,
   EditPost,
+  MessageBot,
+  VerificationToRegistration,
+  GroupSuggestionInfo,
 };

@@ -59,8 +59,10 @@ function Settings(props) {
   const [fulname, setFulName] = useState(null)
   const [email, setEmail] = useState(null)
   const [phoneNumber, setPhoneNumber] = useState(null)
-  const [image, setImage] = useState('https://haycafe.vn/wp-content/uploads/2022/02/Ảnh-avatar-trang-s%E1%BB%8Dc-tráng.jpg')
+  const [image, setImage] = useState(null)
   const [username, setUsername] = useState(null)
+
+  let img;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,15 +78,32 @@ function Settings(props) {
         const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
 
         setFulName(response.data.information.fulName);
-        setEmail(response.data.email);
-        setPhoneNumber("0"+response.data.information.phoneNumber);
-        
+
+        if (response.data.email == null)
+        {
+          setEmail('Chưa cập nhật');
+        }
+        else
+        {
+          setEmail(response.data.email);
+        }
+
+        if (response.data.information.phoneNumber == 0)
+        {
+          setPhoneNumber('Chưa cập nhật')
+        }
+        else
+        {
+          setPhoneNumber("0"+response.data.information.phoneNumber);
+        }
+
         const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?userName=" + username)
         
-        if (responseAvatar.data == " ")
+        if (responseAvatar.data != null)
         {
-          setImage(responseAvatar.data);
+          setImage(responseAvatar.data.toString());
         }
+        console.log(image)
                 
       } catch (error) {
         console.error('Error fetching data:', error);

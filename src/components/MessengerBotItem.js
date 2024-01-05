@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 
-function MessengerItems(props) {
+function MessengerBotItems(props) {
   let { content, dateSent, id, status } = props.item;
 
   const date = new Date(dateSent);
@@ -27,9 +27,7 @@ function MessengerItems(props) {
         setUsername(await AsyncStorage.getItem('username'));
         const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id);
         setResponse(response.data);
-
         setImage(response.data.information.image);
-
         setSentUsername(response.data.userName);
                 
       } catch (error) {
@@ -56,7 +54,7 @@ function MessengerItems(props) {
 
   return CheckIsSender() == false ? (
     <View /** isSender = false --> avatar > message */ style={styles.container}>
-      <Image style={styles.avatar} source={{ uri: image }} />
+      <Image style={styles.avatar} source={{ uri: 'https://icon-library.com/images/bot-icon/bot-icon-5.jpg' }} />
 
       <View style={styles.mainTextView}>
       <View style={styles.leftView}>
@@ -82,7 +80,7 @@ function MessengerItems(props) {
     </View>
   );
 }
-export default MessengerItems;
+export default MessengerBotItems;
 
 const styles = StyleSheet.create({
   container: {

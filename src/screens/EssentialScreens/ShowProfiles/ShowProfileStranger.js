@@ -84,10 +84,10 @@ const ShowProfileStranger = (props) => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly icon={images.phoneIcon} text={"Phone number: " + phoneNumber} />
-          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + email} />
-          <EachOptionViewOnly icon={images.personIcon} text={"Gender: " + gender} />
-          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Year Of Birth: " + yearOfBirth} />
+          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
+          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
 
           <CommonButton
             onPress={AddFriend}

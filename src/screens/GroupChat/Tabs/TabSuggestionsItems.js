@@ -18,6 +18,8 @@ function TabSuggestionsItems(props) {
   const [nameTask, setNameTask] = useState('Tham gia');
 
   const [editPassword, setEditPassword] = useState('');
+
+  const { onPress } = props;
  
   const showTextInputAlert = () => {
     Alert.prompt(
@@ -78,7 +80,7 @@ function TabSuggestionsItems(props) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image /** Avatar */
         style={[styles.avatarImage, {borderColor: generateColor()}]}
         source={{
@@ -102,7 +104,7 @@ function TabSuggestionsItems(props) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 export default TabSuggestionsItems;

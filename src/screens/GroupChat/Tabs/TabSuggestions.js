@@ -84,7 +84,7 @@ function TabSuggestions(props) {
               group={eachGroup}
               key={eachGroup.groupID}
               onPress={() => {
-                navigate("MessengerGroup", { user: eachGroup });
+                navigate("GroupSuggestionInfo", { user: eachGroup });
               }}
             />
           ))}

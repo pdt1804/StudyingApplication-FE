@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Settings, GroupChat, Friends, AllNotification } from "../screens";
+import { Settings, GroupChat, Friends, AllNotification, MessageBot } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { images, colors, fontSizes } from "../constants";
 
@@ -31,6 +31,8 @@ const ScreenOptions = ({ route }) => ({
       iconName = images.activeChatMessageIcon;
     } else if (screenName == "Notifications") {
       iconName = images.activeBellAlarm;
+    } else if (screenName == "MessageBot") {
+      iconName = images.activeFAQIcon;
     }
 
     return (
@@ -73,6 +75,14 @@ function UITab(props) {
         component={GroupChat}
         options={{
           tabBarLabel: "Nhóm học tập",
+          tabBarLabelStyle: tabBarLabelStyles,
+        }}
+      />
+      <Tab.Screen
+        name="MessageBot"
+        component={MessageBot}
+        options={{
+          tabBarLabel: "Hỏi đáp",
           tabBarLabelStyle: tabBarLabelStyles,
         }}
       />

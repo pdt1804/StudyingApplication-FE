@@ -5,8 +5,15 @@ import { UIHeader, CommonButton } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CryptoJS from "crypto-js";
 
 const ResetPasswordInSetting = (props) => {
+
+  const hashPassword = (password) => {
+    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    return hashedPassword;
+  };
+
   const { navigate, goBack, push } = props.navigation;
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -24,19 +31,21 @@ const ResetPasswordInSetting = (props) => {
 
       console.log(responseUserPassWord.data.passWord);
 
-      if (currentPassword == responseUserPassWord.data.passWord) {
-        if (password == rePassword && password.length > 5) {
+      if (hashPassword(currentPassword) == responseUserPassWord.data.passWord) {
+        if (password == rePassword && password.length > 8) {
           const response = await axios.post(
             API_BASE_URL +
               "/api/v1/user/ChangePasswordAfterOTP?userName=" +
               (await AsyncStorage.getItem("username")) +
               "&passWord=" +
-              password
+              hashPassword(password)
           );
 
           if (response.data == true) {
             alert("Đổi thành công");
-            push("UITab");
+            setCurrentPassword("");
+            setPassword("");
+            setRePassword("");
           } else {
             alert("Lỗi mạng !");
           }

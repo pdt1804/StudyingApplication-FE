@@ -29,7 +29,7 @@ function CreateGroup(props) {
 
     if (newGroupName.length > 8)
     {
-        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/createGroup?userName=" + await AsyncStorage.getItem('username') + "&nameGroup=" + newGroupName + "&passWord=" + newPassword)
+        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/createGroup?userName=" + await AsyncStorage.getItem('username') + "&nameGroup=" + newGroupName + "&passWord=" + newPassword + "&image=https://www.iconbunny.com/icons/media/catalog/product/1/5/1563.8-team-ii-icon-iconbunny.jpg")
         
         if (response.status == 200)
         {
@@ -100,7 +100,7 @@ function CreateGroup(props) {
 
               <CommonButton
                 onPress={handleCreateGroup}
-                title={"Lưu thay đổi".toUpperCase()}
+                title={"Tạo nhóm".toUpperCase()}
               />
             </View>
           </View>

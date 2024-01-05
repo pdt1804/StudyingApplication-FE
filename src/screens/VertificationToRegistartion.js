@@ -2,49 +2,33 @@ import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
-import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
+import axios from "axios";
 import CryptoJS from "crypto-js";
 
-const ResetPassword = (props) => {
-
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
+const VerificationToRegistration = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
+  const [OTP, setOTP] = useState('')
 
   //use for api
-  const { userName } = props.route.params;
+  const { newUser, otp } = props.route.params;
+  const handleVerification = async () => {
+ 
+    if (OTP == otp) {
 
-  const [password, setPassword] = useState("none");
-  const [rePassword, setRePassword] = useState("none");
-  const handleResetPassword = async () => {
-    try {
-      if (password == rePassword && password.length > 5) {
         const response = await axios.post(
-          API_BASE_URL +
-            "/api/v1/user/ChangePasswordAfterOTP?userName=" +
-            userName +
-            "&passWord=" +
-            hashPassword(password)
+            API_BASE_URL + "/api/v1/user/CreateAccount?userName=" + newUser.userName + "&passWord=" + newUser.passWord + "&email=" + newUser.Email + "&image=https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg"
         );
-
-        if (response.data == true) {
-          alert("Change password successfully");
-          navigate("Login");
-        } else {
-          alert("Network Error !");
-        }
-      } else {
-        alert(
-          "New password and re-enter password are not same and the password must have at least 5 characters"
-        );
-      }
-    } catch (Error) {
-      console.error(Error.message);
+          if (response.data == newUser.userName) {
+            alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
+            navigate("Login");
+          } else {
+            //unsuccessful
+            alert("Đã có lỗi xảy ra, vui lòng thử lại");
+          }
+    } else {
+      alert("OTP không đúng");
     }
   };
 
@@ -55,47 +39,30 @@ const ResetPassword = (props) => {
 
       <View style={styles.partitionMiddle}>
         <View style={styles.forgetPasswordView}>
-          <Text style={styles.forgetPasswordText}>Đặt lại mật khẩu!</Text>
+          <Text style={styles.forgetPasswordText}>Xác thực email</Text>
         </View>
 
         <View style={styles.mainView}>
-          <View /* Password */ style={styles.textInputView}>
+          <View /* Verification code */ style={styles.textInputView}>
             <Image
-              source={images.typePasswordIcon}
+              source={images.emailCheckMarkIcon}
               style={styles.textInputImage}
             />
             <View>
-              <Text>Mật khẩu mới:</Text>
+              <Text>Mã xác thực:</Text>
               <TextInput
                 style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
-                onChangeText={text => setPassword(text)}
-                placeholder="Nhập mật khẩu mới"
-                placeholderTextColor={colors.noImportantText}
-              />
-            </View>
-          </View>
-          <View /* Retype password */ style={styles.textInputView}>
-            <Image
-              source={images.reTypePasswordIcon}
-              style={styles.textInputImage}
-            />
-            <View>
-              <Text>Nhập lại mật khẩu:</Text>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
-                onChangeText={text => setRePassword(text)}
-                placeholder="Nhập lại mật khẩu"
+                maxLength={6}
+                inputMode="numeric"
+                onChangeText={(number) => setOTP(number)}
+                placeholder="Nhập mã xác thực"
                 placeholderTextColor={colors.noImportantText}
               />
             </View>
           </View>
 
           <CommonButton
-            onPress={handleResetPassword}
+            onPress={handleVerification}
             title={"tiếp tục".toUpperCase()}
           />
         </View>
@@ -103,7 +70,7 @@ const ResetPassword = (props) => {
     </View>
   );
 };
-export default ResetPassword;
+export default VerificationToRegistration;
 
 const styles = StyleSheet.create({
   container: {

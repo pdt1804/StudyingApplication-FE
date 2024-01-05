@@ -41,26 +41,31 @@ const Registration = (props) => {
       Email: email,
     };
 
-    if (username.length > 5 && password.length > 5) {
+    const checkUsername = await axios.get(API_BASE_URL + "/api/v1/user/checkUserName?userName=" + username)
+
+    if (checkUsername.data == true)
+    {
+      alert('Đã tồn tại username này')
+      return;
+    }
+
+    if (username.length > 8 && password.length > 8) {
       try {
         if (password === rePassword) {
-          const response = await axios.post(
-            API_BASE_URL + "/api/v1/user/CreateAccount",
-            newUser
-          );
-          if (response.data == username) {
-            alert("Welcome to my application !!! :)");
-            navigate("Login");
-          } else {
-            //unsuccessful
-            alert("Username is existed, please choose another username !!! :)");
-          }
+          const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
+          
+          navigate("VerificationToRegistration", {newUser: newUser, otp: response.data})
+          
+        }
+        else
+        {
+          alert("mật khẩu và nhập lại mật khẩu không giống")
         }
       } catch (catchError) {
         console.error(catchError.message);
       }
     } else {
-      alert("Your username and password must have at least 5 characters");
+      alert("Tài khoản và mật khẩu phải có tối thiểu 8 kí tự");
     }
   };
 

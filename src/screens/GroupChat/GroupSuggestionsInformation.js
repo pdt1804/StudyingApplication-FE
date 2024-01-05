@@ -55,7 +55,9 @@ function EachOptionNavigate(props) {
   );
 }
 
-function GroupInfo(props) {
+function GroupSuggestionInfo(props) {
+
+  let { groupID } = props.route.params.user;
 
   const [numberOfMembers, setNumberOfMembers] = useState(null);
   const [email, setEmail] = useState(null)
@@ -83,7 +85,7 @@ function GroupInfo(props) {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + groupID)
         setGroup(response.data);
         setleader("Trưởng nhóm:  " + response.data.leaderOfGroup.fulName)
         setUsername(response.data.leaderOfGroup.userName)
@@ -241,10 +243,11 @@ function GroupInfo(props) {
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
+
   return (
     <View style={styles.container}>
       <UIHeader
-        title={"Thiết lập"}
+        title={"Thông tin nhóm"}
         leftIconName={images.backIcon}
         onPressLeftIcon={() => {
           goBack();
@@ -258,12 +261,6 @@ function GroupInfo(props) {
             style={styles.profileImage}
           />
           <Text style={styles.profileUsername}>{group.nameGroup}</Text>
-          <TouchableOpacity
-              onPress={selectImage}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-            </TouchableOpacity>
         </View>
 
               
@@ -278,35 +275,11 @@ function GroupInfo(props) {
 
         <EachOptionViewOnly icon={images.emailIcon} text={dateCreated} />
 
-        <GroupOption text={"Tùy chỉnh tài khoản"} />
-
-        <EachOptionNavigate
-          icon={images.personIcon}
-          text={"Đổi thông tin nhóm"}
-          onPress={ChangeInformationGroup}
-        />
-
-        <EachOptionNavigate
-          icon={images.keyIcon}
-          text={"Thêm thành viên"}
-          onPress={AddMembers}
-        />
-
-        <EachOptionNavigate
-          icon={images.keyIcon}
-          text={"Danh sách thành viên"}
-          onPress={MembersInGroup}
-        />
-        <EachOptionNavigate
-          icon={images.exportIcon}
-          text={"Rời nhóm"}
-          onPress={LeaveGroup}
-        />
       </ScrollView>
     </View>
   );
 }
-export default GroupInfo;
+export default GroupSuggestionInfo;
 
 const styles = StyleSheet.create({
   container: {
@@ -318,12 +291,13 @@ const styles = StyleSheet.create({
     left:0,
     right:0,
     height: 500,
-    position: 'absolute'
+    position: 'absolute',
   },
   profileView: {
     height: 200,
     alignItems: "center",
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    marginTop: 50,
   },
   profileImage: {
     width: 100,
@@ -363,18 +337,24 @@ const styles = StyleSheet.create({
     color: "black",
     paddingStart: 15,
   },
+  containerBtn: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
   button: {
-    backgroundColor: "blue", // Màu xanh
+    backgroundColor: 'blue',
     padding: 10,
     borderRadius: 10,
     marginBottom: 10,
     marginTop: 10,
-    width: 150,
-    height: 40,
+    width: 280,
+    height: 45,
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white', // Chữ trắng
-    fontSize: 12,
+    color: 'white',
+    fontSize: 18,
   },
 });

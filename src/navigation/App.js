@@ -32,6 +32,8 @@ import {
   Reply,
   ShowNotificationOfUser,
   EditPost,
+  VerificationToRegistration,
+  GroupSuggestionInfo,
 } from '../screens';
 import UITab from './UITab';
 
@@ -47,6 +49,7 @@ function App(props) {
         }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="VerificationToRegistration" component={VerificationToRegistration} />
         
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen name="Verification" component={Verification} />
@@ -57,6 +60,7 @@ function App(props) {
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
         <Stack.Screen name="ResetPasswordInSetting" component={ResetPasswordInSetting} />
+        <Stack.Screen name="GroupSuggestionInfo" component={GroupSuggestionInfo} />
         
         <Stack.Screen name="CreatePost" component={CreatePost} />
         <Stack.Screen name="CreateNotification" component={CreateNotification} />

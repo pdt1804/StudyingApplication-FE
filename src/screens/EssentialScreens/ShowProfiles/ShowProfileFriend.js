@@ -77,11 +77,43 @@ const ShowProfileFriend = (props) => {
         const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + friendUsername);
 
         setFulName(response.data.information.fulName);
-        setEmail(response.data.email);
-        setPhoneNumber(response.data.information.phoneNumber);
         setImage(response.data.information.image)
-        setYearOfBirth(response.data.information.yearOfBirth)
-        setGender(response.data.information.gender)
+
+        if (response.data.email == null)
+        {
+          setEmail('chưa cập nhật');
+        }
+        else
+        {
+          setEmail(response.data.email);
+        }
+
+        if (response.data.information.phoneNumber == 0)
+        {
+          setPhoneNumber('chưa cập nhật')
+        }
+        else
+        {
+          setPhoneNumber("0"+response.data.information.phoneNumber);
+        }
+
+        if (response.data.information.gender == null)
+        {
+          setGender('chưa cập nhật')
+        }
+        else
+        {
+          setGender("0"+response.data.information.gender);
+        }
+
+        if (response.data.information.yearOfBirth == 0)
+        {
+          setYearOfBirth('chưa cập nhật')
+        }
+        else
+        {
+          setYearOfBirth(response.data.information.yearOfBirth);
+        }
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -119,10 +151,10 @@ const ShowProfileFriend = (props) => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly icon={images.phoneIcon} text={"Phone number: " + phoneNumber} />
+          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + phoneNumber} />
           <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + email} />
-          <EachOptionViewOnly icon={images.personIcon} text={"Gender: " + gender} />
-          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Year Of Birth: " + yearOfBirth} />
+          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + gender} />
+          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + yearOfBirth} />
 
           <CommonButton
             onPress={DeleteFriend}
