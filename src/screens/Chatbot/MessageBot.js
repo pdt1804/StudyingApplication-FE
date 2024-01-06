@@ -68,10 +68,10 @@ function MessageBot(props) {
     <View style={styles.container}>
       <UIHeader
         title="Hỏi đáp"
-        leftIconName={images.backIcon}
+        leftIconName={null}
         rightIconName={null}
         onPressLeftIcon={() => {
-          goBack();
+          
         }}
         onPressRightIcon={null}
         onPressTitle={null}

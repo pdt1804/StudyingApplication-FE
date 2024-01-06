@@ -74,7 +74,7 @@ function UITab(props) {
         name="GroupChat"
         component={GroupChat}
         options={{
-          tabBarLabel: "Nhóm học tập",
+          tabBarLabel: "Nhóm",
           tabBarLabelStyle: tabBarLabelStyles,
         }}
       />
