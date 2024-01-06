@@ -9,6 +9,11 @@ function TabSuggestionsItems(props) {
   let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
 
+  if (image == null)
+  {
+    image = "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg";
+  }
+
   const { onPress } = props;
   
   const [myUsername, setMyUsername] = useState("")

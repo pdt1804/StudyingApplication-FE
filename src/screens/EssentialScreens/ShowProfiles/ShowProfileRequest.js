@@ -107,24 +107,13 @@ const ShowProfileRequest = (props) => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly
-            icon={images.phoneIcon}
-            text={"Phone number: " + phoneNumber}
-          />
-          <EachOptionViewOnly
-            icon={images.emailIcon}
-            text={"Email: " + email}
-          />
-          <EachOptionViewOnly
-            icon={images.personIcon}
-            text={"Gender: " + gender}
-          />
-          <EachOptionViewOnly
-            icon={images.documentBlackIcon}
-            text={"Year Of Birth: " + yearOfBirth}
-          />
+          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
+          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
 
-          <DoubleCommonButton
+
+          {/* <DoubleCommonButton
             onPressLeft={handleAcceptButton}
             titleLeft={"Xác nhận".toUpperCase()}
 
@@ -134,6 +123,18 @@ const ShowProfileRequest = (props) => {
             }}
             onPressRight={handleRevokeButton}
             titleRight={"Từ chối".toUpperCase()}
+          /> */}
+
+          <DoubleCommonButton
+            onPressRight={handleAcceptButton}
+            titleRight={"Xác nhận".toUpperCase()}
+
+            styleLeft={{
+              borderColor: 'black',
+              backgroundColor: 'pink'
+            }}
+            onPressLeft={handleRevokeButton}
+            titleLeft={"Từ chối".toUpperCase()}
           />
         </View>
       </ScrollView>

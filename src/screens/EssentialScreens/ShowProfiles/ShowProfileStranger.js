@@ -59,6 +59,11 @@ const ShowProfileStranger = (props) => {
   
   let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } = props.route.params;
 
+  if (image == null)
+  {
+    image = "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg";
+  }
+
   //navigation
   const { navigate, goBack } = props.navigation;
 
