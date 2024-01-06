@@ -9,7 +9,11 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import { UIHeader, CommonButton } from "../../../components";
+import {
+  UIHeader,
+  CommonButton,
+  DoubleCommonButton,
+} from "../../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
@@ -56,33 +60,40 @@ const generateColor = () => {
 };
 
 const ShowProfileRequest = (props) => {
-  let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } = props.route.params;
+  let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } =
+    props.route.params;
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
-  //handle button here  
+  //handle button here
   const handleAcceptButton = async () => {
+    const response = await axios.post(
+      API_BASE_URL +
+        "/api/v1/friendship/acceptInvitation?sentUserName=" +
+        userName +
+        "&myUserName=" +
+        (await AsyncStorage.getItem("username"))
+    );
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + userName + "&myUserName=" + await AsyncStorage.getItem('username'));
-
-    console.log(response.status)
+    console.log(response.status);
     goBack();
-
-
-  }
+  };
 
   const handleRevokeButton = async () => {
+    const response = await axios.post(
+      API_BASE_URL +
+        "/api/v1/friendship/refuseInvitation?sentUserName=" +
+        userName +
+        "&myUserName=" +
+        (await AsyncStorage.getItem("username"))
+    );
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + userName + "&myUserName=" + await AsyncStorage.getItem('username'));
-
-    console.log(response.status)
+    console.log(response.status);
     goBack();
+  };
 
-
-  }
-
-  const [buttonName, setButtonName] = useState("Add Friend")
+  const [buttonName, setButtonName] = useState("Add Friend");
 
   return (
     <View style={styles.container}>
@@ -96,19 +107,34 @@ const ShowProfileRequest = (props) => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
-          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
-
-          <CommonButton
-            onPress={handleAcceptButton}
-            title={"Xác nhận".toUpperCase()}
+          <EachOptionViewOnly
+            icon={images.phoneIcon}
+            text={"Phone number: " + phoneNumber}
           />
-          <CommonButton
-            onPress={handleRevokeButton}
-            title={"Từ chối".toUpperCase()}
-          /> 
+          <EachOptionViewOnly
+            icon={images.emailIcon}
+            text={"Email: " + email}
+          />
+          <EachOptionViewOnly
+            icon={images.personIcon}
+            text={"Gender: " + gender}
+          />
+          <EachOptionViewOnly
+            icon={images.documentBlackIcon}
+            text={"Year Of Birth: " + yearOfBirth}
+          />
+
+          <DoubleCommonButton
+            onPressLeft={handleAcceptButton}
+            titleLeft={"Xác nhận".toUpperCase()}
+
+            styleRight={{
+              borderColor: 'black',
+              backgroundColor: 'pink'
+            }}
+            onPressRight={handleRevokeButton}
+            titleRight={"Từ chối".toUpperCase()}
+          />
         </View>
       </ScrollView>
 

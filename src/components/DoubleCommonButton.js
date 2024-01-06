@@ -4,6 +4,7 @@ import { images, colors, fontSizes } from "../constants/index";
 
 function DoubleCommonButton(props) {
   const { onPressLeft, titleLeft, onPressRight, titleRight } = props;
+  const { styleLeft, styleRight } = props;
 
   let fontSizeTitleLeft = fontSizes.h4;
   let fontSizeTitleRight = fontSizes.h4;
@@ -17,7 +18,7 @@ function DoubleCommonButton(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPressLeft} style={styles.buttons}>
+      <TouchableOpacity onPress={onPressLeft} style={[styles.buttons, styleLeft]}>
         <Text
           style={{
             padding: 11,
@@ -30,7 +31,7 @@ function DoubleCommonButton(props) {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={onPressRight} style={styles.buttons}>
+      <TouchableOpacity onPress={onPressRight} style={[styles.buttons, styleRight]}>
         <Text
           style={{
             padding: 11,
