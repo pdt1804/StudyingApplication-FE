@@ -96,14 +96,20 @@ const ShowProfileMember = (props) => {
 
   }
 
+  const ShowPicture = () => {
+    navigate("ShowPicture", {file: image})
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View /* the top color */ style={styles.colorView} />
         <View style={styles.mainView}>
           <View /* Profile picture */ style={styles.profileView}>
-            <Image source={{ uri: image }} style={styles.profileImage} />
-            <Text style={styles.profileUsername}>{fulName}</Text>
+            <TouchableOpacity onPress={ShowPicture}>
+              <Image source={{ uri: image }} style={styles.profileImage} />
+              <Text style={styles.profileUsername}>{fulName}</Text>
+            </TouchableOpacity>
           </View>
 
           <GroupOption text={"Thông tin tài khoản"} />

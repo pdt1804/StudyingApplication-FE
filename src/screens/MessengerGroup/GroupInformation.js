@@ -237,6 +237,10 @@ function GroupInfo(props) {
     }
     
   }
+
+  const ShowPicture = () => {
+    navigate("ShowPicture", {file: image})
+  }
   
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
@@ -253,10 +257,12 @@ function GroupInfo(props) {
 
       <ScrollView>
         <View /* Profile picture */ style={styles.profileView}>
-          <Image
-            source={{ uri: image }}
-            style={styles.profileImage}
-          />
+          <TouchableOpacity onPress={ShowPicture}>
+            <Image
+              source={{ uri: image }}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
           <Text style={styles.profileUsername}>{group.nameGroup}</Text>
           <TouchableOpacity
               onPress={selectImage}

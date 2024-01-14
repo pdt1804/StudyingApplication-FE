@@ -181,6 +181,11 @@ const ShowNotification = (props) => {
     }
   };
 
+  const ShowPicture = () => {
+
+    navigate("ShowPicture", {file: image})
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -225,10 +230,12 @@ const ShowNotification = (props) => {
             LoadItem();
           }}
         />
-        <Image
-          source={{ uri: image != null ? image : null }}
-          style={styles.image}
-        />
+        <TouchableOpacity onPress={ShowPicture}>
+          <Image
+            source={{ uri: image != null ? image : null }}
+            style={styles.image}
+          />
+        </TouchableOpacity>
       </ScrollView>
 
       <FloatingAction

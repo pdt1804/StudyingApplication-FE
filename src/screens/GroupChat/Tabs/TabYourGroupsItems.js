@@ -32,6 +32,11 @@ function TabYourGroupsItems(props) {
 
     checkNewNotification();
 
+    const intervalId = setInterval(checkNewNotification, 1000);
+
+    // // Hủy interval khi component bị unmounted
+    return () => clearInterval(intervalId);
+
   }, [groupID]);
 
   const handlePress = () => {
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
   },
   textNameGroupWithOutSeen: {
     width: '80%',
-    color: "black",
+    color: colors.active,
     fontSize: 16,
     fontWeight: 'bold',
   },

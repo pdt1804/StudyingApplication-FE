@@ -34,6 +34,11 @@ function TabYourFriendsItems(props) {
 
     checkNewNotification();
 
+    const intervalId = setInterval(checkNewNotification, 1000);
+
+    // // Hủy interval khi component bị unmounted
+    return () => clearInterval(intervalId);
+
   }, []);
 
   const ToMessage = async () => {
@@ -54,7 +59,7 @@ function TabYourFriendsItems(props) {
       onPress={ToMessage}
       style={styles.container}>
       <Image
-        style={styles.avatarImage}
+        style={isNewNotification ? styles.activeAvatarImage : styles.avatarImage}
         source={{
           uri: image,
         }}
@@ -96,6 +101,15 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     borderColor: colors.inactive,
     borderWidth:2,
+    marginRight: 15,
+  },
+  activeAvatarImage: {
+    width: 75,
+    height: 75,
+    resizeMode: 'cover',
+    borderRadius: 90,
+    borderColor: colors.active,
+    borderWidth:5,
     marginRight: 15,
   },
 });

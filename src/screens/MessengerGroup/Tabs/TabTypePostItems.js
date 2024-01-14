@@ -77,12 +77,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 5,
     color: "black",
-    fontSize: fontSizes.h5,
+    fontSize: fontSizes.h6,
   },
   content: {
     marginLeft: 7,
     marginRight: 10,
-    color: "black",
+    color: colors.active,
     fontSize: fontSizes.h7,
   }
 });

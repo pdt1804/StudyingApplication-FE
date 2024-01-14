@@ -48,7 +48,7 @@ function NotificationItems(props) {
       />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>{header}</Text>
-        <Text style={styles.contentText} numberOfLines={2}>{content}</Text>
+        <Text style={isNewNotification ? styles.activeContentText : styles.contentText} numberOfLines={2}>{content}</Text>
       </View>
       <Text style={isNewNotification ? styles.activeTimeText : styles.timeText}>
         {dateSentNotification.getHours()}:{dateSentNotification.getMinutes()} {dateSentNotification.getDate()}/{dateSentNotification.getMonth() + 1}
@@ -86,6 +86,11 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: fontSizes.h7,
     fontWeight: "300",
+  },
+  activeContentText: {
+    color: "black",
+    fontSize: fontSizes.h7,
+    fontWeight: "bold",
   },
   timeText: {
     width: 60,

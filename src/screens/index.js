@@ -12,6 +12,7 @@ import GroupChat from "./GroupChat/GroupChat";
 import MessengerGroup from "./MessengerGroup/MessengerGroup";
 
 import Friends from "./Friends/Friends";
+import ShowPicture from "./EssentialScreens/ShowPicture";
 import Messenger from "./Messenger/Messenger";
 
 import AllNotification from "./AllNotification/AllNotification";
@@ -83,4 +84,5 @@ export {
   MessageBot,
   VerificationToRegistration,
   GroupSuggestionInfo,
+  ShowPicture
 };

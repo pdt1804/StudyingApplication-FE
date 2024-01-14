@@ -93,15 +93,18 @@ const ShowDocument = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={'Nội dung file'}
-        rightIconName={images.trashCanIcon}
+        rightIconName={images.errorIcon}
         leftIconName={images.backIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
         onPressRightIcon={() => deleteDocument()}
         mainStyle={{
+          //backgroundColor: colors.backgroundWhite,
           paddingBottom: 20,
         }}
+        //iconStyle={{ tintColor: colors.active }}
+        //textStyle={{ color: colors.active }}
       />
 
       <PdfReader source={{ uri: file}}>

@@ -28,7 +28,7 @@ const CreateNotification = (props) => {
       alert('Hãy nhập tiêu đề')
       return;
     }
-    
+
     if (contentText.length == 0)
     {
       alert('Hãy nhập nội dung')
@@ -72,11 +72,11 @@ const CreateNotification = (props) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       
       try {
 
-        setPath(result.uri);
+        setPath(result.assets[0].uri);
 
       } catch (error) {
         console.error('Error uploading image:', error);

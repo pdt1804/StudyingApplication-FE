@@ -181,7 +181,11 @@ function Settings(props) {
   };
 
 
+  const ShowPicture = () => {
 
+    navigate("ShowPicture", {file: image})
+
+  }
   
   
   //function of navigation to/back
@@ -195,10 +199,12 @@ function Settings(props) {
 
       <ScrollView>
         <View /* Profile picture */ style={styles.profileView}>
-          <Image
-            source={{ uri: image }}
-            style={styles.profileImage}
-          />
+          <TouchableOpacity onPress={ShowPicture}>
+            <Image
+              source={{ uri: image }}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
           <Text style={styles.profileUsername}>{fulname}</Text>
           <TouchableOpacity
               onPress={selectImage}

@@ -220,6 +220,11 @@ const ShowPost = (props) => {
     }
   }
 
+  const ShowPicture = () => {
+
+    navigate("ShowPicture", {file: image})
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -257,7 +262,9 @@ const ShowPost = (props) => {
           content={content}
           onPress={handleLike}
         />
-        <Image source={{uri: image != null ? image : null}} style={styles.image} />
+        <TouchableOpacity onPress={ShowPicture}>
+         <Image source={{uri: image != null ? image : null}} style={styles.image} />
+        </TouchableOpacity>
       </ScrollView>
 
       <TouchableOpacity
