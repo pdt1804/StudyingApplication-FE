@@ -70,9 +70,11 @@ const Registration = (props) => {
 
       try {
         if (password === rePassword) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
+
+          const apiGetAuthCode = API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email;
+          //const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
           
-          navigate("VerificationToRegistration", {newUser: newUser, otp: response.data})
+          navigate("VerificationToRegistration", {newUser: newUser, otp: 0, api: apiGetAuthCode})
           
         }
         else

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
+import axios from "axios";
 
 const Verification = (props) => {
   //navigation to/back
@@ -9,14 +10,28 @@ const Verification = (props) => {
 
   //use for api
   const [otp, setOTP] = useState("-1");
-  const { OTP, userName } = props.route.params;
+  const [otpFromAPI, setOtpFromAPI] = useState("");
+
+  const { userName, api } = props.route.params;
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+        const getAuthOTP = await axios.get(api);
+        setOtpFromAPI(getAuthOTP.data)
+
+    };
+
+    fetchData();
+  }, [props.userName]);
+
   const handleVerification = async () => {
-    if (OTP == otp) {
+    if (otpFromAPI == otp) {
       navigate("ResetPassword", {
         userName: userName,
       });
     } else {
-      alert("OTP is not correct");
+      alert("OTP không đúng");
     }
   };
 

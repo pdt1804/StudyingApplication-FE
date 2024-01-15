@@ -44,15 +44,15 @@ const Login = (props) => {
           await AsyncStorage.setItem("username", username);
           push("UITab", {tabName: "Settings"});
         } else {
-          alert("Username or password aren't correct");
+          alert("Tài khoản hoặc mật khẩu không đúng");
         }
       } else {
-        alert("Username or password aren't correct");
+        alert("Tài khoản hoặc mật khẩu không đúng");
       }
     } catch (error) {
       console.error(error.message);
       console.error(error.name);
-      alert("Username or password aren't correct");
+      alert("Tài khoản hoặc mật khẩu không đúng");
     }
   };
 

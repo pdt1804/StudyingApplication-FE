@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
@@ -10,12 +10,26 @@ const VerificationToRegistration = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
   const [OTP, setOTP] = useState('')
+  const [otpFromAPI, setOtpFromAPI] = useState(56)
+
 
   //use for api
-  const { newUser, otp } = props.route.params;
+  const { newUser, otp, api } = props.route.params;
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+        const getAuthOTP = await axios.get(api);
+        setOtpFromAPI(getAuthOTP.data)
+
+    };
+
+    fetchData();
+  }, [props.userName]);
+
   const handleVerification = async () => {
  
-    if (OTP == otp) {
+    if (OTP == otpFromAPI) {
 
         const response = await axios.post(
             API_BASE_URL + "/api/v1/user/CreateAccount?userName=" + newUser.userName + "&passWord=" + newUser.passWord + "&email=" + newUser.Email + "&image=https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg"

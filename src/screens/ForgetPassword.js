@@ -13,18 +13,23 @@ const ForgetPassword = (props) => {
   const [username, setUsername] = useState(".");
   const handleForgetPassword = async () => {
     try {
-      const response = await axios.get(
-        API_BASE_URL + "/api/v1/user/GetRecoveryCode?userName=" + username
-      );
-      if (response.status == 200) {
-        navigate("Verification", {
-          OTP: response.data,
-          userName: username,
-        });
-      } else {
-        alert("Maybe user of this username didn't set email for this account");
-        alert("Please contact us to get more helps");
-      }
+
+      const apiPath = API_BASE_URL + "/api/v1/user/GetRecoveryCode?userName=" + username;
+      
+      navigate("Verification", {
+        api: apiPath,
+        userName: username,
+      });
+
+      // if (response.status == 200) {
+      //   navigate("Verification", {
+      //     OTP: response.data,
+      //     userName: username,
+      //   });
+      // } else {
+      //   alert("Có lẽ email của user này đã bị lỗi");
+      //   alert("Hãy liên lạc với chúng tôi theo số điện thoại 09xxxxxxx08 để được giúp đỡ");
+      // }
     } catch (Error) {
       console.error(Error.message);
     }

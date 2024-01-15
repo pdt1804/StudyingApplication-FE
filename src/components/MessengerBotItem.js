@@ -72,7 +72,7 @@ function MessengerBotItems(props) {
       <Text style={styles.timeText}>{timeSent}</Text>
       </View>
       <View style={styles.rightView}>
-        <Text style={styles.message}>{content}</Text>
+        <Text style={styles.myMessage}>{content}</Text>
       </View>
     </View>
 
@@ -102,10 +102,18 @@ const styles = StyleSheet.create({
   },
   message: {
     color: "black",
-    fontSize: fontSizes.h6,
+    fontSize: fontSizes.h7,
     paddingVertical: 7,
     paddingHorizontal: 7,
     backgroundColor: colors.SecondaryContainer,
+    borderRadius: 10,
+  },
+  myMessage: {
+    color: "black",
+    fontSize: fontSizes.h7,
+    paddingVertical: 7,
+    paddingHorizontal: 7,
+    backgroundColor: 'rgb(231, 236, 242)',
     borderRadius: 10,
   },
   leftView: {

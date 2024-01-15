@@ -23,7 +23,7 @@ const ResetPassword = (props) => {
   const [rePassword, setRePassword] = useState("none");
   const handleResetPassword = async () => {
     try {
-      if (password == rePassword && password.length > 5) {
+      if (password == rePassword && password.length > 8) {
         const response = await axios.post(
           API_BASE_URL +
             "/api/v1/user/ChangePasswordAfterOTP?userName=" +
@@ -33,14 +33,14 @@ const ResetPassword = (props) => {
         );
 
         if (response.data == true) {
-          alert("Change password successfully");
+          alert("Thay đổi thành công");
           navigate("Login");
         } else {
           alert("Network Error !");
         }
       } else {
         alert(
-          "New password and re-enter password are not same and the password must have at least 5 characters"
+          "Không thành công, đảm bảo mật khẩu mới và nhập lại mật khẩu phải giống nhau và có trên 8 kí tự"
         );
       }
     } catch (Error) {

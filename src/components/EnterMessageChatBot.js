@@ -31,6 +31,7 @@ function EnterMessageChatBot({OnPress}) {
 
     const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=" + await AsyncStorage.getItem('username') + "&toUserName=Chatbot", sentMessage)
     
+    setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
     const chatCompletion = await axios.post('https://api.openai.com/v1/chat/completions', {
         messages: [{ role: 'user', content: typedText }],
         model: 'gpt-3.5-turbo',

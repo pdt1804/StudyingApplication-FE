@@ -51,7 +51,7 @@ const ResetPasswordInSetting = (props) => {
           }
         } else {
           alert(
-            "Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 5 ký tự"
+            "Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 8 ký tự"
           );
         }
       } else {
