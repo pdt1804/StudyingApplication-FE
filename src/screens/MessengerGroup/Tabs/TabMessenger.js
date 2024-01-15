@@ -22,6 +22,8 @@ const getGroupID = async () =>
 
 function TabMessenger(props) {
   //list of example = state
+  const { navigate, goBack, push } = props.navigation;
+
   const [chatHistory, setChatHistory] = useState([]);
   const [userName, setUserName] = useState(null);
 
@@ -55,7 +57,7 @@ function TabMessenger(props) {
     <View style={styles.displayView}>
       <ScrollView /* Chat */ ref={scrollRef}>
         {chatHistory.map((eachItem) => (
-          <MessengerGroupItems item={eachItem} key={eachItem.id} />
+          <MessengerGroupItems item={eachItem} key={eachItem.id} navigate={navigate}/>
         ))}
       </ScrollView>
 

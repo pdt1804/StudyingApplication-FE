@@ -106,7 +106,7 @@ const ShowProfileMember = (props) => {
         <View /* the top color */ style={styles.colorView} />
         <View style={styles.mainView}>
           <View /* Profile picture */ style={styles.profileView}>
-            <TouchableOpacity onPress={ShowPicture}>
+            <TouchableOpacity style={styles.profileView} onPress={ShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
               <Text style={styles.profileUsername}>{fulName}</Text>
             </TouchableOpacity>

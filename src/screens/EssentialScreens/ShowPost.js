@@ -222,6 +222,12 @@ const ShowPost = (props) => {
 
   const ShowPicture = () => {
 
+    if (image == "images.blankImageLoading")
+    {
+      alert("Nội dung này không có ảnh")
+      return;
+    }
+    
     navigate("ShowPicture", {file: image})
   }
 

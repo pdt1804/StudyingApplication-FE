@@ -55,9 +55,15 @@ const generateColor = () => {
   return `#${randomColor}`;
 };
 
-const ShowProfileSentInvitation = (props) => {
+const ShowProfile = (props) => {
   
-  let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } = props.route.params;
+  let { userName, email } = props.route.params.userReplied;
+  let { image, fulName, phoneNumber, yearOfBirth, gender } = props.route.params.userReplied.information;
+
+  if (image == null)
+  {
+    image = "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg";
+  }
 
   //navigation
   const { navigate, goBack } = props.navigation;
@@ -65,15 +71,16 @@ const ShowProfileSentInvitation = (props) => {
   //handle button here  
   const handleButton = async () => {}
 
-  const UndoAddFriend = async () => {
+  const AddFriend = async () => {
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/undoInvitationFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
     goBack();
-}
 
-const ShowPicture = () => {
-  navigate("ShowPicture", {file: image})
-}
+  }
+  
+  const ShowPicture = () => {
+    navigate("ShowPicture", {file: image})
+  }
 
   return (
     <View style={styles.container}>
@@ -81,7 +88,7 @@ const ShowPicture = () => {
         <View /* the top color */ style={styles.colorView} />
         <View style={styles.mainView}>
           <View /* Profile picture */ style={styles.profileView}>
-          <TouchableOpacity style={styles.profileView} onPress={ShowPicture}>
+            <TouchableOpacity style={styles.profileView} onPress={ShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
               <Text style={styles.profileUsername}>{fulName}</Text>
             </TouchableOpacity>
@@ -94,10 +101,6 @@ const ShowPicture = () => {
           <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
           <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
 
-          <CommonButton
-            onPress={UndoAddFriend}
-            title={"Thu hồi".toUpperCase()}
-          />
         </View>
       </ScrollView>
 
@@ -115,7 +118,7 @@ const ShowPicture = () => {
     </View>
   );
 };
-export default ShowProfileSentInvitation;
+export default ShowProfile;
 
 const styles = StyleSheet.create({
   container: {

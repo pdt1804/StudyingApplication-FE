@@ -14,6 +14,7 @@ import { UIHeader, EnterMessageReplyBar } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ShowProfile from "../EssentialScreens/ShowProfiles/ShowProfile";
 
 const Reply = (props) => {
 
@@ -47,6 +48,10 @@ const Reply = (props) => {
      return () => clearInterval(intervalId);
   }, [props.userName]);
 
+  const ShowProfile = async () => {
+    navigate("ShowProfile", { userReplied: userComment });
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -61,7 +66,7 @@ const Reply = (props) => {
       />
 
       <ScrollView style={styles.listContainer}>
-        <View style={styles.mainCommentContainer}>
+        <TouchableOpacity style={styles.mainCommentContainer} onPress={ShowProfile}>
           <Image
             style={styles.img}
             source={{
@@ -74,10 +79,10 @@ const Reply = (props) => {
             </Text>
             <Text style={styles.contentText}>{content}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {comments.map((eachComment) => (
-          <ReplyItems comment={eachComment} key={eachComment.replyID} />
+          <ReplyItems comment={eachComment} key={eachComment.replyID} navigate={navigate}/>
         ))}
       </ScrollView>
 

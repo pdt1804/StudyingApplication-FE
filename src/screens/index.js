@@ -14,6 +14,7 @@ import MessengerGroup from "./MessengerGroup/MessengerGroup";
 import Friends from "./Friends/Friends";
 import ShowPicture from "./EssentialScreens/ShowPicture";
 import Messenger from "./Messenger/Messenger";
+import ShowProfile from "./EssentialScreens/ShowProfiles/ShowProfile";
 
 import AllNotification from "./AllNotification/AllNotification";
 
@@ -48,6 +49,7 @@ import GroupSuggestionInfo from "./GroupChat/GroupSuggestionsInformation";
 
 export {
   Login,
+  ShowProfile,
   Registration,
   ForgetPassword,
   Verification,

@@ -35,6 +35,7 @@ import {
   VerificationToRegistration,
   GroupSuggestionInfo,
   ShowPicture,
+  ShowProfile,
 } from '../screens';
 import UITab from './UITab';
 
@@ -63,6 +64,7 @@ function App(props) {
         <Stack.Screen name="ResetPasswordInSetting" component={ResetPasswordInSetting} />
         <Stack.Screen name="GroupSuggestionInfo" component={GroupSuggestionInfo} />
         <Stack.Screen name="ShowPicture" component={ShowPicture} />
+        <Stack.Screen name="ShowProfile" component={ShowProfile} />
         
         <Stack.Screen name="CreatePost" component={CreatePost} />
         <Stack.Screen name="CreateNotification" component={CreateNotification} />

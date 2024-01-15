@@ -183,6 +183,12 @@ const ShowNotification = (props) => {
 
   const ShowPicture = () => {
 
+    if (image == null)
+    {
+      alert("Nội dung này không có ảnh")
+      return;
+    }
+
     navigate("ShowPicture", {file: image})
   }
 

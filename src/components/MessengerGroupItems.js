@@ -8,6 +8,8 @@ import { API_BASE_URL } from "../../DomainAPI";
 function MessengerGroupItems(props) {
   let { content, dateSent, id, user } = props.item;
 
+  const {navigate} = props;
+
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
     date.getMonth() + 1
@@ -49,8 +51,12 @@ function MessengerGroupItems(props) {
     }
   };
 
+  const ShowProfile = async () => {
+    navigate("ShowProfile", { userReplied: user })
+  }
+
   return CheckIsSender() == false ? (
-    <View /** isSender = false --> avatar > message */ style={styles.container}>
+    <TouchableOpacity /** isSender = false --> avatar > message */ style={styles.container} onPress={ShowProfile}>
       <Image style={styles.avatar} source={{ uri: image }} />
 
       <View style={styles.mainTextView}>
@@ -61,9 +67,9 @@ function MessengerGroupItems(props) {
           <Text style={styles.message}>{content}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   ) : (
-    <View /** isSender = true --> message > avatar */ style={styles.container}>
+    <TouchableOpacity /** isSender = true --> message > avatar */ style={styles.container} onPress={ShowProfile}>
       <View style={styles.mainTextView}>
         <View style={styles.rightView}>
           <Text style={styles.subText}>{timeSent}</Text>
@@ -74,7 +80,7 @@ function MessengerGroupItems(props) {
       </View>
 
       <Image style={styles.avatar} source={{ uri: image }} />
-    </View>
+    </TouchableOpacity>
   );
 }
 export default MessengerGroupItems;

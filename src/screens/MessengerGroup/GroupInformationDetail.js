@@ -37,7 +37,7 @@ function GroupInformationDetail(props) {
     
     if (response.status == 200)
     {
-        push("GroupInfo");
+        goBack()
     }
     else
     {
@@ -85,7 +85,7 @@ function GroupInformationDetail(props) {
         <View style={styles.noHeaderContainer}>
           <View style={styles.partitionMiddle}>
             <View style={styles.yourInformationView}>
-              <Text style={styles.yourInformationText}>Thông tin của bạn</Text>
+              <Text style={styles.yourInformationText}>Thông tin nhóm</Text>
             </View>
 
             <View style={styles.mainView}>

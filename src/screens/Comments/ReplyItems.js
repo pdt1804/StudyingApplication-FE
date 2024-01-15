@@ -14,10 +14,16 @@ import { images, colors, icons, fontSizes } from "../../constants";
 function ReplyItems(props) {
   let { userReplied, dateReplied, content, replyID } = props.comment;
 
+  const { navigate } = props; 
+
   const date = new Date(dateReplied)
+  
+  const ShowProfile = async () => {
+    navigate('ShowProfile', { userReplied: userReplied })
+  }
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={ShowProfile}>
       <Image
         style={styles.img}
         source={{
@@ -36,7 +42,7 @@ function ReplyItems(props) {
       <View style={styles.rightSideView}>
       <Text style={styles.rightSideText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 export default ReplyItems;
