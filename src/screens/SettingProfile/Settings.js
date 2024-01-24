@@ -14,9 +14,7 @@ import { UIHeader } from "../../components";
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { encode } from "base-64";
 
 
 function GroupOption(props) {
