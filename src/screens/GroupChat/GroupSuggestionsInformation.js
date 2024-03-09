@@ -85,7 +85,12 @@ function GroupSuggestionInfo(props) {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + groupID)
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + groupID, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         setGroup(response.data);
         setleader("Trưởng nhóm:  " + response.data.leaderOfGroup.fulName)
         setUsername(response.data.leaderOfGroup.userName)
@@ -126,7 +131,12 @@ function GroupSuggestionInfo(props) {
         }
         else
         {
-            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + username + "&groupID=" + group.groupID)
+            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?groupID=" + group.groupID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            })
             if (response.status == 200)
             {
                 //await AsyncStorage.removeItem('groupID');
@@ -136,7 +146,12 @@ function GroupSuggestionInfo(props) {
       }
       else
       {
-        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + await AsyncStorage.getItem('username') + "&groupID=" + group.groupID)
+        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?groupID=" + group.groupID, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         if (response.status == 200)
         {
             //await AsyncStorage.removeItem('groupID');

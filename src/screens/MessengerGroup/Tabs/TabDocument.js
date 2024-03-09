@@ -17,6 +17,13 @@ import TabDocumentItem from "./TabDocumentItem";
 import * as DocumentPicker from 'expo-document-picker';
 //import DocumentViewer from 'expo-document-viewer';
 import PdfReader from "rn-pdf-reader-js";
+//import {v2 as cloudinary} from 'cloudinary';
+          
+// cloudinary.config({ 
+//   cloud_name: 'ddsbj1z4x', 
+//   api_key: '698816719337434', 
+//   api_secret: 'B3H1aL9FI2guvg6X5jGifxUdGoQ' 
+// });
 
 
 
@@ -37,11 +44,28 @@ function TabDocument(props) {
   useEffect(() => {
     const fetchData = async () => {
      
-        setUserName((await AsyncStorage.getItem('username')).toString());
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUserName(extractToken.data);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/document/getAllDocumentOfGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
   
-        const response = await axios.get(API_BASE_URL + "/api/v1/document/getAllDocumentOfGroup?groupID=" + await AsyncStorage.getItem('groupID'));
-  
-        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
 
         setGroup(responseGroup.data);
 
@@ -59,7 +83,8 @@ function TabDocument(props) {
 
   const selectFile = async () => {
 
-    if (group.leaderOfGroup.userName == await AsyncStorage.getItem('username'))
+    //alert(userName)
+    if (group.leaderOfGroup.userName == userName)
     {
       try {
         const fileResult = await DocumentPicker.getDocumentAsync({
@@ -70,6 +95,16 @@ function TabDocument(props) {
         {
           return;
         }
+
+        // alert(fileResult.assets[0].uri.substring(7))
+
+        // cloudinary.v2.uploader
+        // .upload(fileResult.assets[0].uri.substring(7), {
+        //   folder: '',
+        //   resource_type: 'raw'})
+        // .then(console.log);
+
+        // alert("thanh cong")
 
         console.log(fileResult)
 
@@ -82,7 +117,14 @@ function TabDocument(props) {
         formData.append('userName', await AsyncStorage.getItem('username'));
         formData.append('fileName', fileResult.assets[0].name);
 
-        const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData)
+        const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        //uploadImage(fileResult.assets[0].uri, fileResult.assets[0].name, fileResult.assets[0].mimeType);
 
         if (response.status == 200)
         {
@@ -102,6 +144,50 @@ function TabDocument(props) {
       alert('Bạn không phải trưởng nhóm')
     }
   };
+
+  const uploadImage = async (uri, name, type) => {
+    const formData = new FormData();
+    
+    if(uri.toString())
+    formData.append('file', {
+      uri,
+      name: name,
+      type: type,
+    });
+    formData.append('groupID', await AsyncStorage.getItem('groupID'));
+    formData.append('userName', await AsyncStorage.getItem('username'));
+    formData.append('fileName', name);
+  
+    try {
+      // const response = await fetch('YOUR_BACKEND_URL', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+      const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
+
+  
+      if (response.status == 200) {
+        const imageURL = await response.json();
+        console.log('URL của ảnh:', imageURL);
+        alert('Tải lên thành công')
+        // Tiếp tục xử lý URL của ảnh ở đây
+      } else {
+        console.log('Lỗi khi tải lên ảnh');
+      }
+    } catch (error) {
+      console.log('Lỗi:', error);
+    }
+  };
+
 
   const openPDF = async (file) => {  
     try {

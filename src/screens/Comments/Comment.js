@@ -28,7 +28,12 @@ const Comment = (props) => {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllCommentInBlog?blogID=" + blogID);
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllCommentInBlog?blogID=" + blogID, {
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
         setComments(response.data)
                 
       } catch (error) {
@@ -41,7 +46,7 @@ const Comment = (props) => {
     fetchData();
 
     //Sử dụng setInterval để gọi lại fetchData mỗi giây
-    const intervalId = setInterval(fetchData, 3000);
+    const intervalId = setInterval(fetchData, 1000);
 
     // // Hủy interval khi component bị unmounted
      return () => clearInterval(intervalId);

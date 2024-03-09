@@ -11,9 +11,65 @@ import {
 import { images, colors } from "../constants";
 import { API_BASE_URL } from "../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SockJS from 'sockjs-client';
+import { over } from "stompjs";
 
-function EnterMessageGroupBar({userName}) {
+function EnterMessageGroupBar({userName, groupID, stompClient}) {
   const [typedText, setTypedText] = useState("");
+
+  const [groups, setGroups] = useState([]);
+  const [username, setUsername] = useState(null);
+
+  //const [stompClient, setStompClient] = useState(over(socket));
+  
+
+  useEffect(() => {
+
+    const initial = async () => {
+
+      groupID = await AsyncStorage.getItem('groupID');
+
+      //stompClient.connect({} , onConnected, onError)
+
+      setUsername(await AsyncStorage.getItem('username'))
+
+      const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+
+      setGroups(response.data);  
+
+    };
+
+    initial();
+
+    // const intervalId = setInterval(checkNewNotification, 1000);
+
+    // // // Hủy interval khi component bị unmounted
+    // return () => clearInterval(intervalId);
+
+  }, []);
+
+
+  const onConnected = () =>
+  {
+    stompClient.subscribe("/user/public/queue/" + groupID.toString(), onReceived)
+
+    // groups.map((group) => {
+    //   stompClient.subscribe("/public/queue/" + group.groupID, onReceived)
+    // })
+
+  }
+
+  const onError = async () =>
+  {
+    alert('Error')
+  }
+
+
   const handleSendMessage = async () => {
     
     if (typedText.length == 0)
@@ -25,7 +81,27 @@ function EnterMessageGroupBar({userName}) {
       content: typedText,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/messagegroup/sendMessage?groupID=" + await AsyncStorage.getItem('groupID') + "&userName=" + userName, message)
+    var form = new FormData()
+    form.append('messContent', typedText)
+    form.append('groupID', await AsyncStorage.getItem('groupID'))
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/messagegroup/sendMessage", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    if (response.status == 200)
+    {
+      console.log('sending')
+      const messagePayload = { groupID: parseInt(await AsyncStorage.getItem('groupID')) };
+
+      //alert(stompClient.connected)
+      stompClient.send('/app/sendMess', {}, JSON.stringify(messagePayload));
+      console.log('sent')
+    }
+
     setTypedText(""); 
 
   };

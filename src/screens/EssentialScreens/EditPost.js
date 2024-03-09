@@ -91,13 +91,18 @@ const EditPost = (props) => {
     const formData = new FormData();
     formData.append('blogID', blogID);
     formData.append('content', contentText);
-    formData.append('image', filePath)
   
     const response = await axios.put(API_BASE_URL + '/api/v1/blog/updateBlog', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     });
+
+    if (filePath != "images.blankImageLoading")
+    {
+      uploadImage(filePath, blogID)
+    }
         
     if (response.status == 200)
     {
@@ -110,6 +115,47 @@ const EditPost = (props) => {
     }
 
     navigate("TabDiscussionFiltered", {type: type});
+  };
+
+  const uploadImage = async (uri, blogID) => {
+    const formData = new FormData();
+    
+    if(uri.toString())
+    formData.append('file', {
+      uri,
+      name: 'image.jpg',
+      type: 'image/jpg',
+    });
+    formData.append('blogID', blogID)
+  
+    try {
+      // const response = await fetch('YOUR_BACKEND_URL', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+      const response = await axios.post(API_BASE_URL + '/api/v1/blog/insertImageInBlog', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+
+  
+      if (response.status == 200) {
+        const imageURL = await response.json();
+        console.log('URL của ảnh:', imageURL);
+        alert('Tạo thành công')
+        // Tiếp tục xử lý URL của ảnh ở đây
+      } else {
+        console.log('Lỗi khi tải lên ảnh');
+      }
+    } catch (error) {
+      console.log('Lỗi:', error);
+    }
   };
 
   return (

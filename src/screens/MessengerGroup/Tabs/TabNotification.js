@@ -25,14 +25,37 @@ function TabNotification(props) {
 
   const [userName, setUserName] = useState("")
 
+  const [leaderOfGroup, setLeaderOfGroup] = useState(null)
+
   useEffect(() => {
     const fetchData = async () => {
      
-        setUserName((await AsyncStorage.getItem('username')).toString());
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUserName(extractToken.data);
   
-        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyGroupID?groupID=" + await AsyncStorage.getItem('groupID'));
+        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyGroupID?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
   
         setNotifications(response.data);
+
+        const leader = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setLeaderOfGroup(leader.data.leaderOfGroup.userName)
     };
   
     fetchData(); // Gọi fetchData ngay sau khi component được mount
@@ -63,7 +86,14 @@ function TabNotification(props) {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
-            navigate("CreateNotification");
+            if (leaderOfGroup == userName)
+            {
+              navigate("CreateNotification");
+            }
+            else
+            {
+              alert('Bạn không phải nhóm trưởng')
+            }
           }}
         >
           <Text style={styles.buttonText}>{"Tạo thông báo"}</Text>

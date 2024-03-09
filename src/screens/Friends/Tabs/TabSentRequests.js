@@ -34,7 +34,12 @@ function TabSentRequests(props) {
         const username = await AsyncStorage.getItem('username');
         setUsername(username);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllSentInvitationList?myUserName=" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllSentInvitationList", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
 
         setInvitation(response.data)
                 

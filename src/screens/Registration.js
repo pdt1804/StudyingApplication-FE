@@ -37,7 +37,7 @@ const Registration = (props) => {
   const handleRegister = async () => {
     let newUser = {
       userName: username,
-      passWord: hashPassword(password),
+      passWord: password,
       Email: email,
     };
 

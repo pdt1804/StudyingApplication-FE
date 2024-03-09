@@ -27,7 +27,12 @@ function TabYourFriendsItems(props) {
 
   useEffect(() => {
     const checkNewNotification = async () => {
-      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/checkNewMessage?myUserName=" + await AsyncStorage.getItem('username') + "&fromUserName=" + userName);
+      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/checkNewMessage", { fromUserName: userName }, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
       
       setIsNewNotification(response.data === true);
     };

@@ -25,30 +25,42 @@ function EnterMessageChatBot({OnPress}) {
       return;
     }
 
-    const sentMessage = {
-        content: typedText,
-    }
+    var form = new FormData()
+    form.append('toUserName', "Chatbot")
+    form.append('messContent', typedText)
 
-    const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=" + await AsyncStorage.getItem('username') + "&toUserName=Chatbot", sentMessage)
+    const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
     
+    var content = typedText;
+
     setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
+
     const chatCompletion = await axios.post('https://api.openai.com/v1/chat/completions', {
-        messages: [{ role: 'user', content: typedText }],
+        messages: [{ role: 'user', content: content }],
         model: 'gpt-3.5-turbo',
         max_tokens: 100,
     }, {
         headers: {
-            'Authorization': 'API KEY',
+            'Authorization': 'Bearer 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',
             'Content-Type': 'application/json',
         },
     });
 
+    var formData = new FormData()
+    formData.append("messContent", chatCompletion.data.choices[0].message.content)
 
-    const message = {
-      content: chatCompletion.data.choices[0].message.content,
-    }
+    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/saveChatbotMessage", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=Chatbot&toUserName=" + await AsyncStorage.getItem('username'), message)
     setTypedText(""); 
 
   };

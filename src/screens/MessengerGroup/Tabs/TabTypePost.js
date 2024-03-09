@@ -32,11 +32,28 @@ function TabTypePost(props) {
   useEffect(() => {
     const fetchData = async () => {
 
-        setUsername(await AsyncStorage.getItem('username').toString())
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllSubject?groupID=" + await AsyncStorage.getItem('groupID'));
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllSubject?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
       
-        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUsername(extractToken.data)
         
         setGroup(responseGroup.data)
         setTypes(response.data);
@@ -69,13 +86,20 @@ function TabTypePost(props) {
                 alert('Tạo không thành công, hãy nhập tên chủ đề')
                 return;
               }
-              if (group.leaderOfGroup.userName == await AsyncStorage.getItem('username')) {
+              if (group.leaderOfGroup.userName == username) {
+
+                var form = new FormData()
+                form.append("groupID", await AsyncStorage.getItem("groupID"))
+                form.append("nameSubject", text)
+
                 const response = await axios.post(
                   API_BASE_URL +
-                    '/api/v1/blog/createNewSubject?groupID=' +
-                    (await AsyncStorage.getItem('groupID')) +
-                    '&nameSubject=' +
-                    text
+                    '/api/v1/blog/createNewSubject', form, {
+                      headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                      },
+                    }
                 );
                 if (response.status == 200) {
                   alert("Thêm thành công")

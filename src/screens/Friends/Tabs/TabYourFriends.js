@@ -30,7 +30,14 @@ function TabYourFriends(props) {
         const username = await AsyncStorage.getItem('username');
         setUsername(username);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllFriendList?myUserName=" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/friendship/getAllFriendList", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
+
+        //console.log(response.data)
 
         setFriends(response.data);
                 
@@ -51,8 +58,9 @@ function TabYourFriends(props) {
 
   }, [props.userName]);
 
-  function SelectedFriend(myUsername, friendUsername)
+  const SelectedFriend = async (myUsername, friendUsername) =>
   {
+    await AsyncStorage.setItem('friend', "chat");
     navigate("Messenger", {
       myUsername: myUsername,
       friendUsername: friendUsername,

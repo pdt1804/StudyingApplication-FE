@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { images, colors } from "../constants";
 import { API_BASE_URL } from "../../DomainAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function EnterMessageBar({myUsername, friendUsername}) {
+function EnterMessageBar({myUsername, friendUsername, stompClient, friendID}) {
   const [typedText, setTypedText] = useState("");
   const handleSendMessage = async () => {
     
@@ -25,8 +26,26 @@ function EnterMessageBar({myUsername, friendUsername}) {
       content: typedText,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser?fromUserName=" + myUsername + "&toUserName=" + friendUsername, message)
-    setTypedText(""); 
+    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", { toUserName: friendUsername, messContent: typedText }, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    if (response.status == 200)
+    {
+      setTypedText(""); 
+      const messagePayload = { groupID: friendID };
+      console.log(friendID)
+      console.log('sending')
+      stompClient.send("/app/sendMessForUser", {}, JSON.stringify(messagePayload));
+      console.log('sent')
+    }
+    else
+    {
+      alert('Có lỗi mạng, vui lòng gửi lại sau')
+    }
 
   };
 

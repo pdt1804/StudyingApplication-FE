@@ -6,6 +6,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 
 function MessengerBotItems(props) {
+
   let { content, dateSent, id, status } = props.item;
 
   const date = new Date(dateSent);
@@ -25,15 +26,20 @@ function MessengerBotItems(props) {
       try {
 
         setUsername(await AsyncStorage.getItem('username'));
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
+
         setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
                 
       } catch (error) {
         console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
       }
     };
 
@@ -42,13 +48,13 @@ function MessengerBotItems(props) {
 
   const CheckIsSender = () => {
 
-    if(username == sentUsername)
+    if (sentUsername == "Chatbot")
     {
-      return true;
+      return false;
     }
     else
     {
-      return false;
+      return true;
     }
   }
 

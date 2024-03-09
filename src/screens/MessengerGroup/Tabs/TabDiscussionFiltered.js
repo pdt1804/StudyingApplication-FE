@@ -56,14 +56,31 @@ function TabDiscussionFiltered(props) {
   useEffect(() => {
     const fetchData = async () => {
 
-      setUsername(await AsyncStorage.getItem('username'))
+      const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
 
-      const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllBlogBySubject?groupID=" + await AsyncStorage.getItem('groupID') + "&subjectID=" + subjectID);
+      setUsername(extractToken.data)
+
+      const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllBlogBySubject?groupID=" + await AsyncStorage.getItem('groupID') + "&subjectID=" + subjectID, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
 
       //console.log(response.data)
       setTopics(response.data);
 
-      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
 
       setLeaderOfGroup(responseGroup.data.leaderOfGroup.userName)
 
@@ -100,7 +117,12 @@ function TabDiscussionFiltered(props) {
             style: 'destructive',
             onPress: async () => {
 
-              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/sureToDeleteSubject?subjectID=" + subjectID + "&groupID=" + groupID)
+              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/sureToDeleteSubject?subjectID=" + subjectID + "&groupID=" + groupID, {
+                headers: {
+                  'Content-Type': 'application/json', 
+                  'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                },
+              })
 
               if (response.status == 200)
               {
@@ -136,12 +158,19 @@ function TabDiscussionFiltered(props) {
                 return;
             }
             if (true) {
+
+              var form = new FormData()
+              form.append("subjectID", subjectID)
+              form.append("newNameSubject", text)
+
               const response = await axios.put(
                 API_BASE_URL +
-                  '/api/v1/blog/updateSubject?subjectID=' +
-                   subjectID +
-                  '&newNameSubject=' +
-                   text
+                  '/api/v1/blog/updateSubject', form, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data',
+                      'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                    },
+                  }
               );
               if (response.status == 200) {
                 alert("Sửa thành công")

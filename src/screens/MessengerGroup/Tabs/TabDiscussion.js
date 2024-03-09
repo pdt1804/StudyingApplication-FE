@@ -37,13 +37,23 @@ function TabDiscussion(props) {
       const response = await axios.get(
         API_BASE_URL +
           "/api/v1/blog/getAllBlog?groupID=" +
-          (await AsyncStorage.getItem("groupID"))
+          (await AsyncStorage.getItem("groupID")), {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            },
+          }
       );
 
       const responseSubject = await axios.get(
         API_BASE_URL +
           "/api/v1/blog/getAllSubject?groupID=" +
-          (await AsyncStorage.getItem("groupID"))
+          (await AsyncStorage.getItem("groupID")), {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            },
+          }
       );
 
       setTopics(response.data);

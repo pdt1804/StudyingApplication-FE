@@ -17,7 +17,16 @@ function AddMemberInGroupItem(props) {
 
   const handleAddInGroup = async () => {
     
-    const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup?myUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'))
+    var form = new FormData();
+    form.append("friendUserName", userName)
+    form.append("groupID", await AsyncStorage.getItem('groupID'))
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/addFriendInGroup", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     if (response.status == 200)
     {

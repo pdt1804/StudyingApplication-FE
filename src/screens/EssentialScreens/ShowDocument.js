@@ -16,6 +16,7 @@ import { API_BASE_URL } from "../../../DomainAPI";
 import { decode } from "base-64";
 import PdfReader from "rn-pdf-reader-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import WebView from "react-native-webview";
 
 
 const ShowDocument = (props) => {
@@ -27,6 +28,7 @@ const ShowDocument = (props) => {
 
   const [group, setGroup] = useState("")
 
+  console.log(file)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,9 +36,23 @@ const ShowDocument = (props) => {
      
         setUsername(await AsyncStorage.getItem('username'))
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getGroupByDocumentID?documentID=" + documentID)
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getGroupByDocumentID?documentID=" + documentID, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
 
         setGroup(response.data);
+
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUsername(extractToken.data)
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -69,7 +85,12 @@ const ShowDocument = (props) => {
             style: 'destructive',
             onPress: async () => {
 
-              const response = await axios.delete(API_BASE_URL + "/api/v1/document/deleteDocument?groupID=" + group.groupID + "&documentID=" + documentID)
+              const response = await axios.delete(API_BASE_URL + "/api/v1/document/deleteDocument?groupID=" + group.groupID + "&documentID=" + documentID, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                },
+              })
 
               if (response.status == 200)
               {

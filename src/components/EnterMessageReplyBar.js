@@ -28,7 +28,12 @@ function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
       content: typedText,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/blog/replyComment?commentID=" + commentID + "&userName=" + await AsyncStorage.getItem('username'), reply)
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/replyComment?commentID=" + commentID, reply, {
+      headers: {
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     if (response.status != 200)
     {

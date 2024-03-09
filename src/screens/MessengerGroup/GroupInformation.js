@@ -66,6 +66,7 @@ function GroupInfo(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [extractToken, setExtractToken] = useState(null)
 
 
   const [group, setGroup] = useState('');
@@ -83,7 +84,12 @@ function GroupInfo(props) {
     const fetchData = async () => {
       try {
        
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         setGroup(response.data);
         setleader("Trưởng nhóm:  " + response.data.leaderOfGroup.fulName)
         setUsername(response.data.leaderOfGroup.userName)
@@ -93,6 +99,15 @@ function GroupInfo(props) {
         
         date = new Date(response.data.dateCreated);
         setDateCreated("Ngày tạo nhóm:  " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear())
+
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setExtractToken(extractToken.data)
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -116,7 +131,7 @@ function GroupInfo(props) {
   const LeaveGroup = async () => {
     try {
 
-      if (username == await AsyncStorage.getItem('username'))
+      if (username == extractToken)
       {
         if (numberOfMembers > 1)
         {
@@ -124,7 +139,12 @@ function GroupInfo(props) {
         }
         else
         {
-            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + username + "&groupID=" + group.groupID)
+            const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?groupID=" + group.groupID, {
+              headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            })
             if (response.status == 200)
             {
                 //await AsyncStorage.removeItem('groupID');
@@ -134,7 +154,12 @@ function GroupInfo(props) {
       }
       else
       {
-        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?userName=" + await AsyncStorage.getItem('username') + "&groupID=" + group.groupID)
+        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteGroup?groupID=" + group.groupID, {
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         if (response.status == 200)
         {
             //await AsyncStorage.removeItem('groupID');
@@ -153,7 +178,7 @@ function GroupInfo(props) {
 
   const selectImage = async () => {
 
-    if (username == await AsyncStorage.getItem('username'))
+    if (username == extractToken)
     {
         let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -162,30 +187,37 @@ function GroupInfo(props) {
         quality: 1,
         });
 
-        if (!result.cancelled) {
+        if (!result.canceled) {
         
-        setImage(result.uri);
+        setImage(result.assets[0].uri.toString());
 
         try {
 
             const groupID = await AsyncStorage.getItem('groupID');
             
-            var imagePath = result.uri.toString()
+            var imagePath = result.assets[0].uri.toString()
 
-            const formData = new FormData();
-            formData.append('file', imagePath);
-            formData.append('groupID', groupID);
+            uploadImage(imagePath)
+
+            // const formData = new FormData();
+            // formData.append('image', {
+            //   imagePath,
+            //   name: 'image.jpg',
+            //   type: 'image/jpg',
+            // });
+            // formData.append('groupID', groupID);
     
-            const response = await axios.put(API_BASE_URL + '/api/v1/groupStudying/changeAvatarGroup', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            });
+            // const response = await axios.put(API_BASE_URL + '/api/v1/groupStudying/changeAvatarGroup', formData, {
+            // headers: {
+            //     'Content-Type': 'multipart/form-data',
+            //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            // },
+            // });
             
-            if (response.status == 200)
-            {
-            console.log(imagePath)
-            }
+            // if (response.status == 200)
+            // {
+            // console.log(imagePath)
+            // }
 
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -199,11 +231,50 @@ function GroupInfo(props) {
 
   };
 
+  const uploadImage = async (uri) => {
+    const formData = new FormData();
+    formData.append('image', {
+      uri,
+      name: 'image.jpg',
+      type: 'image/jpg',
+    });
+    formData.append('groupID', await AsyncStorage.getItem('groupID'));
+
+  
+    try {
+      // const response = await fetch('YOUR_BACKEND_URL', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+        const response = await axios.put(API_BASE_URL + '/api/v1/groupStudying/changeAvatarGroup', formData, {
+         headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+        });
+  
+      if (response.status == 200) {
+        const imageURL = await response.json();
+        console.log('URL của ảnh:', imageURL);
+        alert('Đổi thành công')
+        // Tiếp tục xử lý URL của ảnh ở đây
+      } else {
+        console.log('Lỗi khi tải lên ảnh');
+      }
+    } catch (error) {
+      console.log('Lỗi:', error);
+    }
+  };
+
 
 
   const ChangeInformationGroup = async () => {
 
-    if (username == await AsyncStorage.getItem('username'))
+    if (username == extractToken)
     {
         navigate("GroupInformationDetail", {group: group})
     }
@@ -215,7 +286,7 @@ function GroupInfo(props) {
 
   const MembersInGroup = async () => {
 
-    if (username == await AsyncStorage.getItem('username'))
+    if (username == extractToken)
     {
         navigate('MembersInGroup');
     }
@@ -227,7 +298,7 @@ function GroupInfo(props) {
 
   const AddMembers = async () => {
 
-    if (username == await AsyncStorage.getItem('username'))
+    if (username == extractToken)
     {
         navigate('AddMember')
     }

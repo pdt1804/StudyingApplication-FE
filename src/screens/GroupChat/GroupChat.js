@@ -48,8 +48,14 @@ function GroupChat(props) {
         const username = await AsyncStorage.getItem('username');
         setUsername(username);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser?myUserName=" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
         //console.log(response.data)
+
         setGroups(response.data);
 
                 
@@ -62,10 +68,10 @@ function GroupChat(props) {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, 1000);
+    // const intervalId = setInterval(fetchData, 1000);
 
-    // // Hủy interval khi component bị unmounted
-     return () => clearInterval(intervalId);
+    // // // Hủy interval khi component bị unmounted
+    //  return () => clearInterval(intervalId);
 
   }, [props.userName]);
 

@@ -61,14 +61,22 @@ const ShowNotificationOfUser = (props) => {
         const response = await axios.get(
           API_BASE_URL +
             "/api/v1/groupStudying/getNameGroupByNotificationID?notificationID=" +
-            notifycationID
+            notifycationID, {
+              headers: {
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
         setGroupName(response.data);
 
         const responseItem = await axios.get(
           API_BASE_URL +
             "/api/v1/notifycation/loadNotifycation?notifycationID=" +
-            notifycationID + "&myUserName=" + await AsyncStorage.getItem('username')
+            notifycationID, {
+              headers: {
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
 
         setItem(responseItem.data)
@@ -103,11 +111,16 @@ const ShowNotificationOfUser = (props) => {
             if (item.documentID == -1)
             {
 
-            const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID)
+            const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            })
 
             if (response.status == 200)
             {
-                navigate('ShowPost', {topic: response.data})
+              navigate('ShowPost', {topic: response.data})
             }
             else if (response.status == 500)
             {
@@ -122,7 +135,12 @@ const ShowNotificationOfUser = (props) => {
             else if (item.blogID == -1)
             {
 
-            const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID)
+            const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            })
 
             if (response.status == 200)
             {

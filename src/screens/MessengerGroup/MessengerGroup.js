@@ -86,7 +86,12 @@ function MessengerGroup(props) {
   useEffect(() => {
     const fetchData = async () => {
       
-      const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+      const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
       setGroup(response.data);
 
     };
@@ -101,6 +106,13 @@ function MessengerGroup(props) {
 
   }
 
+  const goBackToGroupList = async () => {
+
+    await AsyncStorage.setItem('group', "list");
+    goBack();
+
+  }
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -108,7 +120,7 @@ function MessengerGroup(props) {
         leftIconName={images.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
-          goBack();
+          goBackToGroupList();
         }}
         onPressRightIcon={null}
         onPressTitle={ShowGroupInfo}

@@ -14,7 +14,7 @@ function MessengerItems(props) {
   }`;
 
   const [image, setImage] = useState(null);
-
+  const [sender, setSender] = useState(false);
   const [username, setUsername] = useState("")
   const [sentUsername, setSentUsername] = useState("")
 
@@ -25,12 +25,31 @@ function MessengerItems(props) {
       try {
 
         setUsername(await AsyncStorage.getItem('username'));
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id);
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });        
+        
         setResponse(response.data);
 
         setImage(response.data.information.image);
 
         setSentUsername(response.data.userName);
+
+        var form = new FormData()
+        form.append("userName", sentUsername)
+
+        const checkSender = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+        
+        setSender(checkSender.data)
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -44,7 +63,7 @@ function MessengerItems(props) {
 
   const CheckIsSender = () => {
 
-    if(username == sentUsername)
+    if (sender == sentUsername)
     {
       return true;
     }

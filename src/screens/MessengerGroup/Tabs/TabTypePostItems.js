@@ -22,7 +22,12 @@ function TabTypePostItems(props) {
   useEffect(() => {
     const fetchData = async () => {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" + subjectID + "&groupID=" + await AsyncStorage.getItem('groupID'));
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" + subjectID + "&groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
               
         setNumberOfBlogBySubject(response.data)
     };

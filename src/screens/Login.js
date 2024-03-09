@@ -15,6 +15,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoJS from "crypto-js";
 
+
 const Login = (props) => {
 
   const hashPassword = (password) => {
@@ -37,11 +38,11 @@ const Login = (props) => {
             "/api/v1/user/Authenticate?userName=" +
             username +
             "&passWord=" +
-            hashPassword(password)
+            password
         );
 
-        if (response.data == username) {
-          await AsyncStorage.setItem("username", username);
+        if (response.data != "Failed") {
+          await AsyncStorage.setItem("username", response.data);
           push("UITab", {tabName: "Settings"});
         } else {
           alert("Tài khoản hoặc mật khẩu không đúng");
@@ -65,6 +66,23 @@ const Login = (props) => {
     Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardIsShown(false);
     });
+
+    const fetchData = async () => {
+      try {
+
+        // if (await AsyncStorage.getItem('username') != null)
+        // {
+        //   push("UITab", {tabName: "Settings"});
+        // }        
+                
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   });
 
   return (

@@ -28,7 +28,12 @@ function AllNotification(props) {
 
         const userName = await AsyncStorage.getItem('username');
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyUserName?userName=" + userName);
+        const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyUserName", {
+          headers: {
+            'Authorization': 'Bearer ' + userName,
+          },
+        });
+
         setNotifications(response.data)
                 
       } catch (error) {

@@ -26,7 +26,12 @@ function TabSuggestionsItems(props) {
 
     if (buttonName == "Thêm bạn bè")
     {
-      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
+      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend", { receivedUserName: userName } ,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
       setButtonName("Đã gửi lời mời kết bạn")
     }
   }

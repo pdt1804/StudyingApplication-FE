@@ -23,40 +23,61 @@ const ResetPasswordInSetting = (props) => {
   //use for api
   const handleResetPassword = async () => {
     try {
-      const responseUserPassWord = await axios.get(
-        API_BASE_URL +
-          "/api/v1/user/GetUser?userName=" +
-          (await AsyncStorage.getItem("username"))
-      );
 
-      console.log(responseUserPassWord.data.passWord);
+      console.log(await AsyncStorage.getItem('username'))
+      if (password == rePassword && password.length > 8)
+      {
 
-      if (hashPassword(currentPassword) == responseUserPassWord.data.passWord) {
-        if (password == rePassword && password.length > 8) {
-          const response = await axios.post(
-            API_BASE_URL +
-              "/api/v1/user/ChangePasswordAfterOTP?userName=" +
-              (await AsyncStorage.getItem("username")) +
-              "&passWord=" +
-              hashPassword(password)
-          );
+        const formData = new FormData();
+        formData.append('newPassWord', password);
+        formData.append('currentPassWord', currentPassword);
 
-          if (response.data == true) {
-            alert("Đổi thành công");
-            setCurrentPassword("");
-            setPassword("");
-            setRePassword("");
-          } else {
-            alert("Lỗi mạng !");
-          }
-        } else {
-          alert(
-            "Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 8 ký tự"
-          );
+        const response = await axios.post(API_BASE_URL + "/api/v1/information/changePassword", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        if (response.data == "Successful")
+        {
+          alert("Đổi thành công")
+          setCurrentPassword("")
+          setPassword("")
+          setRePassword("")
         }
-      } else {
-        alert("Mật khẩu bạn nhập không đúng với mật khẩu hiện tại");
+        else
+        {
+          alert("Thông tin bạn nhập không đúng, vui lòng nhập lại")
+        }
       }
+
+      // if (currentPassword == responseUserPassWord.data.passWord) {
+      //   if (password == rePassword && password.length > 8) {
+      //     const response = await axios.post(
+      //       API_BASE_URL +
+      //         "/api/v1/user/ChangePasswordAfterOTP?userName=" +
+      //         (await AsyncStorage.getItem("username")) +
+      //         "&passWord=" +
+      //         password
+      //     );
+
+      //     if (response.data == true) {
+      //       alert("Đổi thành công");
+      //       setCurrentPassword("");
+      //       setPassword("");
+      //       setRePassword("");
+      //     } else {
+      //       alert("Lỗi mạng !");
+      //     }
+      //   } else {
+      //     alert(
+      //       "Mật khẩu mới và nhập lại mật khẩu mới không khớp, đảm bảo mật khẩu mới hơn 8 ký tự"
+      //     );
+      //   }
+      // } else {
+      //   alert("Mật khẩu bạn nhập không đúng với mật khẩu hiện tại");
+      // }
     } catch (Error) {
       console.error(Error.message);
     }

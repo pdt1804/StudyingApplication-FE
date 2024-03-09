@@ -56,7 +56,12 @@ function ContentBox(props) {
   useEffect(() => {
     const fetchData = async () => {
 
-      const checkLike = await axios.get(API_BASE_URL + "/api/v1/blog/checkLikeBlog?userName=" + await AsyncStorage.getItem('username') + "&blogID=" + blogiD)
+      const checkLike = await axios.get(API_BASE_URL + "/api/v1/blog/checkLikeBlog?blogID=" + blogiD, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
 
       setLikeStatus(checkLike.data === true)
       
@@ -122,9 +127,21 @@ const ShowPost = (props) => {
   useEffect(() => {
     const fetchData = async () => {
 
-      setUsername(await AsyncStorage.getItem('username'))
+      const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
 
-      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+      setUsername(extractToken.data)
+      
+      const responseGroup = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      })
 
       setLeaderOfGroup(responseGroup.data.leaderOfGroup.userName)
 
@@ -168,7 +185,12 @@ const ShowPost = (props) => {
             style: 'destructive',
             onPress: async () => {
 
-              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/deleteBlog?blogID=" + blogID)
+              const response = await axios.delete(API_BASE_URL + "/api/v1/blog/deleteBlog?blogID=" + blogID, {
+                headers: {
+                  'Content-Type': 'application/json', 
+                  'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                },
+              })
 
               if (response.status == 200)
               {
@@ -200,7 +222,14 @@ const ShowPost = (props) => {
   //Xu li like
   const handleLike = async () => {
     
-    const likeBlog = await axios.post(API_BASE_URL + "/api/v1/blog/likeBlog?userName=" + await AsyncStorage.getItem('username') + "&blogID=" + blogiD)
+    var form = new FormData()
+    form.append("blogID", blogiD)
+
+    const likeBlog = await axios.post(API_BASE_URL + "/api/v1/blog/likeBlog", form, {
+      headers: {
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     if (likeBlog.status == 200)
     {

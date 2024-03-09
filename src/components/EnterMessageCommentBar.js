@@ -37,7 +37,12 @@ function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
       content: typedText,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/blog/commentBlog?blogID=" + blogID + "&userName=" + await AsyncStorage.getItem('username'), comment)
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/commentBlog?blogID=" + blogID, comment, {
+      headers: {
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     if (response.status != 200)
     {

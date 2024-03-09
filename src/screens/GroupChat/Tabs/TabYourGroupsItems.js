@@ -4,6 +4,9 @@ import { images, colors, icons, fontSizes } from "../../../constants";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+//import { StompClient } from "../../../../WebSocketConfig";
+import SockJS from 'sockjs-client';
+import { over } from "stompjs";
 
 const generateColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215)
@@ -14,19 +17,41 @@ const generateColor = () => {
 
 function TabYourGroupsItems(props) {
   let { nameGroup, imageGroup, newestMessage, status, groupID } = props.group;
+  //let { stompClient } = props.stompClient
+
   const { onPress } = props;
+  const stompClient = props.stompClient
 
   let fontSizeName = fontSizes.h5;
   if (nameGroup.length > 22) {
     fontSizeName = fontSizes.h6;
   }
 
+  // let socket = new SockJS(API_BASE_URL + "/ws")
+  // let stompClient = over(socket)
+  // stompClient.connect({}, onConnected, () => console.log("error"))
+
+
   const [isNewNotification, setIsNewNotification] = useState(false);
 
   useEffect(() => {
+
     const checkNewNotification = async () => {
-      const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/checkNewMessage?myUserName=" + await AsyncStorage.getItem('username') + "&groupID=" + groupID);
+
+      //stompClient.subscribe('/user/public/queue/group' + groupID, onReceived)
+
+      // socket = Socket
+      // stompClient = StompClient
+      //stompClient.subscribe("asd", onReceivedMessage);
+
+      const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/checkNewMessage", { groupID: groupID}, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
       
+      //console.log(response.data)
       setIsNewNotification(response.data === true);
     };
 
@@ -44,6 +69,12 @@ function TabYourGroupsItems(props) {
     setIsNewNotification(false)
     onPress();
 
+  }
+
+  const onReceived = async (message) =>
+  {
+    setIsNewNotification(true)
+    alert("New message")
   }
 
 

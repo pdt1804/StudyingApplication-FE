@@ -34,7 +34,13 @@ function TabSuggestions(props) {
           setGroups([]);
 
         } else if (searchText.length >= 1) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyName?nameGroup=" + searchText + "&userName=" + await AsyncStorage.getItem('username'));
+          alert("Reach")
+          const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyName?nameGroup=" + searchText, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            },
+          });
           setGroups(response.data);
 
         }

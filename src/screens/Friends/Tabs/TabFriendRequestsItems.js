@@ -19,7 +19,12 @@ function TabFriendRequestsItems(props) {
     
     setMyUsername(await AsyncStorage.getItem('username'));
     
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation", { sentUserName: friendUsername }, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
   
     {onPressButtonLeft}
   };
@@ -27,7 +32,12 @@ function TabFriendRequestsItems(props) {
   const handleCancel = async () => {
     setMyUsername(await AsyncStorage.getItem('username'));
     
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation?sentUserName=" + friendUsername + "&myUserName=" + await AsyncStorage.getItem('username'))
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation", { sentUserName: friendUsername }, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
   
     {onPressButtonRight}
   };

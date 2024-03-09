@@ -14,7 +14,8 @@ import { images, colors, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../../DomainAPI";
 import axios from "axios";
-
+import SockJS from 'sockjs-client';
+import { over } from "stompjs";
 
 function TabYourGroups(props) {
   //list of group example = state
@@ -28,18 +29,35 @@ function TabYourGroups(props) {
 
   const [username, setUsername] = useState("")
 
+  const [myUsername, setMyUsername] = useState("")
+
+  
+  // let socket = new SockJS(API_BASE_URL + "/ws")
+  // let stompClient = over(socket)
+  // stompClient.connect({}, onConnected, () => console.log("error"))
+
+  const [socket, setSocket] = useState(new SockJS(API_BASE_URL + "/ws"))
+  //const [stompClient, setStompClient] = useState(over(socket));
+  
+  let stompClient = over(socket);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
 
-        const username = await AsyncStorage.getItem('username');
-        setUsername(username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser?myUserName=" + username);
-
-        //console.log(response.data);
         setGroups(response.data);
 
+        //stompClient.connect({} , onConnected, onError)
+
+
+        //console.log(response.data);
                 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -57,12 +75,41 @@ function TabYourGroups(props) {
 
   }, [props.userName]);
 
+  const onConnected = () =>
+  {
+
+  }
+
+  const onError = async () =>
+  {
+    alert('Error')
+  }
+
+
+
+  const onReceived = async (message) =>
+  {
+    alert("reach")
+    const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    });
+
+    setGroups(response.data);  
+  }
+
+
   const SelectedGroup = async (eachGroup) => {
 
     try {
           
       await AsyncStorage.removeItem("groupID")
       await AsyncStorage.setItem("groupID", eachGroup.groupID.toString());
+
+      await AsyncStorage.setItem('group', "chat");
+
       navigate("MessengerGroup", { group: eachGroup });
 
     } catch (error) {
@@ -72,7 +119,6 @@ function TabYourGroups(props) {
     }
   
   }
-
 
   return (
     <View style={styles.container}>
@@ -110,6 +156,7 @@ function TabYourGroups(props) {
           .map((eachGroup) => (
             <TabYourGroupsItems
               group={eachGroup}
+              stompClient={stompClient}
               key={eachGroup.groupID}
               onPress={() => { SelectedGroup(eachGroup) }}
             />
@@ -117,7 +164,9 @@ function TabYourGroups(props) {
       </ScrollView>
     </View>
   );
+
 }
+
 export default TabYourGroups;
 
 const styles = StyleSheet.create({

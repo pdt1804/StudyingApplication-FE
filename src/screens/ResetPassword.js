@@ -29,7 +29,7 @@ const ResetPassword = (props) => {
             "/api/v1/user/ChangePasswordAfterOTP?userName=" +
             userName +
             "&passWord=" +
-            hashPassword(password)
+            password
         );
 
         if (response.data == true) {

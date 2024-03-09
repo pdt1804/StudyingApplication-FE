@@ -19,6 +19,7 @@ import axios from "axios";
 function Settings(props) {
   
   const [newUsername, setNewUsername] = useState("");
+  const [infoID, setInfoID] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newDateOfBirth, setNewDateOfBirth] = useState("");
@@ -30,19 +31,22 @@ function Settings(props) {
 
   const handleSettings = async () => {
     
-    const username = await AsyncStorage.getItem('username');
-
-    const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
+    console.log(await AsyncStorage.getItem('username'))
 
     let updateInformation = {
-      infoID: response.data.information.infoID,
+      infoID: infoID,
       fulName: newUsername,
       phoneNumber: newPhoneNumber,
       yearOfBirth: newDateOfBirth,
       gender: gender,
     }
 
-    const responseUpdate = await axios.post(API_BASE_URL + "/api/v1/information/updateInformation", updateInformation);
+    const responseUpdate = await axios.post(API_BASE_URL + "/api/v1/information/updateInformation", updateInformation, {
+      headers: {
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (responseUpdate.status == 200)
     {
@@ -65,8 +69,13 @@ function Settings(props) {
 
         const username = await AsyncStorage.getItem('username');
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
+        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser", {
+          headers: {
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
 
+        setInfoID(response.data.information.infoID)
         setNewUsername(response.data.information.fulName);
         setNewEmail(response.data.email)
         setNewPhoneNumber(response.data.information.phoneNumber.toString())

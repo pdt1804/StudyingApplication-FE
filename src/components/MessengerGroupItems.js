@@ -19,19 +19,38 @@ function MessengerGroupItems(props) {
 
   const [username, setUsername] = useState("");
   const [sentUsername, setSentUsername] = useState("");
+  const [sender, setSender] = useState("");
 
   const [response, setResponse] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        //stompClient.subscribe("/user/public/queue/group/" + id, onReceived)
+
         setUsername(await AsyncStorage.getItem("username"));
         const response = await axios.get(
           API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id
-        );
+        , {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
+
         setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
+
+        const checkSender = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setSender(checkSender.data);
 
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -44,7 +63,7 @@ function MessengerGroupItems(props) {
   }, [props.userName]);
 
   const CheckIsSender = () => {
-    if (username == sentUsername) {
+    if (sender == sentUsername) {
       return true;
     } else {
       return false;

@@ -37,7 +37,12 @@ function MessageBot(props) {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/loadMessageforUser?myUserName=" + await AsyncStorage.getItem('username') + "&toUserName=Chatbot");
+        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/loadMessageforUser?toUserName=Chatbot", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
         setChatHistory(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

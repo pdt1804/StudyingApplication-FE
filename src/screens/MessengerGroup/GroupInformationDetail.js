@@ -33,7 +33,12 @@ function GroupInformationDetail(props) {
         passWord: newPassword,
     }
     
-    const response = await axios.put(API_BASE_URL + "/api/v1/groupStudying/updateGroup", group);
+    const response = await axios.put(API_BASE_URL + "/api/v1/groupStudying/updateGroup", group, {
+      headers: {
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    });
     
     if (response.status == 200)
     {
@@ -50,7 +55,12 @@ function GroupInformationDetail(props) {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
 
         setNewGroupName(response.data.nameGroup);
         setNewPassword(response.data.passWord);

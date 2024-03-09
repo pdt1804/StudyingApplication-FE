@@ -68,26 +68,24 @@ const ShowProfileRequest = (props) => {
 
   //handle button here
   const handleAcceptButton = async () => {
-    const response = await axios.post(
-      API_BASE_URL +
-        "/api/v1/friendship/acceptInvitation?sentUserName=" +
-        userName +
-        "&myUserName=" +
-        (await AsyncStorage.getItem("username"))
-    );
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation", { sentUserName: userName }, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     console.log(response.status);
     goBack();
   };
 
   const handleRevokeButton = async () => {
-    const response = await axios.post(
-      API_BASE_URL +
-        "/api/v1/friendship/refuseInvitation?sentUserName=" +
-        userName +
-        "&myUserName=" +
-        (await AsyncStorage.getItem("username"))
-    );
+    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation", { sentUserName: userName }, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     console.log(response.status);
     goBack();

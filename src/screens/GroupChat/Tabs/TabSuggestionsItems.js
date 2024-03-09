@@ -36,10 +36,13 @@ function TabSuggestionsItems(props) {
             if (text === passWord) {
               const response = await axios.post(
                 API_BASE_URL +
-                  '/api/v1/groupStudying/joinInGroup?myUserName=' +
-                  (await AsyncStorage.getItem('username')) +
-                  '&groupID=' +
-                  groupID
+                  '/api/v1/groupStudying/joinInGroup?groupID=' +
+                  groupID, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data',
+                      'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                    },
+                  }
               );
               if (response.status === 200) {
                 setNameTask('Đã tham gia');
@@ -63,7 +66,12 @@ function TabSuggestionsItems(props) {
     {
       if (nameTask == "Tham gia")
       {
-        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup?myUserName=" + await AsyncStorage.getItem("username") + "&groupID=" + groupID)
+        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup", { groupID: groupID },{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         if (response.status == 200)
         {
           setNameTask('Đã tham gia')

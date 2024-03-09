@@ -37,7 +37,12 @@ function TabSuggestions(props) {
           setInvitation([]);
 
         } else if (searchText.length >= 1) {
-          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/findAllFriendByInputName?input=" + searchText + "&userName=" + username);
+          const response = await axios.get(API_BASE_URL + "/api/v1/friendship/findAllFriendByInputName?input=" + searchText, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            },
+          });
           setInvitation(response.data);
 
         }

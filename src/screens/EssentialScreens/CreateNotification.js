@@ -38,12 +38,62 @@ const CreateNotification = (props) => {
     let notification = {
       header: titleText,
       content: contentText,
-      image: path,
+      //image: path,
     }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/create?groupID=" + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'), notification)
+    const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/create?groupID=" + await AsyncStorage.getItem('groupID'), notification, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    if (path != null)
+    {
+      uploadImage(path, response.data)
+    }
+
+
     alert("Tạo thành công")
     goBack();
+  };
+
+  const uploadImage = async (uri, notificationID) => {
+    const formData = new FormData();
+    formData.append('image', {
+      uri,
+      name: 'image.jpg',
+      type: 'image/jpg',
+    });
+    formData.append('notificationID', notificationID)
+  
+    try {
+      // const response = await fetch('YOUR_BACKEND_URL', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+      const response = await axios.post(API_BASE_URL + '/api/v1/notifycation/insertImage', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+  
+      if (response.status == 200) {
+        const imageURL = await response.json();
+        console.log('URL của ảnh:', imageURL);
+        //alert('Đổi thành công')
+        // Tiếp tục xử lý URL của ảnh ở đây
+      } else {
+        console.log('Lỗi khi tải lên ảnh');
+      }
+    } catch (error) {
+      console.log('Lỗi:', error);
+    }
   };
 
 
@@ -84,6 +134,7 @@ const CreateNotification = (props) => {
     }
 
   };
+  
 
   return (
     <View style={styles.container}>

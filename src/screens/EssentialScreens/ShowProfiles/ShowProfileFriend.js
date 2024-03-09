@@ -74,7 +74,12 @@ const ShowProfileFriend = (props) => {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + friendUsername);
+        const response = await axios.get(API_BASE_URL + "/api/v1/information/GetUser?userName=" + friendUsername, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
 
         setFulName(response.data.information.fulName);
         setImage(response.data.information.image)
@@ -129,7 +134,12 @@ const ShowProfileFriend = (props) => {
   //handle button here  
   const DeleteFriend = async () => {
 
-    const response = await axios.delete(API_BASE_URL + "/api/v1/friendship/deleteFriend?sentUserName=" + friendUsername + "&receivedUserName=" + await AsyncStorage.getItem('username'))
+    const response = await axios.delete(API_BASE_URL + "/api/v1/friendship/deleteFriend/" + friendUsername, {
+      withCredentials: true,
+      headers: {
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
     
     if (response.status)
     {

@@ -29,7 +29,12 @@ const Reply = (props) => {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllReplyInComment?commentID=" + commentID);
+        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllReplyInComment?commentID=" + commentID, {
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        });
         setComments(response.data)
                 
       } catch (error) {

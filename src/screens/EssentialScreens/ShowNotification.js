@@ -73,21 +73,37 @@ const ShowNotification = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setUsername(await AsyncStorage.getItem("username"));
 
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUsername(extractToken.data)
+        
         const response = await axios.get(
           API_BASE_URL +
             "/api/v1/groupStudying/getNameGroupByNotificationID?notificationID=" +
-            notifycationID
+            notifycationID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
         setGroupName(response.data);
 
         const responseItem = await axios.get(
           API_BASE_URL +
             "/api/v1/notifycation/loadNotifycation?notifycationID=" +
-            notifycationID +
-            "&myUserName=" +
-            (await AsyncStorage.getItem("username"))
+            notifycationID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
 
         setItem(responseItem.data);
@@ -95,7 +111,12 @@ const ShowNotification = (props) => {
         const responseGroup = await axios.get(
           API_BASE_URL +
             "/api/v1/groupStudying/findGroupbyId?groupID=" +
-            (await AsyncStorage.getItem("groupID"))
+            (await AsyncStorage.getItem("groupID")), {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
         setGroup(responseGroup.data);
       } catch (error) {
@@ -115,7 +136,12 @@ const ShowNotification = (props) => {
     try {
       if (item.documentID == -1) {
         const response = await axios.get(
-          API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID
+          API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+            },
+          }
         );
 
         if (response.status == 200) {
@@ -127,7 +153,12 @@ const ShowNotification = (props) => {
         const response = await axios.get(
           API_BASE_URL +
             "/api/v1/document/getDocumentById?documentID=" +
-            item.documentID
+            item.documentID, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            }
         );
 
         if (response.status == 200) {
@@ -165,7 +196,12 @@ const ShowNotification = (props) => {
                   "&notifycationID=" +
                   notifycationID +
                   "&groupID=" +
-                  (await AsyncStorage.getItem("groupID"))
+                  (await AsyncStorage.getItem("groupID")), {
+                    headers: {
+                      'Content-Type': 'multipart/form-data',
+                      'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                    },
+                  }
               );
 
               if (response.status == 200) {

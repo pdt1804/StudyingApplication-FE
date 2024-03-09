@@ -32,7 +32,12 @@ function AddMember(props) {
           try {
             
             //setMembers([]);
-            const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getUserAddInGroup?groupID=" + await AsyncStorage.getItem('groupID') + "&userName=" + await AsyncStorage.getItem('username'));
+            const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getUserAddInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+              headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            });
                     
             // setResponse(responses);
             

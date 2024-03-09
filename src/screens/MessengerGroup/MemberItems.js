@@ -13,6 +13,33 @@ function MemberItems(props) {
   
   const [myUsername, setMyUsername] = useState("")
   const [friendUsername, setFriendUsername] = useState(userName)
+  const [buttonName, setButtonName] = useState("Xoá khỏi nhóm")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setMyUsername(extractToken.data)
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    
+
+  }, [props.userName]);
 
 
   const handleAddFriend = async () => {
@@ -26,18 +53,27 @@ function MemberItems(props) {
 
   const handleLeaveGroup = async () => {
 
-    if (userName != await AsyncStorage.getItem('username'))
+    if (buttonName == "Xoá khỏi nhóm")
     {
-      const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'))
-
-      if (response.status == 200)
+      if (userName != myUsername)
       {
+        const response = await axios.delete(API_BASE_URL + "/api/v1/groupStudying/deleteUser?userName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        if (response.status == 200)
+        {
+          setButtonName('Đã xoá khỏi nhóm') 
           alert('Xoá thành công')
+        }
       }
-    }
-    else
-    {
-      alert("Bạn không thể tự xoá bạn")
+      else
+      {
+        alert("Bạn không thể tự xoá bạn")
+      }
     }
 
   };
@@ -62,7 +98,7 @@ function MemberItems(props) {
             <Text style={[styles.buttonsText, styles.addFriend]}>Nhóm trưởng</Text>
           </TouchableOpacity> */}
           <TouchableOpacity onPress={handleLeaveGroup} style={styles.buttons}>
-            <Text style={styles.buttonsText}>Xoá khỏi nhóm</Text>
+            <Text style={styles.buttonsText}>{buttonName}</Text>
           </TouchableOpacity>
         </View>
       </View>

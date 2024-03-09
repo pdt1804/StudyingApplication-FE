@@ -24,7 +24,15 @@ function NotificationItems(props) {
 
   useEffect(() => {
     const checkNewNotification = async () => {
-      const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/checkNewNotifycation?myUserName=" + await AsyncStorage.getItem('username') + "&notifycationID=" + notifycationID);
+
+      var form = new FormData();
+      form.append("notifycationID", notifycationID)
+
+      const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/checkNewNotifycation", form, {
+        headers: {
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem("username"),
+        },
+      });
       
       setIsNewNotification(response.data === true);
     };

@@ -70,10 +70,17 @@ function Settings(props) {
     const fetchData = async () => {
       try {
 
+
         const username = await AsyncStorage.getItem('username');
         setUsername(username);
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser?userName=" + username);
+        console.log(await AsyncStorage.getItem('username'))
+
+        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser", {
+          headers: {
+            'Authorization': 'Bearer ' + username,
+          },
+        });
 
         setFulName(response.data.information.fulName);
 
@@ -95,7 +102,11 @@ function Settings(props) {
           setPhoneNumber("0"+response.data.information.phoneNumber);
         }
 
-        const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?userName=" + username)
+        const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?", {
+          headers: {
+            'Authorization': 'Bearer ' + username,
+          },
+        })
         
         if (responseAvatar.data != null)
         {
@@ -156,20 +167,22 @@ function Settings(props) {
         
         var imagePath = result.assets[0].uri.toString()
 
-        const formData = new FormData();
-        formData.append('image', imagePath);
-        formData.append('userName', username);
+        uploadImage(imagePath)
+
+        // const formData = new FormData();
+        // formData.append('image', imagePath);
   
-        const response = await axios.post(API_BASE_URL + '/api/v1/information/changeAvatar', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        // const response = await axios.post(API_BASE_URL + '/api/v1/information/changeAvatar', formData, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //     'Authorization': 'Bearer ' + username,
+        //   },
+        // });
         
-        if (response.status == 200)
-        {
-          console.log(imagePath)
-        }
+        // if (response.status == 200)
+        // {
+        //   alert('Đổi thành công')
+        // }
 
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -184,6 +197,43 @@ function Settings(props) {
     navigate("ShowPicture", {file: image})
 
   }
+
+  const uploadImage = async (uri) => {
+    const formData = new FormData();
+    formData.append('image', {
+      uri,
+      name: 'image.jpg',
+      type: 'image/jpg',
+    });
+  
+    try {
+      // const response = await fetch('YOUR_BACKEND_URL', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+      const response = await axios.post(API_BASE_URL + '/api/v1/information/changeAvatarCloud', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + username,
+        },
+      });
+  
+      if (response.status == 200) {
+        const imageURL = await response.json();
+        console.log('URL của ảnh:', imageURL);
+        alert('Đổi thành công')
+        // Tiếp tục xử lý URL của ảnh ở đây
+      } else {
+        console.log('Lỗi khi tải lên ảnh');
+      }
+    } catch (error) {
+      console.log('Lỗi:', error);
+    }
+  };
   
   
   //function of navigation to/back

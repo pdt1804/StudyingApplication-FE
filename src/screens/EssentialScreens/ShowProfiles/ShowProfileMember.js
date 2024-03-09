@@ -63,13 +63,28 @@ const ShowProfileMember = (props) => {
   let { userName, image, fulName, phoneNumber, yearOfBirth, gender, email } = props.route.params;
 
   const [group, setGroup] = useState("")
+  const [username, setUsername] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
       try {
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'))
+        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
         setGroup(response.data);
+
+        const extractToken = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          },
+        })
+
+        setUsername(extractToken.data);
 
                 
       } catch (error) {
@@ -86,7 +101,21 @@ const ShowProfileMember = (props) => {
   //handle button here  
   const ChangeLeader = async () => {
 
-    const response = await axios.put(API_BASE_URL + "/api/v1/groupStudying/changeLeaderofGroup?currentUserName=" + await AsyncStorage.getItem('username') + "&newUserName=" + userName + "&groupID=" + await AsyncStorage.getItem('groupID'))
+    if (group.leaderOfGroup.userName == userName)
+    {
+      alert("Bạn hiện tại đang là trưởng nhóm")
+      return;
+    }
+
+    var form = new FormData()
+    form.append('newUserName', userName)
+    form.append('groupID', await AsyncStorage.getItem("groupID"))
+
+    const response = await axios.put(API_BASE_URL + "/api/v1/groupStudying/changeLeaderofGroup", form, {
+      headers: {
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
 
     if (response.status == 200)
     {

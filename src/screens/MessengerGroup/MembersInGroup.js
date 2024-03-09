@@ -31,7 +31,12 @@ function MembersInGroup(props) {
           try {
             
             setMembers([]);
-            const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'));
+            const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+              headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+              },
+            });
                     
             setResponse(responses);
             
