@@ -71,10 +71,17 @@ const Registration = (props) => {
       try {
         if (password === rePassword) {
 
-          const apiGetAuthCode = API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email;
-          //const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
+          //const apiGetAuthCode = API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email;
+          const apiGetAuthCode = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
           
-          navigate("VerificationToRegistration", {newUser: newUser, otp: 0, api: apiGetAuthCode})
+          // const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email, {
+          //   headers: {
+          //     'Content-Type': 'multipart/form-data',
+          //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+          //   },
+          // });
+
+          navigate("VerificationToRegistration", {newUser: newUser, otp: apiGetAuthCode.data, api: apiGetAuthCode})
           
         }
         else
