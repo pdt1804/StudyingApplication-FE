@@ -34,7 +34,7 @@ function TabSuggestions(props) {
           setGroups([]);
 
         } else if (searchText.length >= 1) {
-          alert("Reach")
+          //alert("Reach")
           const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyName?nameGroup=" + searchText, {
             headers: {
               'Content-Type': 'multipart/form-data',
