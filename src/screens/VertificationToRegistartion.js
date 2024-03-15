@@ -30,7 +30,7 @@ const VerificationToRegistration = (props) => {
   const handleVerification = async () => {
  
     //alert(otp)
-    alert(OTP)
+    //alert(OTP)
     
     if (otp == OTP) {
 

@@ -6,6 +6,7 @@ import EnterMessageCommentBar from "./EnterMessageCommentBar"
 import MessengerGroupItems from "./MessengerGroupItems"
 import MessengerItems from "./MessengerItems"
 import DoubleCommonButton from "./DoubleCommonButton"
+import Icon from "./MyIcon"
 export {
     CommonButton,
     UIHeader,
@@ -15,4 +16,6 @@ export {
     MessengerGroupItems,
     EnterMessageReplyBar,
     EnterMessageCommentBar,
+
+    Icon,
 }

@@ -8,16 +8,14 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
 import { API_BASE_URL } from "../../DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoJS from "crypto-js";
 
-
 const Login = (props) => {
-
   const hashPassword = (password) => {
     const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
     return hashedPassword;
@@ -31,7 +29,6 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
     try {
-
       if (username != null && password != null) {
         const response = await axios.get(
           API_BASE_URL +
@@ -43,7 +40,7 @@ const Login = (props) => {
 
         if (response.data != "Failed") {
           await AsyncStorage.setItem("username", response.data);
-          push("UITab", {tabName: "Settings"});
+          push("UITab", { tabName: "Settings" });
         } else {
           alert("Tài khoản hoặc mật khẩu không đúng");
         }
@@ -69,15 +66,13 @@ const Login = (props) => {
 
     const fetchData = async () => {
       try {
-
         // if (await AsyncStorage.getItem('username') != null)
         // {
         //   push("UITab", {tabName: "Settings"});
-        // }        
-                
+        // }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
         setLoading(false);
       }
     };
@@ -96,7 +91,11 @@ const Login = (props) => {
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
-            <Image source={images.personIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.personIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -112,7 +111,11 @@ const Login = (props) => {
           </View>
 
           <View /* password */ style={styles.textInputView}>
-            <Image source={images.keyIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.keyIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -202,13 +205,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 40,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginLeft: 10,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 300,
