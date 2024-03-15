@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { UIHeader, CommonButton } from "../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { UIHeader, CommonButton, Icon } from "../components";
+import { API_BASE_URL } from "../api/DomainAPI";
 
 const ForgetPassword = (props) => {
   //navigation to/back
@@ -47,8 +46,10 @@ const ForgetPassword = (props) => {
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
-            <Image
-              source={images.personCircleIcon}
+            <Icon
+              name={icons.personCircleIcon}
+              size={30}
+              color={colors.PrimaryBackground}
               style={styles.textInputImage}
             />
             <View>
