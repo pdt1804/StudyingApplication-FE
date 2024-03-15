@@ -5,7 +5,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
