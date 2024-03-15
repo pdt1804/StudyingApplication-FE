@@ -10,10 +10,9 @@ import {
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
-import { API_BASE_URL } from "../../DomainAPI";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoJS from "crypto-js";
+
+import { user_login } from "../api/AuthScreens/user_login";
 
 const Login = (props) => {
   const hashPassword = (password) => {
@@ -27,43 +26,14 @@ const Login = (props) => {
   //Login component and function, use for api
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = async () => {
-    try {
-      if (username != null && password != null) {
-        const response = await axios.get(
-          API_BASE_URL +
-            "/api/v1/user/Authenticate?userName=" +
-            username +
-            "&passWord=" +
-            password
-        );
-
-        if (response.data != "Failed") {
-          await AsyncStorage.setItem("username", response.data);
-          push("UITab", { tabName: "Settings" });
-        } else {
-          alert("Tài khoản hoặc mật khẩu không đúng");
-        }
-      } else {
-        alert("Tài khoản hoặc mật khẩu không đúng");
-      }
-    } catch (error) {
-      console.error(error.message);
-      console.error(error.name);
-      alert("Tài khoản hoặc mật khẩu không đúng");
-    }
+  const handleLogin = () => {
+    user_login(username, password, () =>
+      push("UITab", { tabName: "Settings" })
+    );
   };
 
-  //turn off unimportant things when typing
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+  //????
   useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardIsShown(true);
-    });
-    Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardIsShown(false);
-    });
-
     const fetchData = async () => {
       try {
         // if (await AsyncStorage.getItem('username') != null)
