@@ -1,5 +1,5 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../DomainAPI";
 
 export const user_login = async (username, password, action) => {
@@ -16,7 +16,6 @@ export const user_login = async (username, password, action) => {
       if (response.data != "Failed") {
         await AsyncStorage.setItem("username", response.data);
         action();
-        //push("UITab", { tabName: "Settings" });
       } else {
         alert("Tài khoản hoặc mật khẩu không đúng");
       }
@@ -29,24 +28,3 @@ export const user_login = async (username, password, action) => {
     alert("Tài khoản hoặc mật khẩu không đúng");
   }
 };
-
-
-
-/*----------------------------------------------------------------------------------
-import ApiManager from './ApiManager';
-
-export const user_login = async data => {
-  try {
-    const result = await ApiManager('/v1/user/Authenticate', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      data: data,
-    });
-    return result;
-  } catch (error) {
-    return error.response.data;
-  }
-};
- */

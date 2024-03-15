@@ -10,9 +10,8 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../constants/index";
 import { CommonButton } from "../components";
-import axios from "axios";
+import { user_register } from "../api";
 import CryptoJS from "crypto-js";
-import { API_BASE_URL } from "../../DomainAPI";
 
 const Registration = (props) => {
 
@@ -34,7 +33,15 @@ const Registration = (props) => {
   const [rePassword, setrePassword] = useState("");
 
   //use for api
+
   const handleRegister = async () => {
+    const result = await user_register(username, password, email, rePassword);
+    if (result) {
+      navigate("VerificationToRegistration", { newUser: result.newUser, otp: result.otp });
+    }
+  };
+
+  /* const handleRegister = async () => {
     let newUser = {
       userName: username,
       passWord: password,
@@ -94,7 +101,7 @@ const Registration = (props) => {
     } else {
       alert("Tài khoản và mật khẩu phải có tối thiểu 8 kí tự");
     }
-  };
+  }; */
 
   //turn off unimportant things when typing
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
