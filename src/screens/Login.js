@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
+import { user_login } from "../api";
 import CryptoJS from "crypto-js";
 
-import { user_login } from "../api/AuthScreens/user_login";
 
 const Login = (props) => {
   const hashPassword = (password) => {

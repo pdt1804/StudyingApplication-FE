@@ -5,16 +5,14 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
 import { user_register } from "../api";
 import CryptoJS from "crypto-js";
 
 const Registration = (props) => {
-
   const hashPassword = (password) => {
     const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
     return hashedPassword;
@@ -23,96 +21,22 @@ const Registration = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  //states for validating
-  const [errorEmail, setErrorEmail] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rePassword, setrePassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
 
   //use for api
-
   const handleRegister = async () => {
     const result = await user_register(username, password, email, rePassword);
     if (result) {
-      navigate("VerificationToRegistration", { newUser: result.newUser, otp: result.otp });
+      navigate("VerificationToRegistration", {
+        newUser: result.newUser,
+        otp: result.otp,
+      });
     }
   };
-
-  /* const handleRegister = async () => {
-    let newUser = {
-      userName: username,
-      passWord: password,
-      Email: email,
-    };
-
-    if (!email.endsWith("@gmail.com"))
-    {
-      if (!email.endsWith("@gm.uit.edu.vn"))
-      {
-        alert("Định dạng email không đúng")
-        return;
-      }
-    }
-
-    if (username.length > 8 && password.length > 8) {
-
-      const checkUsername = await axios.get(API_BASE_URL + "/api/v1/user/checkUserName?userName=" + username)
-
-      if (checkUsername.data == true)
-      {
-        alert('Đã tồn tại username này')
-        return;
-      }
-  
-      const checkEmail = await axios.get(API_BASE_URL + "/api/v1/user/checkEmail?email=" + email)
-  
-      if (checkEmail.data == true)
-      {
-        alert('Đã tồn tại email này')
-        return;
-      }
-
-      try {
-        if (password === rePassword) {
-
-          //const apiGetAuthCode = API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email;
-          const apiGetAuthCode = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
-          
-          // const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email, {
-          //   headers: {
-          //     'Content-Type': 'multipart/form-data',
-          //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          //   },
-          // });
-
-          navigate("VerificationToRegistration", {newUser: newUser, otp: apiGetAuthCode.data, api: apiGetAuthCode})
-          
-        }
-        else
-        {
-          alert("mật khẩu và nhập lại mật khẩu không giống")
-        }
-      } catch (catchError) {
-        console.error(catchError.message);
-      }
-    } else {
-      alert("Tài khoản và mật khẩu phải có tối thiểu 8 kí tự");
-    }
-  }; */
-
-  //turn off unimportant things when typing
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardIsShown(true);
-    });
-    Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardIsShown(false);
-    });
-  });
 
   return (
     <View style={styles.container}>
@@ -125,7 +49,11 @@ const Registration = (props) => {
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
-            <Image source={images.personIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.personIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -141,7 +69,11 @@ const Registration = (props) => {
           </View>
 
           <View /* email */ style={styles.textInputView}>
-            <Image source={images.emailIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.emailIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -157,7 +89,11 @@ const Registration = (props) => {
           </View>
 
           <View /* password */ style={styles.textInputView}>
-            <Image source={images.keyIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.keyIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -174,14 +110,18 @@ const Registration = (props) => {
           </View>
 
           <View /* re-enter password */ style={styles.textInputView}>
-            <Image source={images.addKeyIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.addKeyIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
                 secureTextEntry={true} // * the password
                 inputMode="text"
                 onChangeText={(text) => {
-                  setrePassword(text);
+                  setRePassword(text);
                 }}
                 placeholder="Re-enter Password"
                 placeholderTextColor={colors.placeholder}
@@ -205,8 +145,6 @@ const Registration = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-
-      {keyboardIsShown == false && <View style={styles.partitionBottom} />}
     </View>
   );
 };
@@ -256,13 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 40,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginLeft: 10,
-    tintColor: colors.blueIcon,
   },
   textInputTypingArea: {
     width: 300,
