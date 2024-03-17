@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL } from "../DomainAPI";
+import { images } from "../../constants";
 
 export const user_register = async (username, password, email, rePassword) => {
   let newUser = {
@@ -50,4 +51,19 @@ export const user_register = async (username, password, email, rePassword) => {
   } else {
     alert("Tài khoản và mật khẩu phải có tối thiểu 9 kí tự");
   }
+};
+
+export const user_createAccountData = async (newUser) => {
+  const response = await axios.post(
+    API_BASE_URL +
+      "/api/v1/user/CreateAccount?userName=" +
+      newUser.userName +
+      "&passWord=" +
+      newUser.passWord +
+      "&email=" +
+      newUser.Email +
+      "&image=" +
+      images.blankAvatarForRegistration
+  );
+  return response.data;
 };

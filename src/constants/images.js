@@ -8,4 +8,5 @@ export default {
   decorStuff02: require(IMG_BASE_URL + 'DecorStuff02.png'),
 
   blankImageLoading: require(BLANK_IMG_BASE_URL + 'blank-image-loading.jpg'),
+  blankAvatarForRegistration: "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg",
 };

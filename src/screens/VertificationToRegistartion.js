@@ -1,51 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
-import { API_BASE_URL } from "../../DomainAPI";
-import axios from "axios";
-import CryptoJS from "crypto-js";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
+import { user_createAccountData } from "../api";
 
 const VerificationToRegistration = (props) => {
   //navigation to/back
   const { navigate, goBack } = props.navigation;
-  const [OTP, setOTP] = useState(0)
-  const [otpFromAPI, setOtpFromAPI] = useState(0)
-
 
   //use for api
-  const { newUser, otp, api } = props.route.params;
-
-  useEffect(() => {
-    const fetchData = async () => {
-
-        const getAuthOTP = await axios.get(api);
-        setOtpFromAPI(otp)
-
-    };
-
-    fetchData();
-  }, [props.userName]);
+  const [OTP, setOTP] = useState(0);
+  const { newUser, otp } = props.route.params;
 
   const handleVerification = async () => {
- 
-    //alert(otp)
-    //alert(OTP)
-    
-    if (otp == OTP) {
+    alert(`otp từ hệ thống: ${otp}, từ màn hình: ${OTP},`);
 
-        const response = await axios.post(
-            API_BASE_URL + "/api/v1/user/CreateAccount?userName=" + newUser.userName + "&passWord=" + newUser.passWord + "&email=" + newUser.Email + "&image=https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg"
-        );
-          if (response.data == newUser.userName) {
-            alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
-            navigate("Login");
-          } else {
-            //unsuccessful
-            alert("Đã có lỗi xảy ra, vui lòng thử lại");
-          }
+    if (otp == OTP) {
+      const dataResponse = await user_createAccountData(newUser);
+      if (dataResponse == newUser.userName) {
+        alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
+        navigate("Login");
+      } else {
+        //unsuccessful
+        alert("Đã có lỗi xảy ra, vui lòng thử lại");
+      }
     } else {
-      alert("OTP không đúng");
+      //alert("OTP không đúng");
     }
   };
 
@@ -61,9 +41,11 @@ const VerificationToRegistration = (props) => {
 
         <View style={styles.mainView}>
           <View /* Verification code */ style={styles.textInputView}>
-            <Image
-              source={images.emailCheckMarkIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.emailCheckMarkIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Mã xác thực:</Text>
@@ -127,13 +109,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 20,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 55,
-    height: 55,
-    marginRight: 10,
-    marginTop: 25,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,
