@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Settings, GroupChat, Friends, AllNotification, MessageBot } from "../screens";
+import { UserProfile, GroupChat, Friends, AllNotification, MessageBot } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { images, colors, fontSizes } from "../constants";
 
@@ -61,7 +61,7 @@ function UITab(props) {
   const { tabName } = props.route.params;
 
   return (
-    <Tab.Navigator initialRouteName= {tabName == null ? "Settings" : tabName} screenOptions={ScreenOptions}>
+    <Tab.Navigator initialRouteName= {tabName == null ? "UserProfile" : tabName} screenOptions={ScreenOptions}>
       <Tab.Screen
         name="Friends"
         component={Friends}
@@ -95,8 +95,8 @@ function UITab(props) {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="UserProfile"
+        component={UserProfile}
         options={{
           tabBarLabel: "Tài khoản",
           tabBarLabelStyle: tabBarLabelStyles,

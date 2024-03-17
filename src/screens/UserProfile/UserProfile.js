@@ -23,7 +23,7 @@ import {
 } from "../../components";
 
 
-function Settings(props) {
+function UserProfile(props) {
   const [username, setUsername] = useState(null);
   const [fulname, setFulName] = useState(null);
   const [email, setEmail] = useState(null);
@@ -167,7 +167,7 @@ function Settings(props) {
     </View>
   );
 }
-export default Settings;
+export default UserProfile;
 
 const styles = StyleSheet.create({
   container: {

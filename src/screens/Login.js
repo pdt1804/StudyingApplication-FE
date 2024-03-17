@@ -27,7 +27,7 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const handleLogin = () => {
     user_login(username, password, () =>
-      push("UITab", { tabName: "Settings" })
+      push("UITab", { tabName: "UserProfile" })
     );
   };
 

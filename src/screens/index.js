@@ -4,9 +4,9 @@ import ForgetPassword from "./ForgetPassword";
 import Verification from "./Verification";
 import ResetPassword from "./ResetPassword";
 
-import Settings from "./SettingProfile/Settings";
-import SettingProfile from "./SettingProfile/SettingProfile";
-import ResetPasswordInSetting from "./SettingProfile/ResetPasswordInSetting";
+import UserProfile from "./UserProfile/UserProfile";
+import SettingProfile from "./UserProfile/SettingProfile";
+import ResetPasswordInSetting from "./UserProfile/ResetPasswordInSetting";
 
 import GroupChat from "./GroupChat/GroupChat";
 import MessengerGroup from "./MessengerGroup/MessengerGroup";
@@ -53,7 +53,7 @@ export {
   ForgetPassword,
   Verification,
   ResetPassword,
-  Settings,
+  UserProfile,
   SettingProfile,
   GroupChat,
   Friends,
@@ -84,5 +84,5 @@ export {
   EditPost,
   MessageBot,
   GroupSuggestionInfo,
-  ShowPicture
+  ShowPicture,
 };
