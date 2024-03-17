@@ -4,6 +4,7 @@ import { images, icons, colors, fontSizes } from "../constants";
 import Icon from "./MyIcon";
 
 export const TextInputMediumIcon = ({
+  inputMode,
   name,
   icon,
   placeholder,
@@ -23,7 +24,7 @@ export const TextInputMediumIcon = ({
       <TextInput
         style={styles.textInput}
         secureTextEntry={isPassword == null ? false : isPassword} // * the password
-        inputMode="text"
+        inputMode={inputMode == null ? "text" : inputMode}
         placeholder={placeholder}
         placeholderTextColor={colors.noImportantText}
         onChangeText={onChangeText}

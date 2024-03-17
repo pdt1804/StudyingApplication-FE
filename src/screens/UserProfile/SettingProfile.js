@@ -9,15 +9,14 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
-import { CommonButton } from "../../components";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonButton, TextInputMediumIcon } from "../../components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../DomainAPI";
 import axios from "axios";
 
-function Settings(props) {
-  
+function SettingProfile(props) {
   const [newUsername, setNewUsername] = useState("");
   const [infoID, setInfoID] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
@@ -25,13 +24,11 @@ function Settings(props) {
   const [newDateOfBirth, setNewDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
 
-
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
   const handleSettings = async () => {
-    
-    console.log(await AsyncStorage.getItem('username'))
+    console.log(await AsyncStorage.getItem("username"));
 
     let updateInformation = {
       infoID: infoID,
@@ -39,24 +36,24 @@ function Settings(props) {
       phoneNumber: newPhoneNumber,
       yearOfBirth: newDateOfBirth,
       gender: gender,
-    }
+    };
 
-    const responseUpdate = await axios.post(API_BASE_URL + "/api/v1/information/updateInformation", updateInformation, {
-      headers: {
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        'Content-Type': 'application/json',
-      },
-    });
+    const responseUpdate = await axios.post(
+      API_BASE_URL + "/api/v1/information/updateInformation",
+      updateInformation,
+      {
+        headers: {
+          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    if (responseUpdate.status == 200)
-    {
-      navigate("UITab", {tabName: "Settings"});
-    }
-    else
-    {
+    if (responseUpdate.status == 200) {
+      navigate("UITab", { tabName: "Settings" });
+    } else {
       alert("Error!");
     }
-
   };
 
   const handleCancel = async () => {
@@ -66,26 +63,27 @@ function Settings(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const username = await AsyncStorage.getItem("username");
 
-        const username = await AsyncStorage.getItem('username');
+        const response = await axios.get(
+          API_BASE_URL + "/api/v1/user/GetUser",
+          {
+            headers: {
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser", {
-          headers: {
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
-
-        setInfoID(response.data.information.infoID)
+        setInfoID(response.data.information.infoID);
         setNewUsername(response.data.information.fulName);
-        setNewEmail(response.data.email)
-        setNewPhoneNumber(response.data.information.phoneNumber.toString())
-        setNewDateOfBirth(response.data.information.yearOfBirth.toString())
+        setNewEmail(response.data.email);
+        setNewPhoneNumber(response.data.information.phoneNumber.toString());
+        setNewDateOfBirth(response.data.information.yearOfBirth.toString());
         setGender(response.data.information.gender);
-        
-                
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
         setLoading(false);
       }
     };
@@ -112,75 +110,34 @@ function Settings(props) {
             </View>
 
             <View style={styles.mainView}>
-              <View /* new Username */ style={styles.textInputView}>
-                <Image
-                  source={images.personCircleIcon}
-                  style={styles.textInputImageNoTitle}
-                />
-                <View>
-                  <Text>Họ và tên:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="text"
-                    onChangeText={p => setNewUsername(p)}
-                    value={newUsername}
-                    placeholder="Nhập tên người dùng mới"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
-              <View /* new phone number */ style={styles.textInputView}>
-                <Image
-                  source={images.phoneRingCircleIcon}
-                  style={styles.textInputImage}
-                />
-                <View>
-                  <Text>Số điện thoại:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="numeric"
-                    onChangeText={p => setNewPhoneNumber(p)}
-                    value={newPhoneNumber}
-                    placeholder="Nhập số điện thoại mới"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
-              <View /* new email */ style={styles.textInputView}>
-                <Image
-                  source={images.genderEqualityIcon}
-                  style={styles.textInputImage}
-                />
-                <View>
-                  <Text>Giới tính:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="text"
-                    onChangeText={p => setGender(p)}
-                    value={gender}
-                    placeholder="Nhập giới tính của bạn"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.textInputView}>
-                <Image
-                  source={images.birthdayCakeIcon}
-                  style={styles.textInputImage}
-                />
-                <View>
-                  <Text>Năm sinh:</Text>
-                  <TextInput
-                    style={styles.textInputTypingArea}
-                    inputMode="numeric"
-                    onChangeText={p => setNewDateOfBirth(p)}
-                    value={newDateOfBirth}
-                    placeholder="Nhập năm sinh của bạn"
-                    placeholderTextColor={colors.noImportantText}
-                  />
-                </View>
-              </View>
+              <TextInputMediumIcon
+                inputMode="text"
+                name={"Họ và tên"}
+                icon={icons.personCircleIcon}
+                placeholder={"Nhập tên người dùng mới"}
+                onChangeText={(p) => setNewUsername(p)}
+              />
+              <TextInputMediumIcon
+                inputMode="numeric"
+                name={"Số điện thoại"}
+                icon={icons.phoneRingCircleIcon}
+                placeholder={"Nhập số điện thoại mới"}
+                onChangeText={(p) => setNewPhoneNumber(p)}
+              />
+              <TextInputMediumIcon
+                inputMode="text"
+                name={"Giới tính"}
+                icon={icons.genderEqualityIcon}
+                placeholder={"Nhập giới tính của bạn"}
+                onChangeText={(p) => setGender(p)}
+              />
+              <TextInputMediumIcon
+                inputMode="numeric"
+                name={"Năm sinh"}
+                icon={icons.birthdayCakeIcon}
+                placeholder={"Nhập năm sinh của bạn"}
+                onChangeText={(p) => setNewDateOfBirth(p)}
+              />
 
               <CommonButton
                 onPress={handleSettings}
@@ -189,14 +146,20 @@ function Settings(props) {
             </View>
           </View>
 
-          <Image source={images.decorStuff01} style={styles.decorStuffBottomLeft} />
-          <Image source={images.decorStuff02} style={styles.decorStuffBottomRight} />
+          <Image
+            source={images.decorStuff01}
+            style={styles.decorStuffBottomLeft}
+          />
+          <Image
+            source={images.decorStuff02}
+            style={styles.decorStuffBottomRight}
+          />
         </View>
       </ScrollView>
     </View>
   );
 }
-export default Settings;
+export default SettingProfile;
 
 const styles = StyleSheet.create({
   container: {
@@ -218,7 +181,7 @@ const styles = StyleSheet.create({
   },
   yourInformationText: {
     color: colors.PrimaryOnContainerAndFixed,
-    fontSize: fontSizes.h2*0.9,
+    fontSize: fontSizes.h2 * 0.9,
     fontWeight: "bold",
     alignSelf: "center",
   },
