@@ -13,6 +13,7 @@ import {
   RowSectionDisplay,
   RowSectionNavigate,
 } from "./RowSection";
+import { TextInputMediumIcon } from "./MyInput";
 
 export {
   CommonButton,
@@ -28,4 +29,5 @@ export {
   RowSectionTitle,
   RowSectionDisplay,
   RowSectionNavigate,
+  TextInputMediumIcon,
 };

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../../constants/index";
-import { UIHeader, CommonButton } from "../../components";
+import { images, colors, fontSizes, icons } from "../../constants/index";
+import { UIHeader, CommonButton, TextInputMediumIcon } from "../../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../../DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoJS from "crypto-js";
 
 const ResetPasswordInSetting = (props) => {
-
   const hashPassword = (password) => {
     const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
     return hashedPassword;
@@ -23,32 +22,31 @@ const ResetPasswordInSetting = (props) => {
   //use for api
   const handleResetPassword = async () => {
     try {
-
-      console.log(await AsyncStorage.getItem('username'))
-      if (password == rePassword && password.length > 8)
-      {
-
+      console.log(await AsyncStorage.getItem("username"));
+      if (password == rePassword && password.length > 8) {
         const formData = new FormData();
-        formData.append('newPassWord', password);
-        formData.append('currentPassWord', currentPassword);
+        formData.append("newPassWord", password);
+        formData.append("currentPassWord", currentPassword);
 
-        const response = await axios.post(API_BASE_URL + "/api/v1/information/changePassword", formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        })
+        const response = await axios.post(
+          API_BASE_URL + "/api/v1/information/changePassword",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
-        if (response.data == "Successful")
-        {
-          alert("Đổi thành công")
-          setCurrentPassword("")
-          setPassword("")
-          setRePassword("")
-        }
-        else
-        {
-          alert("Thông tin bạn nhập không đúng, vui lòng nhập lại")
+        if (response.data == "Successful") {
+          alert("Đổi thành công");
+          setCurrentPassword("");
+          setPassword("");
+          setRePassword("");
+        } else {
+          alert("Thông tin bạn nhập không đúng, vui lòng nhập lại");
         }
       }
 
@@ -94,57 +92,29 @@ const ResetPasswordInSetting = (props) => {
         </View>
 
         <View style={styles.mainView}>
-          <View /* Password */ style={styles.textInputView}>
-            <Image
-              source={images.typePasswordIcon}
-              style={styles.textInputImage}
-            />
-            <View>
-              <Text>Mật khẩu hiện tại:</Text>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
-                placeholder="Nhập mật khẩu hiện tại"
-                placeholderTextColor={colors.noImportantText}
-                onChangeText={(p) => setCurrentPassword(p)}
-              />
-            </View>
-          </View>
-          <View /* Password */ style={styles.textInputView}>
-            <Image
-              source={images.typeNewPasswordIcon}
-              style={styles.textInputImage}
-            />
-            <View>
-              <Text>Mật khẩu mới:</Text>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
-                placeholder="Nhập mật khẩu mới"
-                placeholderTextColor={colors.noImportantText}
-                onChangeText={(p) => setPassword(p)}
-              />
-            </View>
-          </View>
-          <View /* Retype password */ style={styles.textInputView}>
-            <Image
-              source={images.reTypePasswordIcon}
-              style={styles.textInputImage}
-            />
-            <View>
-              <Text>Nhập lại mật khẩu:</Text>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
-                placeholder="Nhập lại mật khẩu"
-                placeholderTextColor={colors.noImportantText}
-                onChangeText={(p) => setRePassword(p)}
-              />
-            </View>
-          </View>
+          <TextInputMediumIcon
+            name={"Mật khẩu hiện tại"}
+            icon={icons.typePasswordIcon}
+            placeholder={"Nhập mật khẩu hiện tại"}
+            isPassword={true}
+            onChangeText={(p) => setCurrentPassword(p)}
+          />
+          
+          <TextInputMediumIcon
+            name={"Mật khẩu mới"}
+            icon={icons.typeNewPasswordIcon}
+            placeholder={"Nhập mật khẩu mới"}
+            isPassword={true}
+            onChangeText={(p) => setPassword(p)}
+          />
+          
+          <TextInputMediumIcon
+            name={"Nhập lại mật khẩu"}
+            icon={icons.reTypePasswordIcon}
+            placeholder={"Nhập lại mật khẩu"}
+            isPassword={true}
+            onChangeText={(p) => setRePassword(p)}
+          />
 
           <CommonButton
             onPress={handleResetPassword}
