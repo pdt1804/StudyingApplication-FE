@@ -31,9 +31,10 @@ const Registration = (props) => {
   const handleRegister = async () => {
     const result = await user_register(username, password, email, rePassword);
     if (result) {
-      navigate("VerificationToRegistration", {
+      navigate("Verification", {
         newUser: result.newUser,
         otp: result.otp,
+        actionType: "Registration",
       });
     }
   };

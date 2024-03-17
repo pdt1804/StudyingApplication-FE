@@ -2,34 +2,65 @@ import React, { useState, useEffect } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
-import { auth_getAuthOTP } from "../api";
+import { auth_getAuthOTP, user_createAccountData } from "../api";
 
 const Verification = (props) => {
+  const { userName, api, newUser, otp, kind: actionType } = props.route.params;
+  //userName, api are for ForgetPassword
+  //newUser, otp are for Registration
+  //actionType: ForgetPassword (0) - Registration (1)
+
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  //use for api
-  const [otp, setOTP] = useState("-1");
+  //use for api: ForgetPassword
+  const [OTP, setOTP] = useState("-1");
   const [otpFromAPI, setOtpFromAPI] = useState("");
-
-  const { userName, api } = props.route.params;
 
   useEffect(() => {
     const fetchData = async () => {
       const getAuthOTP = await auth_getAuthOTP(api);
       setOtpFromAPI(getAuthOTP);
     };
-
     fetchData();
   }, [props.userName]);
 
-  const handleVerification = async () => {
-    if (otpFromAPI == otp) {
+  const handleVerification_ForgetPassword = async () => {
+    alert(`ForgetPassword: otp từ hệ thống: ${otpFromAPI}, từ màn hình: ${OTP},`);
+
+    if (otpFromAPI == OTP) {
       navigate("ResetPassword", {
         userName: userName,
       });
     } else {
-      alert("OTP không đúng");
+      //alert("OTP không đúng");
+    }
+  };
+
+  //use for api: Registration
+  const handleVerification_Registration = async () => {
+    alert(`Registration: otp từ hệ thống: ${otp}, từ màn hình: ${OTP},`);
+
+    if (otp == OTP) {
+      const dataResponse = await user_createAccountData(newUser);
+      if (dataResponse == newUser.userName) {
+        alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
+        navigate("Login");
+      } else {
+        //unsuccessful
+        alert("Đã có lỗi xảy ra, vui lòng thử lại");
+      }
+    } else {
+      //alert("OTP không đúng");
+    }
+  };
+
+  //final handleVerification
+  const handleVerification = async () => {
+    if (actionType === 0 || actionType === "ForgetPassword") {
+      handleVerification_ForgetPassword();
+    } else if (actionType === 1 || actionType === "Registration") {
+      handleVerification_Registration();
     }
   };
 

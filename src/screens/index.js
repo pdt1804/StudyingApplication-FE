@@ -25,7 +25,6 @@ import EditPost from "./EssentialScreens/EditPost";
 import ShowPost from "./EssentialScreens/ShowPost";
 import ShowNotification from "./EssentialScreens/ShowNotification";
 import ShowNotificationOfUser from "./AllNotification/ShowNotificationOfUser";
-import VerificationToRegistration from "./VertificationToRegistartion";
 
 import MemberToChangeRole from "./MessengerGroup/MemberToChangeRole";
 import ShowDocument from "./EssentialScreens/ShowDocument";
@@ -84,7 +83,6 @@ export {
   ShowNotificationOfUser,
   EditPost,
   MessageBot,
-  VerificationToRegistration,
   GroupSuggestionInfo,
   ShowPicture
 };

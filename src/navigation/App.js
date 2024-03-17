@@ -32,7 +32,6 @@ import {
   Reply,
   ShowNotificationOfUser,
   EditPost,
-  VerificationToRegistration,
   GroupSuggestionInfo,
   ShowPicture,
   ShowProfile,
@@ -51,7 +50,6 @@ function App(props) {
         }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
-        <Stack.Screen name="VerificationToRegistration" component={VerificationToRegistration} />
         
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen name="Verification" component={Verification} />

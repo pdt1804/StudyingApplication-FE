@@ -17,6 +17,7 @@ const ForgetPassword = (props) => {
       navigate("Verification", {
         api: apiPath,
         userName: username,
+        actionType: "ForgetPassword",
       });
 
       // if (response.status == 200) {
