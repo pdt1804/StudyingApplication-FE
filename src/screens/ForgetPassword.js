@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { UIHeader, CommonButton, Icon } from "../components";
-import { API_BASE_URL } from "../api/DomainAPI";
+import { auth_getRecoveryCode } from "../api";
 
 const ForgetPassword = (props) => {
   //navigation to/back
@@ -12,9 +12,8 @@ const ForgetPassword = (props) => {
   const [username, setUsername] = useState(".");
   const handleForgetPassword = async () => {
     try {
+      const apiPath = await auth_getRecoveryCode(username);
 
-      const apiPath = API_BASE_URL + "/api/v1/user/GetRecoveryCode?userName=" + username;
-      
       navigate("Verification", {
         api: apiPath,
         userName: username,
@@ -48,16 +47,16 @@ const ForgetPassword = (props) => {
           <View /* username */ style={styles.textInputView}>
             <Icon
               name={icons.personCircleIcon}
-              size={30}
+              size={55}
               color={colors.PrimaryBackground}
-              style={styles.textInputImage}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Tên đăng nhập:</Text>
               <TextInput
                 style={styles.textInputTypingArea}
                 inputMode="text"
-                onChangeText={text => setUsername(text)}
+                onChangeText={(text) => setUsername(text)}
                 placeholder="Nhập tên đăng nhập của bạn"
                 placeholderTextColor={colors.noImportantText}
               />
@@ -71,17 +70,17 @@ const ForgetPassword = (props) => {
         </View>
       </View>
 
-<UIHeader
-  title={null}
-  leftIconName={images.backIcon}
-  rightIconName={null}
-  onPressLeftIcon={() => {
-    goBack();
-  }}
-  onPressRightIcon={null}
-  mainStyle={styles.UIHeaderMainStyle}
-  iconStyle={styles.UIHeaderIconStyle}
-/>
+      <UIHeader
+        title={null}
+        leftIconName={images.backIcon}
+        rightIconName={null}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
+        onPressRightIcon={null}
+        mainStyle={styles.UIHeaderMainStyle}
+        iconStyle={styles.UIHeaderIconStyle}
+      />
     </View>
   );
 };
@@ -138,13 +137,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 20,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 55,
-    height: 55,
-    marginRight: 10,
-    marginTop: 25,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,

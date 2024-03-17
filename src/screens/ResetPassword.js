@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 import CryptoJS from "crypto-js";
 
 const ResetPassword = (props) => {
-
   const hashPassword = (password) => {
     const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
     return hashedPassword;
@@ -40,7 +39,7 @@ const ResetPassword = (props) => {
         }
       } else {
         alert(
-          "Không thành công, đảm bảo mật khẩu mới và nhập lại mật khẩu phải giống nhau và có trên 8 kí tự"
+          "Không thành công, đảm bảo mật khẩu mới và nhập lại mật khẩu phải giống nhau và có tối thiểu 9 kí tự"
         );
       }
     } catch (Error) {
@@ -60,9 +59,11 @@ const ResetPassword = (props) => {
 
         <View style={styles.mainView}>
           <View /* Password */ style={styles.textInputView}>
-            <Image
-              source={images.typePasswordIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.typePasswordIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Mật khẩu mới:</Text>
@@ -70,16 +71,18 @@ const ResetPassword = (props) => {
                 style={styles.textInputTypingArea}
                 secureTextEntry={true} // * the password
                 inputMode="text"
-                onChangeText={text => setPassword(text)}
+                onChangeText={(text) => setPassword(text)}
                 placeholder="Nhập mật khẩu mới"
                 placeholderTextColor={colors.noImportantText}
               />
             </View>
           </View>
           <View /* Retype password */ style={styles.textInputView}>
-            <Image
-              source={images.reTypePasswordIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.reTypePasswordIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Nhập lại mật khẩu:</Text>
@@ -87,7 +90,7 @@ const ResetPassword = (props) => {
                 style={styles.textInputTypingArea}
                 secureTextEntry={true} // * the password
                 inputMode="text"
-                onChangeText={text => setRePassword(text)}
+                onChangeText={(text) => setRePassword(text)}
                 placeholder="Nhập lại mật khẩu"
                 placeholderTextColor={colors.noImportantText}
               />
@@ -143,13 +146,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 20,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 55,
-    height: 55,
-    marginRight: 10,
-    marginTop: 25,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,

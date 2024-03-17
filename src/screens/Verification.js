@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
-import axios from "axios";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
+import { auth_getAuthOTP } from "../api";
 
 const Verification = (props) => {
   //navigation to/back
@@ -16,10 +16,8 @@ const Verification = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-
-        const getAuthOTP = await axios.get(api);
-        setOtpFromAPI(getAuthOTP.data)
-
+      const getAuthOTP = await auth_getAuthOTP(api);
+      setOtpFromAPI(getAuthOTP);
     };
 
     fetchData();
@@ -47,9 +45,11 @@ const Verification = (props) => {
 
         <View style={styles.mainView}>
           <View /* Verification code */ style={styles.textInputView}>
-            <Image
-              source={images.emailCheckMarkIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.emailCheckMarkIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Mã xác thực:</Text>
@@ -113,13 +113,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 20,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 55,
-    height: 55,
-    marginRight: 10,
-    marginTop: 25,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,
