@@ -5,118 +5,73 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
-  Alert,
 } from "react-native";
-import { images, colors, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
-import { API_BASE_URL } from "../../../DomainAPI";
-import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ImagePicker from 'expo-image-picker';
+import { images, icons, colors, fontSizes } from "../../constants";
+import { UIHeader, Icon } from "../../components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import {
+  profile_getUser,
+  profile_getAvatar,
+  profile_uploadImage,
+} from "../../api";
+import {
+  RowSectionTitle,
+  RowSectionDisplay,
+  RowSectionNavigate,
+} from "../../components";
 
-
-function GroupOption(props) {
-  const { text } = props;
-
-  return (
-    <View style={styles.groupOptionsView}>
-      <Text style={styles.groupOptionsText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionViewOnly(props) {
-  const { icon, text } = props;
-
-  return (
-    <View style={styles.eachOptionView}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionNavigate(props) {
-  const { icon, text, onPress } = props;
-
-  return (
-    <TouchableOpacity style={styles.eachOptionView} onPress={onPress}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-      <View style={{ flex: 1 }} />
-      <Image source={images.chevronRightIcon} style={styles.eachOptionIcon} />
-    </TouchableOpacity>
-  );
-}
 
 function Settings(props) {
-
-  const [profile, setProfile] = useState(null);
-  const [fulname, setFulName] = useState(null)
-  const [email, setEmail] = useState(null)
-  const [phoneNumber, setPhoneNumber] = useState(null)
-  const [image, setImage] = useState(null)
-  const [username, setUsername] = useState(null)
-
-  let img;
+  const [username, setUsername] = useState(null);
+  const [fulname, setFulName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [image, setImage] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
+
+  const setEverything = (username, fulname, email, phoneNumber) => {
+    setUsername(username);
+    setFulName(fulname);
+
+    if (email == null) {
+      setEmail("Chưa cập nhật");
+    } else {
+      setEmail(email);
+    }
+
+    if (phoneNumber == 0) {
+      setPhoneNumber("Chưa cập nhật");
+    } else {
+      setPhoneNumber("0" + phoneNumber);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const username = await AsyncStorage.getItem("username");
+        //console.log(username);
+        const responseUser = await profile_getUser(username);
 
+        setEverything(
+          username,
+          responseUser.data.information.fulName,
+          responseUser.data.email,
+          responseUser.data.information.phoneNumber
+        );
 
-        const username = await AsyncStorage.getItem('username');
-        setUsername(username);
-
-        console.log(await AsyncStorage.getItem('username'))
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/user/GetUser", {
-          headers: {
-            'Authorization': 'Bearer ' + username,
-          },
-        });
-
-        setFulName(response.data.information.fulName);
-
-        if (response.data.email == null)
-        {
-          setEmail('Chưa cập nhật');
-        }
-        else
-        {
-          setEmail(response.data.email);
-        }
-
-        if (response.data.information.phoneNumber == 0)
-        {
-          setPhoneNumber('Chưa cập nhật')
-        }
-        else
-        {
-          setPhoneNumber("0"+response.data.information.phoneNumber);
-        }
-
-        const responseAvatar = await axios.get(API_BASE_URL + "/api/v1/information/getAvatar?", {
-          headers: {
-            'Authorization': 'Bearer ' + username,
-          },
-        })
-        
-        if (responseAvatar.data != null)
-        {
+        const responseAvatar = await profile_getAvatar(username);
+        if (responseAvatar.data != null) {
           setImage(responseAvatar.data.toString());
         }
-        console.log(image)
-                
+        console.log(image);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
         setLoading(false);
       }
     };
@@ -126,30 +81,24 @@ function Settings(props) {
 
   useEffect(() => {
     (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
       }
     })();
   }, []);
 
   const Logout = async () => {
     try {
-
-      await AsyncStorage.removeItem('username');
-      navigate("Login")
-
+      await AsyncStorage.removeItem("username");
+      navigate("Login");
     } catch (error) {
-
-      console.error('Error logging out:', error);
-
+      console.error("Error logging out:", error);
     }
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const selectImage = async () => {
-
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -158,134 +107,59 @@ function Settings(props) {
     });
 
     if (!result.canceled) {
-      
       setImage(result.assets[0].uri);
 
       try {
-
-        const username = await AsyncStorage.getItem('username');
-        
-        var imagePath = result.assets[0].uri.toString()
-
-        uploadImage(imagePath)
-
-        // const formData = new FormData();
-        // formData.append('image', imagePath);
-  
-        // const response = await axios.post(API_BASE_URL + '/api/v1/information/changeAvatar', formData, {
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data',
-        //     'Authorization': 'Bearer ' + username,
-        //   },
-        // });
-        
-        // if (response.status == 200)
-        // {
-        //   alert('Đổi thành công')
-        // }
-
+        var imagePath = result.assets[0].uri.toString();
+        await profile_uploadImage(imagePath, username);
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       }
     }
-
   };
-
 
   const ShowPicture = () => {
-
-    navigate("ShowPicture", {file: image})
-
-  }
-
-  const uploadImage = async (uri) => {
-    const formData = new FormData();
-    formData.append('image', {
-      uri,
-      name: 'image.jpg',
-      type: 'image/jpg',
-    });
-  
-    try {
-      // const response = await fetch('YOUR_BACKEND_URL', {
-      //   method: 'POST',
-      //   body: formData,
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-
-      const response = await axios.post(API_BASE_URL + '/api/v1/information/changeAvatarCloud', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + username,
-        },
-      });
-  
-      if (response.status == 200) {
-        const imageURL = await response.json();
-        console.log('URL của ảnh:', imageURL);
-        alert('Đổi thành công')
-        // Tiếp tục xử lý URL của ảnh ở đây
-      } else {
-        console.log('Lỗi khi tải lên ảnh');
-      }
-    } catch (error) {
-      console.log('Lỗi:', error);
-    }
+    navigate("ShowPicture", { file: image });
   };
-  
-  
+
   //function of navigation to/back
-  const { navigate, goBack, push } = props.navigation;
+  const { navigate, goBack } = props.navigation;
 
   return (
     <View style={styles.container}>
-      <UIHeader
-        title={"Thiết lập"}
-      />
+      <UIHeader title={"Hồ sơ"} />
 
       <ScrollView>
         <View /* Profile picture */ style={styles.profileView}>
           <TouchableOpacity onPress={ShowPicture}>
-            <Image
-              source={{ uri: image }}
-              style={styles.profileImage}
-            />
+            <Image source={{ uri: image }} style={styles.profileImage} />
           </TouchableOpacity>
           <Text style={styles.profileUsername}>{fulname}</Text>
-          <TouchableOpacity
-              onPress={selectImage}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={selectImage} style={styles.button}>
+            <Text style={styles.buttonText}>Thay đổi ảnh</Text>
+          </TouchableOpacity>
         </View>
 
-              
-        <GroupOption text={"Thông tin tài khoản"} styles={{marginTop: 20}}/>
+        <RowSectionTitle text={"Thông tin tài khoản"} styles={{ marginTop: 20 }} />
 
-        <EachOptionViewOnly
-          icon={images.phoneIcon}
-          text={phoneNumber}
-        />
-        <EachOptionViewOnly icon={images.emailIcon} text={email} />
+        <RowSectionDisplay icon={icons.phoneIcon} text={phoneNumber} />
+        <RowSectionDisplay icon={icons.emailIcon} text={email} />
 
-        <GroupOption text={"Tùy chỉnh tài khoản"} />
+        <RowSectionTitle text={"Tùy chỉnh tài khoản"} />
 
-        <EachOptionNavigate
-          icon={images.personIcon}
+        <RowSectionNavigate
+          icon={icons.personIcon}
           text={"Đổi thông tin cá nhân"}
           onPress={() => navigate("SettingProfile")}
         />
 
-        <EachOptionNavigate
-          icon={images.keyIcon}
+        <RowSectionNavigate
+          icon={icons.keyIcon}
           text={"Đổi mật khẩu"}
-          onPress={() => navigate('ResetPasswordInSetting')}
+          onPress={() => navigate("ResetPasswordInSetting")}
         />
-        <EachOptionNavigate
-          icon={images.exportIcon}
+        <RowSectionNavigate
+          icon={icons.exportIcon}
           text={"Đăng xuất"}
           onPress={Logout}
         />
@@ -299,13 +173,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
-  },
-  bannerImage: {
-    top:0,
-    left:0,
-    right:0,
-    height: 500,
-    position: 'absolute'
   },
   profileView: {
     height: 200,
@@ -324,31 +191,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: fontSizes.h6,
   },
-  groupOptionsView: {
-    height: 50,
-    marginStart: 12,
-    justifyContent: "center",
-  },
-  groupOptionsText: {
-    fontSize: fontSizes.h7,
-    color: colors.noImportantText,
-    paddingStart: 10,
-  },
-  eachOptionView: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
-  },
-  eachOptionIcon: {
-    width: 20,
-    height: 20,
-    marginStart: 10,
-  },
-  eachOptionText: {
-    fontSize: fontSizes.h6,
-    color: "black",
-    paddingStart: 15,
-  },
   button: {
     backgroundColor: colors.PrimaryBackground,
     padding: 10,
@@ -357,10 +199,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 150,
     height: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: fontSizes.h7,
   },
 });
