@@ -18,6 +18,9 @@ import {
 } from "./UserProfileScreens/user_profile";
 import { user_profile_changePassword } from "./UserProfileScreens/user_changePassword";
 
+//UserProfileScreens
+import { notifications_getAllByUserName } from "./NotificationScreens/notifications_getAll";
+
 export {
   user_login,
 
@@ -33,4 +36,6 @@ export {
   profile_uploadImage,
 
   user_profile_changePassword,
+
+  notifications_getAllByUserName,
 };
