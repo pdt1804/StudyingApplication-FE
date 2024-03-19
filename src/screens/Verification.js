@@ -5,7 +5,7 @@ import { CommonButton, Icon } from "../components";
 import { auth_getAuthOTP, user_createAccountData } from "../api";
 
 const Verification = (props) => {
-  const { userName, api, newUser, otp, kind: actionType } = props.route.params;
+  const { userName, api, newUser, otp, actionType } = props.route.params;
   //userName, api are for ForgetPassword
   //newUser, otp are for Registration
   //actionType: ForgetPassword (0) - Registration (1)

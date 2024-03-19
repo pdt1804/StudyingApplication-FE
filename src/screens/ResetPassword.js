@@ -5,6 +5,7 @@ import { CommonButton, Icon } from "../components";
 import axios from "axios";
 import { API_BASE_URL } from "../../DomainAPI";
 import CryptoJS from "crypto-js";
+import { auth_changePasswordAfterOTP } from "../api";
 
 const ResetPassword = (props) => {
   const hashPassword = (password) => {
@@ -23,14 +24,7 @@ const ResetPassword = (props) => {
   const handleResetPassword = async () => {
     try {
       if (password == rePassword && password.length > 8) {
-        const response = await axios.post(
-          API_BASE_URL +
-            "/api/v1/user/ChangePasswordAfterOTP?userName=" +
-            userName +
-            "&passWord=" +
-            password
-        );
-
+        const response = await auth_changePasswordAfterOTP(userName, password);
         if (response.data == true) {
           alert("Thay đổi thành công");
           navigate("Login");

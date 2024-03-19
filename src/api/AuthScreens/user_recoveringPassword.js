@@ -10,3 +10,10 @@ export const auth_getAuthOTP = async (api) => {
   const getAuthOTP = await axios.get(api);
   return getAuthOTP.data;
 };
+
+export const auth_changePasswordAfterOTP = async (userName, password) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/api/v1/user/ChangePasswordAfterOTP?userName=${userName}&passWord=${password}`
+  );
+  return response;
+};
