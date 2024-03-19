@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
 import CryptoJS from "crypto-js";
 import { auth_changePasswordAfterOTP } from "../api";
 
