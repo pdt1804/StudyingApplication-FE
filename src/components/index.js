@@ -14,6 +14,7 @@ import {
   RowSectionNavigate,
 } from "./RowSection";
 import { TextInputMediumIcon } from "./MyInput";
+import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
 
 export {
   CommonButton,
@@ -24,10 +25,12 @@ export {
   MessengerGroupItems,
   EnterMessageReplyBar,
   EnterMessageCommentBar,
-
+  //
   Icon,
   RowSectionTitle,
   RowSectionDisplay,
   RowSectionNavigate,
   TextInputMediumIcon,
+  SubjectBox,
+  ContentBox,
 };
