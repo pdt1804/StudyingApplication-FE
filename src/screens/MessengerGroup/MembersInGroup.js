@@ -104,10 +104,10 @@ function MembersInGroup(props) {
                 });
               }}
               onPressButtonLeft={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
               onPressButtonRightr={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
             />
           ))}

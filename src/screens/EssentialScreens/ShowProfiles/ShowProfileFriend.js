@@ -144,7 +144,7 @@ const ShowProfileFriend = (props) => {
     if (response.status)
     {
       alert('Xoá bạn thành công')
-      navigate('UITab', {tabName: "Friends"})
+      navigate('MainBottomTab', {tabName: "Friends"})
     }
 
   }

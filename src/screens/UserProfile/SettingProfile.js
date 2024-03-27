@@ -50,7 +50,7 @@ function SettingProfile(props) {
     );
 
     if (responseUpdate.status == 200) {
-      navigate("UITab", { tabName: "Settings" });
+      navigate("MainBottomTab", { tabName: "Settings" });
     } else {
       alert("Error!");
     }

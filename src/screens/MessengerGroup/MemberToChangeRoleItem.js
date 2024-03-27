@@ -31,7 +31,7 @@ function MemberToChangeRoleItems(props) {
     if (response.status == 200)
     {
         alert('Đổi nhóm trưởng và rời khỏi nhóm thành công')
-        navigate("UITab" , {tabName: "GroupChat"})
+        navigate("MainBottomTab" , {tabName: "GroupChat"})
     }
   };
 

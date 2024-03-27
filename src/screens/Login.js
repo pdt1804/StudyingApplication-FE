@@ -27,27 +27,9 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const handleLogin = () => {
     user_login(username, password, () =>
-      push("UITab", { tabName: "UserProfile" })
+      push("MainBottomTab", { tabName: "UserProfile" })
     );
   };
-
-  //????
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // if (await AsyncStorage.getItem('username') != null)
-        // {
-        //   push("UITab", {tabName: "Settings"});
-        // }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  });
 
   return (
     <View style={styles.container}>

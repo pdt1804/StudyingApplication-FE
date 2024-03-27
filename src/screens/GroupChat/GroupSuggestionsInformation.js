@@ -140,7 +140,7 @@ function GroupSuggestionInfo(props) {
             if (response.status == 200)
             {
                 //await AsyncStorage.removeItem('groupID');
-                navigate("UITab" , {tabName: "GroupChat"})
+                navigate("MainBottomTab" , {tabName: "GroupChat"})
             }
         }
       }
@@ -155,7 +155,7 @@ function GroupSuggestionInfo(props) {
         if (response.status == 200)
         {
             //await AsyncStorage.removeItem('groupID');
-            navigate("UITab" , {tabName: "GroupChat"})
+            navigate("MainBottomTab" , {tabName: "GroupChat"})
         }
       }
 

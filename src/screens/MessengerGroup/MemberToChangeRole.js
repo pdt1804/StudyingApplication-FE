@@ -100,10 +100,10 @@ function MemberToChangeRole(props) {
                 });
               }}
               onPressButtonLeft={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
               onPressButtonRightr={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
             />
           ))}

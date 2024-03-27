@@ -36,7 +36,7 @@ import {
   ShowPicture,
   ShowProfile,
 } from '../screens';
-import UITab from './UITab';
+import MainBottomTab from './MainBottomTab';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +55,7 @@ function App(props) {
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
-        <Stack.Screen name="UITab" component={UITab} />
+        <Stack.Screen name="MainBottomTab" component={MainBottomTab} />
         <Stack.Screen name="Messenger" component={Messenger} />
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
