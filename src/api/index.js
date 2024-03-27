@@ -19,23 +19,27 @@ import {
 import { user_profile_changePassword } from "./UserProfileScreens/user_changePassword";
 
 //UserProfileScreens
-import { notifications_getAllByUserName } from "./NotificationScreens/notifications_getAll";
+import {
+  notifications_getAllByUserName,
+  notifications_checkNewByNotifycationID,
+} from "./NotificationScreens/notifications_getAll";
 
 export {
   user_login,
-
+  //
   user_register,
   user_createAccountData,
-
+  //
   auth_getRecoveryCode,
   auth_getAuthOTP,
   auth_changePasswordAfterOTP,
-
+  //
   profile_getUser,
   profile_getAvatar,
   profile_uploadImage,
-
+  //
   user_profile_changePassword,
-
+  //
   notifications_getAllByUserName,
+  notifications_checkNewByNotifycationID,
 };
