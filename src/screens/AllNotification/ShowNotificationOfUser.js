@@ -8,18 +8,21 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { images, icons, colors, fontSizes } from "../../constants";
+import { UIHeader, Icon } from "../../components";
+import {
+  notifications_getNameGroupByNotifycationID,
+  notifications_loadNotifycation,
+  notifications_getBlogById,
+  notifications_getDocumentById,
+} from "../../api";
 
 function SubjectBox(props) {
   const { icon, title, content } = props;
 
   return (
     <View style={styles.SubjectBoxView}>
-      <Image source={icon} style={styles.icon} />
+      <Icon name={icon} size={20} color={colors.inactive} style={styles.icon} />
       <Text style={styles.title}>{title}: </Text>
       <Text style={styles.SubjectBoxContent}>{content}</Text>
     </View>
@@ -32,8 +35,15 @@ function ContentBox(props) {
   return (
     <View style={styles.ContentBoxView}>
       <View style={styles.ContentBoxTopView}>
-        <Image source={icon} style={styles.icon} />
-        <Text style={styles.title} onPress={props.OnPressContent}>{title}: </Text>
+        <Icon
+          name={icon}
+          size={20}
+          color={colors.inactive}
+          style={styles.icon}
+        />
+        <Text style={styles.title} onPress={props.OnPressContent}>
+          {title}:{" "}
+        </Text>
       </View>
       <Text style={styles.ContentBoxContent}>{content}</Text>
     </View>
@@ -44,43 +54,26 @@ const ShowNotificationOfUser = (props) => {
   let { header, content, notifycationType, dateSent, notifycationID, image } =
     props.route.params.notification;
 
-
   const date = new Date(dateSent);
   const hour = date.getHours();
   const minute = date.getMinutes();
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const sendingTime = `${hour}:${minute} ${day}/${month}`;
-  
+
   const [groupName, setGroupName] = useState("");
   const [item, setItem] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          API_BASE_URL +
-            "/api/v1/groupStudying/getNameGroupByNotificationID?notificationID=" +
-            notifycationID, {
-              headers: {
-                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-              },
-            }
+        const getGroupName = await notifications_getNameGroupByNotifycationID(
+          notifycationID
         );
-        setGroupName(response.data);
+        setGroupName(getGroupName);
 
-        const responseItem = await axios.get(
-          API_BASE_URL +
-            "/api/v1/notifycation/loadNotifycation?notifycationID=" +
-            notifycationID, {
-              headers: {
-                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-              },
-            }
-        );
-
-        setItem(responseItem.data)
-
+        const getItem = await notifications_loadNotifycation(notifycationID);
+        setItem(getItem);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -91,106 +84,63 @@ const ShowNotificationOfUser = (props) => {
     fetchData();
   }, [props.userName]);
 
-  //navigation
-  const { navigate, goBack } = props.navigation;
-
   const LoadItem = async () => {
+    console.log(notifycationType);
+    console.log(notifycationType != "user");
+    if (notifycationType == "user") {
+    } else {
+      try {
+        if (item != null) {
+          if (item.documentID == -1) {
+            const response = await notifications_getBlogById(item.blogID);
 
-    console.log(notifycationType)
-    console.log(notifycationType != "user")
-    if (notifycationType == "user")
-    {
+            if (response.status == 200) {
+              navigate("ShowPost", { topic: response.data });
+            } else if (response.status == 500) {
+              alert("Nội dung này có thể đã bị xoá");
+            } else {
+              alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
+            }
+          } else if (item.blogID == -1) {
+            const response = await notifications_getDocumentById(
+              item.documentID
+            );
 
-    }
-    else
-    {
-        try
-        {
-        if (item != null)
-        {
-            if (item.documentID == -1)
-            {
-
-            const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-              },
-            })
-
-            if (response.status == 200)
-            {
-              navigate('ShowPost', {topic: response.data})
+            if (response.status == 200) {
+              navigate("ShowDocument", { notification: response.data });
+            } else if (response.status == 500) {
+              alert("Nội dung này có thể đã bị xoá");
+            } else {
+              alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
             }
-            else if (response.status == 500)
-            {
-                alert('Nội dung này có thể đã bị xoá')
-            }
-            else
-            {
-                alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-            }
-
-            }
-            else if (item.blogID == -1)
-            {
-
-            const response = await axios.get(API_BASE_URL + "/api/v1/document/getDocumentById?documentID=" + item.documentID, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-              },
-            })
-
-            if (response.status == 200)
-            {
-                navigate('ShowDocument', {notification: response.data})
-            }
-            else if (response.status == 500)
-            {
-                alert('Nội dung này có thể đã bị xoá')
-            }
-            else
-            {
-                alert('Đã có lỗi xảy ra, vui lòng xem trong nhóm')
-            }
-            }
-            else
-            {
-
-            }
+          } else {
+          }
+        } else {
+          alert("Bài thảo luận hoặc tài liệu này đã bị xoá");
         }
-        else
-        {
-            alert('Bài thảo luận hoặc tài liệu này đã bị xoá')
-        }
-        }
-        catch (error)
-        {
+      } catch (error) {
         //console.error(error.message)
-        alert('Nội dung này đã bị xoá')
-
-        }
+        alert("Nội dung này đã bị xoá");
+      }
     }
-
-  }
+  };
 
   const ShowPicture = () => {
-
-    if (image == null)
-    {
-      alert("Nội dung này không có ảnh")
+    if (image == null) {
+      alert("Nội dung này không có ảnh");
       return;
     }
-    
-    navigate('ShowPicture', {file: image})
-  }
+    navigate("ShowPicture", { file: image });
+  };
+
+  //navigation
+  const { navigate, goBack } = props.navigation;
 
   return (
     <View style={styles.container}>
       <UIHeader
         title={"Thông báo"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
@@ -202,33 +152,43 @@ const ShowNotificationOfUser = (props) => {
       />
 
       <ScrollView style={{ marginTop: 20 }}>
-        <SubjectBox icon={images.groupIcon} title="Nhóm" content={groupName} />
+        <SubjectBox icon={icons.groupIcon} title="Nhóm" content={groupName} />
 
         <SubjectBox
-          icon={images.clockIcon}
+          icon={icons.clockIcon}
           title="Thời gian gửi"
           content={sendingTime}
         />
 
         <SubjectBox
-          icon={images.menuIcon}
+          icon={icons.menuIcon}
           title="Loại thông báo"
           content={item.notifycationType == "user" ? "Trưởng nhóm" : "Hệ thống"}
         />
 
-        <SubjectBox icon={images.priceTagIcon} title="Tiêu đề" content={item.header} />
+        <SubjectBox
+          icon={icons.priceTagIcon}
+          title="Tiêu đề"
+          content={item.header}
+        />
 
         <ContentBox
-          icon={images.documentBlackIcon}
+          icon={icons.documentBlackIcon}
           title="Nội dung"
           content={item.content}
-          OnPressContent={() => {LoadItem()}}
+          OnPressContent={() => {
+            LoadItem();
+          }}
         />
 
         <TouchableOpacity onPress={ShowPicture}>
-         <Image source={{uri: image != null ? image : null}} style={styles.image} />
+          <Icon
+            name={{ uri: image != null ? image : null }}
+            size={20}
+            color={colors.inactive}
+            style={styles.image}
+          />
         </TouchableOpacity>
-
       </ScrollView>
     </View>
   );

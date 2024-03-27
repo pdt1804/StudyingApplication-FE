@@ -18,11 +18,17 @@ import {
 } from "./UserProfileScreens/user_profile";
 import { user_profile_changePassword } from "./UserProfileScreens/user_changePassword";
 
-//UserProfileScreens
+//NotificationScreens
 import {
   notifications_getAllByUserName,
   notifications_checkNewByNotifycationID,
 } from "./NotificationScreens/notifications_getAll";
+import {
+  notifications_getNameGroupByNotifycationID,
+  notifications_loadNotifycation,
+  notifications_getBlogById,
+  notifications_getDocumentById,
+} from "./NotificationScreens/notifications_loadAndShow";
 
 export {
   user_login,
@@ -42,4 +48,8 @@ export {
   //
   notifications_getAllByUserName,
   notifications_checkNewByNotifycationID,
+  notifications_getNameGroupByNotifycationID,
+  notifications_loadNotifycation,
+  notifications_getBlogById,
+  notifications_getDocumentById,
 };
