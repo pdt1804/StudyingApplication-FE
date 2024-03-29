@@ -8,7 +8,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, Icon } from "../../components";
+import {
+  UIHeader,
+  RowSectionTitle,
+  RowSectionDisplay,
+  RowSectionNavigate,
+} from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -16,12 +21,6 @@ import {
   profile_getAvatar,
   profile_uploadImage,
 } from "../../api";
-import {
-  RowSectionTitle,
-  RowSectionDisplay,
-  RowSectionNavigate,
-} from "../../components";
-
 
 function UserProfile(props) {
   const [username, setUsername] = useState(null);
@@ -140,7 +139,10 @@ function UserProfile(props) {
           </TouchableOpacity>
         </View>
 
-        <RowSectionTitle text={"Thông tin tài khoản"} styles={{ marginTop: 20 }} />
+        <RowSectionTitle
+          text={"Thông tin tài khoản"}
+          styles={{ marginTop: 20 }}
+        />
 
         <RowSectionDisplay icon={icons.phoneIcon} text={phoneNumber} />
         <RowSectionDisplay icon={icons.emailIcon} text={email} />

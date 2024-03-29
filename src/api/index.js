@@ -30,6 +30,9 @@ import {
   notifications_getDocumentById,
 } from "./NotificationScreens/notifications_loadAndShow";
 
+//GroupChatScreens
+import { group_findGroupById } from "./GroupChatScreens/group_findGroupById";
+
 export {
   user_login,
   //
@@ -52,4 +55,6 @@ export {
   notifications_loadNotifycation,
   notifications_getBlogById,
   notifications_getDocumentById,
+  //
+  group_findGroupById,
 };
