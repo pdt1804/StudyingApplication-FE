@@ -32,6 +32,10 @@ import {
 
 //GroupChatScreens
 import { group_findGroupById } from "./GroupChatScreens/group_findGroupById";
+import {
+  group_getAllGroupofUser,
+  group_checkNewMessage,
+} from "./GroupChatScreens/group_tab_yourGroups";
 
 export {
   user_login,
@@ -57,4 +61,6 @@ export {
   notifications_getDocumentById,
   //
   group_findGroupById,
+  group_getAllGroupofUser,
+  group_checkNewMessage,
 };

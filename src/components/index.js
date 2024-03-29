@@ -15,6 +15,7 @@ import {
 } from "./RowSection";
 import { TextInputMediumIcon } from "./MyInput";
 import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
+import { SearchBarAndButton } from "./MySearchBars";
 
 export {
   CommonButton,
@@ -33,4 +34,5 @@ export {
   TextInputMediumIcon,
   SubjectBox,
   ContentBox,
+  SearchBarAndButton,
 };
