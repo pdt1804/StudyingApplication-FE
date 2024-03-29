@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import NotificationItems from "./NotificationItems";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, Icon } from "../../components";
+import { UIHeader, Icon, SearchBarTransparent } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { notifications_getAllByUserName } from "../../api";
 
@@ -52,26 +52,11 @@ function AllNotification(props) {
     <View style={styles.container}>
       <UIHeader title={"Thông báo"} />
 
-      <View /* Search bar */ style={styles.searchBarView}>
-        <TextInput
-          style={styles.searchBarTypingArea}
-          autoCorrect={false}
-          inputMode="search"
-          onChangeText={(text) => {
-            setSearchText(text);
-          }}
-          placeholder="Tìm kiếm..."
-          placeholderTextColor={colors.inactive}
-        />
-        <Icon
-          name={icons.searchIcon}
-          size={20}
-          color={colors.inactive}
-          style={styles.searchBarImage}
-        />
-      </View>
-
-      <View style={styles.blackLine} />
+      <SearchBarTransparent
+        searchBarOnChangeText={(text) => {
+          setSearchText(text);
+        }}
+      />
 
       <ScrollView>
         {notifications
@@ -101,29 +86,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
-  },
-  searchBarView: {
-    height: "7%",
-    paddingHorizontal: 7,
-    flexDirection: "row",
-    paddingTop: 10,
-    backgroundColor: colors.transparentWhite,
-  },
-  searchBarTypingArea: {
-    height: "95%",
-    flex: 1,
-    paddingStart: 45,
-  },
-  searchBarImage: {
-    position: "absolute",
-    top: "45%",
-    left: "4%",
-  },
-  blackLine: {
-    backgroundColor: colors.inactive,
-    height: 1,
-    width: "95%",
-    marginBottom: 10,
-    alignSelf: "center",
   },
 });

@@ -36,6 +36,7 @@ import {
   group_getAllGroupofUser,
   group_checkNewMessage,
 } from "./GroupChatScreens/group_tab_yourGroups";
+import { group_findGroupbyName } from "./GroupChatScreens/group_tab_suggestions";
 
 export {
   user_login,
@@ -63,4 +64,5 @@ export {
   group_findGroupById,
   group_getAllGroupofUser,
   group_checkNewMessage,
+  group_findGroupbyName,
 };
