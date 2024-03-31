@@ -43,6 +43,15 @@ import {
   friend_getAllFriendList,
   friend_checkNewMessage,
 } from "./FriendsListScreens/friend_tab_yourFriends";
+import {
+  friend_findAllFriendByInputName,
+  friend_getAllSentInvitationList,
+  friend_getAllInvitationFriendList,
+  friend_addFriend,
+  friend_undoInvitationFriend,
+  friend_acceptInvitation,
+  friend_refuseInvitation,
+} from "./FriendsListScreens/friend_tab_requestAndSuggestion";
 
 export {
   user_login,
@@ -74,4 +83,11 @@ export {
   //
   friend_getAllFriendList,
   friend_checkNewMessage,
+  friend_findAllFriendByInputName,
+  friend_getAllSentInvitationList,
+  friend_getAllInvitationFriendList,
+  friend_addFriend,
+  friend_undoInvitationFriend,
+  friend_acceptInvitation,
+  friend_refuseInvitation,
 };

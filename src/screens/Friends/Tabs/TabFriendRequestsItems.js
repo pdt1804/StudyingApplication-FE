@@ -1,45 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { friend_acceptInvitation, friend_refuseInvitation } from "../../../api";
 
 function TabFriendRequestsItems(props) {
   let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
-
-  const { onPress, onPressButtonLeft, onPressButtonRight } = props;
-  
-  const [myUsername, setMyUsername] = useState("")
-  const [friendUsername, setFriendUsername] = useState(userName)
-
+  const { onPress } = props;
 
   const handleAddFriend = async () => {
-    
-    setMyUsername(await AsyncStorage.getItem('username'));
-    
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/acceptInvitation", { sentUserName: friendUsername }, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    })
-  
-    {onPressButtonLeft}
+    const response = await friend_acceptInvitation(userName);
   };
 
   const handleCancel = async () => {
-    setMyUsername(await AsyncStorage.getItem('username'));
-    
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/refuseInvitation", { sentUserName: friendUsername }, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    })
-  
-    {onPressButtonRight}
+    const response = await friend_refuseInvitation(userName);
   };
 
   return (
@@ -59,7 +33,9 @@ function TabFriendRequestsItems(props) {
             onPress={handleAddFriend}
             style={[styles.buttons, styles.addFriend]}
           >
-            <Text style={[styles.buttonsText, styles.addFriend]}>Chấp nhận</Text>
+            <Text style={[styles.buttonsText, styles.addFriend]}>
+              Chấp nhận
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCancel} style={styles.buttons}>
             <Text style={styles.buttonsText}>Từ chối</Text>
@@ -81,7 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.inactive,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
@@ -120,13 +96,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addFriend: {
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     color: "white",
     backgroundColor: "blue",
   },
   buttonsText: {
     padding: 7,
-    paddingVertical:7,
+    paddingVertical: 7,
     fontSize: fontSizes.h7,
     fontWeight: "bold",
     color: "black",
