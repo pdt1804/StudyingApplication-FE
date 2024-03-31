@@ -53,6 +53,15 @@ import {
   friend_refuseInvitation,
 } from "./FriendsListScreens/friend_tab_requestAndSuggestion";
 
+//MessengerScreens
+import {
+  messenger_getFriendID,
+  messenger_loadMessageforUser,
+  messenger_getSentUser,
+  messenger_checkSender,
+  messenger_sendMessageForUser,
+} from "./MessengerScreens/messenger_userAndFriend";
+
 export {
   user_login,
   //
@@ -90,4 +99,10 @@ export {
   friend_undoInvitationFriend,
   friend_acceptInvitation,
   friend_refuseInvitation,
+  //
+  messenger_getFriendID,
+  messenger_loadMessageforUser,
+  messenger_getSentUser,
+  messenger_checkSender,
+  messenger_sendMessageForUser,
 };
