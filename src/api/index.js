@@ -38,6 +38,12 @@ import {
 } from "./GroupChatScreens/group_tab_yourGroups";
 import { group_findGroupbyName } from "./GroupChatScreens/group_tab_suggestions";
 
+//FriendsListScreens
+import {
+  friend_getAllFriendList,
+  friend_checkNewMessage,
+} from "./FriendsListScreens/friend_tab_yourFriends";
+
 export {
   user_login,
   //
@@ -65,4 +71,7 @@ export {
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,
+  //
+  friend_getAllFriendList,
+  friend_checkNewMessage,
 };
