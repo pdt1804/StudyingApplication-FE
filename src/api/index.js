@@ -60,6 +60,9 @@ import {
   messenger_getSentUser,
   messenger_checkSender,
   messenger_sendMessageForUser,
+  messenger_loadMessageInGroup,
+  messenger_receiveMessage,
+  messenger_sendMessageForGroup,
 } from "./MessengerScreens/messenger_userAndFriend";
 
 export {
@@ -105,4 +108,7 @@ export {
   messenger_getSentUser,
   messenger_checkSender,
   messenger_sendMessageForUser,
+  messenger_loadMessageInGroup,
+  messenger_receiveMessage,
+  messenger_sendMessageForGroup,
 };

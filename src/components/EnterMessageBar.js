@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {
   Text,
@@ -9,13 +8,18 @@ import {
 } from "react-native";
 import { icons, colors, fontSizes } from "../constants";
 import Icon from "./MyIcon";
-import { messenger_sendMessageForUser } from "../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  messenger_sendMessageForUser,
+  messenger_sendMessageForGroup,
+} from "../api";
 
 const EnterMessageBar = (props) => {
   //use for friend-MessageBar
-  const { myUsername, friendUsername, stompClient, friendID } = props;
+  const { friendUsername, friendID } = props;
+  //use for all
   //actionType: friend (0) - group (1) - comment (2) - reply (3) - chatbot (4)
-  const { actionType } = props;
+  const { stompClient, actionType } = props;
   const [typedText, setTypedText] = useState("");
 
   const handleSendMessage_Friend = async () => {
@@ -23,23 +27,39 @@ const EnterMessageBar = (props) => {
       alert("Hãy nhập tin nhắn");
       return;
     }
-
-    const response = await messenger_sendMessageForUser(friendUsername, typedText);
-
+    const response = await messenger_sendMessageForUser(
+      friendUsername,
+      typedText
+    );
     if (response.status == 200) {
-      setTypedText("");
-      const messagePayload = { groupID: friendID };
       //console.log(friendID);
       //console.log("sending");
+      const messagePayload = { groupID: friendID };
       stompClient.send(
         "/app/sendMessForUser",
         {},
         JSON.stringify(messagePayload)
       );
       //console.log("sent");
-    } else {
-      alert("Có lỗi mạng, vui lòng gửi lại sau");
     }
+    setTypedText("");
+  };
+
+  const handleSendMessage_Group = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập tin nhắn");
+      return;
+    }
+    const response = await messenger_sendMessageForGroup(typedText);
+    if (response.status == 200) {
+      //console.log("sending");
+      const messagePayload = {
+        groupID: parseInt(await AsyncStorage.getItem("groupID")),
+      };
+      stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
+      //console.log("sent");
+    }
+    setTypedText("");
   };
 
   //final handleVerification
@@ -47,7 +67,7 @@ const EnterMessageBar = (props) => {
     if (actionType === 0 || actionType === "friend") {
       handleSendMessage_Friend();
     } else if (actionType === 1 || actionType === "group") {
-      alert('testing')
+      handleSendMessage_Group();
     }
   };
 

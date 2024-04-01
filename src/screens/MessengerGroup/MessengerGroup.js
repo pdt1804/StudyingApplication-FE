@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Image, StyleSheet } from "react-native";
+import { images, icons, colors, fontSizes } from "../../constants";
+import { UIHeader } from "../../components";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { group_findGroupById } from "../../api";
+
 import TabMessenger from "./Tabs/TabMessenger";
 import TabDiscussion from "./Tabs/TabDiscussion";
 import TabTypePost from "./Tabs/TabTypePost";
 import TabNotification from "./Tabs/TabNotification";
 import TabDocument from "./Tabs/TabDocument";
-import { images, colors, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -39,31 +28,30 @@ const ScreenOptions = ({ route }) => ({
     let iconName = null;
     focused
       ? screenName == "TabMessenger"
-        ? (iconName = images.activeChatMessageIcon)
+        ? (iconName = icons.activeChatMessageIcon)
         : screenName == "TabDiscussion"
-        ? (iconName = images.activeBlogSearchIcon)
+        ? (iconName = icons.activeBlogSearchIcon)
         : screenName == "TabTypePost"
-        ? (iconName = images.activeFAQIcon)
+        ? (iconName = icons.activeFAQIcon)
         : screenName == "TabNotification"
-        ? (iconName = images.activeBellAlarm)
-        : (iconName = images.documentBlackIcon)
+        ? (iconName = icons.activeBellAlarm)
+        : (iconName = icons.documentBlackIcon)
       : screenName == "TabMessenger"
-      ? (iconName = images.inactiveChatMessageIcon)
+      ? (iconName = icons.inactiveChatMessageIcon)
       : screenName == "TabDiscussion"
-      ? (iconName = images.inactiveBlogSearchIcon)
+      ? (iconName = icons.inactiveBlogSearchIcon)
       : screenName == "TabTypePost"
-      ? (iconName = images.inactiveFAQIcon)
+      ? (iconName = icons.inactiveFAQIcon)
       : screenName == "TabNotification"
-      ? (iconName = images.inactiveBellAlarm)
-      : (iconName = images.documentIcon)
-      
-      
+      ? (iconName = icons.inactiveBellAlarm)
+      : (iconName = icons.documentIcon);
+
     return (
       <Image
         source={iconName}
         style={{
           right: "25%", //To level both sides evenly after width > 100%.
-          bottom: '15%',
+          bottom: "15%",
           width: "150%",
           height: "125%",
           resizeMode: "stretch",
@@ -75,49 +63,34 @@ const ScreenOptions = ({ route }) => ({
 });
 
 function MessengerGroup(props) {
-  //I forget what's' this
-  //const { imageGroup, nameGroup, groupID } = props.route.params.group;
-
+  const [group, setGroup] = useState("");
   //navigation
   const { navigate, goBack } = props.navigation;
 
-  const [group, setGroup] = useState('');
-
   useEffect(() => {
     const fetchData = async () => {
-      
-      const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/findGroupbyId?groupID=" + await AsyncStorage.getItem('groupID'), {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        },
-      })
+      const groupID = await AsyncStorage.getItem("groupID");
+      const response = await group_findGroupById(groupID);
       setGroup(response.data);
-
     };
 
     fetchData();
   }, [props.userName]);
 
-
   const ShowGroupInfo = async () => {
-
-    navigate('GroupInfo');
-
-  }
+    navigate("GroupInfo");
+  };
 
   const goBackToGroupList = async () => {
-
-    await AsyncStorage.setItem('group', "list");
+    await AsyncStorage.setItem("group", "list");
     goBack();
-
-  }
+  };
 
   return (
     <View style={styles.container}>
       <UIHeader
         title={group.nameGroup}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBackToGroupList();
@@ -131,11 +104,11 @@ function MessengerGroup(props) {
           initialRouteName="TabMessenger"
           screenOptions={ScreenOptions}
         >
-          <Tab.Screen name="TabMessenger" component={TabMessenger}/>
-          <Tab.Screen name="TabDiscussion" component={TabDiscussion}/>
-          <Tab.Screen name="TabTypePost" component={TabTypePost}/>
-          <Tab.Screen name="TabNotification" component={TabNotification}/>
-          <Tab.Screen name="TabDocument" component={TabDocument}/>
+          <Tab.Screen name="TabMessenger" component={TabMessenger} />
+          <Tab.Screen name="TabDiscussion" component={TabDiscussion} />
+          <Tab.Screen name="TabTypePost" component={TabTypePost} />
+          <Tab.Screen name="TabNotification" component={TabNotification} />
+          <Tab.Screen name="TabDocument" component={TabDocument} />
         </Tab.Navigator>
       </View>
     </View>

@@ -67,3 +67,61 @@ export const messenger_sendMessageForUser = async (friendUsername, typedText) =>
   );
   return response;
 };
+
+//-----
+//GROUP CHAT
+
+export const messenger_loadMessageInGroup = async () => {
+  const response = await axios.get(
+    API_BASE_URL +
+      "/api/v1/messagegroup/loadMessageInGroup?groupID=" +
+      (await AsyncStorage.getItem("groupID")),
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response.data;
+};
+
+export const messenger_receiveMessage = async () => {
+  if ((await AsyncStorage.getItem("group")) == "list") {
+    return;
+  } else {
+    const response = await axios.get(
+      API_BASE_URL +
+        "/api/v1/messagegroup/loadMessageInGroup?groupID=" +
+        (await AsyncStorage.getItem("groupID")),
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        },
+      }
+    );
+    return response.data;
+  }
+};
+
+
+//-----------
+
+export const messenger_sendMessageForGroup = async (typedText) => {
+  var form = new FormData();
+  form.append("messContent", typedText);
+  form.append("groupID", await AsyncStorage.getItem("groupID"));
+
+  const response = await axios.post(
+    API_BASE_URL + "/api/v1/messagegroup/sendMessage",
+    form,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
