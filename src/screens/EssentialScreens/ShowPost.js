@@ -13,7 +13,7 @@ import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import { FloatingAction } from "react-native-floating-action";
 
 let likeStatus = false;

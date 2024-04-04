@@ -13,7 +13,7 @@ import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { CommonButton } from "../../components";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import GroupInfo from "./GroupInformation";
 

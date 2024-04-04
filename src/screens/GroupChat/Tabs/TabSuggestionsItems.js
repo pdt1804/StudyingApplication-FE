@@ -3,7 +3,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet, Alert } from "react-na
 import { images, colors, icons, fontSizes } from "../../../constants";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 
 const generateColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215)

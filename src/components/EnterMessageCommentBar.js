@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors } from "../constants";
-import { API_BASE_URL } from "../../DomainAPI";
+import { API_BASE_URL } from "../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {

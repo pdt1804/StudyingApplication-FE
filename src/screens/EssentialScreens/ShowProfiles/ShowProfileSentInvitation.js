@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import { UIHeader, CommonButton, DoubleCommonButton } from "../../../components";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

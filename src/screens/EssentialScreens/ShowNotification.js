@@ -12,7 +12,7 @@ import {
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { FloatingAction } from "react-native-floating-action";
