@@ -9,55 +9,49 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import { SearchBarTransparent } from "../../../components";
 import TabDiscussionItems from "./TabDiscussionItems";
 import axios from "axios";
 import { API_BASE_URL } from "../../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabDiscussion(props) {
-  //list of example = state
   const [topics, setTopics] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [username, setUsername] = useState("");
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
-  const [searchText, setSearchText] = useState("");
-
-  //DropdownComponent --> filter type of post
-  const [valueDropdown, setValueDropdown] = useState(null);
-  const [typeOfPost, setTypeOfPost] = useState(null);
-  const [isFocusDropdown, setIsFocusDropdown] = useState(false);
-
-  const [username, setUsername] = useState("");
-
   useEffect(() => {
     const fetchData = async () => {
-      setUsername(await AsyncStorage.getItem("username").toString());
+      setUsername(AsyncStorage.getItem("username").toString());
 
       const response = await axios.get(
         API_BASE_URL +
           "/api/v1/blog/getAllBlog?groupID=" +
-          (await AsyncStorage.getItem("groupID")), {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-            },
-          }
+          (await AsyncStorage.getItem("groupID")),
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          },
+        }
       );
 
       const responseSubject = await axios.get(
         API_BASE_URL +
           "/api/v1/blog/getAllSubject?groupID=" +
-          (await AsyncStorage.getItem("groupID")), {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-            },
-          }
+          (await AsyncStorage.getItem("groupID")),
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          },
+        }
       );
 
       setTopics(response.data);
-
     };
 
     fetchData(); // Gọi fetchData ngay sau khi component được mount
@@ -71,21 +65,12 @@ function TabDiscussion(props) {
 
   return (
     <View style={styles.container}>
-      <View /* Search bar */ style={styles.searchBarView}>
-        <TextInput
-          style={styles.searchBarTypingArea}
-          autoCorrect={false}
-          inputMode="search"
-          onChangeText={(text) => {
-            setSearchText(text);
-          }}
-          placeholder="Tìm kiếm..."
-          placeholderTextColor={colors.inactive}
-        />
-        <Image source={images.searchIcon} style={styles.searchBarImage} />
-      </View>
 
-      <View style={styles.blackLine} />
+    <SearchBarTransparent
+      searchBarOnChangeText={(text) => {
+        setSearchText(text);
+      }}
+    />
 
       <ScrollView style={styles.listContainer}>
         {topics
@@ -115,31 +100,5 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     margin: 7,
-  },
-  searchBarView: {
-    height: "7%",
-    paddingHorizontal: 7,
-    flexDirection: "row",
-    paddingTop: 10,
-    backgroundColor: colors.transparentWhite,
-  },
-  searchBarTypingArea: {
-    height: "95%",
-    flex: 1,
-    paddingStart: 45,
-  },
-  searchBarImage: {
-    width: 20,
-    height: 20,
-    position: "absolute",
-    top: "45%",
-    left: "6%",
-    tintColor: colors.inactive,
-  },
-  blackLine: {
-    backgroundColor: colors.inactive,
-    height: 1,
-    width: "95%",
-    alignSelf: "center",
   },
 });

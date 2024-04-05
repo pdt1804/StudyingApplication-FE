@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
 
-const Icon = ({ name, size, color, style }) => (
+export default Icon = ({ name, size, color, style }) => (
   <Image
     source={name}
     style={[
@@ -17,4 +17,12 @@ const Icon = ({ name, size, color, style }) => (
   />
 );
 
-export default Icon;
+/** quick use: **
+
+<Icon
+name={icons.---}
+size={---}
+color={colors.---}
+/>
+
+*/

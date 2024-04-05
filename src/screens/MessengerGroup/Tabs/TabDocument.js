@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import TabNotificationItems from "./TabNotificationItems";
+import { SearchBarAndButton } from "../../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../api/DomainAPI";

@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import { SearchBarAndButton } from "../../../components";
 import TabNotificationItems from "./TabNotificationItems";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
