@@ -14,6 +14,17 @@ export default {
   TertiaryContainer: '#C4EED0',
   TertiaryOnContainerAndFixed: '#072711',
 
+  RedBackground: '#6c1414',
+  RedLightBackground: '#d44141',
+  RedObjects: '#FFFFFF',
+  RedContainer: '#eec4c4',
+  RedOnContainerAndFixed: '#270707',
+
+  GrayBackground: '#707070',
+  GrayObjects: '#FFFFFF',
+  GrayContainer: '#eceeed',
+  GrayOnContainerAndFixed: '#2a2b2a',
+
   backgroundWhite: "#fafaff",
   transparentWhite: "rgba(250,250,250,0.8)",
   noImportantText: "rgba(145, 160, 160, 0.75)",

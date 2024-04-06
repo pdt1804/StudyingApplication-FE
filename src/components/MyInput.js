@@ -22,7 +22,7 @@ export const TextInputMediumIcon = ({
     <View>
       <Text>{name}:</Text>
       <TextInput
-        style={styles.textInput}
+        style={styles.textInputMediumIcon}
         secureTextEntry={isPassword == null ? false : isPassword} // * the password
         inputMode={inputMode == null ? "text" : inputMode}
         placeholder={placeholder}
@@ -33,6 +33,27 @@ export const TextInputMediumIcon = ({
   </View>
 );
 
+export const TextInputTransparent = ({
+  inputMode,
+  icon,
+  placeholder,
+  isPassword,
+  onChangeText,
+  style,
+}) => (
+  <View style={styles.container}>
+    <Icon name={icon} size={33} color={colors.PrimaryBackground}/>
+    <TextInput
+      style={styles.textInputTransparent}
+      secureTextEntry={isPassword == null ? false : isPassword} // * the password
+      inputMode={inputMode == null ? "text" : inputMode}
+      placeholder={placeholder}
+      placeholderTextColor={colors.noImportantText}
+      onChangeText={onChangeText}
+    />
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -40,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
   },
-  textInput: {
+  textInputMediumIcon: {
     width: 250,
     height: 55,
     marginTop: 5,
@@ -48,5 +69,18 @@ const styles = StyleSheet.create({
     borderColor: colors.noImportantText,
     borderWidth: 2,
     borderRadius: 20,
+  },
+  textInputTransparent: {
+    flexDirection: "row",
+    flex: 1,
+    height: 40,
+    paddingRight: 10,
+    paddingLeft:5,
+    paddingBottom: 5,
+    borderRadius: 40,
+    alignItems: "center",
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    borderRadius: 5,
   },
 });

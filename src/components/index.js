@@ -13,7 +13,7 @@ import {
   RowSectionDisplay,
   RowSectionNavigate,
 } from "./RowSection";
-import { TextInputMediumIcon } from "./MyInput";
+import { TextInputMediumIcon, TextInputTransparent } from "./MyInput";
 import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
 import { SearchBarAndButton, SearchBarTransparent } from "./MySearchBars";
 
@@ -32,7 +32,9 @@ export {
   RowSectionDisplay,
   RowSectionNavigate,
   TextInputMediumIcon,
+  TextInputTransparent,
   SubjectBox,
   ContentBox,
-  SearchBarAndButton,SearchBarTransparent,
+  SearchBarAndButton,
+  SearchBarTransparent,
 };
