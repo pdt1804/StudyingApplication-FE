@@ -14,11 +14,6 @@ import CryptoJS from "crypto-js";
 
 
 const Login = (props) => {
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
 

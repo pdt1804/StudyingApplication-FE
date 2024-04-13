@@ -6,11 +6,6 @@ import CryptoJS from "crypto-js";
 import { auth_changePasswordAfterOTP } from "../api";
 
 const ResetPassword = (props) => {
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 

@@ -21,11 +21,6 @@ import { RadioButton } from "react-native-paper";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 
 const Registration = (props) => {
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
@@ -75,12 +70,6 @@ const Registration = (props) => {
       setActiveStep(1);
       setNewUser(result.newUser);
       setSystemOTP(result.otp);
-      //--------
-      /* navigate("Verification", {
-        newUser: result.newUser,
-        otp: result.otp,
-        actionType: "Registration",
-      }); */
     }
   };
 
@@ -93,8 +82,6 @@ const Registration = (props) => {
     if (systemOTP == inputOTP) {
       const dataResponse = await user_createAccountData(newUser);
       if (dataResponse == newUser.userName) {
-        //alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
-        //navigate("Login");
         setActiveStep(2);
       } else {
         //unsuccessful
@@ -127,6 +114,8 @@ const Registration = (props) => {
     activeLabelFontSize: 0,
 
     activeStep: activeStep,
+    //activeStep: 2,
+
     topOffset: 10,
     marginBottom: 15,
   };
@@ -154,15 +143,27 @@ const Registration = (props) => {
 
   //style of Step_AdditionalInfo_2
   const Step_AdditionalInfo_2 = {
-    onSubmit: null,
     nextBtnText: "Tiếp theo",
+    previousBtnText: "Quay Lại",
+    nextBtnStyle: styles.nextBtn,
+    nextBtnTextStyle: styles.nextBtnText,
+    previousBtnStyle: styles.previousBtn,
+    previousBtnTextStyle: styles.previousBtnText,
+  };
+
+  //style of Step_AdditionalInfo_3
+  const Step_AdditionalInfo_3 = {
+    label: "Chọn topic (chủ đề) học tập",
+    onSubmit: () => {
+      alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
+      navigate("Login");
+    },
     previousBtnText: "Quay Lại",
     finishBtnText: "Xong",
     nextBtnStyle: styles.nextBtn,
     nextBtnTextStyle: styles.nextBtnText,
     previousBtnStyle: styles.previousBtn,
     previousBtnTextStyle: styles.previousBtnText,
-    removeBtnRow: null,
   };
 
   return (
@@ -173,6 +174,10 @@ const Registration = (props) => {
         <ProgressSteps {...ProgressStepsStyle}>
           <ProgressStep {...Step_BasicInfo}>
             <View style={{ alignItems: "center" }}>
+              <Text style={[styles.stepAdditionalInfoTitle,{fontSize:fontSizes.h3}]}>
+                Đăng ký tài khoản mới
+              </Text>
+              
               <TextInputTransparent
                 inputMode={"text"}
                 icon={icons.personIcon}
@@ -231,6 +236,10 @@ const Registration = (props) => {
 
           <ProgressStep {...Step_OTP}>
             <View style={styles.container_OTP}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Mã xác thực đã được gửi qua email bạn
+              </Text>
+              
               <View style={styles.mainView}>
                 <TextInputMediumIcon
                   name={"Mã xác thực"}
@@ -252,6 +261,7 @@ const Registration = (props) => {
               <Text style={styles.stepAdditionalInfoTitle}>
                 Giới tính của bạn là gì?
               </Text>
+
               <RadioButton.Group
                 onValueChange={(newGender) => setGender(newGender)}
                 value={gender}
@@ -306,10 +316,7 @@ const Registration = (props) => {
             </View>
           </ProgressStep>
 
-          <ProgressStep
-            {...Step_AdditionalInfo_2}
-            label="Chọn topic (chủ đề) học tập"
-          >
+          <ProgressStep {...Step_AdditionalInfo_3}>
             <View style={styles.stepAdditionalInfoView}>
               <Text style={styles.stepAdditionalInfoTitle}>
                 Bạn quan tâm đến những gì?
@@ -399,16 +406,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PrimaryContainer,
   },
   imageUIT: {
-    width: 200,
-    marginTop: "-50%",
+    width: '90%',
+    //marginTop: "-50%",
     resizeMode: "contain",
     position: "absolute",
     alignSelf: "center",
   },
   whiteView: {
-    flex: 7,
+    flex: 1,
     width: "99%",
-    marginTop: "60%",
+    marginTop: "15%",
     paddingHorizontal: "5%",
     borderColor: colors.transparentWhite,
     borderWidth: 2,
@@ -439,7 +446,7 @@ const styles = StyleSheet.create({
   //Step_AdditionalInfo
   stepAdditionalInfoView: { alignItems: "center" },
   stepAdditionalInfoTitle: {
-    alignSelf: "center",
+    textAlign: "center",
     fontSize: fontSizes.h4,
     fontWeight: "bold",
     marginTop: 10,

@@ -6,11 +6,6 @@ import CryptoJS from "crypto-js";
 import { user_profile_changePassword } from "../../api";
 
 const ResetPasswordInSetting = (props) => {
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   const { navigate, goBack, push } = props.navigation;
 
   const [currentPassword, setCurrentPassword] = useState("");
