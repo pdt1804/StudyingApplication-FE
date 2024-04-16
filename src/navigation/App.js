@@ -26,7 +26,6 @@ import {
   MembersInGroup,
   ShowProfileMember,
   MemberToChangeRole,
-  CreateGroup,
   AddMember,
   Comment,
   Reply,
@@ -81,7 +80,6 @@ function App(props) {
         <Stack.Screen name="GroupInformationDetail" component={GroupInformationDetail} />
         <Stack.Screen name="MembersInGroup" component={MembersInGroup} />
         <Stack.Screen name="MemberToChangeRole" component={MemberToChangeRole} />
-        <Stack.Screen name="CreateGroup" component={CreateGroup} />
         <Stack.Screen name="AddMember" component={AddMember} />
 
         <Stack.Screen name="TabDiscussionFiltered" component={TabDiscussionFiltered} />

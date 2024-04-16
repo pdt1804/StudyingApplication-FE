@@ -31,7 +31,7 @@ import {
 } from "./NotificationScreens/notifications_loadAndShow";
 
 //GroupChatScreens
-import { group_findGroupById } from "./GroupChatScreens/group_findGroupById";
+import { group_findGroupById, group_createGroup } from "./GroupChatScreens/group_find_create";
 import {
   group_getAllGroupofUser,
   group_checkNewMessage,
@@ -89,6 +89,7 @@ export {
   notifications_getDocumentById,
   //
   group_findGroupById,
+  group_createGroup,
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,

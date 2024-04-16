@@ -21,4 +21,5 @@ export default {
 
   blankImageLoading: require(BLANK_IMG_BASE_URL + 'blank-image-loading.jpg'),
   blankAvatarForRegistration: "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg",
+  blankAvatarForNewGroup: "https://www.iconbunny.com/icons/media/catalog/product/1/5/1563.8-team-ii-icon-iconbunny.jpg",
 };

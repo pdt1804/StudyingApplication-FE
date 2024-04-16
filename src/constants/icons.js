@@ -26,7 +26,6 @@ export default {
   pencilIcon: require(ICON_BASE_URL + 'Pencil.png'),
   backIcon: require(ICON_BASE_URL + 'Back.png'),
   checkMarkIcon: require(ICON_BASE_URL + 'CheckMark.png'),
-  cancelIcon: require(ICON_BASE_URL + 'Cancel.png'),
   personCircleIcon: require(ICON_BASE_URL + 'PersonCircle.png'),
   emailCheckMarkIcon: require(ICON_BASE_URL + 'EmailCheckMark.png'),
   typePasswordIcon: require(ICON_BASE_URL + 'TypePassword.png'),
@@ -52,4 +51,10 @@ export default {
   inactiveLikeIcon: require(ICON_BASE_URL + 'InactiveLike.png'),
   activeFAQIcon: require(ICON_BASE_URL + 'ActiveFAQ.png'),
   inactiveFAQIcon: require(ICON_BASE_URL + 'InactiveFAQ.png'),
+
+  
+  cancelCircleIcon: require(ICON_BASE_URL + 'CancelCircle.png'),
+  cancelBlankIcon: require(ICON_BASE_URL + 'CancelBlank.png'),
+  cancelBoxClearIcon: require(ICON_BASE_URL + 'CancelBoxClear.png'),
+  cancelBoxBlackIcon: require(ICON_BASE_URL + 'CancelBoxBlack.png'),
 };

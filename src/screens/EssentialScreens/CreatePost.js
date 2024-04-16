@@ -163,7 +163,7 @@ const CreatePost = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Tạo thảo luận"}
-        leftIconName={blankContent ? images.backIcon : images.cancelIcon}
+        leftIconName={blankContent ? images.backIcon : images.cancelCircleIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           blankContent ? goBack() : setContentText("");
