@@ -38,6 +38,7 @@ import {
   group_extractBearerToken,
   group_createNewSubject,
   group_getNumberOfBlogBySubject,
+  group_getAllNotificationByGroupId,
 } from "./GroupChatScreens/group_find_create";
 import {
   group_getAllGroupofUser,
@@ -101,6 +102,7 @@ export {
   group_extractBearerToken,
   group_createNewSubject,
   group_getNumberOfBlogBySubject,
+  group_getAllNotificationByGroupId,
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,

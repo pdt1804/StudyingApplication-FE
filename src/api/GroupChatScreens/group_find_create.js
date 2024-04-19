@@ -105,3 +105,19 @@ export const group_getNumberOfBlogBySubject = async (subjectID) => {
   );
   return response;
 };
+
+
+// ----------------------------------
+// ------- tab notification ---------
+// ----------------------------------
+
+export const group_getAllNotificationByGroupId = async () => {
+    const response = await axios.get(API_BASE_URL + "/api/v1/notifycation/getAllNotifycationbyGroupID?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+    });
+
+    return response;
+}

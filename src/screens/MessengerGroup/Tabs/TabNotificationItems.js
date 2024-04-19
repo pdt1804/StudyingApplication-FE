@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
+import React from "react";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import { Icon } from "../../../components";
 
 function TabNotificationItems(props) {
-  let { header, content, dateSent } = props.notification;
-
-  const date = new Date(dateSent)
-
+  const { header, content, dateSent } = props.notification;
   const { onPress } = props;
+
+  const date = new Date(dateSent);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image style={styles.img} source={images.personCircleIcon} />
+      <Icon
+        name={icons.personCircleIcon}
+        size={33}
+        color={colors.PrimaryBackground}
+        style={styles.icon}
+      />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
           {header}
@@ -28,7 +25,10 @@ function TabNotificationItems(props) {
           {content}
         </Text>
       </View>
-      <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
+      <Text style={styles.timeText}>
+        {date.getHours()}:{date.getMinutes()} {date.getDate()}/
+        {date.getMonth() + 1}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -40,13 +40,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     flexDirection: "row",
   },
-  img: {
-    width: 33,
-    height: 33,
-    resizeMode: "stretch",
-    marginTop: 11,
-    marginHorizontal: 10,
-    tintColor: colors.active,
+  icon: {
+    marginTop: 6,
   },
   textView: {
     flex: 1,
