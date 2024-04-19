@@ -39,6 +39,8 @@ import {
   group_createNewSubject,
   group_getNumberOfBlogBySubject,
   group_getAllNotificationByGroupId,
+  group_getAllDocumentOfGroup,
+  group_addDocument,
 } from "./GroupChatScreens/group_find_create";
 import {
   group_getAllGroupofUser,
@@ -103,6 +105,8 @@ export {
   group_createNewSubject,
   group_getNumberOfBlogBySubject,
   group_getAllNotificationByGroupId,
+  group_getAllDocumentOfGroup,
+  group_addDocument,
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,
