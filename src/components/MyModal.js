@@ -5,6 +5,14 @@ import Icon from "./MyIcon";
 
 // PHẢI CÓ dòng này khi dùng: 
 //    const [modalVisible, setModalVisible] = useState(false);
+/*
+<WhiteSlideBottomUp
+  title={"---"}
+  renderContent={renderContent---}
+  modalVisible={modalVisible}
+  setModalVisible={setModalVisible}
+/>
+*/
 export function WhiteSlideBottomUp({ modalVisible, setModalVisible, title, renderContent }) {
   return (
     <>

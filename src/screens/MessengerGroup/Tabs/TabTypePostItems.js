@@ -1,55 +1,38 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
-import axios from "axios";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../api/DomainAPI";
+import { Icon } from "../../../components";
+import { group_getNumberOfBlogBySubject } from "../../../api";
 
 function TabTypePostItems(props) {
-  let { nameSubject, subjectID } = props.type;
+  const { nameSubject, subjectID } = props.type;
+  const { onPress } = props;
 
-  const [numberOfBlogBySubject, setNumberOfBlogBySubject] = useState('')
-
+  const [numberOfBlogBySubject, setNumberOfBlogBySubject] = useState("");
   useEffect(() => {
     const fetchData = async () => {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" + subjectID + "&groupID=" + await AsyncStorage.getItem('groupID'), {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
-              
-        setNumberOfBlogBySubject(response.data)
+      const response = await group_getNumberOfBlogBySubject(subjectID);
+      setNumberOfBlogBySubject(response.data);
     };
-
-    fetchData(); // Gọi fetchData ngay sau khi component được mount
-
-    // Sử dụng setInterval để gọi lại fetchData mỗi giây
-       const intervalId = setInterval(fetchData, 15000);
-
-      // // Hủy interval khi component bị unmounted
-       return () => clearInterval(intervalId);
-    }, [props.userName, ])
-
-  const { onPress } = props;
+    fetchData();
+    const intervalId = setInterval(fetchData, 15000);
+    return () => clearInterval(intervalId);
+  }, [props.userName]);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.topView}>
-      <Image source={images.activeChatMessageIcon} style={styles.icon} />
+        <Icon
+          name={icons.activeChatMessageIcon}
+          size={30}
+          color={colors.PrimaryBackground}
+          style={styles.icon}
+        />
         <Text style={styles.text}>{nameSubject}</Text>
       </View>
-      <Text style={styles.content} numberOfLines={5} >Số bài đăng: {numberOfBlogBySubject}</Text>
+      <Text style={styles.content} numberOfLines={5}>
+        Số bài đăng: {numberOfBlogBySubject}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -60,8 +43,8 @@ const styles = StyleSheet.create({
     height: 60,
     margin: 10,
     paddingStart: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 10,
     borderColor: "black",
@@ -69,14 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ShadowedItems,
   },
   topView: {
-    flexDirection: 'row',
-  },
-  icon: {
-    width: 30,
-    height: 30,
-    margin: 5,
-    resizeMode: "stretch",
-    tintColor: colors.postIcon,
+    flexDirection: "row",
   },
   text: {
     marginTop: 5,
@@ -89,5 +65,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: colors.active,
     fontSize: fontSizes.h7,
-  }
+  },
 });

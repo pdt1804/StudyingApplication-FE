@@ -31,7 +31,14 @@ import {
 } from "./NotificationScreens/notifications_loadAndShow";
 
 //GroupChatScreens
-import { group_findGroupById, group_createGroup } from "./GroupChatScreens/group_find_create";
+import {
+  group_findGroupById,
+  group_createGroup,
+  group_getAllSubject,
+  group_extractBearerToken,
+  group_createNewSubject,
+  group_getNumberOfBlogBySubject,
+} from "./GroupChatScreens/group_find_create";
 import {
   group_getAllGroupofUser,
   group_checkNewMessage,
@@ -90,6 +97,10 @@ export {
   //
   group_findGroupById,
   group_createGroup,
+  group_getAllSubject,
+  group_extractBearerToken,
+  group_createNewSubject,
+  group_getNumberOfBlogBySubject,
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,
