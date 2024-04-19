@@ -1,21 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import { SearchBarTransparent } from "../../../components";
 import TabDiscussionItems from "./TabDiscussionItems";
-import axios from "axios";
-import { API_BASE_URL } from "../../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { group_getAllBlog } from "../../../api";
 
-function TabDiscussion(props) {
+export default function TabDiscussion(props) {
   const [topics, setTopics] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [username, setUsername] = useState("");
@@ -27,50 +18,22 @@ function TabDiscussion(props) {
     const fetchData = async () => {
       setUsername(AsyncStorage.getItem("username").toString());
 
-      const response = await axios.get(
-        API_BASE_URL +
-          "/api/v1/blog/getAllBlog?groupID=" +
-          (await AsyncStorage.getItem("groupID")),
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
-          },
-        }
-      );
-
-      const responseSubject = await axios.get(
-        API_BASE_URL +
-          "/api/v1/blog/getAllSubject?groupID=" +
-          (await AsyncStorage.getItem("groupID")),
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
-          },
-        }
-      );
-
-      setTopics(response.data);
+      const responseBlog = await group_getAllBlog();
+      setTopics(responseBlog.data);
     };
 
-    fetchData(); // Gọi fetchData ngay sau khi component được mount
-
-    // Sử dụng setInterval để gọi lại fetchData mỗi giây
+    fetchData();
     const intervalId = setInterval(fetchData, 3000);
-
-    // // Hủy interval khi component bị unmounted
     return () => clearInterval(intervalId);
   }, [props.userName, username]);
 
   return (
     <View style={styles.container}>
-
-    <SearchBarTransparent
-      searchBarOnChangeText={(text) => {
-        setSearchText(text);
-      }}
-    />
+      <SearchBarTransparent
+        searchBarOnChangeText={(text) => {
+          setSearchText(text);
+        }}
+      />
 
       <ScrollView style={styles.listContainer}>
         {topics
@@ -90,7 +53,6 @@ function TabDiscussion(props) {
     </View>
   );
 }
-export default TabDiscussion;
 
 const styles = StyleSheet.create({
   container: {

@@ -118,7 +118,6 @@ export const group_getAllNotificationByGroupId = async () => {
             'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
         },
     });
-
     return response;
 }
 
@@ -150,6 +149,24 @@ export const group_addDocument = async (fileResult) => {
             'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
         },
     });
+    return response;
+}
 
+
+// ---------------------------------------
+// ------- tab discussion (blog) ---------
+// ---------------------------------------
+
+export const group_getAllBlog = async () => {
+    const response = await axios.get(
+        API_BASE_URL +
+          "/api/v1/blog/getAllBlog?groupID=" +
+          (await AsyncStorage.getItem("groupID")), {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+        }
+    );
     return response;
 }

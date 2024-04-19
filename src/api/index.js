@@ -41,6 +41,7 @@ import {
   group_getAllNotificationByGroupId,
   group_getAllDocumentOfGroup,
   group_addDocument,
+  group_getAllBlog,
 } from "./GroupChatScreens/group_find_create";
 import {
   group_getAllGroupofUser,
@@ -107,6 +108,7 @@ export {
   group_getAllNotificationByGroupId,
   group_getAllDocumentOfGroup,
   group_addDocument,
+  group_getAllBlog,
   group_getAllGroupofUser,
   group_checkNewMessage,
   group_findGroupbyName,
