@@ -34,15 +34,19 @@ import {
 import {
   group_findGroupById,
   group_createGroup,
-  group_getAllSubject,
   group_extractBearerToken,
+} from "./GroupChatScreens/group_general_management";
+import {
+  group_getAllSubject,
   group_createNewSubject,
   group_getNumberOfBlogBySubject,
-  group_getAllNotificationByGroupId,
+} from "./GroupChatScreens/group_subTab_subject";
+import { group_getAllNotificationByGroupId } from "./GroupChatScreens/group_subTab_notification";
+import {
   group_getAllDocumentOfGroup,
   group_addDocument,
-  group_getAllBlog,
-} from "./GroupChatScreens/group_find_create";
+} from "./GroupChatScreens/group_subTab_document";
+import { group_getAllBlog } from "./GroupChatScreens/group_subTab_discussion_blog";
 import {
   group_getAllGroupofUser,
   group_checkNewMessage,
