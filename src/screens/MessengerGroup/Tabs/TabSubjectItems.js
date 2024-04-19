@@ -4,7 +4,7 @@ import { images, colors, icons, fontSizes } from "../../../constants";
 import { Icon } from "../../../components";
 import { group_getNumberOfBlogBySubject } from "../../../api";
 
-function TabTypePostItems(props) {
+export default function TabSubjectItems(props) {
   const { nameSubject, subjectID } = props.type;
   const { onPress } = props;
 
@@ -36,7 +36,6 @@ function TabTypePostItems(props) {
     </TouchableOpacity>
   );
 }
-export default TabTypePostItems;
 
 const styles = StyleSheet.create({
   container: {

@@ -88,7 +88,7 @@ export const group_createNewSubject = async (text) => {
   return response;
 };
 
-// TabTypePostItems
+// TabSubjectItems
 export const group_getNumberOfBlogBySubject = async (subjectID) => {
   const response = await axios.get(
     API_BASE_URL +

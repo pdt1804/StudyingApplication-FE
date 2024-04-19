@@ -8,7 +8,7 @@ import { group_findGroupById } from "../../api";
 
 import TabMessenger from "./Tabs/TabMessenger";
 import TabDiscussion from "./Tabs/TabDiscussion";
-import TabTypePost from "./Tabs/TabTypePost";
+import TabSubject from "./Tabs/TabSubject";
 import TabNotification from "./Tabs/TabNotification";
 import TabDocument from "./Tabs/TabDocument";
 
@@ -31,7 +31,7 @@ const ScreenOptions = ({ route }) => ({
         ? (iconName = icons.activeChatMessageIcon)
         : screenName == "TabDiscussion"
         ? (iconName = icons.activeBlogSearchIcon)
-        : screenName == "TabTypePost"
+        : screenName == "TabSubject"
         ? (iconName = icons.activeFAQIcon)
         : screenName == "TabNotification"
         ? (iconName = icons.activeBellAlarm)
@@ -40,7 +40,7 @@ const ScreenOptions = ({ route }) => ({
       ? (iconName = icons.inactiveChatMessageIcon)
       : screenName == "TabDiscussion"
       ? (iconName = icons.inactiveBlogSearchIcon)
-      : screenName == "TabTypePost"
+      : screenName == "TabSubject"
       ? (iconName = icons.inactiveFAQIcon)
       : screenName == "TabNotification"
       ? (iconName = icons.inactiveBellAlarm)
@@ -106,7 +106,7 @@ function MessengerGroup(props) {
         >
           <Tab.Screen name="TabMessenger" component={TabMessenger} />
           <Tab.Screen name="TabDiscussion" component={TabDiscussion} />
-          <Tab.Screen name="TabTypePost" component={TabTypePost} />
+          <Tab.Screen name="TabSubject" component={TabSubject} />
           <Tab.Screen name="TabNotification" component={TabNotification} />
           <Tab.Screen name="TabDocument" component={TabDocument} />
         </Tab.Navigator>

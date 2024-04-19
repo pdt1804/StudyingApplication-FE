@@ -16,7 +16,7 @@ import {
   TextInputMediumIcon,
   CommonButton,
 } from "../../../components";
-import TabTypePostItems from "./TabTypePostItems";
+import TabSubjectItems from "./TabSubjectItems";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   group_findGroupById,
@@ -25,7 +25,7 @@ import {
   group_createNewSubject,
 } from "../../../api";
 
-function TabTypePost(props) {
+export default function TabSubject(props) {
   //navigation
   const { navigate, goBack } = props.navigation;
 
@@ -120,7 +120,7 @@ function TabTypePost(props) {
               .includes(searchText.toLowerCase())
           )
           .map((eachType) => (
-            <TabTypePostItems
+            <TabSubjectItems
               type={eachType}
               key={eachType.subjectID}
               onPress={() => {
@@ -132,7 +132,6 @@ function TabTypePost(props) {
     </View>
   );
 }
-export default TabTypePost;
 
 const styles = StyleSheet.create({
   container: {

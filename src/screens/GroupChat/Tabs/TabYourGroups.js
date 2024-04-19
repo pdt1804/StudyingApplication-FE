@@ -59,7 +59,7 @@ export default function TabYourGroups(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const renderContentCreateGroup = () => {
     return (
-      <View style={styles.mainView}>
+      <View>
         <TextInputMediumIcon
           inputMode={"text"}
           name={"Tên nhóm"}
