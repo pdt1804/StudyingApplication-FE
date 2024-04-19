@@ -16,7 +16,7 @@ import {
 } from "../../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 
 function GroupOption(props) {
   const { text } = props;

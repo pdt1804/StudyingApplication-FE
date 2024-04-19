@@ -12,7 +12,7 @@ import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MemberItems from "./MemberItems";
 
@@ -104,10 +104,10 @@ function MembersInGroup(props) {
                 });
               }}
               onPressButtonLeft={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
               onPressButtonRightr={()=> {
-                push('UITab')
+                push('MainBottomTab')
               }}
             />
           ))}

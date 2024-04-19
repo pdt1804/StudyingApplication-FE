@@ -9,10 +9,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import TabNotificationItems from "./TabNotificationItems";
+import { SearchBarAndButton } from "../../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 import TabDocumentItem from "./TabDocumentItem";
 import * as DocumentPicker from 'expo-document-picker';
 //import DocumentViewer from 'expo-document-viewer';

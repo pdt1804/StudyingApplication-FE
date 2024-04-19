@@ -1,40 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { friend_addFriend } from "../../../api";
 
 function TabSuggestionsItems(props) {
   let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
-
-  if (image == null)
-  {
-    image = "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg";
-  }
-
   const { onPress } = props;
-  
-  const [myUsername, setMyUsername] = useState("")
-  const [buttonName, setButtonName] = useState("Thêm bạn bè")
 
-  const [friendUsername, setFriendUsername] = useState(userName)
-
-
-  const handleAddFriend = async () => {
-
-    if (buttonName == "Thêm bạn bè")
-    {
-      const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend", { receivedUserName: userName } ,{
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        },
-      })
-      setButtonName("Đã gửi lời mời kết bạn")
-    }
+  if (image == null) {
+    image = images.blankAvatarForRegistration;
   }
+
+  const [buttonName, setButtonName] = useState("Thêm bạn bè");
+  const handleAddFriend = async () => {
+    if (buttonName == "Thêm bạn bè") {
+      const response = await friend_addFriend(userName);
+      setButtonName("Đã gửi lời mời kết bạn");
+    }
+  };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -69,7 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.inactive,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
@@ -98,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttons: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: 20,
     marginVertical: 5,
 
@@ -108,12 +92,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  addFriend: {
-  },
   buttonsText: {
     padding: 7,
-    paddingVertical:7,
-    paddingHorizontal:10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     color: "white",
     fontSize: fontSizes.h7,
     fontWeight: "bold",

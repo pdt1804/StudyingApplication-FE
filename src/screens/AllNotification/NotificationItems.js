@@ -3,63 +3,64 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  Image,
   TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
   StyleSheet,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../constants";
-import { API_BASE_URL } from "../../../DomainAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { images, icons, colors, fontSizes } from "../../constants";
+import { Icon } from "../../components";
+import { notifications_checkNewByNotifycationID } from "../../api";
 
 function NotificationItems(props) {
-  const { header, notifycationType, content, dateSent, notifycationID } = props.group;
+  const { header, notifycationType, content, dateSent, notifycationID } =
+    props.group;
   const dateSentNotification = new Date(dateSent);
   const { onPress } = props;
 
   const [isNewNotification, setIsNewNotification] = useState(false);
-
   useEffect(() => {
-    const checkNewNotification = async () => {
-
-      var form = new FormData();
-      form.append("notifycationID", notifycationID)
-
-      const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/checkNewNotifycation", form, {
-        headers: {
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem("username"),
-        },
-      });
-      
-      setIsNewNotification(response.data === true);
+    const fetchNewNotification = async () => {
+      const isNew = await notifications_checkNewByNotifycationID(
+        notifycationID
+      );
+      setIsNewNotification(isNew);
     };
 
-    checkNewNotification();
-
+    fetchNewNotification();
   }, [notifycationID]);
 
   const handlePress = () => {
-    
-    setIsNewNotification(false)
+    setIsNewNotification(false);
     onPress();
-
-  }
+  };
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <Image
+      <Icon
+        name={
+          notifycationType === "admin"
+            ? icons.globeIcon
+            : icons.personCircleIcon
+        }
+        size={33}
+        color={colors.active}
         style={styles.img}
-        source={notifycationType === 'admin' ? images.globeIcon : images.personCircleIcon}
       />
       <View style={styles.textView}>
-        <Text style={styles.titleText} numberOfLines={1}>{header}</Text>
-        <Text style={isNewNotification ? styles.activeContentText : styles.contentText} numberOfLines={2}>{content}</Text>
+        <Text style={styles.titleText} numberOfLines={1}>
+          {header}
+        </Text>
+        <Text
+          style={
+            isNewNotification ? styles.activeContentText : styles.contentText
+          }
+          numberOfLines={2}
+        >
+          {content}
+        </Text>
       </View>
       <Text style={isNewNotification ? styles.activeTimeText : styles.timeText}>
-        {dateSentNotification.getHours()}:{dateSentNotification.getMinutes()} {dateSentNotification.getDate()}/{dateSentNotification.getMonth() + 1}
+        {dateSentNotification.getHours()}:{dateSentNotification.getMinutes()}{" "}
+        {dateSentNotification.getDate()}/{dateSentNotification.getMonth() + 1}
       </Text>
     </TouchableOpacity>
   );
@@ -74,12 +75,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   img: {
-    width: 33,
-    height: 33,
     resizeMode: "stretch",
     marginTop: 11,
     marginHorizontal: 10,
-    tintColor: colors.active,
   },
   textView: {
     flex: 1,

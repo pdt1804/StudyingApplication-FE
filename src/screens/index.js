@@ -4,9 +4,9 @@ import ForgetPassword from "./ForgetPassword";
 import Verification from "./Verification";
 import ResetPassword from "./ResetPassword";
 
-import Settings from "./SettingProfile/Settings";
-import SettingProfile from "./SettingProfile/SettingProfile";
-import ResetPasswordInSetting from "./SettingProfile/ResetPasswordInSetting";
+import UserProfile from "./UserProfile/UserProfile";
+import SettingProfile from "./UserProfile/SettingProfile";
+import ResetPasswordInSetting from "./UserProfile/ResetPasswordInSetting";
 
 import GroupChat from "./GroupChat/GroupChat";
 import MessengerGroup from "./MessengerGroup/MessengerGroup";
@@ -25,7 +25,6 @@ import EditPost from "./EssentialScreens/EditPost";
 import ShowPost from "./EssentialScreens/ShowPost";
 import ShowNotification from "./EssentialScreens/ShowNotification";
 import ShowNotificationOfUser from "./AllNotification/ShowNotificationOfUser";
-import VerificationToRegistration from "./VertificationToRegistartion";
 
 import MemberToChangeRole from "./MessengerGroup/MemberToChangeRole";
 import ShowDocument from "./EssentialScreens/ShowDocument";
@@ -37,7 +36,6 @@ import GroupInfo from "./MessengerGroup/GroupInformation";
 import GroupInformationDetail from "./MessengerGroup/GroupInformationDetail";
 import ShowProfileMember from "./EssentialScreens/ShowProfiles/ShowProfileMember";
 import MembersInGroup from "./MessengerGroup/MembersInGroup";
-import CreateGroup from "./MessengerGroup/CreateGroup";
 import AddMember from "./MessengerGroup/AddMember";
  
 import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
@@ -54,7 +52,7 @@ export {
   ForgetPassword,
   Verification,
   ResetPassword,
-  Settings,
+  UserProfile,
   SettingProfile,
   GroupChat,
   Friends,
@@ -77,14 +75,12 @@ export {
   GroupInformationDetail,
   MembersInGroup,
   MemberToChangeRole,
-  CreateGroup,
   AddMember,
   Comment,
   Reply,
   ShowNotificationOfUser,
   EditPost,
   MessageBot,
-  VerificationToRegistration,
   GroupSuggestionInfo,
-  ShowPicture
+  ShowPicture,
 };

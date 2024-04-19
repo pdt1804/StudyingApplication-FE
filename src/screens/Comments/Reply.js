@@ -12,7 +12,7 @@ import ReplyItems from "./ReplyItems";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageReplyBar } from "../../components";
 import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowProfile from "../EssentialScreens/ShowProfiles/ShowProfile";
 

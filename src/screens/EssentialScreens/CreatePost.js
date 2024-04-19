@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from 'expo-image-picker';
@@ -163,7 +163,7 @@ const CreatePost = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Tạo thảo luận"}
-        leftIconName={blankContent ? images.backIcon : images.cancelIcon}
+        leftIconName={blankContent ? images.backIcon : images.cancelCircleIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           blankContent ? goBack() : setContentText("");

@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text, View, Image, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import Icon from "./MyIcon";
 
 function UIHeader(props) {
   const {
@@ -27,8 +28,10 @@ function UIHeader(props) {
             style={[styles.iconClickable, iconStyle]}
             onPress={onPressLeftIcon}
           >
-            <Image
-              source={leftIconName}
+            <Icon
+              name={leftIconName}
+              size={30}
+              color={colors.PrimaryObjects}
               style={[styles.iconDisplayedLeft, iconStyle, iconLeftStyle]}
             />
           </TouchableOpacity>
@@ -49,8 +52,10 @@ function UIHeader(props) {
             style={styles.iconClickable}
             onPress={onPressRightIcon}
           >
-            <Image
-              source={rightIconName}
+            <Icon
+              name={rightIconName}
+              size={30}
+              color={colors.PrimaryObjects}
               style={[styles.iconDisplayedRight, iconStyle, iconRightStyle]}
             />
           </TouchableOpacity>
@@ -81,21 +86,14 @@ const styles = StyleSheet.create({
   iconBlank: {
     width: 40,
     height: 40,
-    //backgroundColor: 'pink'
   },
   iconDisplayedLeft: {
     top: 10,
-    width: 30,
-    height: 30,
     marginStart: 10,
-    tintColor: colors.PrimaryObjects,
   },
   iconDisplayedRight: {
     top: 10,
-    width: 30,
-    height: 30,
     marginEnd: 10,
-    tintColor: colors.PrimaryObjects,
   },
   textDisplayed: {
     top: 10,

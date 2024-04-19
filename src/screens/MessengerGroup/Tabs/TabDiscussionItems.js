@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 
 function TabDiscussionItems(props) {
   let { blogID, content, dateCreated, comments, likes } = props.topic;

@@ -6,145 +6,151 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Modal,
   ScrollView,
   StyleSheet,
 } from "react-native";
 import TabYourGroupsItems from "./TabYourGroupsItems";
-import { images, colors, fontSizes } from "../../../constants";
+import {
+  Icon,
+  SearchBarAndButton,
+  CommonButton,
+  TextInputMediumIcon,
+} from "../../../components";
+import { images, colors, icons, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
-import axios from "axios";
-import SockJS from 'sockjs-client';
-import { over } from "stompjs";
+import { group_getAllGroupofUser, group_createGroup } from "../../../api";
 
-function TabYourGroups(props) {
-  //list of group example = state
+export default function TabYourGroups(props) {
   const [groups, setGroups] = useState([]);
-
-  //use for search bar (textInput)
   const [searchText, setSearchText] = useState("");
 
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  const [username, setUsername] = useState("")
-
-  const [myUsername, setMyUsername] = useState("")
-
-  
-  // let socket = new SockJS(API_BASE_URL + "/ws")
-  // let stompClient = over(socket)
-  // stompClient.connect({}, onConnected, () => console.log("error"))
-
-  const [socket, setSocket] = useState(new SockJS(API_BASE_URL + "/ws"))
-  //const [stompClient, setStompClient] = useState(over(socket));
-  
-  let stompClient = over(socket);
+  //Có thấy để "stompClient" ở đây nhưng ko thấy sử dụng
+  //nên xóa rồi nha
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
-
+        const response = await group_getAllGroupofUser();
         setGroups(response.data);
-
-        //stompClient.connect({} , onConnected, onError)
-
-
-        //console.log(response.data);
-                
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
         setLoading(false);
       }
     };
 
     fetchData();
-
     const intervalId = setInterval(fetchData, 1000);
-
     // // Hủy interval khi component bị unmounted
     return () => clearInterval(intervalId);
-
   }, [props.userName]);
 
-  const onConnected = () =>
-  {
-
-  }
-
-  const onError = async () =>
-  {
-    alert('Error')
-  }
-
-
-
-  const onReceived = async (message) =>
-  {
-    alert("reach")
-    const response = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllGroupofUser", {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    });
-
-    setGroups(response.data);  
-  }
-
-
   const SelectedGroup = async (eachGroup) => {
-
     try {
-          
-      await AsyncStorage.removeItem("groupID")
+      await AsyncStorage.removeItem("groupID");
       await AsyncStorage.setItem("groupID", eachGroup.groupID.toString());
-
-      await AsyncStorage.setItem('group', "chat");
-
+      await AsyncStorage.setItem("group", "chat");
       navigate("MessengerGroup", { group: eachGroup });
-
     } catch (error) {
-      console.error('Error fetching data:', error);
-      setError('Error fetching data');
+      console.error("Error fetching data:", error);
+      setError("Error fetching data");
       setLoading(false);
     }
-  
-  }
+  };
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleCreateGroup = async () => {
+    if (newGroupName.length > 8) {
+      const response = await group_createGroup(newGroupName, newPassword);
+      if (response.status == 200) {
+        alert("Tạo nhóm thành công, vui lòng vào nhóm mới để thêm thành viên");
+        setModalVisible(false)
+      }
+    } else {
+      alert("Nhập tối thiểu 9 ký tự cho tên nhóm");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchBarAndButtonView}>
-        <View /* Search bar */ style={styles.searchBarView}>
-          <Image source={images.searchIcon} style={styles.searchBarImage} />
-          <TextInput
-            autoCorrect={false}
-            inputMode="search"
-            onChangeText={(text) => {
-              setSearchText(text);
-            }}
-            style={styles.searchBarTypingArea}
-          />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          style={styles.fadeModalView}
+        />
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.slideModalView}>
+          <View style={styles.headerView}>
+            <Text style={styles.title}>Tạo nhóm mới</Text>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              <Icon
+                name={icons.cancelBlankIcon}
+                size={30}
+                color={colors.GrayBackground}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.contentView}>
+            <View style={styles.mainView}>
+              <TextInputMediumIcon
+                inputMode={"text"}
+                name={"Tên nhóm"}
+                icon={icons.personCircleIcon}
+                placeholder={"Nhập tên nhóm mới"}
+                isPassword={false}
+                onChangeText={(text) => setNewGroupName(text)}
+              />
+              <TextInputMediumIcon
+                inputMode={"text"}
+                name={"Mật khẩu gia nhập nhóm"}
+                icon={icons.phoneRingCircleIcon}
+                placeholder={"Nhập mật khẩu mới"}
+                isPassword={true}
+                onChangeText={(text) => setNewPassword(text)}
+              />
+
+              <CommonButton
+                onPress={handleCreateGroup}
+                title={"Tạo nhóm".toUpperCase()}
+              />
+            </View>
+          </View>
         </View>
+      </Modal>
 
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => {
-            navigate("CreateGroup");
-          }}
-        >
-          <Text style={styles.buttonText}>{"Tạo nhóm học tập"}</Text>
-        </TouchableOpacity>
-      </View>
-
+      <SearchBarAndButton
+        searchBarOnChangeText={(text) => {
+          setSearchText(text);
+        }}
+        buttonTitle={"Tạo nhóm học tập"}
+        buttonOnPress={() => {
+          setModalVisible(true);
+        }}
+        buttonLength={"100%"}
+      />
 
       <View style={styles.blackLine} />
 
@@ -156,43 +162,21 @@ function TabYourGroups(props) {
           .map((eachGroup) => (
             <TabYourGroupsItems
               group={eachGroup}
-              stompClient={stompClient}
               key={eachGroup.groupID}
-              onPress={() => { SelectedGroup(eachGroup) }}
+              onPress={() => {
+                SelectedGroup(eachGroup);
+              }}
             />
           ))}
       </ScrollView>
     </View>
   );
-
 }
-
-export default TabYourGroups;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
-  },
-  searchBarView: {
-    height: "7%",
-    paddingHorizontal: 7,
-    flexDirection: "row",
-    paddingTop: 10,
-    backgroundColor: colors.transparentWhite,
-  },
-  searchBarTypingArea: {
-    height: "95%",
-    flex: 1,
-    paddingStart: 45,
-  },
-  searchBarImage: {
-    width: 20,
-    height: 20,
-    position: "absolute",
-    top: "45%",
-    left: "6%",
-    tintColor: colors.inactive,
   },
   blackLine: {
     backgroundColor: colors.inactive,
@@ -200,54 +184,43 @@ const styles = StyleSheet.create({
     width: "95%",
     alignSelf: "center",
   },
-  searchBarAndButtonView: {
-    height: 70,
+
+  headerView: {
+    width: '98%',
+    height: '9%',
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomEndRadius: 5,
+    borderBottomStartRadius: 5,
   },
-  searchBarView: {
-    width: "50%",
-    height: "65%",
-    marginHorizontal: 10,
-    marginTop: 10,    
-    borderColor: "black",
-    borderWidth: 2,
-    borderRadius: 90,    
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.transparentWhite,
-  },
-  searchBarTypingArea: {
-    height: "75%",
-    flex: 1,
-    marginRight: 10,
-  },
-  searchBarImage: {
-    width: 22,
-    height: 22,
-    resizeMode: "stretch",
-    marginHorizontal: 8,
-  },
-  buttonContainer: {
-    width: "auto",
-    height: "65%",
-
-    marginRight: 10,
-    marginTop: 12,
-
-    borderRadius: 20,
-
-    backgroundColor: colors.active,
-
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    paddingHorizontal: 11,
-    fontSize: fontSizes.h7,
+  title: {
+    marginLeft: "5%",
+    fontSize: fontSizes.h4,
     fontWeight: "bold",
+  },
+
+  slideModalView: {
+    flex: 1,
+    width: "99%",
+    marginTop: "33%",
+    borderTopEndRadius: 35,
+    borderTopStartRadius: 35,
+    backgroundColor: "white",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  fadeModalView: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.33)",
+  },
+  contentView: {
+    width: "90%",
+    marginTop: '5%',
+    marginHorizontal: "10%",
+    borderRadius: 20,
+    paddingHorizontal: 35,
+    alignItems: "center",
   },
 });

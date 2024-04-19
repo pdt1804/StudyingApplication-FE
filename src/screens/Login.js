@@ -5,85 +5,26 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
-import { API_BASE_URL } from "../../DomainAPI";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
+import { user_login } from "../api";
 import CryptoJS from "crypto-js";
 
 
 const Login = (props) => {
-
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
   //Login component and function, use for api
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = async () => {
-    try {
-
-      if (username != null && password != null) {
-        const response = await axios.get(
-          API_BASE_URL +
-            "/api/v1/user/Authenticate?userName=" +
-            username +
-            "&passWord=" +
-            password
-        );
-
-        if (response.data != "Failed") {
-          await AsyncStorage.setItem("username", response.data);
-          push("UITab", {tabName: "Settings"});
-        } else {
-          alert("Tài khoản hoặc mật khẩu không đúng");
-        }
-      } else {
-        alert("Tài khoản hoặc mật khẩu không đúng");
-      }
-    } catch (error) {
-      console.error(error.message);
-      console.error(error.name);
-      alert("Tài khoản hoặc mật khẩu không đúng");
-    }
+  const handleLogin = () => {
+    user_login(username, password, () =>
+      push("MainBottomTab", { tabName: "UserProfile" })
+    );
   };
-
-  //turn off unimportant things when typing
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardIsShown(true);
-    });
-    Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardIsShown(false);
-    });
-
-    const fetchData = async () => {
-      try {
-
-        // if (await AsyncStorage.getItem('username') != null)
-        // {
-        //   push("UITab", {tabName: "Settings"});
-        // }        
-                
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  });
 
   return (
     <View style={styles.container}>
@@ -96,7 +37,11 @@ const Login = (props) => {
 
         <View style={styles.mainView}>
           <View /* username */ style={styles.textInputView}>
-            <Image source={images.personIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.personIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -112,7 +57,11 @@ const Login = (props) => {
           </View>
 
           <View /* password */ style={styles.textInputView}>
-            <Image source={images.keyIcon} style={styles.textInputImage} />
+            <Icon
+              name={icons.keyIcon}
+              size={30}
+              color={colors.PrimaryBackground}
+            />
             <View>
               <TextInput
                 style={styles.textInputTypingArea}
@@ -202,13 +151,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 40,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginLeft: 10,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 300,

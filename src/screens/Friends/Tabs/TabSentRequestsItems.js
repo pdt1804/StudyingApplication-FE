@@ -1,29 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { friend_undoInvitationFriend } from "../../../api";
 
 function TabSentRequestsItems(props) {
   let { image, fulName } = props.invitation.information;
   let { userName } = props.invitation;
-
   const { onPress } = props;
-  
-  const [myUsername, setMyUsername] = useState("")
-  const [friendUsername, setFriendUsername] = useState(userName)
-
 
   const handleCancel = async () => {
-
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/undoInvitationFriend" , {receivedUserName: userName}, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    })
-
+    const response = await friend_undoInvitationFriend(userName);
   };
 
   return (

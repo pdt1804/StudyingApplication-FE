@@ -1,17 +1,15 @@
 import * as React from "react";
+import { View, Alert } from "react-native";
 import {
-  Text,
-  View,
-  Image,
-  Alert,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
-import { Settings, GroupChat, Friends, AllNotification, MessageBot } from "../screens";
+  UserProfile,
+  GroupChat,
+  Friends,
+  AllNotification,
+  MessageBot,
+} from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { images, colors, fontSizes } from "../constants";
+import { images, icons, colors, fontSizes } from "../constants";
+import { Icon } from "../components";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,27 +22,23 @@ const ScreenOptions = ({ route }) => ({
 
   tabBarIcon: ({ focused, color, size }) => {
     let screenName = route.name;
-    let iconName = images.personIcon;
+    let iconName = icons.personIcon;
     if (screenName == "GroupChat") {
-      iconName = images.groupIcon;
+      iconName = icons.groupIcon;
     } else if (screenName == "Friends") {
-      iconName = images.activeChatMessageIcon;
+      iconName = icons.activeChatMessageIcon;
     } else if (screenName == "Notifications") {
-      iconName = images.activeBellAlarm;
+      iconName = icons.activeBellAlarm;
     } else if (screenName == "MessageBot") {
-      iconName = images.activeFAQIcon;
+      iconName = icons.activeFAQIcon;
     }
 
     return (
-      <Image
-        source={iconName}
-        style={{
-          width: 20,
-          height: 20,
-          //tintColor: focused ? colors.active : colors.inactive,
-          tintColor: color,
-          marginTop: '10%',
-        }}
+      <Icon
+        name={iconName}
+        size={focused ? 30 : 20}
+        color={color}
+        style={{ marginTop: "10%" }}
       />
     );
   },
@@ -52,16 +46,18 @@ const ScreenOptions = ({ route }) => ({
 
 const tabBarLabelStyles = {
   fontSize: fontSizes.h7,
-  marginTop: '5%',
-  marginBottom: '5%',
+  marginTop: "5%",
+  marginBottom: "5%",
 };
 
-function UITab(props) {
-
+export default function MainBottomTab(props) {
   const { tabName } = props.route.params;
 
   return (
-    <Tab.Navigator initialRouteName= {tabName == null ? "Settings" : tabName} screenOptions={ScreenOptions}>
+    <Tab.Navigator
+      initialRouteName={tabName == null ? "UserProfile" : tabName}
+      screenOptions={ScreenOptions}
+    >
       <Tab.Screen
         name="Friends"
         component={Friends}
@@ -95,8 +91,8 @@ function UITab(props) {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="UserProfile"
+        component={UserProfile}
         options={{
           tabBarLabel: "Tài khoản",
           tabBarLabelStyle: tabBarLabelStyles,
@@ -105,4 +101,3 @@ function UITab(props) {
     </Tab.Navigator>
   );
 }
-export default UITab;

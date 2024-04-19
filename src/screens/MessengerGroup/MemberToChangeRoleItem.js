@@ -3,7 +3,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../constants";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 
 function MemberToChangeRoleItems(props) {
   let { image, fulName } = props.invitation.information;
@@ -31,7 +31,7 @@ function MemberToChangeRoleItems(props) {
     if (response.status == 200)
     {
         alert('Đổi nhóm trưởng và rời khỏi nhóm thành công')
-        navigate("UITab" , {tabName: "GroupChat"})
+        navigate("MainBottomTab" , {tabName: "GroupChat"})
     }
   };
 

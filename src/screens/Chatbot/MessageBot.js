@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { images, colors, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageBar, MessengerItems } from "../../components";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import { useRef } from "react";
 import EnterMessageChatBot from "../../components/EnterMessageChatBot";

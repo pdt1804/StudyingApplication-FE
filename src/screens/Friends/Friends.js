@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { colors, fontSizes } from "../../constants";
+import { UIHeader } from "../../components";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 import TabYourFriends from "./Tabs/TabYourFriends";
 import TabFriendRequests from "./Tabs/TabFriendRequests";
 import TabSentRequests from "./Tabs/TabSentRequests";
 import TabSuggestions from "./Tabs/TabSuggestions";
-import { images, colors, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -25,7 +20,7 @@ const ScreenOptions = ({ route }) => ({
 });
 
 const tabBarLabelStyles = {
-  fontSize: fontSizes.h8*0.82,
+  fontSize: fontSizes.h8 * 0.82,
 };
 
 function Friends(props) {

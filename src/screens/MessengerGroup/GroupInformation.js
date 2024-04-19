@@ -13,7 +13,7 @@ import { images, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { usname } from "../Login";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -148,7 +148,7 @@ function GroupInfo(props) {
             if (response.status == 200)
             {
                 //await AsyncStorage.removeItem('groupID');
-                navigate("UITab" , {tabName: "GroupChat"})
+                navigate("MainBottomTab" , {tabName: "GroupChat"})
             }
         }
       }
@@ -163,7 +163,7 @@ function GroupInfo(props) {
         if (response.status == 200)
         {
             //await AsyncStorage.removeItem('groupID');
-            navigate("UITab" , {tabName: "GroupChat"})
+            navigate("MainBottomTab" , {tabName: "GroupChat"})
         }
       }
 

@@ -3,7 +3,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
+import { API_BASE_URL } from "../api/DomainAPI";
 
 function MessengerBotItems(props) {
 

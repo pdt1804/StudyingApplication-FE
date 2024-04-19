@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import { CommonButton, Icon } from "../components";
 import CryptoJS from "crypto-js";
+import { auth_changePasswordAfterOTP } from "../api";
 
 const ResetPassword = (props) => {
-
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
@@ -24,14 +17,7 @@ const ResetPassword = (props) => {
   const handleResetPassword = async () => {
     try {
       if (password == rePassword && password.length > 8) {
-        const response = await axios.post(
-          API_BASE_URL +
-            "/api/v1/user/ChangePasswordAfterOTP?userName=" +
-            userName +
-            "&passWord=" +
-            password
-        );
-
+        const response = await auth_changePasswordAfterOTP(userName, password);
         if (response.data == true) {
           alert("Thay đổi thành công");
           navigate("Login");
@@ -40,7 +26,7 @@ const ResetPassword = (props) => {
         }
       } else {
         alert(
-          "Không thành công, đảm bảo mật khẩu mới và nhập lại mật khẩu phải giống nhau và có trên 8 kí tự"
+          "Không thành công, đảm bảo mật khẩu mới và nhập lại mật khẩu phải giống nhau và có tối thiểu 9 kí tự"
         );
       }
     } catch (Error) {
@@ -60,9 +46,11 @@ const ResetPassword = (props) => {
 
         <View style={styles.mainView}>
           <View /* Password */ style={styles.textInputView}>
-            <Image
-              source={images.typePasswordIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.typePasswordIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Mật khẩu mới:</Text>
@@ -70,16 +58,18 @@ const ResetPassword = (props) => {
                 style={styles.textInputTypingArea}
                 secureTextEntry={true} // * the password
                 inputMode="text"
-                onChangeText={text => setPassword(text)}
+                onChangeText={(text) => setPassword(text)}
                 placeholder="Nhập mật khẩu mới"
                 placeholderTextColor={colors.noImportantText}
               />
             </View>
           </View>
           <View /* Retype password */ style={styles.textInputView}>
-            <Image
-              source={images.reTypePasswordIcon}
-              style={styles.textInputImage}
+            <Icon
+              name={icons.reTypePasswordIcon}
+              size={55}
+              color={colors.PrimaryBackground}
+              style={{ marginTop: 25 }}
             />
             <View>
               <Text>Nhập lại mật khẩu:</Text>
@@ -87,7 +77,7 @@ const ResetPassword = (props) => {
                 style={styles.textInputTypingArea}
                 secureTextEntry={true} // * the password
                 inputMode="text"
-                onChangeText={text => setRePassword(text)}
+                onChangeText={(text) => setRePassword(text)}
                 placeholder="Nhập lại mật khẩu"
                 placeholderTextColor={colors.noImportantText}
               />
@@ -143,13 +133,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 20,
     alignItems: "center",
-  },
-  textInputImage: {
-    width: 55,
-    height: 55,
-    marginRight: 10,
-    marginTop: 25,
-    tintColor: colors.PrimaryBackground,
   },
   textInputTypingArea: {
     width: 250,

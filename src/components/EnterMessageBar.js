@@ -1,52 +1,74 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  Image,
   TouchableOpacity,
   TextInput,
   StyleSheet,
 } from "react-native";
-import { images, colors } from "../constants";
-import { API_BASE_URL } from "../../DomainAPI";
+import { icons, colors, fontSizes } from "../constants";
+import Icon from "./MyIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  messenger_sendMessageForUser,
+  messenger_sendMessageForGroup,
+} from "../api";
 
-function EnterMessageBar({myUsername, friendUsername, stompClient, friendID}) {
+const EnterMessageBar = (props) => {
+  //use for friend-MessageBar
+  const { friendUsername, friendID } = props;
+  //use for all
+  //actionType: friend (0) - group (1) - comment (2) - reply (3) - chatbot (4)
+  const { stompClient, actionType } = props;
   const [typedText, setTypedText] = useState("");
-  const handleSendMessage = async () => {
-    
-    if (typedText.length == 0)
-    {
-      alert("Hãy nhập tin nhắn")
+
+  const handleSendMessage_Friend = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập tin nhắn");
       return;
     }
-    
-    const message = {
-      content: typedText,
-    }
-
-    const response = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", { toUserName: friendUsername, messContent: typedText }, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    })
-
-    if (response.status == 200)
-    {
-      setTypedText(""); 
+    const response = await messenger_sendMessageForUser(
+      friendUsername,
+      typedText
+    );
+    if (response.status == 200) {
+      //console.log(friendID);
+      //console.log("sending");
       const messagePayload = { groupID: friendID };
-      console.log(friendID)
-      console.log('sending')
-      stompClient.send("/app/sendMessForUser", {}, JSON.stringify(messagePayload));
-      console.log('sent')
+      stompClient.send(
+        "/app/sendMessForUser",
+        {},
+        JSON.stringify(messagePayload)
+      );
+      //console.log("sent");
     }
-    else
-    {
-      alert('Có lỗi mạng, vui lòng gửi lại sau')
-    }
+    setTypedText("");
+  };
 
+  const handleSendMessage_Group = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập tin nhắn");
+      return;
+    }
+    const response = await messenger_sendMessageForGroup(typedText);
+    if (response.status == 200) {
+      //console.log("sending");
+      const messagePayload = {
+        groupID: parseInt(await AsyncStorage.getItem("groupID")),
+      };
+      stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
+      //console.log("sent");
+    }
+    setTypedText("");
+  };
+
+  //final handleVerification
+  const handleSendMessage = async () => {
+    if (actionType === 0 || actionType === "friend") {
+      handleSendMessage_Friend();
+    } else if (actionType === 1 || actionType === "group") {
+      handleSendMessage_Group();
+    }
   };
 
   return (
@@ -62,18 +84,21 @@ function EnterMessageBar({myUsername, friendUsername, stompClient, friendID}) {
         placeholderTextColor={colors.placeholder}
       />
       <TouchableOpacity onPress={handleSendMessage}>
-        <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
+        <Icon
+          name={icons.sendMessageCursorIcon}
+          size={25}
+          color={colors.PrimaryBackground}
+        />
       </TouchableOpacity>
     </View>
   );
-}
+};
 export default EnterMessageBar;
 
 const styles = StyleSheet.create({
   container: {
     height: "auto",
     minHeight: 50,
-    //position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
@@ -93,6 +118,6 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
     padding: 10,
     marginHorizontal: 10,
-    tintColor: colors.PrimaryBackground
+    tintColor: colors.PrimaryBackground,
   },
 });

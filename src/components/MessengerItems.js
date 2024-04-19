@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import { API_BASE_URL } from "../../DomainAPI";
+import { messenger_getSentUser,messenger_checkSender } from "../api";
 
 function MessengerItems(props) {
   let { content, dateSent, id, status } = props.item;
@@ -23,54 +22,29 @@ function MessengerItems(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         setUsername(await AsyncStorage.getItem('username'));
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/getSentUser?messID=" + id, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });        
-        
+  
+        const response = await messenger_getSentUser(id);        
+          
         setResponse(response.data);
-
         setImage(response.data.information.image);
-
         setSentUsername(response.data.userName);
-
-        var form = new FormData()
-        form.append("userName", sentUsername)
-
-        const checkSender = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        })
-        
-        setSender(checkSender.data)
-                
+  
+        const checkSenderResponse = await messenger_checkSender(sentUsername);
+        setSender(checkSenderResponse.data);
+                  
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [props.userName]);
 
   const CheckIsSender = () => {
-
-    if (sender == sentUsername)
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    return sender == sentUsername ? true : false
   }
 
   return CheckIsSender() == false ? (

@@ -11,7 +11,7 @@ import {
 import { images, colors, icons, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import axios from "axios";
-import { API_BASE_URL } from "../../../DomainAPI";
+import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from 'expo-image-picker';
 
@@ -140,7 +140,7 @@ const CreateNotification = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={'Tạo thông báo'}
-        leftIconName={blankContent ? images.backIcon : images.cancelIcon}
+        leftIconName={blankContent ? images.backIcon : images.cancelCircleIcon}
         rightIconName={images.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           blankContent ? goBack() : (setContentText(""), setTitleText(""));

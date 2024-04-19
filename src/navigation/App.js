@@ -26,18 +26,16 @@ import {
   MembersInGroup,
   ShowProfileMember,
   MemberToChangeRole,
-  CreateGroup,
   AddMember,
   Comment,
   Reply,
   ShowNotificationOfUser,
   EditPost,
-  VerificationToRegistration,
   GroupSuggestionInfo,
   ShowPicture,
   ShowProfile,
 } from '../screens';
-import UITab from './UITab';
+import MainBottomTab from './MainBottomTab';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,13 +49,12 @@ function App(props) {
         }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
-        <Stack.Screen name="VerificationToRegistration" component={VerificationToRegistration} />
         
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
-        <Stack.Screen name="UITab" component={UITab} />
+        <Stack.Screen name="MainBottomTab" component={MainBottomTab} />
         <Stack.Screen name="Messenger" component={Messenger} />
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
@@ -83,7 +80,6 @@ function App(props) {
         <Stack.Screen name="GroupInformationDetail" component={GroupInformationDetail} />
         <Stack.Screen name="MembersInGroup" component={MembersInGroup} />
         <Stack.Screen name="MemberToChangeRole" component={MemberToChangeRole} />
-        <Stack.Screen name="CreateGroup" component={CreateGroup} />
         <Stack.Screen name="AddMember" component={AddMember} />
 
         <Stack.Screen name="TabDiscussionFiltered" component={TabDiscussionFiltered} />

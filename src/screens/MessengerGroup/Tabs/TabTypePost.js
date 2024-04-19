@@ -10,9 +10,10 @@ import {
   Alert
 } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import { SearchBarAndButton } from "../../../components";
 import TabTypePostItems from "./TabTypePostItems";
 import axios from "axios";
-import { API_BASE_URL } from "../../../../DomainAPI";
+import { API_BASE_URL } from "../../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TabTypePost(props) {

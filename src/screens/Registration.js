@@ -5,201 +5,396 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Keyboard,
   StyleSheet,
+  ImageBackground,
 } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
-import { CommonButton } from "../components";
-import axios from "axios";
+import { images, icons, colors, fontSizes } from "../constants/index";
+import {
+  CommonButton,
+  Icon,
+  TextInputTransparent,
+  TextInputMediumIcon,
+} from "../components";
+import { user_register, user_createAccountData } from "../api";
 import CryptoJS from "crypto-js";
-import { API_BASE_URL } from "../../DomainAPI";
+import { RadioButton } from "react-native-paper";
+import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 
 const Registration = (props) => {
-
-  const hashPassword = (password) => {
-    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-    return hashedPassword;
-  };
-
   //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  //states for validating
-  const [errorEmail, setErrorEmail] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
-  //states to store email/password
+  //basic info
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rePassword, setrePassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [activeStep, setActiveStep] = useState(0);
+
+  //newUser & OTP
+  const [newUser, setNewUser] = useState("");
+  const [systemOTP, setSystemOTP] = useState("");
+  const [inputOTP, setInputOTP] = useState("");
+
+  //additional info
+  const [gender, setGender] = useState("Nam");
+  const [phoneNumber, setPhoneNumber] = useState("0000000000");
+  const [yearOfBirth, setYearOfBirth] = useState("yyyy");
+  const topics = [
+    { name: "Trí tuệ nhân tạo", image: images.topicAI },
+    { name: "Sinh học tổng hợp", image: images.topicBio },
+    { name: "Quản lý thông tin 5G", image: images.topic5G },
+    { name: "Tương tác con người-máy", image: images.topicHumanAndMachine },
+    { name: "Học máy trong cuộc sống", image: images.topicMachineLearning },
+    { name: "Hệ thống thông tin phân tử", image: images.topicMicro },
+    { name: "Quyền riêng tư và an ninh", image: images.topicPrivacy },
+    { name: "Phát hiện đe dọa mạng", image: images.topicHacker },
+    { name: "IoT trong giao thông", image: images.topicIoT },
+    { name: "Thuật toán mạng xã hội", image: images.topicMedia },
+  ];
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const handlePressTopic = (topic) => {
+    setSelectedTopics((prev) => {
+      if (prev.includes(topic)) {
+        return prev.filter((t) => t !== topic);
+      } else {
+        return [...prev, topic];
+      }
+    });
+  };
 
   //use for api
   const handleRegister = async () => {
-    let newUser = {
-      userName: username,
-      passWord: password,
-      Email: email,
-    };
-
-    if (!email.endsWith("@gmail.com"))
-    {
-      if (!email.endsWith("@gm.uit.edu.vn"))
-      {
-        alert("Định dạng email không đúng")
-        return;
-      }
-    }
-
-    if (username.length > 8 && password.length > 8) {
-
-      const checkUsername = await axios.get(API_BASE_URL + "/api/v1/user/checkUserName?userName=" + username)
-
-      if (checkUsername.data == true)
-      {
-        alert('Đã tồn tại username này')
-        return;
-      }
-  
-      const checkEmail = await axios.get(API_BASE_URL + "/api/v1/user/checkEmail?email=" + email)
-  
-      if (checkEmail.data == true)
-      {
-        alert('Đã tồn tại email này')
-        return;
-      }
-
-      try {
-        if (password === rePassword) {
-
-          //const apiGetAuthCode = API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email;
-          const apiGetAuthCode = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email)
-          
-          // const response = await axios.get(API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email, {
-          //   headers: {
-          //     'Content-Type': 'multipart/form-data',
-          //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          //   },
-          // });
-
-          navigate("VerificationToRegistration", {newUser: newUser, otp: apiGetAuthCode.data, api: apiGetAuthCode})
-          
-        }
-        else
-        {
-          alert("mật khẩu và nhập lại mật khẩu không giống")
-        }
-      } catch (catchError) {
-        console.error(catchError.message);
-      }
-    } else {
-      alert("Tài khoản và mật khẩu phải có tối thiểu 8 kí tự");
+    const result = await user_register(username, password, email, rePassword);
+    if (result) {
+      setActiveStep(1);
+      setNewUser(result.newUser);
+      setSystemOTP(result.otp);
     }
   };
 
-  //turn off unimportant things when typing
-  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardIsShown(true);
-    });
-    Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardIsShown(false);
-    });
-  });
+  //use for api: Registration
+  const handleVerification_Registration = async () => {
+    alert(
+      `Registration: otp từ hệ thống: ${systemOTP}, từ màn hình: ${inputOTP},`
+    );
+
+    if (systemOTP == inputOTP) {
+      const dataResponse = await user_createAccountData(newUser);
+      if (dataResponse == newUser.userName) {
+        setActiveStep(2);
+      } else {
+        //unsuccessful
+        alert("Đã có lỗi xảy ra, vui lòng thử lại");
+      }
+    } else {
+      //alert("OTP không đúng");
+    }
+  };
+
+  //style of ProgressSteps
+  const ProgressStepsStyle = {
+    borderWidth: 9,
+    activeStepIconBorderColor: colors.PrimaryBackground,
+    activeStepIconColor: colors.PrimaryContainer,
+    activeStepNumColor: colors.PrimaryOnContainerAndFixed,
+
+    completedProgressBarColor: colors.PrimaryBackground,
+    progressBarColor: colors.PrimaryContainer,
+
+    completedStepIconColor: colors.PrimaryBackground,
+    completedCheckColor: "white",
+
+    disabledStepIconColor: colors.PrimaryContainer,
+    disabledStepNumColor: colors.PrimaryContainer,
+
+    labelColor: null,
+    labelFontSize: 0,
+    activeLabelColor: null,
+    activeLabelFontSize: 0,
+
+    activeStep: activeStep,
+    //activeStep: 2,
+
+    topOffset: 10,
+    marginBottom: 15,
+  };
+
+  //style of Step_BasicInfo
+  const Step_BasicInfo = {
+    label: "Thông tin tài khoản",
+    removeBtnRow: true,
+  };
+
+  //style of Step_OTP
+  const Step_OTP = {
+    label: "Nhập OTP",
+    removeBtnRow: true,
+  };
+
+  //style of Step_AdditionalInfo_1
+  const Step_AdditionalInfo_1 = {
+    nextBtnText: "Tiếp theo",
+    previousBtnText: null,
+    nextBtnStyle: styles.nextBtn,
+    nextBtnTextStyle: styles.nextBtnText,
+    previousBtnDisabled: true,
+  };
+
+  //style of Step_AdditionalInfo_2
+  const Step_AdditionalInfo_2 = {
+    nextBtnText: "Tiếp theo",
+    previousBtnText: "Quay Lại",
+    nextBtnStyle: styles.nextBtn,
+    nextBtnTextStyle: styles.nextBtnText,
+    previousBtnStyle: styles.previousBtn,
+    previousBtnTextStyle: styles.previousBtnText,
+  };
+
+  //style of Step_AdditionalInfo_3
+  const Step_AdditionalInfo_3 = {
+    label: "Chọn topic (chủ đề) học tập",
+    onSubmit: () => {
+      alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
+      navigate("Login");
+    },
+    previousBtnText: "Quay Lại",
+    finishBtnText: "Xong",
+    nextBtnStyle: styles.nextBtn,
+    nextBtnTextStyle: styles.nextBtnText,
+    previousBtnStyle: styles.previousBtn,
+    previousBtnTextStyle: styles.previousBtnText,
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.partitionTop} />
+      <Image source={images.uitLogo} style={styles.imageUIT} />
 
-      <View style={styles.partitionMiddle}>
-        <View style={styles.welcomeView}>
-          <Image source={images.uitLogo} style={styles.imageUIT} />
-        </View>
-
-        <View style={styles.mainView}>
-          <View /* username */ style={styles.textInputView}>
-            <Image source={images.personIcon} style={styles.textInputImage} />
-            <View>
-              <TextInput
-                style={styles.textInputTypingArea}
-                inputMode="text"
+      <View style={styles.whiteView}>
+        <ProgressSteps {...ProgressStepsStyle}>
+          <ProgressStep {...Step_BasicInfo}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={[styles.stepAdditionalInfoTitle,{fontSize:fontSizes.h3}]}>
+                Đăng ký tài khoản mới
+              </Text>
+              
+              <TextInputTransparent
+                inputMode={"text"}
+                icon={icons.personIcon}
+                placeholder={"Username"}
                 onChangeText={(text) => {
                   setUsername(text);
                 }}
-                placeholder="Username"
-                placeholderTextColor={colors.placeholder}
               />
-              <View style={styles.blackLine} />
-            </View>
-          </View>
 
-          <View /* email */ style={styles.textInputView}>
-            <Image source={images.emailIcon} style={styles.textInputImage} />
-            <View>
-              <TextInput
-                style={styles.textInputTypingArea}
-                inputMode="email"
+              <TextInputTransparent
+                inputMode={"email"}
+                icon={icons.emailIcon}
+                placeholder={"Email"}
                 onChangeText={(text) => {
                   setEmail(text);
                 }}
-                placeholder="Email"
-                placeholderTextColor={colors.placeholder}
               />
-              <View style={styles.blackLine} />
-            </View>
-          </View>
 
-          <View /* password */ style={styles.textInputView}>
-            <Image source={images.keyIcon} style={styles.textInputImage} />
-            <View>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
+              <TextInputTransparent
+                inputMode={"text"}
+                icon={icons.keyIcon}
+                placeholder={"Password"}
+                isPassword={true}
                 onChangeText={(text) => {
                   setPassword(text);
                 }}
-                placeholder="Password"
-                placeholderTextColor={colors.placeholder}
               />
-              <View style={styles.blackLine} />
-            </View>
-          </View>
 
-          <View /* re-enter password */ style={styles.textInputView}>
-            <Image source={images.addKeyIcon} style={styles.textInputImage} />
-            <View>
-              <TextInput
-                style={styles.textInputTypingArea}
-                secureTextEntry={true} // * the password
-                inputMode="text"
+              <TextInputTransparent
+                inputMode={"text"}
+                icon={icons.addKeyIcon}
+                placeholder={"Re-enter Password"}
+                isPassword={true}
                 onChangeText={(text) => {
-                  setrePassword(text);
+                  setRePassword(text);
                 }}
-                placeholder="Re-enter Password"
-                placeholderTextColor={colors.placeholder}
               />
-              <View style={styles.blackLine} />
+
+              <CommonButton
+                onPress={handleRegister}
+                title={"Đăng Ký".toUpperCase()}
+              />
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigate("Login");
+                }}
+                style={styles.loginNavigate}
+              >
+                <Text style={styles.loginNavigateText}>
+                  Về màn hình Đăng Nhập
+                </Text>
+              </TouchableOpacity>
             </View>
-          </View>
+          </ProgressStep>
 
-          <CommonButton
-            onPress={handleRegister}
-            title={"Đăng Ký".toUpperCase()}
-          />
+          <ProgressStep {...Step_OTP}>
+            <View style={styles.container_OTP}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Mã xác thực đã được gửi qua email bạn
+              </Text>
+              
+              <View style={styles.mainView}>
+                <TextInputMediumIcon
+                  name={"Mã xác thực"}
+                  icon={icons.emailCheckMarkIcon}
+                  placeholder={"Nhập mã xác thực"}
+                  onChangeText={(number) => setInputOTP(number)}
+                />
 
-          <TouchableOpacity
-            onPress={() => {
-              navigate("Login");
-            }}
-            style={styles.loginNavigate}
-          >
-            <Text style={styles.loginNavigateText}>Về màn hình Đăng Nhập</Text>
-          </TouchableOpacity>
-        </View>
+                <CommonButton
+                  onPress={handleVerification_Registration}
+                  title={"tiếp tục".toUpperCase()}
+                />
+              </View>
+            </View>
+          </ProgressStep>
+
+          <ProgressStep {...Step_AdditionalInfo_1} label="Giới tính">
+            <View style={styles.stepAdditionalInfoView}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Giới tính của bạn là gì?
+              </Text>
+
+              <RadioButton.Group
+                onValueChange={(newGender) => setGender(newGender)}
+                value={gender}
+              >
+                <View style={styles.eachRadioButtonView}>
+                  <RadioButton value="Nam" />
+                  <Text>Nam</Text>
+                </View>
+                <View style={styles.eachRadioButtonView}>
+                  <RadioButton value="Nữ" />
+                  <Text>Nữ</Text>
+                </View>
+                <View style={styles.eachRadioButtonView}>
+                  <RadioButton value="Khác" />
+                  <Text>Khác</Text>
+                </View>
+              </RadioButton.Group>
+            </View>
+          </ProgressStep>
+
+          <ProgressStep {...Step_AdditionalInfo_2} label="Số điện thoại">
+            <View style={styles.stepAdditionalInfoView}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Số điện thoại của bạn là gì?
+              </Text>
+
+              <TextInputTransparent
+                inputMode={"numeric"}
+                icon={icons.phoneIcon}
+                placeholder={"Nhập số điện thoại của bạn"}
+                onChangeText={(text) => {
+                  setPhoneNumber(text);
+                }}
+              />
+            </View>
+          </ProgressStep>
+
+          <ProgressStep {...Step_AdditionalInfo_2} label="Năm sinh">
+            <View style={styles.stepAdditionalInfoView}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Năm sinh của bạn là gì?
+              </Text>
+
+              <TextInputTransparent
+                inputMode={"numeric"}
+                icon={icons.birthdayCakeIcon}
+                placeholder={"Nhập năm sinh của bạn"}
+                onChangeText={(text) => {
+                  setYearOfBirth(text);
+                }}
+              />
+            </View>
+          </ProgressStep>
+
+          <ProgressStep {...Step_AdditionalInfo_3}>
+            <View style={styles.stepAdditionalInfoView}>
+              <Text style={styles.stepAdditionalInfoTitle}>
+                Bạn quan tâm đến những gì?
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                }}
+              >
+                {topics.map((topic, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      width: "48%",
+                      height: 100,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginBottom: 10,
+                      position: "relative",
+                    }}
+                    onPress={() => handlePressTopic(topic.name)}
+                  >
+                    <Image
+                      source={topic.image}
+                      style={{
+                        flex: 1,
+                        width: "100%",
+                        resizeMode: "stretch",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 15,
+                      }}
+                    />
+
+                    {selectedTopics.includes(topic.name) && (
+                      <View
+                        style={{
+                          ...StyleSheet.absoluteFillObject,
+                          borderRadius: 15,
+                          backgroundColor: "black",
+                          opacity: 0.5,
+                        }}
+                      />
+                    )}
+
+                    <Text
+                      style={{
+                        left: 5,
+                        bottom: 0,
+                        position: "absolute",
+                        color: "white",
+                        fontSize: fontSizes.h7,
+                        fontWeight: "900",
+                      }}
+                    >
+                      {topic.name}
+                    </Text>
+                    {selectedTopics.includes(topic.name) && (
+                      <Icon
+                        name={icons.checkMarkIcon}
+                        size={24}
+                        color={colors.PrimaryContainer}
+                        style={{
+                          top: 0,
+                          right: 0,
+                          position: "absolute",
+                        }}
+                      />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </ProgressStep>
+        </ProgressSteps>
       </View>
-
-      {keyboardIsShown == false && <View style={styles.partitionBottom} />}
     </View>
   );
 };
@@ -207,34 +402,21 @@ export default Registration;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: colors.PrimaryContainer,
-    flex: 1,
-  },
-  partitionTop: {
-    flex: 1,
-  },
-  partitionMiddle: {
-    flex: 9,
-    width: "100%",
-  },
-  /*   partitionBottom: {
-    flex: 2,
-  }, */
-  welcomeView: {
-    flex: 3,
-    flexDirection: "column",
-    width: "100%",
-    alignItems: "center",
-    alignSelf: "center",
   },
   imageUIT: {
-    width: 200,
-    height: 200,
+    width: '90%',
+    //marginTop: "-50%",
+    resizeMode: "contain",
+    position: "absolute",
+    alignSelf: "center",
   },
-  mainView: {
-    flex: 7,
+  whiteView: {
+    flex: 1,
     width: "99%",
-    paddingTop: 40,
+    marginTop: "15%",
+    paddingHorizontal: "5%",
     borderColor: colors.transparentWhite,
     borderWidth: 2,
     borderTopEndRadius: 50,
@@ -242,31 +424,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
     alignSelf: "center",
   },
-  textInputView: {
-    flexDirection: "row",
-    marginLeft: 20,
-    marginRight: 10,
-    marginBottom: 10,
-    borderRadius: 40,
-    alignItems: "center",
-  },
-  textInputImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginLeft: 10,
-    tintColor: colors.blueIcon,
-  },
-  textInputTypingArea: {
-    width: 300,
-    height: 45,
-  },
-  blackLine: {
-    height: 1,
-    backgroundColor: "black",
-  },
   loginNavigate: {
-    marginHorizontal: 55,
+    marginHorizontal: "10%",
     marginBottom: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -276,5 +435,66 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h6,
     fontWeight: "bold",
     color: "blue",
+  },
+  container_OTP: {
+    flex: 1,
+    width: "90%",
+    justifyContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+  },
+  //Step_AdditionalInfo
+  stepAdditionalInfoView: { alignItems: "center" },
+  stepAdditionalInfoTitle: {
+    textAlign: "center",
+    fontSize: fontSizes.h4,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  eachRadioButtonView: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: "10%",
+    marginVertical: 10,
+  },
+  //Buttons
+  nextBtn: {
+    width: 115,
+    borderColor: colors.RedOnContainerAndFixed,
+    borderWidth: 1,
+    borderBottomRightRadius: 25,
+    borderTopRightRadius: 25,
+
+    backgroundColor: colors.RedLightBackground,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  nextBtnText: {
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    fontSize: fontSizes.h7,
+    fontWeight: "bold",
+    color: colors.RedObjects,
+  },
+  previousBtn: {
+    width: 115,
+    borderColor: colors.GrayOnContainerAndFixed,
+    borderWidth: 1,
+    borderBottomLeftRadius: 25,
+    borderTopLeftRadius: 25,
+
+    backgroundColor: colors.GrayBackground,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  previousBtnText: {
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    fontSize: fontSizes.h7,
+    fontWeight: "bold",
+    color: colors.GrayObjects,
   },
 });
