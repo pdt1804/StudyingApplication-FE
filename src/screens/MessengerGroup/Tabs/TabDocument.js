@@ -12,13 +12,13 @@ import {
   group_addDocument,
 } from "../../../api";
 
-function TabDocument(props) {
+export default function TabDocument(props) {
   //navigation
   const { navigate, goBack } = props.navigation;
 
   const [userName, setUserName] = useState("");
   const [group, setGroup] = useState("");
-  const [notifications, setNotifications] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function TabDocument(props) {
       const extractToken = await group_extractBearerToken();
 
       setUserName(extractToken.data);
-      setNotifications(responseDocument.data);
+      setDocuments(responseDocument.data);
       setGroup(responseGroup.data);
     };
 
@@ -79,18 +79,18 @@ function TabDocument(props) {
       />
 
       <ScrollView style={styles.listContainer}>
-        {notifications
-          .filter((eachNotification) =>
-            eachNotification.header
+        {documents
+          .filter((eachDocument) =>
+            eachDocument.header
               .toLowerCase()
               .includes(searchText.toLowerCase())
           )
-          .map((eachNotification) => (
+          .map((eachDocument) => (
             <TabDocumentItem
-              doc={eachNotification}
-              key={eachNotification.documentID}
+              doc={eachDocument}
+              key={eachDocument.documentID}
               onPress={() => {
-                navigate("ShowDocument", { notification: eachNotification });
+                navigate("ShowDocument", { document: eachDocument });
               }}
             />
           ))}
@@ -98,7 +98,6 @@ function TabDocument(props) {
     </View>
   );
 }
-export default TabDocument;
 
 const styles = StyleSheet.create({
   container: {

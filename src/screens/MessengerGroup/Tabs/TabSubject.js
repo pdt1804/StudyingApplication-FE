@@ -1,14 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
 import {
   SearchBarAndButton,
@@ -31,7 +22,7 @@ export default function TabSubject(props) {
 
   const [username, setUsername] = useState("");
   const [group, setGroup] = useState("");
-  const [types, setTypes] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [newSubject, setNewSubject] = useState("");
 
@@ -44,7 +35,7 @@ export default function TabSubject(props) {
 
       setUsername(extractToken.data);
       setGroup(responseGroup.data);
-      setTypes(responseAllSubject.data);
+      setSubjects(responseAllSubject.data);
     };
 
     fetchData();
@@ -113,18 +104,18 @@ export default function TabSubject(props) {
       />
 
       <ScrollView style={styles.listContainer}>
-        {types
-          .filter((eachType) =>
-            eachType.nameSubject
+        {subjects
+          .filter((eachSubject) =>
+            eachSubject.nameSubject
               .toLowerCase()
               .includes(searchText.toLowerCase())
           )
-          .map((eachType) => (
+          .map((eachSubject) => (
             <TabSubjectItems
-              type={eachType}
-              key={eachType.subjectID}
+              type={eachSubject}
+              key={eachSubject.subjectID}
               onPress={() => {
-                navigate("TabDiscussionFiltered", { type: eachType });
+                navigate("TabDiscussionFiltered", { type: eachSubject });
               }}
             />
           ))}

@@ -20,7 +20,7 @@ import WebView from "react-native-webview";
 
 
 const ShowDocument = (props) => {
-  let { file, documentID } = props.route.params.notification;
+  let { file, documentID } = props.route.params.document;
 
   const [content, setContent] = useState("");
 

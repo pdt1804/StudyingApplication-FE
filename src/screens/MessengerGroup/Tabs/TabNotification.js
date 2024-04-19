@@ -10,7 +10,7 @@ import {
   group_getAllNotificationByGroupId,
 } from "../../../api";
 
-function TabNotification(props) {
+export default function TabNotification(props) {
   //navigation
   const { navigate, goBack } = props.navigation;
 
@@ -75,7 +75,7 @@ function TabNotification(props) {
     </View>
   );
 }
-export default TabNotification;
+
 
 const styles = StyleSheet.create({
   container: {
