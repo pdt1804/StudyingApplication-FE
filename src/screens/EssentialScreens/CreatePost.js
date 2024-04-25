@@ -20,7 +20,7 @@ const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
 
-  const [filePath, setFilePath] = useState("images.blankImageLoading")
+  const [filePath, setFilePath] = useState("icons.blankImageLoading")
 
 
   let { subjectID } = props.route.params;
@@ -100,7 +100,7 @@ const CreatePost = (props) => {
         }}
     );
 
-    if (filePath != "images.blankImageLoading")
+    if (filePath != "icons.blankImageLoading")
     {
       uploadImage(filePath, response.data)
     }
@@ -163,8 +163,8 @@ const CreatePost = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Tạo thảo luận"}
-        leftIconName={blankContent ? images.backIcon : images.cancelCircleIcon}
-        rightIconName={images.sendMessageCursorIcon}
+        leftIconName={blankContent ? icons.backIcon : icons.cancelCircleIcon}
+        rightIconName={icons.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           blankContent ? goBack() : setContentText("");
         }}

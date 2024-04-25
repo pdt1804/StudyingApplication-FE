@@ -143,8 +143,9 @@ const ShowNotificationOfUser = (props) => {
           icon={icons.documentBlackIcon}
           title="Nội dung"
           content={item.content}
+          isLikeAble={false}
           OnPressContent={() => {
-            LoadItem(); //Why? Trong ContentBox làm gì có OnPressContent()?
+            LoadItem();
           }}
         />
 
