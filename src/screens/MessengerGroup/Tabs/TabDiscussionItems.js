@@ -1,58 +1,39 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
-import axios from "axios";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
+import { Icon } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../api/DomainAPI";
 
 function TabDiscussionItems(props) {
-  let { blogID, content, dateCreated, comments, likes } = props.topic;
-  let { userName } = props.topic.userCreated;
-  let { fulName } = props.topic.userCreated.information;
-
-
-  //alert(likeCount);
-
+  const { content, comments, likes } = props.topic;
+  const { fulName } = props.topic.userCreated.information;
   const { onPress } = props;
 
   const [username, setUserName] = useState("");
-  const date = new Date(dateCreated);
 
-  const [blog, setBlog] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       setUserName(await AsyncStorage.getItem("username"));
-      //const response = await axios.get(API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + blogID);
-
-      //setNotifications(response.data);
-      //console.log(response.data)
     };
-
-    fetchData(); // Gọi fetchData ngay sau khi component được mount
-
-    // Sử dụng setInterval để gọi lại fetchData mỗi giây
-    //
+    fetchData();
   }, [props.userName, username]);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.topView}>
         <View style={styles.leftSideTopView}>
-          <Image source={images.activeChatMessageIcon} style={styles.icon} />
+          <Icon
+            name={icons.activeChatMessageIcon}
+            size={30}
+            color={colors.PrimaryBackground}
+          />
           <Text style={styles.text}>{fulName}</Text>
         </View>
         <View style={styles.rightSideView}>
-        <Text style={styles.rightSideText}>Số lượt tương tác: {likes.length}</Text>
-        <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
+          <Text style={styles.rightSideText}>
+            Số lượt tương tác: {likes.length}
+          </Text>
+          <Text style={styles.rightSideText}>bình luận: {comments.length}</Text>
         </View>
       </View>
       <Text style={styles.content} numberOfLines={5}>
@@ -80,13 +61,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   leftSideTopView: { flexDirection: "row" },
-  icon: {
-    width: 30,
-    height: 30,
-    margin: 5,
-    resizeMode: "stretch",
-    tintColor: colors.PrimaryBackground,
-  },
   text: {
     marginTop: 5,
     marginLeft: 5,
@@ -100,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
   },
   rightSideView: {
-    flexDirection:'column',
+    flexDirection: "column",
   },
   rightSideText: {
     width: 120,

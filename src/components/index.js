@@ -16,6 +16,7 @@ import {
 import { TextInputMediumIcon, TextInputTransparent } from "./MyInput";
 import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
 import { SearchBarAndButton, SearchBarTransparent } from "./MySearchBars";
+import { WhiteSlideBottomUp } from "./MyModal";
 
 export {
   CommonButton,
@@ -37,4 +38,5 @@ export {
   ContentBox,
   SearchBarAndButton,
   SearchBarTransparent,
+  WhiteSlideBottomUp,
 };

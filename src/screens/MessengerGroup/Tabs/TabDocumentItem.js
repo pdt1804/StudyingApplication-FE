@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
-
+import React from "react";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, colors, icons, fontSizes } from "../../../constants";
-
-//import { openDoc, isDoc, filePath } from 'react-native-doc-viewer';
-
+import { Icon } from "../../../components";
 
 function TabDocumentItem(props) {
   let { header, type, dateUploaded, documentID } = props.doc;
-
-  const date = new Date(dateUploaded)
-
   const { onPress } = props;
+
+  const date = new Date(dateUploaded);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image style={styles.img} source={images.documentIcon} />
+      <Icon
+        name={icons.documentIcon}
+        size={33}
+        color={colors.PrimaryBackground}
+        style={styles.icon}
+      />
       <View style={styles.textView}>
         <Text style={styles.titleText} numberOfLines={1}>
           {header}
@@ -32,7 +25,10 @@ function TabDocumentItem(props) {
           {type.toString().toUpperCase()}
         </Text>
       </View>
-      <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
+      <Text style={styles.timeText}>
+        {date.getHours()}:{date.getMinutes()} {date.getDate()}/
+        {date.getMonth() + 1}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -41,16 +37,11 @@ export default TabDocumentItem;
 const styles = StyleSheet.create({
   container: {
     height: 63,
-    marginBottom: 15,
+    marginVertical: 8,
     flexDirection: "row",
   },
-  img: {
-    width: 33,
-    height: 33,
-    resizeMode: "stretch",
-    marginTop: 11,
-    marginHorizontal: 10,
-    tintColor: colors.active,
+  icon: {
+    marginTop: 6,
   },
   textView: {
     flex: 1,

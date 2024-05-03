@@ -9,6 +9,19 @@ import {
 import { images, icons, colors, fontSizes } from "../constants/index";
 import Icon from "./MyIcon";
 
+// Usage example:
+/* **need: const [searchText, setSearchText] = useState("");
+<SearchBarAndButton
+  searchBarOnChangeText={(text) => {
+    setSearchText(text);
+  }}
+  buttonTitle={"---"}
+  buttonOnPress={() => {
+    ---
+  }}
+  buttonLength={"---%"}
+/>
+*/
 export function SearchBarAndButton(props) {
   const {
     searchBarOnChangeText,

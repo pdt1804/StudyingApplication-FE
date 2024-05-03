@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 import Icon from "./MyIcon";
 
@@ -8,7 +8,7 @@ export function SubjectBox(props) {
 
   return (
     <View style={styles.containerSubjectBox}>
-      <Icon name={icon} size={25} color={'black'} style={styles.icon} />
+      <Icon name={icon} size={25} color={"black"} style={styles.icon} />
       <Text style={styles.title}>{title}: </Text>
       <Text style={styles.SubjectBoxContent}>{content}</Text>
     </View>
@@ -16,28 +16,50 @@ export function SubjectBox(props) {
 }
 
 export function ContentBox(props) {
-  const { icon, title, content } = props;
+  const {
+    icon,
+    title,
+    content,
+    OnPressContent,
+    isLikeAble,
+    likeStatus,
+    onPressLikeIcon,
+  } = props;
 
   return (
     <View style={styles.containerContentBox}>
       <View style={styles.ContentBoxTopView}>
-        <Icon
-          name={icon}
-          size={25}
-          color={'black'}
-          style={styles.icon}
-        />
-        <Text style={styles.title} onPress={props.OnPressContent}>
-          {title}:{" "}
-        </Text>
+        <TouchableOpacity
+          style={styles.leftSideTopView}
+          onPress={OnPressContent}
+        >
+          <Icon name={icon} size={25} color={"black"} style={styles.icon} />
+          <Text style={styles.title}>{title}: </Text>
+        </TouchableOpacity>
+
+        {isLikeAble ? (
+          <TouchableOpacity
+            style={styles.rightSideTopView}
+            onPress={onPressLikeIcon}
+          >
+            <Icon
+              name={likeStatus ? icons.activeLikeIcon : icons.inactiveLikeIcon}
+              size={30}
+              color={likeStatus ? "gold" : "black"}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
       <Text style={styles.ContentBoxContent}>{content}</Text>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
+  //s
   containerSubjectBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -52,6 +74,8 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h5 * 0.9,
     fontWeight: "700",
   },
+
+  //c
   containerContentBox: {
     flexDirection: "column",
     paddingStart: 15,
@@ -59,8 +83,11 @@ const styles = StyleSheet.create({
   },
   ContentBoxTopView: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
   },
+  leftSideTopView: { flexDirection: "row" },
+  rightSideTopView: {},
   ContentBoxContent: {
     padding: 15,
     marginTop: 5,
@@ -75,4 +102,4 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h5,
     fontWeight: "500",
   },
-})
+});

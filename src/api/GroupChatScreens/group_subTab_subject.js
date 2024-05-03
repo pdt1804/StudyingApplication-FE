@@ -1,0 +1,54 @@
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../DomainAPI";
+
+
+export const group_getAllSubject = async () => {
+  const response = await axios.get(
+    API_BASE_URL +
+      "/api/v1/blog/getAllSubject?groupID=" +
+      (await AsyncStorage.getItem("groupID")),
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
+export const group_createNewSubject = async (text) => {
+  var form = new FormData();
+  form.append("groupID", await AsyncStorage.getItem("groupID"));
+  form.append("nameSubject", text);
+  const response = await axios.post(
+    API_BASE_URL + "/api/v1/blog/createNewSubject",
+    form,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
+// TabSubjectItems
+export const group_getNumberOfBlogBySubject = async (subjectID) => {
+  const response = await axios.get(
+    API_BASE_URL +
+      "/api/v1/blog/getNumberOfBlogBySubject?subjectID=" +
+      subjectID +
+      "&groupID=" +
+      (await AsyncStorage.getItem("groupID")),
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
