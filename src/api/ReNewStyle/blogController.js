@@ -71,6 +71,45 @@ export const blog_getBlogById = async (blogID) => {
   return response;
 };
 
+export const blog_getAllBlogBySubject = async (groupID, subjectID) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/blog/getAllBlogBySubject?groupID=${groupID}&subjectID=${subjectID}`,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
+export const blog_getAllCommentInBlog = async (blogID) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/blog/getAllCommentInBlog?blogID=${blogID}`,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
+export const blog_getAllReplyInComment = async (commentID) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/blog/getAllReplyInComment?commentID=${commentID}`,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
 export const blog_createNewSubject = async (groupID, nameSubject) => {
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/blog/createNewSubject?groupID=${groupID}&nameSubject=${nameSubject}`,
