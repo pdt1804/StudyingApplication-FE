@@ -66,7 +66,7 @@ export const user_getUser = async () => {
     `${API_BASE_URL}/api/v1/user/GetUser`,
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
     }
   );

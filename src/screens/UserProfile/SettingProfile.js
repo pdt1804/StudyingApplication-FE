@@ -15,6 +15,7 @@ import { CommonButton, TextInputMediumIcon } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
+import { user_getUser } from "../../api";
 
 function SettingProfile(props) {
   const [newUsername, setNewUsername] = useState("");
@@ -63,24 +64,16 @@ function SettingProfile(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const username = await AsyncStorage.getItem("username");
+        const response = await user_getUser();
 
-        const response = await axios.get(
-          API_BASE_URL + "/api/v1/user/GetUser",
-          {
-            headers: {
-              Authorization:
-                "Bearer " + (await AsyncStorage.getItem("username")),
-            },
-          }
-        );
+        console.log(response.information.infoID)
 
-        setInfoID(response.data.information.infoID);
-        setNewUsername(response.data.information.fulName);
-        setNewEmail(response.data.email);
-        setNewPhoneNumber(response.data.information.phoneNumber.toString());
-        setNewDateOfBirth(response.data.information.yearOfBirth.toString());
-        setGender(response.data.information.gender);
+        setInfoID(response.information.infoID);
+        setNewUsername(response.information.fulName);
+        setNewEmail(response.email);
+        setNewPhoneNumber(response.information.phoneNumber.toString());
+        setNewDateOfBirth(response.information.yearOfBirth.toString());
+        setGender(response.information.gender);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -114,11 +107,13 @@ function SettingProfile(props) {
                 inputMode="text"
                 name={"Họ và tên"}
                 icon={icons.personCircleIcon}
+                value={newUsername}
                 placeholder={"Nhập tên người dùng mới"}
                 onChangeText={(p) => setNewUsername(p)}
               />
               <TextInputMediumIcon
                 inputMode="numeric"
+                value={newPhoneNumber}
                 name={"Số điện thoại"}
                 icon={icons.phoneRingCircleIcon}
                 placeholder={"Nhập số điện thoại mới"}
@@ -127,6 +122,7 @@ function SettingProfile(props) {
               <TextInputMediumIcon
                 inputMode="text"
                 name={"Giới tính"}
+                value={gender}
                 icon={icons.genderEqualityIcon}
                 placeholder={"Nhập giới tính của bạn"}
                 onChangeText={(p) => setGender(p)}
@@ -134,6 +130,7 @@ function SettingProfile(props) {
               <TextInputMediumIcon
                 inputMode="numeric"
                 name={"Năm sinh"}
+                value={newDateOfBirth}
                 icon={icons.birthdayCakeIcon}
                 placeholder={"Nhập năm sinh của bạn"}
                 onChangeText={(p) => setNewDateOfBirth(p)}

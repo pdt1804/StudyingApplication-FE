@@ -38,6 +38,9 @@ const ShowPost = (props) => {
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
 
+  console.log(image[0])
+  const parts = image[0].split('-')
+
   //navigation
   const { navigate, goBack, push } = props.navigation;
 
@@ -59,6 +62,8 @@ const ShowPost = (props) => {
         }
       );
 
+      console.log(image)
+      
       setUsername(extractToken.data);
 
       const responseGroup = await axios.get(
@@ -128,7 +133,7 @@ const ShowPost = (props) => {
                 {
                   headers: {
                     "Content-Type": "application/json",
-                    Authorization:
+                    "Authorization":
                       "Bearer " + (await AsyncStorage.getItem("username")),
                   },
                 }
@@ -149,15 +154,15 @@ const ShowPost = (props) => {
 
   //Xu li like
   const handleLike = async () => {
-    alert(`id: ${blogID}`)
-    /* var form = new FormData();
-    form.append("blogID", blogID); */
+    //alert(`id: ${blogID}`)
+    var form = new FormData();
+    form.append("blogID", blogID); 
 
     const likeBlog = await axios.post(
-      API_BASE_URL + "/api/v1/blog/likeBlog?blogID=2",
+      API_BASE_URL + "/api/v1/blog/likeBlog", form,
       {
         headers: {
-          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          'Authorization': "Bearer " + (await AsyncStorage.getItem("username")),
         },
       }
     );
@@ -232,7 +237,7 @@ const ShowPost = (props) => {
 
         <TouchableOpacity onPress={ShowPicture}>
           <Image
-            source={{ uri: image != null ? image : null }}
+            source={{ uri: image != null ? parts[0] : null }}
             style={styles.image}
           />
         </TouchableOpacity>

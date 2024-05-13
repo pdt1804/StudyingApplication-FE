@@ -17,13 +17,7 @@ export const information_getAllFavoriteTopics = async (infoID) => {
 
 export const information_getAllTopics = async () => {
   const response = await axios.get(
-    `${API_BASE_URL}/api/v1/information/getAllTopics`,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
-      },
-    }
+    `${API_BASE_URL}/api/v1/information/getAllTopics`
   );
   return response.data;
 };
@@ -55,20 +49,22 @@ export const information_updateInformation = async (information) => {
 };
 
 export const information_initialize = async (yearOfBirth, gender, description, phoneNumber, topics, infoID) => {
+
+  var form = new FormData()
+  form.append("yearOfBirth", yearOfBirth)
+  form.append("gender", gender)
+  form.append("description", description)
+  form.append("phoneNumber", phoneNumber)
+  form.append("topics", topics)
+  form.append("infoID", infoID)
+
+  console.log(topics)
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/information/initialize`,
-    {
-      yearOfBirth: yearOfBirth,
-      gender: gender,
-      description: description,
-      phoneNumber: phoneNumber,
-      topics: topics,
-      infoID: infoID,
-    },
+    `${API_BASE_URL}/api/v1/information/initialize`, form,
     {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + (await AsyncStorage.getItem('username')),
       },
     }
   );

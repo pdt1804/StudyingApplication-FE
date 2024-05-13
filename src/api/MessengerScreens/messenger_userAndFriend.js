@@ -55,13 +55,16 @@ export const messenger_checkSender = async (sentUsername) => {
 //-----------
 
 export const messenger_sendMessageForUser = async (friendUsername, typedText) => {
+  var formData = new FormData()
+  formData.append('toUserName', friendUsername)
+  formData.append('messContent', typedText)
+
   const response = await axios.post(
     API_BASE_URL + "/api/v1/messageUser/sendMessageForUser",
-    { toUserName: friendUsername, messContent: typedText },
+    formData,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        'Authorization': "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );

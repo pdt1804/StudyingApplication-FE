@@ -133,10 +133,13 @@ const ShowNotification = (props) => {
   const { navigate, goBack } = props.navigation;
 
   const LoadItem = async () => {
+    alert("As")
     try {
       if (item.documentID == -1) {
+        var form = new FormData();
+        form.append("blogID", item.blogID);
         const response = await axios.get(
-          API_BASE_URL + "/api/v1/blog/getBlogById?blogID=" + item.blogID, {
+          API_BASE_URL + "/api/v1/blog/getBlogById", form, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
@@ -150,26 +153,29 @@ const ShowNotification = (props) => {
           alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
         }
       } else if (item.blogID == -1) {
-        const response = await axios.get(
-          API_BASE_URL +
-            "/api/v1/document/getDocumentById?documentID=" +
-            item.documentID, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-              },
-            }
-        );
+          var form = new FormData();
+          form.append("documentID", item.documentID);
+          const response = await axios.get(
+            API_BASE_URL +
+              "/api/v1/document/getDocumentById", form, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+                },
+              }
+          );
 
-        if (response.status == 200) {
-          navigate("ShowDocument", { notification: response.data });
-        } else {
-          alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
-        }
+          console.log(response.data)
+          if (response.status == 200) {
+            navigate("ShowDocument", { notification: response.data });
+          } else {
+            alert("Đã có lỗi xảy ra, vui lòng xem trong nhóm");
+          }
       } else {
+
       }
     } catch (error) {
-      alert("Nội dung này đã bị xoá");
+      alert("Nội dung này đã bị xoá !!");
     }
   };
 

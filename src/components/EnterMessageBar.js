@@ -21,6 +21,7 @@ const EnterMessageBar = (props) => {
   //actionType: friend (0) - group (1) - comment (2) - reply (3) - chatbot (4)
   const { stompClient, actionType } = props;
   const [typedText, setTypedText] = useState("");
+  const [files, setFiles] = useState([]);
 
   const handleSendMessage_Friend = async () => {
     if (typedText.length == 0) {
@@ -30,7 +31,7 @@ const EnterMessageBar = (props) => {
     const response = await messenger_sendMessageForUser(
       friendUsername,
       typedText
-    );
+      );
     if (response.status == 200) {
       //console.log(friendID);
       //console.log("sending");

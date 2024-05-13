@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
   
   const [typedText, setTypedText] = useState("");
+  const [userNames, setUserNames] = useState([]);
 
   const ReplyComment = async () => {
 
@@ -24,13 +25,17 @@ function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
       return;
     }
 
-    let reply = {
-      content: typedText,
-    }
+    // let reply = {
+    //   content: typedText,
+    // }
+    var form = new FormData();
+    form.append('commentID', commentID)
+    form.append('content', typedText)
+    form.append('userNames', userNames)
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/blog/replyComment?commentID=" + commentID, reply, {
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/replyComment", form, {
       headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'multipart/form-data', 
         'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     })

@@ -3,16 +3,27 @@ import { API_BASE_URL } from "../DomainAPI";
 import { images } from "../../constants";
 
 export const user_register = async (username, password, email, rePassword) => {
-  let newUser = {
-    userName: username,
-    passWord: password,
-    Email: email,
-  };
+  try {
+    let newUser = {
+      userName: username,
+      passWord: password,
+      Email: email,
+    };
 
+    const apiGetAuthCode = await axios.get(
+      API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email
+      );
+      return { newUser, otp: apiGetAuthCode.data };
+  } catch (catchError) {
+    console.error(catchError.message);
+  }
+};
+
+export const user_checkInfo = async (username, password, email, rePassword) => {
   if (!email.endsWith("@gmail.com")) {
     if (!email.endsWith("@gm.uit.edu.vn")) {
       alert("Định dạng email không đúng");
-      return;
+      return false;
     }
   }
 
@@ -23,7 +34,7 @@ export const user_register = async (username, password, email, rePassword) => {
 
     if (checkUsername.data == true) {
       alert("Đã tồn tại username này");
-      return;
+      return false;
     }
 
     const checkEmail = await axios.get(
@@ -32,24 +43,18 @@ export const user_register = async (username, password, email, rePassword) => {
 
     if (checkEmail.data == true) {
       alert("Đã tồn tại email này");
-      return;
+      return false;
     }
 
-    try {
-      if (password === rePassword) {
-        const apiGetAuthCode = await axios.get(
-          API_BASE_URL + "/api/v1/user/GetAuthenticationCode?email=" + email
-        );
-
-        return { newUser, otp: apiGetAuthCode.data };
-      } else {
-        alert("mật khẩu và nhập lại mật khẩu không giống");
-      }
-    } catch (catchError) {
-      console.error(catchError.message);
+    if (password !== rePassword) {
+      alert("mật khẩu và nhập lại mật khẩu không giống");
+      return false;
     }
+
+    return true;
   } else {
     alert("Tài khoản và mật khẩu phải có tối thiểu 9 kí tự");
+    return false;
   }
 };
 
@@ -65,5 +70,5 @@ export const user_createAccountData = async (newUser) => {
       "&image=" +
       images.blankAvatarForRegistration
   );
-  return response.data;
+  return response;
 };

@@ -31,11 +31,12 @@ function TabYourFriends(props) {
     return () => clearInterval(intervalId);
   }, [props.userName]);
 
-  const SelectedFriend = async (myUsername, friendUsername) => {
+  const SelectedFriend = async (myUsername, friendUsername, state) => {
     await AsyncStorage.setItem("friend", "chat");
     navigate("Messenger", {
       myUsername: myUsername,
       friendUsername: friendUsername,
+      state: state,
     });
   };
 
@@ -48,8 +49,8 @@ function TabYourFriends(props) {
           <TabYourFriendsItems
             friend={item}
             key={item.ID}
-            onPress={(myUserName, friendUsername) => {
-              SelectedFriend(myUserName, friendUsername);
+            onPress={(myUserName, friendUsername, state) => {
+              SelectedFriend(myUserName, friendUsername, state);
             }}
           />
         )}

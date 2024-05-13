@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import React, { useState, useEffect } from "react";
 import {
   Text,
@@ -14,6 +14,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
   const [typedText, setTypedText] = useState("");
+  const [userNames, setUserNames] = useState([]);
+
   const handleSendMessage = async () => {
     
     const message = {
@@ -33,13 +35,18 @@ function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
       return;
     }
 
-    let comment = {
-      content: typedText,
-    }
+    // let comment = {
+    //   content: typedText,
+    // }
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/blog/commentBlog?blogID=" + blogID, comment, {
+    var form = new FormData();
+    form.append('content', typedText)
+    form.append('blogID', blogID)
+    form.append('userNames', userNames)
+
+    const response = await axios.post(API_BASE_URL + "/api/v1/blog/commentBlog", form, {
       headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'multipart/form-data', 
         'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     })

@@ -17,7 +17,7 @@ import { over } from "stompjs";
 import { messenger_getFriendID, messenger_loadMessageforUser } from "../../api";
 
 function Messenger(props) {
-  const { myUsername, friendUsername } = props.route.params;
+  const { myUsername, friendUsername,  } = props.route.params;
   const [chatHistory, setChatHistory] = useState([]);
   const [friendID, setFriendID] = useState(null);
 
@@ -58,6 +58,7 @@ function Messenger(props) {
 
   const onReceivedMessage = async (message) => {
     if ((await AsyncStorage.getItem("friend")) == "list") {
+      setIsNewNotification(true)
       return;
     } else {
       const response = await messenger_loadMessageforUser(friendUsername);
