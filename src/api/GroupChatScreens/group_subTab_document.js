@@ -14,11 +14,16 @@ export const group_getAllDocumentOfGroup = async () => {
 }
 
 export const group_addDocument = async (fileResult) => {
+
+    var uri = fileResult.assets[0].uri;
     const formData = new FormData();
-    formData.append('file', fileResult.assets[0].uri);
+    //formData.append('file', fileResult.assets[0].uri);
+    formData.append("file", {
+        uri,
+        name: fileResult.assets[0].name,
+        type: fileResult.assets[0].mimeType,
+      });
     formData.append('groupID', await AsyncStorage.getItem('groupID'));
-    formData.append('userName', await AsyncStorage.getItem('username'));
-    formData.append('fileName', fileResult.assets[0].name);
 
     const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData, {
         headers: {

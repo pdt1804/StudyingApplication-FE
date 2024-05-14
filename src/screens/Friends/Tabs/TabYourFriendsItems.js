@@ -32,7 +32,7 @@ function TabYourFriendsItems(props) {
   const ToMessage = async () => {
     try {
       setIsNewNotification(false);
-      onPress(await AsyncStorage.getItem("username"), userName);
+      onPress(await AsyncStorage.getItem("username"), userName, setIsNewNotification());
     } catch (exception) {
       console.error(exception.message);
     }

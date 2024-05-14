@@ -35,6 +35,8 @@ function EnterMessageChatBot({OnPress}) {
         'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     })
+
+    console.log("1")
     
     var content = typedText;
 
@@ -46,10 +48,12 @@ function EnterMessageChatBot({OnPress}) {
         max_tokens: 100,
     }, {
         headers: {
-            'Authorization': 'Bearer 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',
+            'Authorization': 'Bearer sk-proj-HbtZMwoSuTsKB3N4080ZT3BlbkFJjvr3qHjhgrMdWTtzOaLQ',
             'Content-Type': 'application/json',
         },
     });
+
+    console.log("2")
 
     var formData = new FormData()
     formData.append("messContent", chatCompletion.data.choices[0].message.content)
@@ -60,6 +64,8 @@ function EnterMessageChatBot({OnPress}) {
         'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     })
+
+    console.log("3")
 
     setTypedText(""); 
 

@@ -57,5 +57,5 @@ export const profile_uploadImage = async (uri, username) => {
     } catch (error) {
       console.log("Lỗi:", error);
     }
-  return response;
+  //return response;
 };

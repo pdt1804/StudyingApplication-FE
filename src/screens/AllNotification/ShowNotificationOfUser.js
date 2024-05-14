@@ -41,6 +41,7 @@ const ShowNotificationOfUser = (props) => {
 
         const getItem = await notifications_loadNotifycation(notifycationID);
         setItem(getItem);
+
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -52,12 +53,13 @@ const ShowNotificationOfUser = (props) => {
   }, [props.userName]);
 
   const LoadItem = async () => {
-    console.log(notifycationType);
-    console.log(notifycationType != "user");
+    //console.log(notifycationType);
+    //console.log(notifycationType != "user");
     if (notifycationType == "user") {
     } else {
       try {
         if (item != null) {
+
           if (item.documentID == -1) {
             const response = await notifications_getBlogById(item.blogID);
 
@@ -74,7 +76,7 @@ const ShowNotificationOfUser = (props) => {
             );
 
             if (response.status == 200) {
-              navigate("ShowDocument", { notification: response.data });
+              navigate("ShowDocument", { document: response.data });
             } else if (response.status == 500) {
               alert("Nội dung này có thể đã bị xoá");
             } else {
@@ -87,7 +89,7 @@ const ShowNotificationOfUser = (props) => {
         }
       } catch (error) {
         //console.error(error.message)
-        alert("Nội dung này đã bị xoá");
+        alert("Nội dung này đã bị xoá !");
       }
     }
   };

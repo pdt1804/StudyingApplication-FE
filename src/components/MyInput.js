@@ -11,6 +11,7 @@ export const TextInputMediumIcon = ({
   isPassword,
   onChangeText,
   style,
+  value,
 }) => (
   <View style={styles.container}>
     <Icon
@@ -26,6 +27,7 @@ export const TextInputMediumIcon = ({
         secureTextEntry={isPassword == null ? false : isPassword} // * the password
         inputMode={inputMode == null ? "text" : inputMode}
         placeholder={placeholder}
+        value={value}
         placeholderTextColor={colors.noImportantText}
         onChangeText={onChangeText}
       />

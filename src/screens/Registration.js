@@ -15,10 +15,15 @@ import {
   TextInputTransparent,
   TextInputMediumIcon,
 } from "../components";
-import { user_register, user_createAccountData } from "../api";
+import { user_register, user_createAccountData, information_initialize } from "../api";
 import CryptoJS from "crypto-js";
 import { RadioButton } from "react-native-paper";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
+import { information_getAllTopics } from "../api";
+import { API_BASE_URL } from "../api/DomainAPI";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { user_checkInfo } from "../api/AuthScreens/user_register";
 
 const Registration = (props) => {
   //navigation to/back
@@ -35,23 +40,23 @@ const Registration = (props) => {
   const [newUser, setNewUser] = useState("");
   const [systemOTP, setSystemOTP] = useState("");
   const [inputOTP, setInputOTP] = useState("");
+  const [infoID, setInfoID] = useState("");
 
   //additional info
   const [gender, setGender] = useState("Nam");
-  const [phoneNumber, setPhoneNumber] = useState("0000000000");
-  const [yearOfBirth, setYearOfBirth] = useState("yyyy");
-  const topics = [
-    { name: "Trí tuệ nhân tạo", image: images.topicAI },
-    { name: "Sinh học tổng hợp", image: images.topicBio },
-    { name: "Quản lý thông tin 5G", image: images.topic5G },
-    { name: "Tương tác con người-máy", image: images.topicHumanAndMachine },
-    { name: "Học máy trong cuộc sống", image: images.topicMachineLearning },
-    { name: "Hệ thống thông tin phân tử", image: images.topicMicro },
-    { name: "Quyền riêng tư và an ninh", image: images.topicPrivacy },
-    { name: "Phát hiện đe dọa mạng", image: images.topicHacker },
-    { name: "IoT trong giao thông", image: images.topicIoT },
-    { name: "Thuật toán mạng xã hội", image: images.topicMedia },
-  ];
+  const [phoneNumber, setPhoneNumber] = useState("00000000000");
+  const [yearOfBirth, setYearOfBirth] = useState("0000");
+  const [description, setDescription] = useState("Giới thiệu về bạn ...");
+  const [jwtToken, setJwtToken] = useState(null);
+
+  const [topics, setTopics] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setTopics(await information_getAllTopics())
+    };
+    fetchData();
+  }, [props.userName]);
+
   const [selectedTopics, setSelectedTopics] = useState([]);
   const handlePressTopic = (topic) => {
     setSelectedTopics((prev) => {
@@ -65,23 +70,28 @@ const Registration = (props) => {
 
   //use for api
   const handleRegister = async () => {
-    const result = await user_register(username, password, email, rePassword);
-    if (result) {
+    if (await user_checkInfo(username, password, email, rePassword) == true)
+    {
       setActiveStep(1);
-      setNewUser(result.newUser);
-      setSystemOTP(result.otp);
+      const result = await user_register(username, password, email, rePassword);
+      if (result) {
+        setNewUser(result.newUser);
+        setSystemOTP(result.otp);
+      }
     }
   };
 
   //use for api: Registration
   const handleVerification_Registration = async () => {
-    alert(
-      `Registration: otp từ hệ thống: ${systemOTP}, từ màn hình: ${inputOTP},`
-    );
+    // alert(
+    //   `Registration: otp từ hệ thống: ${systemOTP}, từ màn hình: ${inputOTP},`
+    // );
 
     if (systemOTP == inputOTP) {
       const dataResponse = await user_createAccountData(newUser);
-      if (dataResponse == newUser.userName) {
+      if (dataResponse.status == 200 && dataResponse.data.jwtToken != null) {
+        setJwtToken(dataResponse.data.jwtToken)
+        setInfoID(dataResponse.data.infoID)
         setActiveStep(2);
       } else {
         //unsuccessful
@@ -154,9 +164,11 @@ const Registration = (props) => {
   //style of Step_AdditionalInfo_3
   const Step_AdditionalInfo_3 = {
     label: "Chọn topic (chủ đề) học tập",
-    onSubmit: () => {
+    onSubmit: async () => {
       alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
-      navigate("Login");
+      await information_initialize(yearOfBirth, gender, description, phoneNumber, selectedTopics, infoID)
+      AsyncStorage.setItem('username', jwtToken)
+      navigate("MainBottomTab", { tabName: "UserProfile" })
     },
     previousBtnText: "Quay Lại",
     finishBtnText: "Xong",
@@ -328,9 +340,9 @@ const Registration = (props) => {
                   justifyContent: "space-between",
                 }}
               >
-                {topics.map((topic, index) => (
+                {topics.map((topic) => (
                   <TouchableOpacity
-                    key={index}
+                    key={topic.topicID}
                     style={{
                       width: "48%",
                       height: 100,
@@ -339,10 +351,10 @@ const Registration = (props) => {
                       marginBottom: 10,
                       position: "relative",
                     }}
-                    onPress={() => handlePressTopic(topic.name)}
+                    onPress={() => handlePressTopic(topic.topicID)}
                   >
                     <Image
-                      source={topic.image}
+                      source={topic.Image}
                       style={{
                         flex: 1,
                         width: "100%",
@@ -353,7 +365,7 @@ const Registration = (props) => {
                       }}
                     />
 
-                    {selectedTopics.includes(topic.name) && (
+                    {selectedTopics.includes(topic.topicID) && (
                       <View
                         style={{
                           ...StyleSheet.absoluteFillObject,
@@ -374,9 +386,9 @@ const Registration = (props) => {
                         fontWeight: "900",
                       }}
                     >
-                      {topic.name}
+                      {topic.topicName}
                     </Text>
-                    {selectedTopics.includes(topic.name) && (
+                    {selectedTopics.includes(topic.topicID) && (
                       <Icon
                         name={icons.checkMarkIcon}
                         size={24}

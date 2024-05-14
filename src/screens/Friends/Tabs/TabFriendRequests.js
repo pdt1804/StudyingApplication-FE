@@ -29,13 +29,13 @@ function TabSuggestions(props) {
       }
     };
 
-    // Thực hiện fetch dữ liệu sau khi ngừng nhập trong 2 giây
-    const timeoutId = setTimeout(() => {
-      fetchData();
-    }, 1);
+    fetchData();
 
-    // Hủy timeout nếu có sự kiện thay đổi trong khoảng 2 giây
-    return () => clearTimeout(timeoutId);
+    //Sử dụng setInterval để gọi lại fetchData mỗi giây
+    const intervalId = setInterval(fetchData, 1000);
+
+    // // Hủy interval khi component bị unmounted
+     return () => clearInterval(intervalId);
   }, [searchText, username]);
 
   return (

@@ -33,8 +33,8 @@ export const notifications_getBlogById = async (blogID) => {
     `${API_BASE_URL}/api/v1/blog/getBlogById?blogID=${blogID}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        'Content-Type': 'application/json',
+        "Authorization": 'Bearer ' + (await AsyncStorage.getItem('username')),
       },
     }
   );
@@ -46,10 +46,71 @@ export const notifications_getDocumentById = async (documentID) => {
     `${API_BASE_URL}/api/v1/document/getDocumentById?documentID=${documentID}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ' + (await AsyncStorage.getItem('username')),
       },
     }
   );
+
   return response;
 };
+
+// export const notifications_getNameGroupByNotifycationID = async (notifycationID) => {
+//   var form = new FormData()
+//   form.append('notificationID', notifycationID)
+//   const response = await axios.get(
+//     API_BASE_URL +
+//       "/api/v1/groupStudying/getNameGroupByNotificationID", form, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+//         },
+//       }
+//   );
+//   return response.data;
+// }
+
+// export const notifications_loadNotifycation = async (notifycationID) => {
+//   var form = new FormData()
+//   form.append('notificationID', notifycationID)
+//   const response = await axios.get(
+//     API_BASE_URL +
+//       "/api/v1/notifycation/loadNotifycation", form, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+//         },
+//       }
+//   );
+//   return response.data;
+// }
+
+// export const notifications_getBlogById = async (blogID) => {
+//   var form = new FormData();
+//   form.append("blogID", blogID)
+//   const response = await axios.get(
+//     `${API_BASE_URL}/api/v1/blog/getBlogById`, form,
+//     {
+//       headers: {
+//         'Content-Type': 'multipart/form-data',
+//         "Authorization": 'Bearer ' + (await AsyncStorage.getItem('username')),
+//       },
+//     }
+//   );
+//   return response;
+// };
+
+// export const notifications_getDocumentById = async (documentID) => {
+//   var form = new FormData();
+//   form.append("documentID", documentID);
+//   const response = await axios.get(
+//     `${API_BASE_URL}/api/v1/document/getDocumentById`, form,
+//     {
+//       headers: {
+//         'Content-Type': 'multipart/form-data',
+//         "Authorization": 'Bearer ' + (await AsyncStorage.getItem('username')),
+//       },
+//     }
+//   );
+//   return response;
+// };

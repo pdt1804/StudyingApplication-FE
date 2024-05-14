@@ -14,6 +14,7 @@ export const user_login = async (username, password, action) => {
       );
 
       if (response.data != "Failed") {
+        console.log(response.data)
         await AsyncStorage.setItem("username", response.data);
         action();
       } else {

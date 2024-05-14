@@ -51,12 +51,6 @@ function MessageBot(props) {
   
     useEffect(() => {
       fetchData(); // Gọi lần đầu tiên khi component được render
-  
-      const intervalId = setInterval(() => {
-        fetchData(); // Gọi lại sau mỗi 2 giây
-      }, 1000);
-  
-      return () => clearInterval(intervalId); // Xóa interval khi component bị unmount hoặc dependencies thay đổi
     }, [props.userName]);
 
   function LoadUserInformation()
