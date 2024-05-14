@@ -25,7 +25,7 @@ import {
   information_getAllFavoriteTopics,
 } from "../../api";
 
-function UserProfile(props) {
+export default function UserProfile(props) {
   const [username, setUsername] = useState(null);
   const [fulname, setFulName] = useState(null);
   const [image, setImage] = useState(null);
@@ -36,7 +36,7 @@ function UserProfile(props) {
   const [yearOfBirth, setYearOfBirth] = useState(null);
   const [gender, setGender] = useState(null);
 
-  const [topics, setTopics] = useState(null);
+  const [topics, setTopics] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,35 +55,21 @@ function UserProfile(props) {
     setFulName(fulname);
     setTopics(topics);
 
-    if (phoneNumber == 0) {
-      setPhoneNumber("Chưa cập nhật");
-    } else {
-      setPhoneNumber("0" + phoneNumber);
-    }
+    description == null
+      ? setDescription("Chưa cập nhật")
+      : setDescription(description);
 
-    if (email == null) {
-      setEmail("Chưa cập nhật");
-    } else {
-      setEmail(email);
-    }
+    phoneNumber == 0
+      ? setPhoneNumber("Chưa cập nhật")
+      : setPhoneNumber("0" + phoneNumber);
 
-    if (description == 0) {
-      setDescription("Chưa cập nhật");
-    } else {
-      setDescription(description);
-    }
+    email == null ? setEmail("Chưa cập nhật") : setEmail(email);
 
-    if (yearOfBirth == 0) {
-      setYearOfBirth("Chưa cập nhật");
-    } else {
-      setYearOfBirth(yearOfBirth);
-    }
+    yearOfBirth <= 1900
+      ? setYearOfBirth("Chưa cập nhật")
+      : setYearOfBirth(yearOfBirth);
 
-    if (gender == 0) {
-      setGender("Chưa cập nhật");
-    } else {
-      setGender(gender);
-    }
+    gender == null ? setGender("Chưa cập nhật") : setGender(gender);
   };
 
   useEffect(() => {
@@ -192,12 +178,19 @@ function UserProfile(props) {
               </Text>
             </View>
           </View>
-          <FlatList
-            horizontal={true}
-            data={topics}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => <Text style={styles.Topic}>{item}</Text>}
+
+          <RowSectionTitle
+            text={"Chủ đề yêu thích"}
+            styles={{ marginTop: 20 }}
           />
+
+          <ScrollView contentContainerStyle={styles.topics_container}>
+            {topics.map((topicName, index) => (
+              <View style={styles.eachTopicBox} key={index}>
+                <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
 
         <RowSectionTitle
@@ -232,7 +225,6 @@ function UserProfile(props) {
     </View>
   );
 }
-export default UserProfile;
 
 const styles = StyleSheet.create({
   container: {
@@ -279,10 +271,24 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h8,
   },
   //
-  Topic: {
-    marginHorizontal: 5,
-    padding: 2,
+  topics_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  eachTopicBox: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 5,
+    marginHorizontal: 3,
+    borderRadius: 12,
     borderWidth: 1,
-    borderRadius: 5,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  eachTopicBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h7,
   },
 });

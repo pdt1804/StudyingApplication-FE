@@ -20,8 +20,6 @@ import CryptoJS from "crypto-js";
 import { RadioButton } from "react-native-paper";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { information_getAllTopics } from "../api";
-import { API_BASE_URL } from "../api/DomainAPI";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { user_checkInfo } from "../api/AuthScreens/user_register";
 
@@ -354,7 +352,7 @@ const Registration = (props) => {
                     onPress={() => handlePressTopic(topic.topicID)}
                   >
                     <Image
-                      source={topic.image}
+                      source={{uri: topic.image}}
                       style={{
                         flex: 1,
                         width: "100%",
