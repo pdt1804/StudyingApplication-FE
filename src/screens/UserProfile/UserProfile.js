@@ -4,6 +4,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  FlatList,
   ScrollView,
   StyleSheet,
 } from "react-native";
@@ -20,21 +21,45 @@ import {
   profile_getUser,
   profile_getAvatar,
   profile_uploadImage,
+  user_getUser,
+  information_getAllFavoriteTopics,
 } from "../../api";
 
 function UserProfile(props) {
   const [username, setUsername] = useState(null);
   const [fulname, setFulName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(null);
   const [image, setImage] = useState(null);
+
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [yearOfBirth, setYearOfBirth] = useState(null);
+  const [gender, setGender] = useState(null);
+
+  const [topics, setTopics] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const setEverything = (username, fulname, email, phoneNumber) => {
+  const setEverything = (
+    username,
+    fulname,
+    email,
+    phoneNumber,
+    description,
+    yearOfBirth,
+    gender,
+    topics
+  ) => {
     setUsername(username);
     setFulName(fulname);
+    setTopics(topics);
+
+    if (phoneNumber == 0) {
+      setPhoneNumber("Chưa cập nhật");
+    } else {
+      setPhoneNumber("0" + phoneNumber);
+    }
 
     if (email == null) {
       setEmail("Chưa cập nhật");
@@ -42,10 +67,22 @@ function UserProfile(props) {
       setEmail(email);
     }
 
-    if (phoneNumber == 0) {
-      setPhoneNumber("Chưa cập nhật");
+    if (description == 0) {
+      setDescription("Chưa cập nhật");
     } else {
-      setPhoneNumber("0" + phoneNumber);
+      setDescription(description);
+    }
+
+    if (yearOfBirth == 0) {
+      setYearOfBirth("Chưa cập nhật");
+    } else {
+      setYearOfBirth(yearOfBirth);
+    }
+
+    if (gender == 0) {
+      setGender("Chưa cập nhật");
+    } else {
+      setGender(gender);
     }
   };
 
@@ -53,14 +90,23 @@ function UserProfile(props) {
     const fetchData = async () => {
       try {
         const username = await AsyncStorage.getItem("username");
-        //console.log(username);
-        const responseUser = await profile_getUser(username);
+        const responseUser = await user_getUser();
+        const responseFavTopics = await information_getAllFavoriteTopics(
+          responseUser.information.infoID
+        );
+
+        let topicNames = responseFavTopics.map((item) => item.topicName);
+        //console.log(topicNames);
 
         setEverything(
           username,
-          responseUser.data.information.fulName,
-          responseUser.data.email,
-          responseUser.data.information.phoneNumber
+          responseUser.information.fulName,
+          responseUser.email,
+          responseUser.information.phoneNumber,
+          responseUser.information.description,
+          responseUser.information.yearOfBirth,
+          responseUser.information.gender,
+          topicNames
         );
 
         const responseAvatar = await profile_getAvatar(username);
@@ -76,7 +122,7 @@ function UserProfile(props) {
     };
 
     fetchData();
-  }, [props.userName]);
+  }, [props.userName, loading]);
 
   useEffect(() => {
     (async () => {
@@ -129,15 +175,29 @@ function UserProfile(props) {
       <UIHeader title={"Hồ sơ"} />
 
       <ScrollView>
-        <View /* Profile picture */ style={styles.profileView}>
-          <TouchableOpacity onPress={ShowPicture}>
-            <Image source={{ uri: image }} style={styles.profileImage} />
-          </TouchableOpacity>
-          <Text style={styles.profileUsername}>{fulname}</Text>
-          <TouchableOpacity onPress={selectImage} style={styles.button}>
-            <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-          </TouchableOpacity>
+        <View>
+        <View style={styles.profileView}>
+          <View>
+            <TouchableOpacity onPress={ShowPicture}>
+              <Image source={{ uri: image }} style={styles.profileImage} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={selectImage} style={styles.button}>
+              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.profileUsername}>{fulname}</Text>
+            <Text style={styles.profileDescription} numberOfLines={4}>
+              {description}
+            </Text>
+          </View>
         </View>
+        <FlatList
+        horizontal={true}
+          data={topics}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => <Text style={styles.Topic}>{item}</Text>}
+        /></View>
 
         <RowSectionTitle
           text={"Thông tin tài khoản"}
@@ -146,6 +206,8 @@ function UserProfile(props) {
 
         <RowSectionDisplay icon={icons.phoneIcon} text={phoneNumber} />
         <RowSectionDisplay icon={icons.emailIcon} text={email} />
+        <RowSectionDisplay icon={icons.birthdayCakeIcon} text={yearOfBirth} />
+        <RowSectionDisplay icon={icons.genderEqualityIcon} text={gender} />
 
         <RowSectionTitle text={"Tùy chỉnh tài khoản"} />
 
@@ -177,34 +239,49 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundWhite,
   },
   profileView: {
-    height: 200,
+    marginLeft: "5%",
+    marginVertical: 15,
     alignItems: "center",
+    flexDirection: "row",
   },
   profileImage: {
     width: 100,
     height: 100,
     resizeMode: "cover",
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 5,
     borderRadius: 90,
-    borderColor: "white",
-    borderWidth: 5,
+    borderColor: colors.PrimaryBackground,
+    borderWidth: 2,
   },
   profileUsername: {
     color: "black",
-    fontSize: fontSizes.h6,
+    fontSize: fontSizes.h5,
+    fontWeight: "900",
+  },
+  profileDescription: {
+    Height: 70,
+    maxWidth: 220,
+    color: "gray",
+    fontSize: fontSizes.h7,
   },
   button: {
     backgroundColor: colors.PrimaryBackground,
-    padding: 10,
+    padding: 3,
     borderRadius: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    width: 150,
-    height: 40,
+    width: 90,
     alignItems: "center",
+    alignSelf: "center",
   },
   buttonText: {
     color: "white",
-    fontSize: fontSizes.h7,
+    fontSize: fontSizes.h8,
+  },
+  //
+  Topic: {
+    marginHorizontal: 5,
+    padding: 2,
+    borderWidth: 1,
+    borderRadius:5,
   },
 });

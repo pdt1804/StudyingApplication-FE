@@ -7,8 +7,8 @@ export const information_getAllFavoriteTopics = async (infoID) => {
     `${API_BASE_URL}/api/v1/information/getAllFavoriteTopics?infoID=${infoID}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -27,8 +27,8 @@ export const information_getAllUnfavourateTopics = async (infoID) => {
     `${API_BASE_URL}/api/v1/information/getAllUnfavourateTopics?infoID=${infoID}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -41,30 +41,38 @@ export const information_updateInformation = async (information) => {
     information,
     {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        "Content-Type": "application/json",
       },
     }
   );
+  return response;
 };
 
-export const information_initialize = async (yearOfBirth, gender, description, phoneNumber, topics, infoID) => {
+export const information_initialize = async (
+  yearOfBirth,
+  gender,
+  description,
+  phoneNumber,
+  topics,
+  infoID
+) => {
+  var form = new FormData();
+  form.append("yearOfBirth", yearOfBirth);
+  form.append("gender", gender);
+  form.append("description", description);
+  form.append("phoneNumber", phoneNumber);
+  form.append("topics", topics);
+  form.append("infoID", infoID);
 
-  var form = new FormData()
-  form.append("yearOfBirth", yearOfBirth)
-  form.append("gender", gender)
-  form.append("description", description)
-  form.append("phoneNumber", phoneNumber)
-  form.append("topics", topics)
-  form.append("infoID", infoID)
-
-  console.log(topics)
+  console.log(topics);
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/information/initialize`, form,
+    `${API_BASE_URL}/api/v1/information/initialize`,
+    form,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -76,8 +84,8 @@ export const information_AddTopic = async (topics, infoID) => {
     {},
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -89,8 +97,8 @@ export const information_RemoveTopic = async (topics, infoID) => {
     {},
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -101,8 +109,8 @@ export const information_getInformation = async () => {
     `${API_BASE_URL}/api/v1/information/getInformation`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -114,22 +122,25 @@ export const information_getAvatar = async () => {
     `${API_BASE_URL}/api/v1/information/getAvatar`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
   return response.data;
 };
 
-export const information_changePassword = async (newPassWord, currentPassWord) => {
+export const information_changePassword = async (
+  newPassWord,
+  currentPassWord
+) => {
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/information/changePassword?newPassWord=${newPassWord}&currentPassWord=${currentPassWord}`,
     {},
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -142,8 +153,8 @@ export const information_changeAvatar = async (image) => {
     {},
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -152,14 +163,14 @@ export const information_changeAvatar = async (image) => {
 
 export const information_changeAvatarCloud = async (image) => {
   const formData = new FormData();
-  formData.append('image', image);
+  formData.append("image", image);
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/information/changeAvatarCloud`,
     formData,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -171,8 +182,8 @@ export const information_ExtractBearerToken = async () => {
     `${API_BASE_URL}/api/v1/information/ExtractBearerToken`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -184,8 +195,8 @@ export const information_GetUser = async (userName) => {
     `${API_BASE_URL}/api/v1/information/GetUser?userName=${userName}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -197,8 +208,8 @@ export const information_getAllUpside = async () => {
     `${API_BASE_URL}/api/v1/information/getAllUpside`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
@@ -210,8 +221,8 @@ export const information_getAllDownside = async () => {
     `${API_BASE_URL}/api/v1/information/getAllDownside`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
