@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarAndButton } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabDocumentItem from "./TabDocumentItem";

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 
 function ReplyItems(props) {
   let { userReplied, dateReplied, content, replyID } = props.comment;

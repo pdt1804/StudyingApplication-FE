@@ -8,7 +8,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { UIHeader, CommonButton, DoubleCommonButton } from "../../../components";
 import { API_BASE_URL } from "../../../api/DomainAPI";
 import axios from "axios";

@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  FlatList,
   ScrollView,
   SafeAreaView,
   StyleSheet,
@@ -12,48 +13,40 @@ import {
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { CommonButton, TextInputMediumIcon } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { user_getUser, information_updateInformation } from "../../../api";
+import {
+  user_getUser,
+  information_getAllFavoriteTopics,
+  information_getAllTopics,
+} from "../../../api";
+
+const FavTopicBox = ({ title }) => (
+  <View style={styles.button}>
+    <Text style={styles.buttonText}>{title}</Text>
+  </View>
+);
 
 export default function TabSettingTopics(props) {
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
-  const [infoID, setInfoID] = useState("");
-  const [newUsername, setNewUsername] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newYearOfBirth, setNewYearOfBirth] = useState("");
-  const [gender, setGender] = useState("");
+  const [favTopics, setFavTopics] = useState(null);
+  const [unFavTopics, setUnFavTopics] = useState(null);
 
   const handleSettings = async () => {
-    //console.log(await AsyncStorage.getItem("username"));
-    let updateInformation = {
-      infoID: infoID,
-      fulName: newUsername,
-      description: newDescription,
-      phoneNumber: newPhoneNumber,
-      email: newEmail,
-      yearOfBirth: newYearOfBirth,
-      gender: gender,
-    };
-    const responseUpdate = information_updateInformation(updateInformation);
-    //console.log(responseUpdate);
     navigate("MainBottomTab", { tabName: "UserProfile" });
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await user_getUser();
-        //console.log(response.information.infoID);
-        setInfoID(response.information.infoID);
-        setNewUsername(response.information.fulName);
-        setNewDescription(response.information.description);
-        setNewPhoneNumber(response.information.phoneNumber.toString());
-        setNewEmail(response.email);
-        setNewYearOfBirth(response.information.yearOfBirth.toString());
-        setGender(response.information.gender);
+        const responseUser = await user_getUser();
+        const responseFavTopics = await information_getAllFavoriteTopics(
+          responseUser.information.infoID
+        );
+        const topicNames = responseFavTopics.map((item) => item.topicName);
+        setFavTopics(topicNames);
+
+        console.log(favTopics);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -68,11 +61,11 @@ export default function TabSettingTopics(props) {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.mainView}>
-
-          <CommonButton
-            onPress={handleSettings}
-            title={"Lưu thay đổi".toUpperCase()}
-          />
+          <ScrollView contentContainerStyle={styles.test_container}>
+            {favTopics.map((topic, index) => (
+              <FavTopicBox key={index} title={topic} />
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
@@ -91,9 +84,36 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
     borderColor: colors.PrimaryOnContainerAndFixed,
     borderWidth: 2,
-    borderRadius: 50,
+    borderRadius: 30,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
+  },
+  //
+  Topic: {
+    marginHorizontal: 5,
+    padding: 2,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  //
+  test_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 5,
+    marginHorizontal:3,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  buttonText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
   },
 });

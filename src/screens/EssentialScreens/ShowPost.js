@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader, SubjectBox, ContentBox } from "../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";

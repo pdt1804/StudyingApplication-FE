@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import {
   SearchBarAndButton,
   WhiteSlideBottomUp,

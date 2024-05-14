@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { friend_addFriend } from "../../../api";
 
 function TabSuggestionsItems(props) {

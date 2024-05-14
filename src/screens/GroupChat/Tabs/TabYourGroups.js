@@ -7,7 +7,7 @@ import {
   TextInputMediumIcon,
   WhiteSlideBottomUp,
 } from "../../../components";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { group_getAllGroupofUser, group_createGroup } from "../../../api";
 

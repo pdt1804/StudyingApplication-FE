@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { friend_checkNewMessage } from "../../../api";
 

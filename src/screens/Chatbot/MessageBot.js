@@ -67,13 +67,6 @@ function MessageBot(props) {
     <View style={styles.container}>
       <UIHeader
         title="Hỏi đáp"
-        leftIconName={null}
-        rightIconName={null}
-        onPressLeftIcon={() => {
-          
-        }}
-        onPressRightIcon={null}
-        onPressTitle={null}
       />
 
       <SafeAreaView style={styles.displayView}>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { friend_acceptInvitation, friend_refuseInvitation } from "../../../api";
 
 function TabFriendRequestsItems(props) {

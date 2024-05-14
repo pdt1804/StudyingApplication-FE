@@ -176,28 +176,29 @@ function UserProfile(props) {
 
       <ScrollView>
         <View>
-        <View style={styles.profileView}>
-          <View>
-            <TouchableOpacity onPress={ShowPicture}>
-              <Image source={{ uri: image }} style={styles.profileImage} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={selectImage} style={styles.button}>
-              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-            </TouchableOpacity>
+          <View style={styles.profileView}>
+            <View>
+              <TouchableOpacity onPress={ShowPicture}>
+                <Image source={{ uri: image }} style={styles.profileImage} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={selectImage} style={styles.button}>
+                <Text style={styles.buttonText}>Thay đổi ảnh</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <Text style={styles.profileUsername}>{fulname}</Text>
+              <Text style={styles.profileDescription} numberOfLines={4}>
+                {description}
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.profileUsername}>{fulname}</Text>
-            <Text style={styles.profileDescription} numberOfLines={4}>
-              {description}
-            </Text>
-          </View>
+          <FlatList
+            horizontal={true}
+            data={topics}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => <Text style={styles.Topic}>{item}</Text>}
+          />
         </View>
-        <FlatList
-        horizontal={true}
-          data={topics}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => <Text style={styles.Topic}>{item}</Text>}
-        /></View>
 
         <RowSectionTitle
           text={"Thông tin tài khoản"}
@@ -282,6 +283,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     padding: 2,
     borderWidth: 1,
-    borderRadius:5,
+    borderRadius: 5,
   },
 });

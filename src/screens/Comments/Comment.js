@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import CommentItems from "./CommentItems";
-import { images, colors, icons, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageCommentBar } from "../../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { images, colors, icons, fontSizes } from "../constants";
+import { images, icons, colors, fontSizes } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API_BASE_URL } from "../api/DomainAPI";

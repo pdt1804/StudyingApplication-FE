@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Alert,Modal, Button,
 } from "react-native";
-import { images, colors, icons, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarAndButton } from "../../../components";
 import { UIHeader } from "../../../components";
 import TabDiscussionItems from "./TabDiscussionItems";
