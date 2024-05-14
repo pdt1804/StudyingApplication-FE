@@ -4,32 +4,17 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
-  FlatList,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import {
-  CommonButton,
-  TextInputMediumIcon,
-  SearchBarAndButton,
-  Icon,
-} from "../../../components";
+import { SearchBarAndButton, Icon } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   user_getUser,
   information_getAllFavoriteTopics,
   information_getAllUnfavourateTopics,
-  information_getAllTopics,
 } from "../../../api";
-
-const FavTopicBox = ({ title }) => (
-  <View style={styles.favTopicBox}>
-    <Text style={styles.favTopicBoxText}>{title}</Text>
-  </View>
-);
 
 export default function TabSettingTopics(props) {
   //function of navigation to/back
@@ -38,6 +23,7 @@ export default function TabSettingTopics(props) {
   const [favTopics, setFavTopics] = useState([]);
   const [unFavTopics, setUnFavTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const handlePressTopic = (topic) => {
     setSelectedTopics((prev) => {
@@ -49,8 +35,12 @@ export default function TabSettingTopics(props) {
     });
   };
 
-  const handleSettings = async () => {
-    navigate("MainBottomTab", { tabName: "UserProfile" });
+  const handleAddTopics = async (selectedTopics) => {
+    alert(`thêm "${selectedTopics}" thành công`);
+  };
+
+  const handleRemoveTopic = async (topic) => {
+    alert(`xóa "${topic.topicName}" thành công`);
   };
 
   useEffect(() => {
@@ -64,8 +54,7 @@ export default function TabSettingTopics(props) {
           responseUser.information.infoID
         );
 
-        const FavTopicNames = responseFavTopics.map((item) => item.topicName);
-        setFavTopics(FavTopicNames);
+        setFavTopics(responseFavTopics);
         setUnFavTopics(responseUnFavTopics);
 
         console.log(favTopics);
@@ -80,15 +69,33 @@ export default function TabSettingTopics(props) {
   }, [props.userName]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.mainView}>
+    <View style={styles.container}>
+      <View style={[styles.mainView, styles.mainView_Top]}>
         <Text style={styles.header}>Chủ đề bạn đã chọn</Text>
-        <ScrollView contentContainerStyle={styles.test_container}>
-          {favTopics.map((topicName, index) => (
-            <View style={styles.favTopicBox} key={index}>
-              <Text style={styles.favTopicBoxText}>{topicName}</Text>
-            </View>
-          ))}
+        <ScrollView>
+          <View style={styles.topicsView}>
+            {favTopics.map((topic) => (
+              <View key={topic.topicID} style={styles.eachFavTopic}>
+                <View style={styles.favTopicBox}>
+                  <Text style={styles.favTopicBoxText}>{topic.topicName}</Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                  }}
+                  onPress={() => handleRemoveTopic(topic)}
+                >
+                  <Icon
+                    name={icons.cancelCircleIcon}
+                    size={20}
+                    color={colors.RedLightBackground}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
         </ScrollView>
       </View>
 
@@ -97,46 +104,54 @@ export default function TabSettingTopics(props) {
           setSearchText(text);
         }}
         buttonTitle={"Thêm chủ đề yêu thích"}
-        buttonOnPress={() => {
-          setModalVisible(true);
-        }}
+        buttonOnPress={() => handleAddTopics(selectedTopics)}
         buttonLength={"100%"}
       />
 
-      <View style={styles.mainView02}>
-        <ScrollView style={styles.sub_ScrollView}>
+      <View style={[styles.mainView, styles.mainView_Bottom]}>
+        <Text style={styles.header}>Chủ đề bạn chưa chọn</Text>
+        <ScrollView>
           <View style={styles.topicsView}>
-            {unFavTopics.map((topic) => (
-              <TouchableOpacity
-                key={topic.topicID}
-                style={styles.eachTopic}
-                onPress={() => handlePressTopic(topic.topicID)}
-              >
-                <Image source={{ uri: topic.image }} style={styles.topicImg} />
-
-                {selectedTopics.includes(topic.topicID) && (
-                  <View style={styles.blackCover} />
-                )}
-
-                <Text style={styles.topicNameText}>{topic.topicName}</Text>
-                {selectedTopics.includes(topic.topicID) && (
-                  <Icon
-                    name={icons.checkMarkIcon}
-                    size={24}
-                    color={colors.PrimaryContainer}
-                    style={{
-                      top: 0,
-                      right: 0,
-                      position: "absolute",
-                    }}
+            {unFavTopics
+              .filter((eachTopic) =>
+                eachTopic.topicName
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase())
+              )
+              .map((topic) => (
+                <TouchableOpacity
+                  key={topic.topicID}
+                  style={styles.eachTopic}
+                  onPress={() => handlePressTopic(topic.topicID)}
+                >
+                  <Image
+                    source={{ uri: topic.image }}
+                    style={styles.topicImg}
                   />
-                )}
-              </TouchableOpacity>
-            ))}
+
+                  {selectedTopics.includes(topic.topicID) && (
+                    <View style={styles.blackCover} />
+                  )}
+
+                  <Text style={styles.topicNameText}>{topic.topicName}</Text>
+                  {selectedTopics.includes(topic.topicID) && (
+                    <Icon
+                      name={icons.checkMarkIcon}
+                      size={24}
+                      color={colors.PrimaryContainer}
+                      style={{
+                        top: 0,
+                        right: 0,
+                        position: "absolute",
+                      }}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
           </View>
         </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -146,14 +161,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    marginBottom: 20,
+    marginBottom: 11,
     fontSize: fontSizes.h3,
     fontWeight: "bold",
   },
   mainView: {
     width: "90%",
     padding: 15,
-    marginVertical: "5%",
+    marginTop: "5%",
     backgroundColor: colors.transparentWhite,
     borderColor: colors.PrimaryOnContainerAndFixed,
     borderWidth: 2,
@@ -162,35 +177,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  mainView02: {
-    maxHeight: 370,
-    width: "90%",
-    padding: 15,
-    marginVertical: "5%",
-    backgroundColor: colors.transparentWhite,
-    borderColor: colors.PrimaryOnContainerAndFixed,
-    borderWidth: 2,
-    borderRadius: 30,
-    alignSelf: "center",
+  mainView_Top: {
+    height: "26%",
+  },
+  mainView_Bottom: {
+    height: "55%",
   },
   //
-  Topic: {
-    marginHorizontal: 5,
-    padding: 2,
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  //
-  test_container: {
+  scrollViewFavTopics: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-around",
   },
+  eachFavTopic: {
+    marginBottom: 5,
+    marginHorizontal: 1,
+    paddingBottom: 7,
+    paddingRight: 17,
+  },
   favTopicBox: {
     paddingVertical: 5,
     paddingHorizontal: 10,
-    marginBottom: 5,
-    marginHorizontal: 1,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.GrayContainer,
