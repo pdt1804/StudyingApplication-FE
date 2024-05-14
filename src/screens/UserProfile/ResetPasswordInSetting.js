@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-import { images, icons, colors, fontSizes, icons } from "../../constants/index";
+import { images, icons, colors, fontSizes } from "../../constants/index";
 import { UIHeader, CommonButton, TextInputMediumIcon } from "../../components";
 import CryptoJS from "crypto-js";
 import { user_profile_changePassword } from "../../api";
