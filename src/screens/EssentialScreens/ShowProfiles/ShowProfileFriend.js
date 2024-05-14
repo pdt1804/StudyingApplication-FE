@@ -43,7 +43,7 @@ function EachOptionNavigate(props) {
       <Image source={icon} style={styles.eachOptionIcon} />
       <Text style={styles.eachOptionText}>{text}</Text>
       <View style={{ flex: 1 }} />
-      <Image source={images.chevronRightIcon} style={styles.eachOptionIcon} />
+      <Image source={icons.chevronRightIcon} style={styles.eachOptionIcon} />
     </TouchableOpacity>
   );
 }
@@ -167,10 +167,10 @@ const ShowProfileFriend = (props) => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + phoneNumber} />
-          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + email} />
-          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + gender} />
-          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + yearOfBirth} />
+          <EachOptionViewOnly icon={icons.phoneIcon} text={"Số điện thoại: " + phoneNumber} />
+          <EachOptionViewOnly icon={icons.emailIcon} text={"Email: " + email} />
+          <EachOptionViewOnly icon={icons.personIcon} text={"Giới tính: " + gender} />
+          <EachOptionViewOnly icon={icons.documentBlackIcon} text={"Năm sinh: " + yearOfBirth} />
 
           <CommonButton
             onPress={DeleteFriend}
@@ -181,7 +181,7 @@ const ShowProfileFriend = (props) => {
 
       <UIHeader
         title={null}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

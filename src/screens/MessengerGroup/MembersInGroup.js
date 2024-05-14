@@ -61,7 +61,7 @@ function MembersInGroup(props) {
   return (
     <View style={styles.container}>
       <UIHeader title={"Thành viên"} 
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
@@ -78,7 +78,7 @@ function MembersInGroup(props) {
           placeholder="Tìm kiếm..."
           placeholderTextColor={colors.inactive}
         />
-        <Image source={images.searchIcon} style={styles.searchBarImage} />
+        <Image source={icons.searchIcon} style={styles.searchBarImage} />
       </View>
 
       <View style={styles.blackLine} />

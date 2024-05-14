@@ -162,8 +162,8 @@ const EditPost = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Sửa thảo luận"}
-        leftIconName={images.backIcon}
-        rightIconName={images.sendMessageCursorIcon}
+        leftIconName={icons.backIcon}
+        rightIconName={icons.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           goBack()
         }}

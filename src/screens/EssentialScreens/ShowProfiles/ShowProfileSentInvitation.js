@@ -43,7 +43,7 @@ function EachOptionNavigate(props) {
       <Image source={icon} style={styles.eachOptionIcon} />
       <Text style={styles.eachOptionText}>{text}</Text>
       <View style={{ flex: 1 }} />
-      <Image source={images.chevronRightIcon} style={styles.eachOptionIcon} />
+      <Image source={icons.chevronRightIcon} style={styles.eachOptionIcon} />
     </TouchableOpacity>
   );
 }
@@ -94,10 +94,10 @@ const ShowPicture = () => {
 
           <GroupOption text={"Thông tin tài khoản"} />
 
-          <EachOptionViewOnly icon={images.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
-          <EachOptionViewOnly icon={images.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={images.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={images.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
+          <EachOptionViewOnly icon={icons.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
+          <EachOptionViewOnly icon={icons.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={icons.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
+          <EachOptionViewOnly icon={icons.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
 
           <CommonButton
             onPress={UndoAddFriend}
@@ -108,7 +108,7 @@ const ShowPicture = () => {
 
       <UIHeader
         title={null}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

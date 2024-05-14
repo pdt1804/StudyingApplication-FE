@@ -61,7 +61,7 @@ const Reply = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Phản hồi bình luận"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

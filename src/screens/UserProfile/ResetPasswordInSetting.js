@@ -77,7 +77,7 @@ const ResetPasswordInSetting = (props) => {
 
       <UIHeader
         title={null}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

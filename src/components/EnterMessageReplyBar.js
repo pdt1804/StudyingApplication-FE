@@ -63,7 +63,7 @@ function EnterMessageReplyBar({myUsername, friendUsername, commentID}) {
         placeholderTextColor={colors.placeholder}
       />
       <TouchableOpacity onPress={ReplyComment}>
-        <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
+        <Image source={icons.sendMessageCursorIcon} style={styles.sendIcon} />
       </TouchableOpacity>
     </View>
   );

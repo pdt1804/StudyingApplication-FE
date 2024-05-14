@@ -114,8 +114,8 @@ const ShowDocument = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={'Nội dung file'}
-        rightIconName={images.trashCanIcon}
-        leftIconName={images.backIcon}
+        rightIconName={icons.trashCanIcon}
+        leftIconName={icons.backIcon}
         onPressLeftIcon={() => {
           goBack();
         }}

@@ -20,7 +20,7 @@ import { FloatingAction } from "react-native-floating-action";
 const floatingActions = [
   {
     text: "Xóa thông báo",
-    icon: images.trashCanIcon,
+    icon: icons.trashCanIcon,
     name: "bt_delete",
     position: 2,
   },
@@ -238,7 +238,7 @@ const ShowNotification = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Thông báo"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
@@ -250,28 +250,28 @@ const ShowNotification = (props) => {
       />
 
       <ScrollView style={styles.mainView}>
-        <SubjectBox icon={images.groupIcon} title="Nhóm" content={groupName} />
+        <SubjectBox icon={icons.groupIcon} title="Nhóm" content={groupName} />
 
         <SubjectBox
-          icon={images.clockIcon}
+          icon={icons.clockIcon}
           title="Thời gian gửi"
           content={sendingTime}
         />
 
         <SubjectBox
-          icon={images.menuIcon}
+          icon={icons.menuIcon}
           title="Loại thông báo"
           content={item.notifycationType == "user" ? "Trưởng nhóm" : "Hệ thống"}
         />
 
         <SubjectBox
-          icon={images.priceTagIcon}
+          icon={icons.priceTagIcon}
           title="Tiêu đề"
           content={item.header}
         />
 
         <ContentBox
-          icon={images.documentBlackIcon}
+          icon={icons.documentBlackIcon}
           title="Nội dung"
           content={item.content}
           OnPressContent={() => {

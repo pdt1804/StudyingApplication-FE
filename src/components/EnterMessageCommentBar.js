@@ -75,7 +75,7 @@ function EnterMessageCommentBar({myUsername, friendUsername, blogID}) {
         placeholderTextColor={colors.placeholder}
       />
       <TouchableOpacity onPress={commentBlog}>
-        <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
+        <Image source={icons.sendMessageCursorIcon} style={styles.sendIcon} />
       </TouchableOpacity>
     </View>
   );

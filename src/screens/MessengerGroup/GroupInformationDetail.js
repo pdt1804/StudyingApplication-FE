@@ -84,7 +84,7 @@ function GroupInformationDetail(props) {
     <View style={styles.container}>
       <UIHeader
         title={"Tùy chỉnh"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();
@@ -101,7 +101,7 @@ function GroupInformationDetail(props) {
             <View style={styles.mainView}>
               <View /* new Username */ style={styles.textInputView}>
                 <Image
-                  source={images.personCircleIcon}
+                  source={icons.personCircleIcon}
                   style={styles.textInputImageNoTitle}
                 />
                 <View>
@@ -118,7 +118,7 @@ function GroupInformationDetail(props) {
               </View>
               <View /* new phone number */ style={styles.textInputView}>
                 <Image
-                  source={images.phoneRingCircleIcon}
+                  source={icons.phoneRingCircleIcon}
                   style={styles.textInputImage}
                 />
                 <View>

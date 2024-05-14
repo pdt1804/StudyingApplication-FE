@@ -84,7 +84,7 @@ function EnterMessageChatBot({OnPress}) {
         placeholderTextColor={colors.placeholder}
       />
       <TouchableOpacity onPress={handleSendMessage}>
-        <Image source={images.sendMessageCursorIcon} style={styles.sendIcon} />
+        <Image source={icons.sendMessageCursorIcon} style={styles.sendIcon} />
       </TouchableOpacity>
     </View>
   );

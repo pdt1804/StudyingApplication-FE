@@ -166,8 +166,8 @@ const Registration = (props) => {
     label: "Chọn topic (chủ đề) học tập",
     onSubmit: async () => {
       alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
-      await information_initialize(yearOfBirth, gender, description, phoneNumber, selectedTopics, infoID)
       AsyncStorage.setItem('username', jwtToken)
+      await information_initialize(yearOfBirth, gender, description, phoneNumber, selectedTopics, infoID)
       navigate("MainBottomTab", { tabName: "UserProfile" })
     },
     previousBtnText: "Quay Lại",
@@ -354,7 +354,7 @@ const Registration = (props) => {
                     onPress={() => handlePressTopic(topic.topicID)}
                   >
                     <Image
-                      source={topic.Image}
+                      source={topic.image}
                       style={{
                         flex: 1,
                         width: "100%",

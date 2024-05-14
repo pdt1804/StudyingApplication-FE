@@ -56,7 +56,7 @@ const Comment = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Bình luận trên bài đăng"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

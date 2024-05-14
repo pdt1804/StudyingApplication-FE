@@ -88,7 +88,7 @@ function SettingProfile(props) {
     <View style={styles.container}>
       <UIHeader
         title={"Tùy chỉnh"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

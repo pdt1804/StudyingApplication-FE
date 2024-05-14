@@ -84,7 +84,7 @@ function Messenger(props) {
     <View style={styles.container}>
       <UIHeader
         title={friendUsername}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBackToFriendList();

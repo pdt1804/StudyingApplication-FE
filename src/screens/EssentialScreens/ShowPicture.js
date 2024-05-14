@@ -33,7 +33,7 @@ const ShowPicture = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={"Ảnh"}
-        leftIconName={images.backIcon}
+        leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
           goBack();

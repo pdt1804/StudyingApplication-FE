@@ -140,8 +140,8 @@ const CreateNotification = (props) => {
     <View style={styles.container}>
       <UIHeader
         title={'Tạo thông báo'}
-        leftIconName={blankContent ? images.backIcon : images.cancelCircleIcon}
-        rightIconName={images.sendMessageCursorIcon}
+        leftIconName={blankContent ? icons.backIcon : icons.cancelCircleIcon}
+        rightIconName={icons.sendMessageCursorIcon}
         onPressLeftIcon={() => {
           blankContent ? goBack() : (setContentText(""), setTitleText(""));
         }}
