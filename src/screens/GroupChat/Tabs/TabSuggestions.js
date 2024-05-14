@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from "react-native";
 import TabSuggestionsItems from "./TabSuggestionsItems";
-import { images, colors, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarTransparent } from "../../../components";
 import { group_findGroupbyName } from "../../../api";
 

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { CommonButton } from "../../components";
 import AsyncStorage from '@react-native-async-storage/async-storage';

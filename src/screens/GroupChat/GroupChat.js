@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import TabYourGroups from "./Tabs/TabYourGroups";
 import TabSuggestions from "./Tabs/TabSuggestions";
-import { images, colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 

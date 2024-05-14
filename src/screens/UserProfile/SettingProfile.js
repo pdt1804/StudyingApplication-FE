@@ -1,7 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import TabSettingBasicInfo from "./Tabs/TabSettingBasicInfo";
-import { images, colors, fontSizes } from "../../constants";
+import TabSettingTopics from "./Tabs/TabSettingTopics";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
@@ -13,16 +14,25 @@ const ScreenOptions = ({ route }) => ({
   tabBarInactiveTintColor: colors.inactive,
   tabBarActiveBackgroundColor: colors.backgroundWhite,
   tabBarInactiveBackgroundColor: colors.backgroundWhite,
+  tabBarLabelStyles:{
+    fontSize: fontSizes.h7,
+  }
 });
 
-const tabBarLabelStyles = {
-  fontSize: fontSizes.h6,
-};
-
 export default function SettingProfile(props) {
+  const { navigate, goBack } = props.navigation;
+
   return (
     <View style={styles.container}>
-      <UIHeader title={"Nhóm học tập"} />
+      <UIHeader
+        title={"Tùy chỉnh"}
+        leftIconName={icons.backIcon}
+        rightIconName={null}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
+        onPressRightIcon={() => {}}
+      />
       <View style={styles.displayView}>
         <Tab.Navigator
           initialRouteName="TabSettingBasicInfo"
@@ -32,16 +42,14 @@ export default function SettingProfile(props) {
             name="TabSettingBasicInfo"
             component={TabSettingBasicInfo}
             options={{
-              tabBarLabel: "Đã tham gia",
-              tabBarLabelStyle: tabBarLabelStyles,
+              tabBarLabel: "Thông tin cơ bản",
             }}
           />
           <Tab.Screen
-            name="TabSettingBasicInfo"
-            component={TabSettingBasicInfo}
+            name="TabSettingTopics"
+            component={TabSettingTopics}
             options={{
-              tabBarLabel: "Gợi ý nhóm",
-              tabBarLabelStyle: tabBarLabelStyles,
+              tabBarLabel: "Chủ đề bạn quan tâm",
             }}
           />
         </Tab.Navigator>

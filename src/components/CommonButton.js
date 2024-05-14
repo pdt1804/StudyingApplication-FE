@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
+import { images, icons, colors, fontSizes } from "../constants/index";
 
 function CommonButton(props) {
   const { onPress, title } = props;

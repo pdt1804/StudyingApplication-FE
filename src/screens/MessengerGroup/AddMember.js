@@ -8,7 +8,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import { images, colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import axios from "axios";

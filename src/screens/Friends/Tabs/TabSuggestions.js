@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import TabSuggestionsItems from "./TabSuggestionsItems";
 import { SearchBarTransparent } from "../../../components";
-import { images, colors, fontSizes } from "../../../constants";
+import { images, icons, colors, fontSizes } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { friend_findAllFriendByInputName } from "../../../api";
 

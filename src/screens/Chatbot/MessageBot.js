@@ -10,7 +10,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { images, colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader, EnterMessageBar, MessengerItems } from "../../components";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";

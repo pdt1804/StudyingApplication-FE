@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { images, colors, fontSizes } from "../constants/index";
+import { images, icons, colors, fontSizes } from "../constants/index";
 
 function DoubleCommonButton(props) {
   const { onPressLeft, titleLeft, onPressRight, titleRight } = props;

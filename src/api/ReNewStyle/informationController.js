@@ -46,7 +46,7 @@ export const information_updateInformation = async (information) => {
       },
     }
   );
-  return response;
+  return response.status;
 };
 
 export const information_initialize = async (
