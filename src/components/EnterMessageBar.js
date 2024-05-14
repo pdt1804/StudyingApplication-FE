@@ -74,6 +74,13 @@ const EnterMessageBar = (props) => {
 
   return (
     <View style={styles.container}>
+    <TouchableOpacity onPress={()=>{}}>
+      <Icon
+        name={icons.addKeyIcon}
+        size={25}
+        color={colors.PrimaryBackground}
+      />
+    </TouchableOpacity>
       <TextInput
         multiline={true}
         style={styles.textInput}
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
   },
   textInput: {
-    width: "85%",
+    width: "75%",
     color: "black",
     paddingStart: 10,
   },
