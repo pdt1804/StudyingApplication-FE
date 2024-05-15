@@ -13,6 +13,7 @@ import {
   messenger_sendMessageForUser,
   messenger_sendMessageForGroup,
 } from "../api";
+import * as ImagePicker from "expo-image-picker";
 
 const EnterMessageBar = (props) => {
   //use for friend-MessageBar
@@ -72,11 +73,32 @@ const EnterMessageBar = (props) => {
     }
   };
 
+  const selectImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      multiple: true, 
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+
+      try {
+        var imagePath = result.assets[0].uri.toString();
+        await profile_uploadImage(imagePath, username);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
-    <TouchableOpacity onPress={()=>{}}>
+    <TouchableOpacity onPress={selectImage}>
       <Icon
-        name={icons.addKeyIcon}
+        name={icons.priceTagIcon}
         size={25}
         color={colors.PrimaryBackground}
       />

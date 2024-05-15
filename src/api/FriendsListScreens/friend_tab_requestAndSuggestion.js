@@ -6,11 +6,12 @@ import { API_BASE_URL } from "../DomainAPI";
 //tab screens
 
 export const friend_findAllFriendByInputName = async (input) => {
+
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/friendship/findAllFriendByInputName?input=${input}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
       },
     }

@@ -37,7 +37,7 @@ export const information_getAllUnfavourateTopics = async (infoID) => {
 
 export const information_updateInformation = async (information) => {
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/information/updateInformation`,
+    `${API_BASE_URL}/api/v1/information/updateInformation?email=${information.email}`,
     information,
     {
       headers: {
@@ -79,29 +79,38 @@ export const information_initialize = async (
 };
 
 export const information_AddTopic = async (topics, infoID) => {
+  // var formData = new FormData();
+  // formData.append("topics", topics)
+  // formData.append("infoiD", infoID)
+
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/information/AddTopic?topics=${topics}&infoID=${infoID}`,
     {},
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
+
+  return response
 };
 
 export const information_RemoveTopic = async (topics, infoID) => {
+  console.log(topics)
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/information/RemoveTopic?topics=${topics}&infoID=${infoID}`,
     {},
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
+  
+  return response;
 };
 
 export const information_getInformation = async () => {

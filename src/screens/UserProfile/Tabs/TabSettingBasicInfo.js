@@ -40,6 +40,7 @@ export default function TabSettingBasicInfo(props) {
     const responseUpdate = information_updateInformation(updateInformation);
     //console.log(responseUpdate);
     navigate("MainBottomTab", { tabName: "UserProfile" });
+    alert('Vui lòng khởi động lại để nhìn thấy thay đổi')
   };
 
   useEffect(() => {

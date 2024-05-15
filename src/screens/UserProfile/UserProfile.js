@@ -99,7 +99,7 @@ export default function UserProfile(props) {
         if (responseAvatar.data != null) {
           setImage(responseAvatar.data.toString());
         }
-        console.log(image);
+        //console.log(image);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -108,6 +108,9 @@ export default function UserProfile(props) {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 3000);
+    return () => clearInterval(intervalId);
   }, [props.userName, loading]);
 
   useEffect(() => {

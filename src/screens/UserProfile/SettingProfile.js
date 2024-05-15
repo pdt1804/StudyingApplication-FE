@@ -29,7 +29,7 @@ export default function SettingProfile(props) {
         leftIconName={icons.backIcon}
         rightIconName={null}
         onPressLeftIcon={() => {
-          goBack();
+          navigate("MainBottomTab", { tabName: "UserProfile" })
         }}
         onPressRightIcon={() => {}}
       />

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarAndButton, Icon } from "../../../components";
@@ -14,6 +15,8 @@ import {
   user_getUser,
   information_getAllFavoriteTopics,
   information_getAllUnfavourateTopics,
+  information_AddTopic,
+  information_RemoveTopic,
 } from "../../../api";
 
 export default function TabSettingTopics(props) {
@@ -24,6 +27,7 @@ export default function TabSettingTopics(props) {
   const [unFavTopics, setUnFavTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [infoID, setInfoID] = useState()
 
   const handlePressTopic = (topic) => {
     setSelectedTopics((prev) => {
@@ -36,17 +40,69 @@ export default function TabSettingTopics(props) {
   };
 
   const handleAddTopics = async (selectedTopics) => {
-    alert(`thêm "${selectedTopics}" thành công`);
+    const response = await information_AddTopic(selectedTopics, infoID)
+    if (response.status == 200)
+    {
+      alert('Đã thêm chủ đề yêu thích')
+
+      const responseFavTopics = await information_getAllFavoriteTopics(
+        infoID
+      );
+      const responseUnFavTopics = await information_getAllUnfavourateTopics(
+        infoID
+      );
+
+      setFavTopics(responseFavTopics);
+      setUnFavTopics(responseUnFavTopics);
+    }
+    else
+    {
+      alert('Có lỗi xảy ra, vui lòng thử lại')
+    }
   };
 
   const handleRemoveTopic = async (topic) => {
-    alert(`xóa "${topic.topicName}" thành công`);
+    Alert.alert(
+      "Xác nhận xoá",
+      "Bạn có chắc chắn muốn xoá?",
+      [
+        {
+          text: "Huỷ",
+          style: "cancel",
+        },
+        {
+          text: "Xoá",
+          style: "destructive",
+          onPress: async () => {
+            const response = await information_RemoveTopic(topic.topicID, infoID)
+            if (response.status != 200) {
+              alert("Xoá không thành công, kiểm tra lại mạng");
+            }
+            else
+            {
+              const responseFavTopics = await information_getAllFavoriteTopics(
+                infoID
+              );
+              const responseUnFavTopics = await information_getAllUnfavourateTopics(
+                infoID
+              );
+      
+              setFavTopics(responseFavTopics);
+              setUnFavTopics(responseUnFavTopics);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const responseUser = await user_getUser();
+        setInfoID(responseUser.information.infoID)
+
         const responseFavTopics = await information_getAllFavoriteTopics(
           responseUser.information.infoID
         );
@@ -103,7 +159,7 @@ export default function TabSettingTopics(props) {
         searchBarOnChangeText={(text) => {
           setSearchText(text);
         }}
-        buttonTitle={"Thêm chủ đề yêu thích"}
+        buttonTitle={"Thêm chủ đề"}
         buttonOnPress={() => handleAddTopics(selectedTopics)}
         buttonLength={"100%"}
       />
