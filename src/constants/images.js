@@ -1,5 +1,4 @@
 const IMG_BASE_URL = '../assets/';
-const BLANK_IMG_BASE_URL = '../assets/blank/';
 
 export default {
   background: require(IMG_BASE_URL + 'background.jpg'),
