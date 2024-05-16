@@ -1,6 +1,5 @@
 const IMG_BASE_URL = '../assets/';
 const BLANK_IMG_BASE_URL = '../assets/blank/';
-const TOPIC_IMG_BASE_URL = '../assets/topics/';
 
 export default {
   background: require(IMG_BASE_URL + 'background.jpg'),
@@ -8,18 +7,8 @@ export default {
   decorStuff01: require(IMG_BASE_URL + 'DecorStuff01.png'),
   decorStuff02: require(IMG_BASE_URL + 'DecorStuff02.png'),
 
-  topicAI: require(TOPIC_IMG_BASE_URL + 'AI.jpg'),
-  topicBio: require(TOPIC_IMG_BASE_URL + 'Bio.jpg'),
-  topicHacker: require(TOPIC_IMG_BASE_URL + 'Hacker.jpg'),
-  topicIoT: require(TOPIC_IMG_BASE_URL + 'IoT.jpg'),
-  topicMachineLearning: require(TOPIC_IMG_BASE_URL + 'MachineLearning.jpg'),
-  topicMedia: require(TOPIC_IMG_BASE_URL + 'Media.jpg'),
-  topicMicro: require(TOPIC_IMG_BASE_URL + 'Micro.jpg'),
-  topicPrivacy: require(TOPIC_IMG_BASE_URL + 'Privacy.jpg'),
-  topicHumanAndMachine: require(TOPIC_IMG_BASE_URL + 'HumanAndMachine.jpg'),
-  topic5G: require(TOPIC_IMG_BASE_URL + '5G.jpg'),
-
-  blankImageLoading: require(BLANK_IMG_BASE_URL + 'blank-image-loading.jpg'),
+  blankImageLoading: 'https://img.freepik.com/premium-vector/no-photos-icon-vector-image-can-be-used-spa_120816-264914.jpg',
   blankAvatarForRegistration: "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg",
-  blankAvatarForNewGroup: "https://www.iconbunny.com/icons/media/catalog/product/1/5/1563.8-team-ii-icon-iconbunny.jpg",
+  //blankAvatarForNewGroup: "https://www.iconbunny.com/icons/media/catalog/product/1/5/1563.8-team-ii-icon-iconbunny.jpg", //ảnh quá hạng sử dụng, lỗi 404
+  blankAvatarForNewGroup: "https://img.freepik.com/premium-vector/audiences-icon-vector-image-can-be-used-public-relations-agency_120816-248194.jpg",
 };

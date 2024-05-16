@@ -2,6 +2,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../DomainAPI";
 
+import { images } from "../../constants";
+
 export const groupStudying_getAllGroupofUser = async () => {
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/groupStudying/getAllGroupofUser`,
@@ -71,12 +73,19 @@ export const groupStudying_findGroupbyName = async (nameGroup) => {
 export const groupStudying_createGroup = async (
   nameGroup,
   passWord,
-  image,
   topics
 ) => {
+  var form = new FormData();
+  form.append("nameGroup", nameGroup);
+  form.append("passWord", passWord);
+  form.append(
+    "image",
+    images.blankAvatarForNewGroup
+  );
+  form.append("topics", topics);
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/groupStudying/createGroup`,
-    { nameGroup: nameGroup, passWord: passWord, image: image, topics: topics },
+    form,
     {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -84,7 +93,7 @@ export const groupStudying_createGroup = async (
       },
     }
   );
-  return response.data;
+  return response;
 };
 
 export const groupStudying_deleteGroup = async (groupID) => {
