@@ -40,6 +40,9 @@ export default {
   birthdayCakeIcon: require(ICON_BASE_URL + 'BirthdayCake.png'),
   genderEqualityIcon: require(ICON_BASE_URL + 'GenderEquality.png'),
   trashCanIcon: require(ICON_BASE_URL + 'TrashCan.png'),
+  laurelWreathIcon: require(ICON_BASE_URL + 'LaurelWreath.png'),
+  leaderIcon: require(ICON_BASE_URL + 'Leader.png'),
+  calendarIcon: require(ICON_BASE_URL + 'Calendar.png'),
 
   activeBellAlarm: require(ICON_BASE_URL + 'ActiveBellAlarm.png'),
   inactiveBellAlarm: require(ICON_BASE_URL + 'InactiveBellAlarm.png'),
@@ -57,4 +60,11 @@ export default {
   cancelBlankIcon: require(ICON_BASE_URL + 'CancelBlank.png'),
   cancelBoxClearIcon: require(ICON_BASE_URL + 'CancelBoxClear.png'),
   cancelBoxBlackIcon: require(ICON_BASE_URL + 'CancelBoxBlack.png'),
+
+  starSoftFilled: require(ICON_BASE_URL + 'StarSoftFilled.png'),
+  starSoftEmpty: require(ICON_BASE_URL + 'StarSoftEmpty.png'),
+  starSoftHalf: require(ICON_BASE_URL + 'StarSoftHalf.png'),
+  starFilled: require(ICON_BASE_URL + 'StarFilled.png'),
+  starEmpty: require(ICON_BASE_URL + 'StarEmpty.png'),
+  starHalf: require(ICON_BASE_URL + 'StarHalf.png'),
 };

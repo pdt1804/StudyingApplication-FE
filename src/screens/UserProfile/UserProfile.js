@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   profileDescription: {
-    Height: 70,
+    height: 70,
     maxWidth: 220,
     color: "gray",
     fontSize: fontSizes.h7,

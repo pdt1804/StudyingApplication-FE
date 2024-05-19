@@ -18,6 +18,9 @@ import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
 import { SearchBarAndButton, SearchBarTransparent } from "./MySearchBars";
 import { WhiteSlideBottomUp } from "./MyModal";
 
+import IconRating from "./IconRating";
+import { ReviewItems, NewReviewInput } from "./Review";
+
 export {
   CommonButton,
   UIHeader,
@@ -39,4 +42,8 @@ export {
   SearchBarAndButton,
   SearchBarTransparent,
   WhiteSlideBottomUp,
+  //
+  IconRating,
+  ReviewItems,
+  NewReviewInput,
 };

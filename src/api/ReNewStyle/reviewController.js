@@ -17,14 +17,20 @@ export const review_checkUserReview = async (groupID) => {
 
 export const review_getAllReviewOfGroup = async (groupID) => {
   const response = await axios.get(
-    `${API_BASE_URL}/api/v1/review/getAllReviewOfGroup?groupID=${groupID}`
+    `${API_BASE_URL}/api/v1/review/getAllReviewOfGroup?groupID=${groupID}`,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
   );
   return response.data;
 };
 
 export const review_createReview = async (groupID, rating, content) => {
   const token = await AsyncStorage.getItem('username');
-  await axios.post(
+  const response = await axios.post(
     `${API_BASE_URL}/api/v1/review/createReview`,
     null,
     {
@@ -38,6 +44,7 @@ export const review_createReview = async (groupID, rating, content) => {
       },
     }
   );
+  return response;
 };
 
 export const review_updateReview = async (reviewID, rating, content) => {

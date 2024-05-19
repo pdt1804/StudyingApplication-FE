@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
+  TextInput,
+  Button,
   Image,
   TouchableOpacity,
   ScrollView,
+  FlatList,
   SafeAreaView,
   StyleSheet,
   Alert,
@@ -15,120 +18,115 @@ import {
   RowSectionTitle,
   RowSectionDisplay,
   RowSectionNavigate,
+  IconRating,
+  ReviewItems,
+  NewReviewInput,
+  Icon,
 } from "../../components";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { groupStudying_findGroupbyId, information_ExtractBearerToken, groupStudying_deleteGroup } from "../../api";
+import {
+  information_ExtractBearerToken,
+  groupStudying_findGroupbyId,
+  groupStudying_deleteGroup,groupStudying_changeAvatarGroup,
+  review_checkUserReview,
+  review_getAllReviewOfGroup,
+  review_createReview,
+} from "../../api";
+
+const SubInfo = ({ icon, text }) => {
+  return (
+    <View style={styles.subInfoContainer}>
+      <Icon name={icon} size={35} color={colors.GrayOnContainerAndFixed} />
+      <Text style={styles.subInfoText}>{text}</Text>
+    </View>
+  );
+};
 
 function GroupInfo(props) {
-  const [numberOfMembers, setNumberOfMembers] = useState(null);
-  const [image, setImage] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [extractToken, setExtractToken] = useState(null);
+  //navigation to/back
+  const { navigate, goBack, push } = props.navigation;
 
   const [group, setGroup] = useState("");
-  const [leader, setLeader] = useState("");
+  const [username, setUsername] = useState(null);
+  const [extractToken, setExtractToken] = useState(null);
+  const [topics, setTopics] = useState([]);
+
+  const [groupID, setGroupID] = useState(null);
+  const [image, setImage] = useState(null);
+  const [nameGroup, setNameGroup] = useState(null);
+  const [leaderOfGroup, setLeaderOfGroup] = useState("");
+  const [numberOfMembers, setNumberOfMembers] = useState(null);
   const [dateCreated, setDateCreated] = useState("");
-  const [members, setMembers] = useState("");
 
-  let date;
+  const [reviews, setReviews] = useState([]);
+  const [checkReviewed, setCheckReviewed] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const groupID = await AsyncStorage.getItem("groupID");
-        const responseData = await groupStudying_findGroupbyId(groupID);
-        setGroup(responseData);
-        setLeader("Trưởng nhóm:  " + responseData.leaderOfGroup.fulName);
-        setUsername(responseData.leaderOfGroup.userName);
-        setNumberOfMembers(responseData.numberOfMembers);
-        setImage(responseData.image);
-        setMembers("Số thành viên: " + responseData.numberOfMembers);
-
-        date = new Date(responseData.dateCreated);
-        setDateCreated(
-          "Ngày tạo nhóm:  " +
-            date.getDate() +
-            "/" +
-            (date.getMonth() + 1) +
-            "/" +
-            date.getFullYear()
-        );
-
-        const extractToken = await information_ExtractBearerToken()
-
-        setExtractToken(extractToken);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [props.userName]);
-
-  useEffect(() => {
-    (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-    })();
+    requestMediaLibraryPermissions;
   }, []);
 
-  const LeaveGroup = async () => {
+  const fetchData = async () => {
     try {
-      if (username == extractToken) {
-        if (numberOfMembers > 1) {
-          alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
-        } else {
-          const response = await groupStudying_deleteGroup(group.groupID)/* axios.delete(
-            API_BASE_URL +
-              "/api/v1/groupStudying/deleteGroup?groupID=" +
-              ,
-            {
-              headers: {
-                 "application/json",
-                Authorization:
-                  "Bearer " + (await AsyncStorage.getItem("username")),
-              },
-            }
-          ); */
-          if (response.status == 200) {
-            //await AsyncStorage.removeItem('groupID');
-            navigate("MainBottomTab", { tabName: "GroupChat" });
-          }
-        }
-      } else {
-        const response = await axios.delete(
-          API_BASE_URL +
-            "/api/v1/groupStudying/deleteGroup?groupID=" +
-            group.groupID,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization:
-                "Bearer " + (await AsyncStorage.getItem("username")),
-            },
-          }
-        );
-        if (response.status == 200) {
-          //await AsyncStorage.removeItem('groupID');
-          navigate("MainBottomTab", { tabName: "GroupChat" });
-        }
-      }
+      const responseDataGroup = await groupStudying_findGroupbyId(
+        await AsyncStorage.getItem("groupID")
+      );
+      setGroup(responseDataGroup);
+      setUsername(responseDataGroup.leaderOfGroup.userName);
+      setExtractToken(await information_ExtractBearerToken());
+
+      setGroupID(responseDataGroup.groupID);
+      setImage(responseDataGroup.image);
+      setNameGroup(responseDataGroup.nameGroup);
+      setLeaderOfGroup(responseDataGroup.leaderOfGroup.fulName);
+      setNumberOfMembers(responseDataGroup.numberOfMembers);
+
+      const date = new Date(responseDataGroup.dateCreated);
+      setDateCreated(
+        date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+      );
+
+      const responseDataReviews = await review_getAllReviewOfGroup(
+        await AsyncStorage.getItem("groupID")
+      );
+      setReviews(responseDataReviews);
+
+      setCheckReviewed(
+        await review_checkUserReview(await AsyncStorage.getItem("groupID"))
+      );
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error("Error fetching data:", error);
     }
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const requestMediaLibraryPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+    }
+  };
 
-  const selectImage = async () => {
+  const handleLeaveGroup = async () => {
+    try {
+      const isCurrentUserLeader = username === extractToken;
+      if (isCurrentUserLeader && numberOfMembers > 1) {
+        alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
+        return; // Exit function early if leader needs to change
+      }
+      const response = await groupStudying_deleteGroup(group.groupID);
+      if (response.status === 200) {
+        //await AsyncStorage.removeItem('groupID');
+        navigate("MainBottomTab", { tabName: "GroupChat" });
+      }
+    } catch (error) {
+      console.error("Error leaving group:", error);
+    }
+  };
+
+  const handelSelectImage = async () => {
     if (username == extractToken) {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -136,36 +134,11 @@ function GroupInfo(props) {
         aspect: [4, 3],
         quality: 1,
       });
-
       if (!result.canceled) {
         setImage(result.assets[0].uri.toString());
-
         try {
-          const groupID = await AsyncStorage.getItem("groupID");
-
           var imagePath = result.assets[0].uri.toString();
-
-          uploadImage(imagePath);
-
-          // const formData = new FormData();
-          // formData.append('image', {
-          //   imagePath,
-          //   name: 'image.jpg',
-          //   type: 'image/jpg',
-          // });
-          // formData.append('groupID', groupID);
-
-          // const response = await axios.put(API_BASE_URL + '/api/v1/groupStudying/changeAvatarGroup', formData, {
-          // headers: {
-          //     'Content-Type': 'multipart/form-data',
-          //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          // },
-          // });
-
-          // if (response.status == 200)
-          // {
-          // console.log(imagePath)
-          // }
+          handleUploadImage(imagePath);
         } catch (error) {
           console.error("Error uploading image:", error);
         }
@@ -175,49 +148,11 @@ function GroupInfo(props) {
     }
   };
 
-  const uploadImage = async (uri) => {
-    const formData = new FormData();
-    formData.append("image", {
-      uri,
-      name: "image.jpg",
-      type: "image/jpg",
-    });
-    formData.append("groupID", await AsyncStorage.getItem("groupID"));
-
-    try {
-      // const response = await fetch('YOUR_BACKEND_URL', {
-      //   method: 'POST',
-      //   body: formData,
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-
-      const response = await axios.put(
-        API_BASE_URL + "/api/v1/groupStudying/changeAvatarGroup",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        const imageURL = await response.json();
-        console.log("URL của ảnh:", imageURL);
-        alert("Đổi thành công");
-        // Tiếp tục xử lý URL của ảnh ở đây
-      } else {
-        console.log("Lỗi khi tải lên ảnh");
-      }
-    } catch (error) {
-      console.log("Lỗi:", error);
-    }
+  const handleUploadImage = async (uri) => {
+    groupStudying_changeAvatarGroup(uri, groupID)
   };
 
-  const ChangeInformationGroup = async () => {
+  const handleChangeInformationGroup = async () => {
     if (username == extractToken) {
       navigate("GroupInformationDetail", { group: group });
     } else {
@@ -225,7 +160,7 @@ function GroupInfo(props) {
     }
   };
 
-  const MembersInGroup = async () => {
+  const handleMembersInGroup = async () => {
     if (username == extractToken) {
       navigate("MembersInGroup");
     } else {
@@ -233,7 +168,7 @@ function GroupInfo(props) {
     }
   };
 
-  const AddMembers = async () => {
+  const handleAddMembers = async () => {
     if (username == extractToken) {
       navigate("AddMember");
     } else {
@@ -241,12 +176,16 @@ function GroupInfo(props) {
     }
   };
 
-  const ShowPicture = () => {
+  const handleShowPicture = () => {
     navigate("ShowPicture", { file: image });
   };
 
-  //function of navigation to/back
-  const { navigate, goBack, push } = props.navigation;
+  const handleSubmitNewReview = (newReviewContent, newStarRatingPoint) => {
+    checkReviewed
+      ? alert("bạn đã review rồi")
+      : (alert("review thành công"),
+        review_createReview(groupID, newStarRatingPoint, newReviewContent));
+  };
 
   return (
     <View style={styles.container}>
@@ -258,25 +197,38 @@ function GroupInfo(props) {
         }}
       />
 
-      <ScrollView>
-        <View /* Profile picture */ style={styles.profileView}>
-          <TouchableOpacity onPress={ShowPicture}>
-            <Image source={{ uri: image }} style={styles.profileImage} />
-          </TouchableOpacity>
-          <Text style={styles.profileUsername}>{group.nameGroup}</Text>
-          <TouchableOpacity onPress={selectImage} style={styles.button}>
-            <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-          </TouchableOpacity>
+      <View>
+        <View style={styles.profileView}>
+          <View>
+            <TouchableOpacity onPress={handleShowPicture}>
+              <Image source={{ uri: image }} style={styles.profileImage} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handelSelectImage} style={styles.button}>
+              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.profileUsername}>{nameGroup}</Text>
+            <View style={styles.profileDescription}>
+              <SubInfo icon={icons.leaderIcon} text={leaderOfGroup} />
+              <SubInfo icon={icons.groupIcon} text={numberOfMembers} />
+              <SubInfo icon={icons.calendarIcon} text={dateCreated} />
+            </View>
+          </View>
         </View>
+      </View>
 
-        <RowSectionTitle text={"Thông tin nhóm"} styles={{ marginTop: 20 }} />
+      <NewReviewInput onSubmit={handleSubmitNewReview} />
 
-        <RowSectionDisplay icon={icons.phoneIcon} text={leader} />
+      <View style={styles.listReviewContainer}>
+        <FlatList
+          data={reviews}
+          renderItem={({ item }) => <ReviewItems {...item} />}
+          keyExtractor={(item) => item}
+        />
+      </View>
 
-        <RowSectionDisplay icon={icons.personIcon} text={members} />
-
-        <RowSectionDisplay icon={icons.emailIcon} text={dateCreated} />
-
+      {/*
         <RowSectionTitle text={"Tùy chỉnh tài khoản"} />
 
         <RowSectionNavigate
@@ -300,8 +252,7 @@ function GroupInfo(props) {
           icon={icons.exportIcon}
           text={"Rời nhóm"}
           onPress={LeaveGroup}
-        />
-      </ScrollView>
+        /> */}
     </View>
   );
 }
@@ -312,68 +263,61 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },
-  bannerImage: {
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 500,
-    position: "absolute",
-  },
   profileView: {
-    height: 200,
+    marginLeft: "5%",
+    marginVertical: 15,
     alignItems: "center",
-    backgroundColor: "transparent",
+    flexDirection: "row",
   },
   profileImage: {
     width: 100,
     height: 100,
     resizeMode: "cover",
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 5,
     borderRadius: 90,
-    borderColor: "white",
-    borderWidth: 5,
+    borderColor: colors.PrimaryBackground,
+    borderWidth: 2,
   },
   profileUsername: {
     color: "black",
-    fontSize: fontSizes.h6,
+    fontSize: fontSizes.h5,
+    fontWeight: "900",
   },
-  groupOptionsView: {
-    height: 50,
-    marginStart: 12,
-    justifyContent: "center",
-  },
-  groupOptionsText: {
-    fontSize: fontSizes.h7,
-    color: colors.noImportantText,
-    paddingStart: 10,
-  },
-  eachOptionView: {
+  profileDescription: {
     flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
-  },
-  eachOptionIcon: {
-    width: 20,
-    height: 20,
-    marginStart: 10,
-  },
-  eachOptionText: {
-    fontSize: fontSizes.h6,
-    color: "black",
-    paddingStart: 15,
+    marginTop: 5,
+    //height: 90,
   },
   button: {
-    backgroundColor: "blue", // Màu xanh
-    padding: 10,
+    backgroundColor: colors.PrimaryBackground,
+    padding: 3,
     borderRadius: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    width: 150,
-    height: 40,
+    width: 90,
     alignItems: "center",
+    alignSelf: "center",
   },
   buttonText: {
-    color: "white", // Chữ trắng
-    fontSize: 12,
+    color: colors.PrimaryObjects,
+    fontSize: fontSizes.h8,
   },
+  //
+  listReviewContainer: { flex: 1 },
+  newReviewInputContainer: {
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  //
+  subInfoContainer: {
+    minWidth: 60,
+    maxWidth: 100,
+    paddingVertical: 5,
+    paddingHorizontal: 3,
+    marginRight: 5,
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 13,
+    borderEndColor: colors.PrimaryContainer,
+  },
+  subInfoText: { fontSize: fontSizes.h7, textAlign: "center" },
 });
