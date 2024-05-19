@@ -32,7 +32,7 @@ function UIHeader(props) {
               name={leftIconName}
               size={30}
               color={colors.PrimaryObjects}
-              style={[styles.iconDisplayedLeft, iconStyle, iconLeftStyle]}
+              style={[styles.iconDisplayed, iconStyle, iconLeftStyle]}
             />
           </TouchableOpacity>
         ) : (
@@ -56,7 +56,7 @@ function UIHeader(props) {
               name={rightIconName}
               size={30}
               color={colors.PrimaryObjects}
-              style={[styles.iconDisplayedRight, iconStyle, iconRightStyle]}
+              style={[styles.iconDisplayed, iconStyle, iconRightStyle]}
             />
           </TouchableOpacity>
         ) : (
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: '3%',
   },
   iconClickable: {
     width: 40,
@@ -87,13 +88,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  iconDisplayedLeft: {
+  iconDisplayed: {
     top: 10,
-    marginStart: 10,
-  },
-  iconDisplayedRight: {
-    top: 10,
-    marginEnd: 10,
   },
   textDisplayed: {
     top: 10,

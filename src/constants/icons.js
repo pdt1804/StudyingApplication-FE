@@ -67,4 +67,11 @@ export default {
   starFilled: require(ICON_BASE_URL + 'StarFilled.png'),
   starEmpty: require(ICON_BASE_URL + 'StarEmpty.png'),
   starHalf: require(ICON_BASE_URL + 'StarHalf.png'),
+
+  review0: require(ICON_BASE_URL + 'Review0.png'),
+  review1: require(ICON_BASE_URL + 'Review1.png'),
+  review2: require(ICON_BASE_URL + 'Review2.png'),
+  review3: require(ICON_BASE_URL + 'Review3.png'),
+  review4: require(ICON_BASE_URL + 'Review4.png'),
+  review5: require(ICON_BASE_URL + 'Review5.png'),
 };

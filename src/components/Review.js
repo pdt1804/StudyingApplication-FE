@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { colors, fontSizes } from "../constants";
+import { icons, colors, fontSizes } from "../constants";
 import IconRating from "./IconRating";
+import Icon from "./MyIcon";
 
 export const ReviewItems = ({
   content: reviewContent,
@@ -18,7 +19,7 @@ export const ReviewItems = ({
   reviewID,
   reviewer,
 }) => {
-  const userAvatar = { uri: reviewer.information.image }
+  const userAvatar = { uri: reviewer.information.image };
   const userFullName = reviewer.information.fulName;
   return (
     <View style={styles.reviewContainer}>
@@ -61,18 +62,54 @@ export const NewReviewInput = ({ onSubmit }) => {
     setNewReviewContent("");
     setNewStarRatingPoint(0); // Reset nội dung và số sao sau khi submit
   };
+
+  const emoFace = () => {
+    let emoFace = icons.review0;
+    newStarRatingPoint == 1
+      ? (emoFace = icons.review1)
+      : newStarRatingPoint == 2
+      ? (emoFace = icons.review2)
+      : newStarRatingPoint == 3
+      ? (emoFace = icons.review3)
+      : newStarRatingPoint == 4
+      ? (emoFace = icons.review4)
+      : newStarRatingPoint == 5
+      ? (emoFace = icons.review5)
+      : (emoFace = icons.review0);
+      return emoFace
+  };
+
+  const emoColor = () => {
+    let emoColor = colors.rating0;
+    newStarRatingPoint == 1
+      ? (emoColor = colors.rating1)
+      : newStarRatingPoint == 2
+      ? (emoColor = colors.rating2)
+      : newStarRatingPoint == 3
+      ? (emoColor = colors.rating3)
+      : newStarRatingPoint == 4
+      ? (emoColor = colors.rating4)
+      : newStarRatingPoint == 5
+      ? (emoColor = colors.rating5)
+      : (emoColor = colors.rating0);
+      return emoColor
+  };
+
   return (
     <View style={styles.newReviewInputContainer}>
-      <IconRating
-        currentRating={newStarRatingPoint}
-        max={5}
-        viewOnly={false}
-        onChange={handleStarRatingChange}
-        starSize={35}
-        starColor={colors.SecondaryOnContainerAndFixed}
-        starsContainerStyle={{ marginBottom: 10 }}
-        eachStarContainerStyle={{ marginHorizontal: 1 }}
-      />
+      <View style={styles.newReviewRatingContainer}>
+        <IconRating
+          currentRating={newStarRatingPoint}
+          max={5}
+          viewOnly={false}
+          onChange={handleStarRatingChange}
+          starSize={45}
+          starColor={colors.SecondaryOnContainerAndFixed}
+          starsContainerStyle={{ marginBottom: 10 }}
+          eachStarContainerStyle={{ marginHorizontal: 1 }}
+        />
+        <Icon name={emoFace()} size={50} color={emoColor()} />
+      </View>
       <TextInput
         style={styles.newReviewContentInput}
         placeholder="Nhập nội dung đánh giá..."
@@ -133,7 +170,19 @@ const styles = StyleSheet.create({
   //new input
   newReviewInputContainer: {
     padding: 16,
-    backgroundColor: "#fff",
+    width: "96%",
+    marginBottom: 10,
+    backgroundColor: colors.transparentWhite,
+    borderRadius: 4,
+    borderColor: colors.SecondaryOnContainerAndFixed,
+    borderWidth: 1,
+    alignSelf: "center",
+  },
+  newReviewRatingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    paddingBottom: 5,
   },
   newReviewContentInput: {
     marginBottom: 8,

@@ -16,21 +16,19 @@ import { images, icons, colors, fontSizes } from "../../constants";
 import {
   UIHeader,
   RowSectionTitle,
-  RowSectionDisplay,
   RowSectionNavigate,
-  IconRating,
   ReviewItems,
   NewReviewInput,
   Icon,
+  WhiteSlideBottomUp,
 } from "../../components";
-import { API_BASE_URL } from "../../api/DomainAPI";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import {
   information_ExtractBearerToken,
   groupStudying_findGroupbyId,
-  groupStudying_deleteGroup,groupStudying_changeAvatarGroup,
+  groupStudying_deleteGroup,
+  groupStudying_changeAvatarGroup,
   review_checkUserReview,
   review_getAllReviewOfGroup,
   review_createReview,
@@ -63,6 +61,8 @@ function GroupInfo(props) {
 
   const [reviews, setReviews] = useState([]);
   const [checkReviewed, setCheckReviewed] = useState(true);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -111,6 +111,7 @@ function GroupInfo(props) {
 
   const handleLeaveGroup = async () => {
     try {
+      setModalVisible(false)
       const isCurrentUserLeader = username === extractToken;
       if (isCurrentUserLeader && numberOfMembers > 1) {
         alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
@@ -149,11 +150,12 @@ function GroupInfo(props) {
   };
 
   const handleUploadImage = async (uri) => {
-    groupStudying_changeAvatarGroup(uri, groupID)
+    groupStudying_changeAvatarGroup(uri, groupID);
   };
 
   const handleChangeInformationGroup = async () => {
     if (username == extractToken) {
+      setModalVisible(false)
       navigate("GroupInformationDetail", { group: group });
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -162,6 +164,7 @@ function GroupInfo(props) {
 
   const handleMembersInGroup = async () => {
     if (username == extractToken) {
+      setModalVisible(false)
       navigate("MembersInGroup");
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -170,6 +173,7 @@ function GroupInfo(props) {
 
   const handleAddMembers = async () => {
     if (username == extractToken) {
+      setModalVisible(false)
       navigate("AddMember");
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -187,14 +191,55 @@ function GroupInfo(props) {
         review_createReview(groupID, newStarRatingPoint, newReviewContent));
   };
 
+  const renderContentCreateGroup = () => {
+    return (
+      <View>
+        <RowSectionNavigate
+          icon={icons.personIcon}
+          text={"Đổi thông tin nhóm"}
+          onPress={handleChangeInformationGroup}
+        />
+
+        <RowSectionNavigate
+          icon={icons.keyIcon}
+          text={"Thêm thành viên"}
+          onPress={handleAddMembers}
+        />
+
+        <RowSectionNavigate
+          icon={icons.keyIcon}
+          text={"Danh sách thành viên"}
+          onPress={handleMembersInGroup}
+        />
+        <RowSectionNavigate
+          icon={icons.exportIcon}
+          text={"Rời nhóm"}
+          onPress={handleLeaveGroup}
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <UIHeader
         title={"Thiết lập"}
         leftIconName={icons.backIcon}
+        rightIconName={icons.menuIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
+        onPressRightIcon={() => {
+          setModalVisible(true);
+        }}
+      />
+
+      <WhiteSlideBottomUp
+        title={"Cài đặt nhóm"}
+        renderContent={renderContentCreateGroup}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        style={{ marginTop: "20%" }}
       />
 
       <View>
@@ -227,32 +272,6 @@ function GroupInfo(props) {
           keyExtractor={(item) => item}
         />
       </View>
-
-      {/*
-        <RowSectionTitle text={"Tùy chỉnh tài khoản"} />
-
-        <RowSectionNavigate
-          icon={icons.personIcon}
-          text={"Đổi thông tin nhóm"}
-          onPress={ChangeInformationGroup}
-        />
-
-        <RowSectionNavigate
-          icon={icons.keyIcon}
-          text={"Thêm thành viên"}
-          onPress={AddMembers}
-        />
-
-        <RowSectionNavigate
-          icon={icons.keyIcon}
-          text={"Danh sách thành viên"}
-          onPress={MembersInGroup}
-        />
-        <RowSectionNavigate
-          icon={icons.exportIcon}
-          text={"Rời nhóm"}
-          onPress={LeaveGroup}
-        /> */}
     </View>
   );
 }
@@ -302,10 +321,16 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h8,
   },
   //
-  listReviewContainer: { flex: 1 },
-  newReviewInputContainer: {
-    padding: 16,
-    backgroundColor: "#fff",
+  listReviewContainer: {
+    flex: 1,
+    width: "96%",
+    paddingTop: 10,
+    borderColor: colors.SecondaryOnContainerAndFixed,
+    borderWidth: 1,
+    borderTopEndRadius: 5,
+    borderTopStartRadius: 5,
+    backgroundColor: colors.transparentWhite,
+    alignSelf: "center",
   },
   //
   subInfoContainer: {

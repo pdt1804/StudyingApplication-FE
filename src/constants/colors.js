@@ -31,4 +31,11 @@ export default {
 
   inactive: "rgba(182, 205, 212, 0.75)",
   active: "rgb(88, 155, 238)",
+
+  rating0: 'crimson',
+  rating1: 'red',
+  rating2: 'orange',
+  rating3: 'gold',
+  rating4: 'navy',
+  rating5: 'green',
 };

@@ -18,6 +18,7 @@ export function WhiteSlideBottomUp({
   setModalVisible,
   title,
   renderContent,
+  style = null,
 }) {
   return (
     <>
@@ -41,7 +42,7 @@ export function WhiteSlideBottomUp({
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.slideModalView}>
+        <View style={[styles.slideModalView, style]}>
           <View style={styles.headerView}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
