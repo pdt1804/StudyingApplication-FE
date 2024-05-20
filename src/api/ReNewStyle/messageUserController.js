@@ -50,13 +50,10 @@ export const messageuser_checkSender = async (userName) => {
   return response.data;
 };
 
-export const messageuser_sendMessageForUser = async (messContent, toUserName, files) => {
+export const messageuser_sendMessageForUser = async (messContent, toUserName) => {
   const formData = new FormData();
   formData.append("messContent", messContent);
   formData.append("toUserName", toUserName);
-  files.forEach((file, index) => {
-    formData.append(`files[${index}]`, file);
-  });
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/messageUser/sendMessageForUser`,
@@ -71,6 +68,30 @@ export const messageuser_sendMessageForUser = async (messContent, toUserName, fi
   return response.data;
 };
 
+export const messageuser_uploadImage = async (toUserName, uri) => {
+    const formData = new FormData();
+    formData.append('file', {
+      uri,
+      name: 'image.jpg',
+      type: 'image/jpg',
+    });
+    formData.append("toUserName", toUserName);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: "Bearer " + await AsyncStorage.getItem('username'),
+        },
+      }
+    );
+
+    return response.data;
+};
+
+//chatbot
 export const messageuser_saveChatbotMessage = async (messContent) => {
   const formData = new FormData();
   formData.append("messContent", messContent);
