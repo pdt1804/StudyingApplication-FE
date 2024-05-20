@@ -37,7 +37,7 @@ import {
 const SubInfo = ({ icon, text }) => {
   return (
     <View style={styles.subInfoContainer}>
-      <Icon name={icon} size={35} color={colors.GrayOnContainerAndFixed} />
+      <Icon name={icon} size={25} color={colors.GrayOnContainerAndFixed} />
       <Text style={styles.subInfoText}>{text}</Text>
     </View>
   );
@@ -97,6 +97,8 @@ function GroupInfo(props) {
       setCheckReviewed(
         await review_checkUserReview(await AsyncStorage.getItem("groupID"))
       );
+
+      setTopics(responseDataGroup.topics.map((item) => item.topicName));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -111,7 +113,7 @@ function GroupInfo(props) {
 
   const handleLeaveGroup = async () => {
     try {
-      setModalVisible(false)
+      setModalVisible(false);
       const isCurrentUserLeader = username === extractToken;
       if (isCurrentUserLeader && numberOfMembers > 1) {
         alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
@@ -155,7 +157,7 @@ function GroupInfo(props) {
 
   const handleChangeInformationGroup = async () => {
     if (username == extractToken) {
-      setModalVisible(false)
+      setModalVisible(false);
       navigate("GroupInformationDetail", { group: group });
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -164,7 +166,7 @@ function GroupInfo(props) {
 
   const handleMembersInGroup = async () => {
     if (username == extractToken) {
-      setModalVisible(false)
+      setModalVisible(false);
       navigate("MembersInGroup");
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -173,7 +175,7 @@ function GroupInfo(props) {
 
   const handleAddMembers = async () => {
     if (username == extractToken) {
-      setModalVisible(false)
+      setModalVisible(false);
       navigate("AddMember");
     } else {
       alert("Bạn không phải trưởng nhóm.");
@@ -259,6 +261,13 @@ function GroupInfo(props) {
               <SubInfo icon={icons.groupIcon} text={numberOfMembers} />
               <SubInfo icon={icons.calendarIcon} text={dateCreated} />
             </View>
+            <View style={styles.topics_container}>
+              {topics.map((topicName, index) => (
+                <View style={styles.eachTopicBox} key={index}>
+                  <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
       </View>
@@ -306,7 +315,6 @@ const styles = StyleSheet.create({
   profileDescription: {
     flexDirection: "row",
     marginTop: 5,
-    //height: 90,
   },
   button: {
     backgroundColor: colors.PrimaryBackground,
@@ -320,7 +328,7 @@ const styles = StyleSheet.create({
     color: colors.PrimaryObjects,
     fontSize: fontSizes.h8,
   },
-  //
+  //list review
   listReviewContainer: {
     flex: 1,
     width: "96%",
@@ -332,7 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
     alignSelf: "center",
   },
-  //
+  //sub info
   subInfoContainer: {
     minWidth: 60,
     maxWidth: 100,
@@ -345,4 +353,27 @@ const styles = StyleSheet.create({
     borderEndColor: colors.PrimaryContainer,
   },
   subInfoText: { fontSize: fontSizes.h7, textAlign: "center" },
+  //topics
+  topics_container: {
+    width: 235,
+    marginTop: 5,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  eachTopicBox: {
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    marginBottom: 5,
+    marginHorizontal: 3,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  eachTopicBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h8,
+  },
 });
