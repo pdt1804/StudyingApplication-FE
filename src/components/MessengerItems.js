@@ -18,6 +18,7 @@ function MessengerItems(props) {
 
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
+  const [path, setPath] = useState(null);
 
   const [imageWidth, setImageWidth] = useState(0);
   const [imageHeight, setImageHeight] = useState(0);

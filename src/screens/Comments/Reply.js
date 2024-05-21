@@ -20,17 +20,29 @@ import { blog_getAllReplyInComment } from "../../api";
 const Reply = (props) => {
   const [replies, setReplies] = useState([]);
 
-  const { commentID, userComment, content } = props.route.params.comment;
+  const { commentID, userComment, content, images } = props.route.params.comment;
   const { navigate, goBack } = props.navigation;
 
   
   //const commentImages = props.route.params.comment.images
-  const commentImages = [
-    images.blankImageLoading,
-    images.blankAvatarForNewGroup,
-    images.blankAvatarForRegistration,
-  ];
+  // const commentImages = [
+  //   images.blankImageLoading,
+  //   images.blankAvatarForNewGroup,
+  //   images.blankAvatarForRegistration,
+  // ];
 
+  const commentImages = []
+
+  //console.log (images.length)
+  if (images.length > 0)
+  {
+    for (let i = 0; i < images.length; i++)
+    {
+      const parts = images[i].toString().split('-')
+      //console.log (parts[0])
+      commentImages.push(parts[0])
+    }
+  }
 
   useEffect(() => {
     fetchData();

@@ -38,7 +38,9 @@ const ShowPost = (props) => {
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
 
-  const parts = image[0] != null ? image[0].toString().split("-")[0] : null;
+  //console.log(image)
+
+  const parts = image.length > 0 ? image[0].toString().split("-")[0] : null;
 
   //navigation
   const { navigate, goBack, push } = props.navigation;
@@ -234,7 +236,7 @@ const ShowPost = (props) => {
 
         <TouchableOpacity onPress={ShowPicture}>
           <Image
-            source={{ uri: parts  }}
+            source={{ uri: parts }}
             style={styles.image}
           />
         </TouchableOpacity>

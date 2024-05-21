@@ -13,14 +13,20 @@ import { images, icons, colors, fontSizes } from "../../constants";
 
 export default function ReplyItems(props) {
   const { navigate } = props;
-  let { userReplied, dateReplied, content } = props.reply;
+  let { userReplied, dateReplied, content, images } = props.reply;
   //const replyImages = props.replies.images
 
-  const replyImages = [
-    images.blankImageLoading,
-    images.blankAvatarForNewGroup,
-    images.blankAvatarForRegistration,
-  ];
+  const replyImages = [];
+
+  if (images.length > 0)
+  {
+    for (let i = 0; i < images.length; i++)
+    {
+      const parts = images[i].toString().split('-')
+      //console.log (parts[0])
+      replyImages.push(parts[0])
+    }
+  }
   
   const getTime = () => {
     const date = new Date(dateReplied);

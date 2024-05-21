@@ -269,23 +269,38 @@ export const blog_sureToDeleteSubject = async (subjectID, groupID) => {
   );
   return response;
 };
-export const blog_commentBlog = async (blogID, content, userName, uriList) => {
-  const imageList = uriList.map((uri) => {
-    return {
-      uri,
-      name: "image.jpg",
-      type: "image/jpg",
-    };
-  });
 
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+export const blog_commentBlog = async (blogID, content, userName, uriList) => {
+  // const imageList = uriList.map((uri) => {
+  //   return {
+  //     uri,
+  //     name: "image.jpg",
+  //     type: "image/jpg",
+  //   };
+  // });
   const formData = new FormData();
+  uriList.forEach((uri) => {
+    formData.append("files", {
+      uri,
+      name: generateRandomString(10) + ".jpg",
+      type: "image/jpg",
+    });
+  });
   formData.append('blogID', blogID)
   formData.append("content", content);
   formData.append("userNames", userName);
-  //formData.append("files", imageList);
 
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/blog/commentBlog?blogID=${blogID}`,
+    `${API_BASE_URL}/api/v1/blog/commentBlog`,
     formData,
     {
       headers: {
@@ -330,21 +345,28 @@ export const blog_replyComment = async (
   userName,
   uriList
 ) => {
-  const imageList = uriList.map((uri) => {
-    return {
-      uri,
-      name: "image.jpg",
-      type: "image/jpg",
-    };
-  });
+  // const imageList = uriList.map((uri) => {
+  //   return {
+  //     uri,
+  //     name: "image.jpg",
+  //     type: "image/jpg",
+  //   };
+  // });
   const formData = new FormData();
+  uriList.forEach((uri) => {
+    formData.append("files", {
+      uri,
+      name: generateRandomString(10) + ".jpg",
+      type: "image/jpg",
+    });
+  });
   formData.append("commentID", commentID);
   formData.append("content", content);
   formData.append("userNames", userName);
   //formData.append("files", imageList);
 
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/blog/replyComment?commentID=${commentID}`,
+    `${API_BASE_URL}/api/v1/blog/replyComment`,
     formData,
     {
       headers: {

@@ -20,6 +20,7 @@ import {
   blog_replyComment,
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
+import { messagegroup_uploadMultipleImages } from "../api/ReNewStyle/messageGroupController";
 
 export default EnterMessageBar = (props) => {
   //use for friend-MessageBar
@@ -73,35 +74,31 @@ export default EnterMessageBar = (props) => {
   };
 
   const handleSendMessage_Comment = async () => {
-    if (typedText.length == 0) {
-      alert("Hãy nhập bình luận");
+    if (typedText.length == 0 && pickedImages.length == 0) {
+      alert("Hãy nhập bình luận hoặc chọn ảnh");
       return;
     }
-    const response = await blog_commentBlog(blogID, typedText, userNames, [
-      images.blankAvatarForNewGroup,
-      images.blankAvatarForRegistration,
-      images.blankImageLoading,
-    ]);
+
+    //console.log(pickedImages)
+    const response = await blog_commentBlog(blogID, typedText, userNames, pickedImages);
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
+    setPickedImages([])
   };
 
   const handleSendMessage_Reply = async () => {
-    if (typedText.length == 0) {
-      alert("Hãy nhập phản hồi");
+    if (typedText.length == 0 && pickedImages.length == 0) {
+      alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
-    const response = await blog_replyComment(commentID, typedText, userNames, [
-      images.blankAvatarForNewGroup,
-      images.blankAvatarForRegistration,
-      images.blankImageLoading,
-    ]);
+    const response = await blog_replyComment(commentID, typedText, userNames, pickedImages);
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
+    setPickedImages([])
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -160,17 +157,63 @@ export default EnterMessageBar = (props) => {
     }
   };
 
-  const handleUploadImages = async () => {
+  const handleUploadImagesForFriend = async () => {
     try {
       await handleSelectImages();
       const response = await messageuser_uploadMultipleImages(
         friendUsername,
         pickedImages
       );
+
+      //alert("2")
+      const messagePayload = { groupID: friendID };
+      stompClient.send(
+        "/app/sendMessForUser",
+        {},
+        JSON.stringify(messagePayload)
+      );
+
+      //alert("3")
+      setPickedImages([])
     } catch (error) {
       console.error("Error uploading image:", error);
     }
   };
+  
+  const handleUploadImagesForGroup = async () => {
+    try {
+      await handleSelectImages();
+      const response = await messagegroup_uploadMultipleImages(
+        await AsyncStorage.getItem('groupID'),
+        pickedImages
+      );
+
+      //alert("2")
+      const messagePayload = {
+        groupID: parseInt(await AsyncStorage.getItem("groupID")),
+      };
+      stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
+
+      //alert("3")
+      setPickedImages([])
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+  
+  const handleUploadImages = async () => {
+    if (actionType === 0 || actionType === "friend") {
+      handleUploadImagesForFriend();
+    } else if (actionType === 1 || actionType === "group") {
+      handleUploadImagesForGroup();
+    } else if (actionType === 2 || actionType === "comment") {
+      handleSelectImages();
+    } else if (actionType === 3 || actionType === "reply") {
+      handleSelectImages();
+    } else if (actionType === 4 || actionType === "chatbot") {
+      handleSendMessage_Chatbot();
+    }
+  }
 
   return (
     <View style={styles.container}>

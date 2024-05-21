@@ -95,17 +95,34 @@ export const messageuser_uploadImage = async (toUserName, uri) => {
   return response.data;
 };
 
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
 //multiple image
 export const messageuser_uploadMultipleImages = async (toUserName, uriList) => {
-  const imageList = uriList.map((uri) => {
-    return {
-      uri,
-      name: "image.jpg",
-      type: "image/jpg",
-    };
-  });
   const formData = new FormData();
-  formData.append("files", imageList);
+  uriList.forEach((uri, index) => {
+    formData.append("files", {
+      uri,
+      name: generateRandomString(10) + ".jpg",
+      type: "image/jpg",
+    });
+  });
+  // for (let i = 0; i < uriList.length; i++)
+  // {
+  //   let uri = uriList[i].uri
+  //   formData.append("files", {
+  //     uri,
+  //     name: `image_${i}jpg`,
+  //     type: "image/jpg",
+  //   });
+  // }
   formData.append("toUserName", toUserName);
 
   const response = await axios.post(
@@ -121,6 +138,7 @@ export const messageuser_uploadMultipleImages = async (toUserName, uriList) => {
 
   return response.data;
 };
+
 
 //chatbot
 export const messageuser_saveChatbotMessage = async (messContent) => {
