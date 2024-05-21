@@ -102,12 +102,12 @@ export const blog_getAllReplyInComment = async (commentID) => {
     `${API_BASE_URL}/api/v1/blog/getAllReplyInComment?commentID=${commentID}`,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
-  return response;
+  return response.data;
 };
 
 export const blog_createNewSubject = async (groupID, nameSubject) => {
@@ -269,11 +269,20 @@ export const blog_sureToDeleteSubject = async (subjectID, groupID) => {
   );
   return response;
 };
-export const blog_commentBlog = async (blogID, content, userNames, files) => {
+export const blog_commentBlog = async (blogID, content, userName, uriList) => {
+  const imageList = uriList.map((uri) => {
+    return {
+      uri,
+      name: "image.jpg",
+      type: "image/jpg",
+    };
+  });
+
   const formData = new FormData();
+  formData.append('blogID', blogID)
   formData.append("content", content);
-  userNames.forEach((username) => formData.append("userNames", username));
-  files.forEach((file) => formData.append("files", file));
+  formData.append("userNames", userName);
+  //formData.append("files", imageList);
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/blog/commentBlog?blogID=${blogID}`,
@@ -318,13 +327,21 @@ export const blog_deleteComment = async (commentID) => {
 export const blog_replyComment = async (
   commentID,
   content,
-  userNames,
-  files
+  userName,
+  uriList
 ) => {
+  const imageList = uriList.map((uri) => {
+    return {
+      uri,
+      name: "image.jpg",
+      type: "image/jpg",
+    };
+  });
   const formData = new FormData();
+  formData.append("commentID", commentID);
   formData.append("content", content);
-  userNames.forEach((username) => formData.append("userNames", username));
-  files.forEach((file) => formData.append("files", file));
+  formData.append("userNames", userName);
+  //formData.append("files", imageList);
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/blog/replyComment?commentID=${commentID}`,

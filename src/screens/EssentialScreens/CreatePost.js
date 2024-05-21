@@ -20,7 +20,7 @@ const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
 
-  const [filePath, setFilePath] = useState("icons.blankImageLoading")
+  const [filePath, setFilePath] = useState(images.blankImageLoading)
 
 
   let { subjectID } = props.route.params;

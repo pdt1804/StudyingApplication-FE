@@ -9,27 +9,31 @@ import {
   Image,
   Button,
 } from "react-native";
-import { icons, colors, fontSizes } from "../constants";
+import { icons, colors, fontSizes, images } from "../constants";
 import Icon from "./MyIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   messenger_sendMessageForGroup,
   messageuser_sendMessageForUser,
   messageuser_uploadMultipleImages,
+  blog_commentBlog,
+  blog_replyComment,
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
-//import ImagePicker from "react-native-image-picker";
 
 export default EnterMessageBar = (props) => {
   //use for friend-MessageBar
   const { friendUsername, friendID } = props;
+  const { commentID } = props;
+  const { blogID } = props;
   //use for all
   //actionType: friend (0) - group (1) - comment (2) - reply (3) - chatbot (4)
   const { stompClient, actionType } = props;
-  const [typedText, setTypedText] = useState("");
 
-  //testing...
+  const [typedText, setTypedText] = useState("");
   const [pickedImages, setPickedImages] = useState([]);
+
+  const [userNames, setUserNames] = useState([]);
 
   const handleSendMessage_Friend = async () => {
     if (typedText.length == 0) {
@@ -68,16 +72,74 @@ export default EnterMessageBar = (props) => {
     setTypedText("");
   };
 
+  const handleSendMessage_Comment = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập bình luận");
+      return;
+    }
+    const response = await blog_commentBlog(blogID, typedText, userNames, [
+      images.blankAvatarForNewGroup,
+      images.blankAvatarForRegistration,
+      images.blankImageLoading,
+    ]);
+    if (response.status != 200) {
+      alert("Lỗi mạng, không thể phản hồi bình luận");
+    }
+    setTypedText("");
+  };
+
+  const handleSendMessage_Reply = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập phản hồi");
+      return;
+    }
+    const response = await blog_replyComment(commentID, typedText, userNames, [
+      images.blankAvatarForNewGroup,
+      images.blankAvatarForRegistration,
+      images.blankImageLoading,
+    ]);
+    if (response.status != 200) {
+      alert("Lỗi mạng, không thể phản hồi bình luận");
+    }
+    setTypedText("");
+  };
+
+  const handleSendMessage_Chatbot = async () => {
+    if (typedText.length == 0) {
+      alert("Hãy nhập tin nhắn");
+      return;
+    }
+    /* const response = await messageuser_sendMessageForUser(
+      typedText,
+      friendUsername
+    );
+    if (response.status == 200) {
+      const messagePayload = { groupID: friendID };
+      stompClient.send(
+        "/app/sendMessForUser",
+        {},
+        JSON.stringify(messagePayload)
+      );
+    } */
+    setTypedText("");
+  };
+
   //final handleVerification
   const handleSendMessage = async () => {
     if (actionType === 0 || actionType === "friend") {
       handleSendMessage_Friend();
     } else if (actionType === 1 || actionType === "group") {
       handleSendMessage_Group();
+    } else if (actionType === 2 || actionType === "comment") {
+      handleSendMessage_Comment();
+    } else if (actionType === 3 || actionType === "reply") {
+      handleSendMessage_Reply();
+    } else if (actionType === 4 || actionType === "chatbot") {
+      handleSendMessage_Chatbot();
     }
   };
 
-  //image
+  //image picker
   const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -101,7 +163,10 @@ export default EnterMessageBar = (props) => {
   const handleUploadImages = async () => {
     try {
       await handleSelectImages();
-      const response = await messageuser_uploadMultipleImages(friendUsername,pickedImages);
+      const response = await messageuser_uploadMultipleImages(
+        friendUsername,
+        pickedImages
+      );
     } catch (error) {
       console.error("Error uploading image:", error);
     }

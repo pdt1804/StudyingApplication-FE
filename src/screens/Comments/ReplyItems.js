@@ -11,16 +11,27 @@ import {
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 
-function ReplyItems(props) {
-  let { userReplied, dateReplied, content, replyID } = props.comment;
+export default function ReplyItems(props) {
+  const { navigate } = props;
+  let { userReplied, dateReplied, content } = props.reply;
+  //const replyImages = props.replies.images
 
-  const { navigate } = props; 
-
-  const date = new Date(dateReplied)
+  const replyImages = [
+    images.blankImageLoading,
+    images.blankAvatarForNewGroup,
+    images.blankAvatarForRegistration,
+  ];
   
+  const getTime = () => {
+    const date = new Date(dateReplied);
+    return `${date.getHours()}:${date.getMinutes()} \n ${date.getDate()}/${
+      date.getMonth() + 1
+    }`;
+  };
+
   const ShowProfile = async () => {
-    navigate('ShowProfile', { userReplied: userReplied })
-  }
+    navigate("ShowProfile", { userReplied: userReplied });
+  };
 
   return (
     <TouchableOpacity style={styles.container} onPress={ShowProfile}>
@@ -34,18 +45,23 @@ function ReplyItems(props) {
         <Text style={styles.titleText} numberOfLines={1}>
           {userReplied.information.fulName}
         </Text>
-        <Text style={styles.contentText}>
-          {content}
-        </Text>
+        <Text style={styles.contentText}>{content}</Text>
+        <View>
+          {replyImages.map((image, index) => (
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={[styles.image, { width: 200, height: 200 }]}
+            />
+          ))}
+        </View>
       </View>
-      {/* <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text> */}
       <View style={styles.rightSideView}>
-      <Text style={styles.rightSideText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
+        <Text style={styles.rightSideText}>{getTime()}</Text>
       </View>
     </TouchableOpacity>
   );
 }
-export default ReplyItems;
 
 const styles = StyleSheet.create({
   container: {
@@ -78,7 +94,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
   },
   rightSideView: {
-    flexDirection: 'column',
+    flexDirection: "column",
     paddingTop: 10,
     marginTop: 10,
   },
@@ -93,5 +109,12 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: colors.inactive,
     marginTop: -15,
+  },
+  image: {
+    maxWidth: 245,
+    resizeMode: "contain",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: colors.PrimaryBackground,
   },
 });

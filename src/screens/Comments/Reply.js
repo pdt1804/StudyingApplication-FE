@@ -10,52 +10,48 @@ import {
 } from "react-native";
 import ReplyItems from "./ReplyItems";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, EnterMessageReplyBar } from "../../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../api/DomainAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import ShowProfile from "../EssentialScreens/ShowProfiles/ShowProfile";
+import {
+  UIHeader,
+  EnterMessageReplyBar,
+  EnterMessageBar,
+} from "../../components";
+import { blog_getAllReplyInComment } from "../../api";
 
 const Reply = (props) => {
-
-  const [comments, setComments] = useState([]);
+  const [replies, setReplies] = useState([]);
 
   const { commentID, userComment, content } = props.route.params.comment;
-
-  //navigation
   const { navigate, goBack } = props.navigation;
 
+  
+  //const commentImages = props.route.params.comment.images
+  const commentImages = [
+    images.blankImageLoading,
+    images.blankAvatarForNewGroup,
+    images.blankAvatarForRegistration,
+  ];
+
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/blog/getAllReplyInComment?commentID=" + commentID, {
-          headers: {
-            'Content-Type': 'application/json', 
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
-        setComments(response.data)
-                
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
-      }
-    };
-
     fetchData();
-
-    //Sử dụng setInterval để gọi lại fetchData mỗi giây
     const intervalId = setInterval(fetchData, 3000);
-
-    // // Hủy interval khi component bị unmounted
-     return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId);
   }, [props.userName]);
 
   const ShowProfile = async () => {
     navigate("ShowProfile", { userReplied: userComment });
-  }
+  };
+
+  const fetchData = async () => {
+    try {
+      const responseData = await blog_getAllReplyInComment(commentID);
+      setReplies(responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Error fetching data");
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -71,7 +67,10 @@ const Reply = (props) => {
       />
 
       <ScrollView style={styles.listContainer}>
-        <TouchableOpacity style={styles.mainCommentContainer} onPress={ShowProfile}>
+        <TouchableOpacity
+          style={styles.mainCommentContainer}
+          onPress={ShowProfile}
+        >
           <Image
             style={styles.img}
             source={{
@@ -83,16 +82,29 @@ const Reply = (props) => {
               {userComment.information.fulName}
             </Text>
             <Text style={styles.contentText}>{content}</Text>
+        <View>
+          {commentImages.map((image, index) => (
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={[styles.image, { width: 200, height: 200 }]}
+            />
+          ))}
+        </View>
           </View>
         </TouchableOpacity>
 
-        {comments.map((eachComment) => (
-          <ReplyItems comment={eachComment} key={eachComment.replyID} navigate={navigate}/>
+        {replies.map((eachReply) => (
+          <ReplyItems
+          reply={eachReply}
+            key={eachReply.replyID}
+            navigate={navigate}
+          />
         ))}
       </ScrollView>
 
-      
-      <EnterMessageReplyBar commentID={commentID}/>
+      {/* <EnterMessageReplyBar commentID={commentID} /> */}
+      <EnterMessageBar commentID={commentID} actionType={'reply'}/>
     </View>
   );
 };
@@ -133,5 +145,12 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: fontSizes.h7,
     fontWeight: "600",
+  },
+  image: {
+    maxWidth: 245,
+    resizeMode: "contain",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: colors.PrimaryBackground,
   },
 });

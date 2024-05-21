@@ -38,8 +38,7 @@ const ShowPost = (props) => {
   let { userName } = props.route.params.topic.userCreated;
   let { fulName } = props.route.params.topic.userCreated.information;
 
-  console.log(image[0])
-  const parts = image[0].split('-')
+  const parts = image[0] != null ? image[0].toString().split("-")[0] : null;
 
   //navigation
   const { navigate, goBack, push } = props.navigation;
@@ -61,9 +60,6 @@ const ShowPost = (props) => {
           },
         }
       );
-
-      console.log(image)
-      
       setUsername(extractToken.data);
 
       const responseGroup = await axios.get(
@@ -94,7 +90,7 @@ const ShowPost = (props) => {
 
       setLikeStatus(checkLike.data === true);
     };
-    
+
     if (shouldReload) {
       // Perform actions to reload the screen
       setShouldReload(false); // Reset the flag
@@ -133,7 +129,7 @@ const ShowPost = (props) => {
                 {
                   headers: {
                     "Content-Type": "application/json",
-                    "Authorization":
+                    Authorization:
                       "Bearer " + (await AsyncStorage.getItem("username")),
                   },
                 }
@@ -156,13 +152,14 @@ const ShowPost = (props) => {
   const handleLike = async () => {
     //alert(`id: ${blogID}`)
     var form = new FormData();
-    form.append("blogID", blogID); 
+    form.append("blogID", blogID);
 
     const likeBlog = await axios.post(
-      API_BASE_URL + "/api/v1/blog/likeBlog", form,
+      API_BASE_URL + "/api/v1/blog/likeBlog",
+      form,
       {
         headers: {
-          'Authorization': "Bearer " + (await AsyncStorage.getItem("username")),
+          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
         },
       }
     );
@@ -237,7 +234,7 @@ const ShowPost = (props) => {
 
         <TouchableOpacity onPress={ShowPicture}>
           <Image
-            source={{ uri: image != null ? parts[0] : null }}
+            source={{ uri: parts  }}
             style={styles.image}
           />
         </TouchableOpacity>

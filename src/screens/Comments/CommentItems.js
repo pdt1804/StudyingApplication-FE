@@ -12,11 +12,17 @@ import {
 import { images, icons, colors, fontSizes } from "../../constants";
 
 function CommentItems(props) {
-  let { commentID, dateComment, userComment, content, replies } = props.comment;
-
-  const date = new Date(dateComment)
-
   const { onPress } = props;
+  let { commentID, dateComment, userComment, content, replies } = props.comment;
+  //const replyImages = props.comment.images
+
+  const getTime = () => {
+    const date = new Date(dateComment);
+    return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
+      date.getMonth() + 1
+    }`;
+  };
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image
@@ -33,10 +39,9 @@ function CommentItems(props) {
           {content}
         </Text>
       </View>
-      {/* <Text style={styles.timeText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text> */}
       <View style={styles.rightSideView}>
-      <Text style={styles.rightSideText}>{date.getHours()}:{date.getMinutes()} {date.getDate()}/{date.getMonth() + 1}</Text>
-      <Text style={styles.rightSideText}>{replies.length} phản hồi</Text>
+        <Text style={styles.rightSideText}>{getTime()}</Text>
+        <Text style={styles.rightSideText}>{replies.length} phản hồi</Text>
       </View>
     </TouchableOpacity>
   );
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
   },
   rightSideView: {
-    flexDirection: 'column',
+    flexDirection: "column",
     paddingTop: 10,
   },
   rightSideText: {
@@ -88,5 +93,12 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: colors.inactive,
     marginTop: -10,
+  },
+  image: {
+    maxWidth: 245,
+    resizeMode: "contain",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: colors.PrimaryBackground,
   },
 });

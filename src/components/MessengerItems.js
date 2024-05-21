@@ -58,21 +58,6 @@ function MessengerItems(props) {
     return sender == sentUsername ? true : false;
   };
 
-  const renderImage = (uri, width = 10, height = 10) => {
-    const aspectRatio = width / height;
-
-    const scaledWidth = Math.min(width, 300);
-    const scaledHeight = scaledWidth / aspectRatio;
-
-    const imageStyle = {
-      width: scaledWidth,
-      height: scaledHeight,
-      resizeMode: 'cover',
-    };
-
-    return <Image source={{ uri }} style={imageStyle} />;
-  };
-
   return CheckIsSender() == false ? (
     <View /** isSender = false --> avatar > message */ style={styles.container}>
       <Image style={styles.avatar} source={{ uri: avatar }} />

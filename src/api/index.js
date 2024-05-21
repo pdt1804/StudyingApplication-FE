@@ -90,6 +90,9 @@ import {
   blog_getAllBlogByContent,
   blog_insertImageInBlog,
   blog_getBlogById,
+  blog_getAllBlogBySubject,
+  blog_getAllCommentInBlog,
+  blog_getAllReplyInComment,
   blog_createNewSubject,
   blog_updateSubject,
   blog_deleteSubject,
@@ -266,12 +269,14 @@ export {
   //
   //
   //
-  //New style
-  blog_getAllSubject,
+  //New styleblog_getAllSubject,
   blog_getAllBlog,
   blog_getAllBlogByContent,
   blog_insertImageInBlog,
   blog_getBlogById,
+  blog_getAllBlogBySubject,
+  blog_getAllCommentInBlog,
+  blog_getAllReplyInComment,
   blog_createNewSubject,
   blog_updateSubject,
   blog_deleteSubject,
