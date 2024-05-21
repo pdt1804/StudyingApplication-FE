@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 
 export default function ReplyItems(props) {
@@ -16,17 +7,26 @@ export default function ReplyItems(props) {
   const { userReplied, dateReplied, content, images } = props.reply;
 
   const replyImages = [];
+  const MAXWidth = 245;
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
 
-  if (images.length > 0)
-  {
-    for (let i = 0; i < images.length; i++)
-    {
-      const parts = images[i].toString().split('-')
-      //console.log (parts[0])
-      replyImages.push(parts[0])
+  const getImageSize = (uri) => {
+    Image.getSize(uri, (width, height) => {
+      const temp = width > MAXWidth ? width / MAXWidth : 1;
+      setImageWidth(width);
+      setImageHeight(height / temp);
+    });
+  };
+
+  if (images.length > 0) {
+    for (let i = 0; i < images.length; i++) {
+      const parts = images[i].toString().split("-")[0];
+      getImageSize(parts)
+      replyImages.push(parts);
     }
   }
-  
+
   const getTime = () => {
     const date = new Date(dateReplied);
     return `${date.getHours()}:${date.getMinutes()} \n ${date.getDate()}/${
@@ -56,7 +56,7 @@ export default function ReplyItems(props) {
             <Image
               key={index}
               source={{ uri: image }}
-              style={[styles.image, { width: 200, height: 200 }]}
+              style={[styles.image, { width: imageWidth, height: imageHeight }]}
             />
           ))}
         </View>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     maxWidth: 245,
     resizeMode: "contain",
     borderRadius: 5,
-    borderWidth: 3,
-    borderColor: colors.PrimaryBackground,
+    //borderWidth: 3,
+    //borderColor: colors.GrayBackground,
   },
 });

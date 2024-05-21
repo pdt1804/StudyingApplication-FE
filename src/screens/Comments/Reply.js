@@ -4,42 +4,39 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   StyleSheet,
 } from "react-native";
 import ReplyItems from "./ReplyItems";
 import { images, icons, colors, fontSizes } from "../../constants";
-import {
-  UIHeader,
-  EnterMessageBar,
-} from "../../components";
+import { UIHeader, EnterMessageBar } from "../../components";
 import { blog_getAllReplyInComment } from "../../api";
 
 const Reply = (props) => {
   const [replies, setReplies] = useState([]);
 
-  const { commentID, userComment, content, images } = props.route.params.comment;
+  const { commentID, userComment, content, images } =
+    props.route.params.comment;
   const { navigate, goBack } = props.navigation;
 
-  
-  //const commentImages = props.route.params.comment.images
-  // const commentImages = [
-  //   images.blankImageLoading,
-  //   images.blankAvatarForNewGroup,
-  //   images.blankAvatarForRegistration,
-  // ];
+  const commentImages = [];
+  const MAXWidth = 245;
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
 
-  const commentImages = []
+  const getImageSize = (uri) => {
+    Image.getSize(uri, (width, height) => {
+      const temp = width > MAXWidth ? width / MAXWidth : 1;
+      setImageWidth(width);
+      setImageHeight(height / temp);
+    });
+  };
 
-  //console.log (images.length)
-  if (images.length > 0)
-  {
-    for (let i = 0; i < images.length; i++)
-    {
-      const parts = images[i].toString().split('-')
-      //console.log (parts[0])
-      commentImages.push(parts[0])
+  if (images.length > 0) {
+    for (let i = 0; i < images.length; i++) {
+      const parts = images[i].toString().split("-")[0];
+      getImageSize(parts);
+      commentImages.push(parts);
     }
   }
 
@@ -93,28 +90,31 @@ const Reply = (props) => {
               {userComment.information.fulName}
             </Text>
             <Text style={styles.contentText}>{content}</Text>
-        <View>
-          {commentImages.map((image, index) => (
-            <Image
-              key={index}
-              source={{ uri: image }}
-              style={[styles.image, { width: 200, height: 200 }]}
-            />
-          ))}
-        </View>
+            <View>
+              {commentImages.map((image, index) => (
+                <Image
+                  key={index}
+                  source={{ uri: image }}
+                  style={[
+                    styles.image,
+                    { width: imageWidth, height: imageHeight },
+                  ]}
+                />
+              ))}
+            </View>
           </View>
         </TouchableOpacity>
 
         {replies.map((eachReply) => (
           <ReplyItems
-          reply={eachReply}
+            reply={eachReply}
             key={eachReply.replyID}
             navigate={navigate}
           />
         ))}
       </ScrollView>
 
-      <EnterMessageBar commentID={commentID} actionType={'reply'}/>
+      <EnterMessageBar commentID={commentID} actionType={"reply"} />
     </View>
   );
 };
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     maxWidth: 245,
     resizeMode: "contain",
     borderRadius: 5,
-    borderWidth: 3,
-    borderColor: colors.PrimaryBackground,
+    //borderWidth: 3,
+    //borderColor: colors.PrimaryBackground,
   },
 });

@@ -38,11 +38,10 @@ function CommentItems(props) {
         <Text style={styles.contentText} numberOfLines={4}>
           {content}
         </Text>
-        <View style={{flexDirection: 'row'}}>
+        <View>
           {replyImages.map((image, index) => (
             <Image key={index} source={{ uri: image }} style={styles.image} />
           ))}
-          <Image source={icons.activeBellAlarm} style={{margin: 10,width: 35, height: 35, alignSelf: 'center'}} />
         </View>
       </View>
       <View style={styles.rightSideView}>

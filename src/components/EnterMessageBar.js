@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
+  Text,
+  Image,
   TouchableOpacity,
   TextInput,
   StyleSheet,
@@ -33,6 +35,22 @@ export default EnterMessageBar = (props) => {
   const [name, setName] = useState("");
 
   const [userNames, setUserNames] = useState([]);
+
+  const MAXHeight = 45;
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
+
+  const getImageSize = (uri) => {
+    Image.getSize(uri, (width, height) => {
+      if (height > MAXHeight) {
+        setImageWidth(width / (height / MAXHeight));
+        setImageHeight(MAXHeight);
+      } else {
+        setImageWidth(width);
+        setImageHeight(height);
+      }
+    });
+  };
 
   const handleSendMessage_Friend = async () => {
     if (typedText.length == 0) {
@@ -161,6 +179,7 @@ export default EnterMessageBar = (props) => {
 
     if (!result.canceled) {
       setPickedImages(result.assets[0].uri.toString());
+      getImageSize(result.assets[0].uri.toString());
       setType(result.assets[0].mimeType.toString());
       setName(result.assets[0].fileName.toString());
       return result.assets[0];
@@ -231,41 +250,60 @@ export default EnterMessageBar = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleUploadImages}>
-        <Icon
-          name={icons.priceTagIcon}
-          size={25}
-          color={colors.PrimaryBackground}
+      {pickedImages === "" ? (
+        <View />
+      ) : (
+        <View style={styles.imgBar}>
+          <Image
+            source={{ uri: pickedImages }}
+            style={[styles.image, { width: imageWidth, height: imageHeight }]}
+          />
+        </View>
+      )}
+      <View style={styles.mainBar}>
+        <TouchableOpacity onPress={handleUploadImages}>
+          <Icon
+            name={icons.priceTagIcon}
+            size={25}
+            color={colors.PrimaryBackground}
+          />
+        </TouchableOpacity>
+        <TextInput
+          multiline={true}
+          style={styles.textInput}
+          onChangeText={(typedText) => {
+            setTypedText(typedText);
+          }}
+          value={typedText}
+          placeholder="Nhắn tin"
+          placeholderTextColor={colors.placeholder}
         />
-      </TouchableOpacity>
-      <TextInput
-        multiline={true}
-        style={styles.textInput}
-        onChangeText={(typedText) => {
-          setTypedText(typedText);
-        }}
-        value={typedText}
-        placeholder="Nhắn tin"
-        placeholderTextColor={colors.placeholder}
-      />
-      <TouchableOpacity onPress={handleSendMessage}>
-        <Icon
-          name={icons.sendMessageCursorIcon}
-          size={25}
-          color={colors.PrimaryBackground}
-        />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleSendMessage}>
+          <Icon
+            name={icons.sendMessageCursorIcon}
+            size={25}
+            color={colors.PrimaryBackground}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: "auto",
-    minHeight: 50,
     bottom: 0,
     left: 0,
     right: 0,
+    backgroundColor: colors.transparentWhite,
+  },
+  imgBar: {
+    flexDirection: "row",
+    paddingHorizontal: 10,
+  },
+  mainBar: {
+    height: "auto",
+    minHeight: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -283,5 +321,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10,
     tintColor: colors.PrimaryBackground,
+  },
+  image: {
+    resizeMode: "contain",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: colors.GrayBackground,
   },
 });
