@@ -31,33 +31,22 @@ const generateRandomString = (length) => {
   return result;
 };
 
-export const messagegroup_uploadMultipleImages = async (groupID, uriList) => {
+export const messagegroup_uploadMultipleImages = async (groupID, uri, name, type) => {
   const formData = new FormData();
-  uriList.forEach((uri) => {
-    formData.append("files", {
-      uri,
-      name: generateRandomString(10) + ".jpg",
-      type: "image/jpg",
-    });
+  formData.append("file", {
+    uri: uri,
+    name: name,
+    type: type,
   });
-  // for (let i = 0; i < uriList.length; i++)
-  // {
-  //   let uri = uriList[i].uri
-  //   formData.append("files", {
-  //     uri,
-  //     name: `image_${i}jpg`,
-  //     type: "image/jpg",
-  //   });
-  // }
   formData.append("groupID", groupID);
 
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/messagegroup/uploadImages`,
+    `${API_BASE_URL}/api/v1/messagegroup/uploadImage`,
     formData,
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        "Authorization": "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );

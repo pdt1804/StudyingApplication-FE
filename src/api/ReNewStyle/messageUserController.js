@@ -105,33 +105,26 @@ const generateRandomString = (length) => {
 };
 
 //multiple image
-export const messageuser_uploadMultipleImages = async (toUserName, uriList) => {
+export const messageuser_uploadMultipleImages = async (toUserName, uri, name, type) => {
+  console.log(uri)
+  console.log(name)
+  console.log(type)
+
   const formData = new FormData();
-  uriList.forEach((uri, index) => {
-    formData.append("files", {
-      uri,
-      name: generateRandomString(10) + ".jpg",
-      type: "image/jpg",
-    });
+  formData.append("file", {
+    uri: uri,
+    name: name,
+    type: type,
   });
-  // for (let i = 0; i < uriList.length; i++)
-  // {
-  //   let uri = uriList[i].uri
-  //   formData.append("files", {
-  //     uri,
-  //     name: `image_${i}jpg`,
-  //     type: "image/jpg",
-  //   });
-  // }
   formData.append("toUserName", toUserName);
 
   const response = await axios.post(
-    `${API_BASE_URL}/api/v1/messageUser/uploadImages`,
+    `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
     formData,
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        "Authorization": "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );

@@ -32,7 +32,10 @@ export default EnterMessageBar = (props) => {
   const { stompClient, actionType } = props;
 
   const [typedText, setTypedText] = useState("");
-  const [pickedImages, setPickedImages] = useState([]);
+  const [pickedImages, setPickedImages] = useState("");
+  const [type, setType] = useState("");
+  const [name, setName] = useState("");
+
 
   const [userNames, setUserNames] = useState([]);
 
@@ -80,12 +83,14 @@ export default EnterMessageBar = (props) => {
     }
 
     //console.log(pickedImages)
-    const response = await blog_commentBlog(blogID, typedText, userNames, pickedImages);
+    const response = await blog_commentBlog(blogID, typedText, userNames, pickedImages, name, type);
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
-    setPickedImages([])
+    setPickedImages("")
+    setType("")
+    setName("")
   };
 
   const handleSendMessage_Reply = async () => {
@@ -93,12 +98,14 @@ export default EnterMessageBar = (props) => {
       alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
-    const response = await blog_replyComment(commentID, typedText, userNames, pickedImages);
+    const response = await blog_replyComment(commentID, typedText, userNames, pickedImages, name, type);
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
-    setPickedImages([])
+    setPickedImages("")
+    setType("")
+    setName("")
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -140,8 +147,9 @@ export default EnterMessageBar = (props) => {
   const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
+      //allowsMultipleSelection: true, T bất lực rồi !!
       quality: 1,
+      allowsEditing: true,
 
       /* mediaTypes: ImagePicker.MediaTypeOptions.All,  //MediaTypeOptions.All thì sẽ có luôn videos trong đấy
       allowsEditing: true,  // đã multiple thì ko edit được
@@ -151,18 +159,24 @@ export default EnterMessageBar = (props) => {
     });
 
     if (!result.canceled) {
-      const uriList = result.assets.map((asset) => asset.uri);
+      //const uriList = result.assets.map((asset) => asset.uri);
       //setPickedImages([...pickedImages, ...uriList]);
-      setPickedImages([...uriList]);
+      //setPickedImages([...uriList]);
+      await setPickedImages(result.assets[0].uri.toString())
+      await setType(result.assets[0].mimeType.toString())
+      await setName(result.assets[0].fileName.toString())
+      return result.assets[0];
     }
   };
 
   const handleUploadImagesForFriend = async () => {
     try {
-      await handleSelectImages();
+      const file = await handleSelectImages();
       const response = await messageuser_uploadMultipleImages(
         friendUsername,
-        pickedImages
+        file.uri,
+        file.fileName, 
+        file.mimeType
       );
 
       //alert("2")
@@ -182,10 +196,12 @@ export default EnterMessageBar = (props) => {
   
   const handleUploadImagesForGroup = async () => {
     try {
-      await handleSelectImages();
+      const file = await handleSelectImages();
       const response = await messagegroup_uploadMultipleImages(
         await AsyncStorage.getItem('groupID'),
-        pickedImages
+        file.uri,
+        file.fileName, 
+        file.mimeType
       );
 
       //alert("2")

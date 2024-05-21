@@ -279,7 +279,7 @@ const generateRandomString = (length) => {
   return result;
 };
 
-export const blog_commentBlog = async (blogID, content, userName, uriList) => {
+export const blog_commentBlog = async (blogID, content, userName, uri, name, type) => {
   // const imageList = uriList.map((uri) => {
   //   return {
   //     uri,
@@ -288,12 +288,10 @@ export const blog_commentBlog = async (blogID, content, userName, uriList) => {
   //   };
   // });
   const formData = new FormData();
-  uriList.forEach((uri) => {
-    formData.append("files", {
-      uri,
-      name: generateRandomString(10) + ".jpg",
-      type: "image/jpg",
-    });
+  formData.append("files", {
+    uri: uri,
+    name: name,
+    type: type,
   });
   formData.append('blogID', blogID)
   formData.append("content", content);
@@ -343,7 +341,9 @@ export const blog_replyComment = async (
   commentID,
   content,
   userName,
-  uriList
+  uri,
+  name,
+  type
 ) => {
   // const imageList = uriList.map((uri) => {
   //   return {
@@ -353,12 +353,10 @@ export const blog_replyComment = async (
   //   };
   // });
   const formData = new FormData();
-  uriList.forEach((uri) => {
-    formData.append("files", {
-      uri,
-      name: generateRandomString(10) + ".jpg",
-      type: "image/jpg",
-    });
+  formData.append("files", {
+    uri: uri,
+    name: name,
+    type: type,
   });
   formData.append("commentID", commentID);
   formData.append("content", content);
