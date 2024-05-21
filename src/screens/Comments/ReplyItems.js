@@ -13,8 +13,7 @@ import { images, icons, colors, fontSizes } from "../../constants";
 
 export default function ReplyItems(props) {
   const { navigate } = props;
-  let { userReplied, dateReplied, content, images } = props.reply;
-  //const replyImages = props.replies.images
+  const { userReplied, dateReplied, content, images } = props.reply;
 
   const replyImages = [];
 

@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API_BASE_URL } from "../api/DomainAPI";
 
-function MessengerGroupItems(props) {
+export default function MessengerGroupItems(props) {
   let { content, dateSent, id, user } = props.item;
 
   const {navigate} = props;
@@ -15,13 +15,24 @@ function MessengerGroupItems(props) {
     date.getMonth() + 1
   }`;
 
+  const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
 
   const [username, setUsername] = useState("");
   const [sentUsername, setSentUsername] = useState("");
   const [sender, setSender] = useState("");
 
-  const [response, setResponse] = useState("");
+  const MAXWidth = 245;
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
+
+  const getImageSize = (uri) => {
+    Image.getSize(uri, (width, height) => {
+      const temp = width > MAXWidth ? width / MAXWidth : 1;
+      setImageWidth(width);
+      setImageHeight(height / temp);
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +50,6 @@ function MessengerGroupItems(props) {
           },
         });
 
-        setResponse(response.data);
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
 
@@ -52,6 +62,11 @@ function MessengerGroupItems(props) {
 
         setSender(checkSender.data);
 
+        props.item.content
+          ? setIsImage(false)
+          : (setIsImage(true),
+            setImage(props.item.images[0].toString().split("-")[0]),
+            getImageSize(props.item.images[0].toString().split("-")[0]));
       } catch (error) {
         console.error("Error fetching data:", error.message);
         setError("Error fetching data");
@@ -83,7 +98,24 @@ function MessengerGroupItems(props) {
           <Text style={styles.subText}>{user.information.fulName} | {timeSent}</Text>
         </View>
         <View style={styles.leftView}>
-          <Text style={styles.message}>{content}</Text>
+          {isImage ? (
+            (console.log(imageHeight),
+            (
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageWidth,
+                    height: imageHeight,
+                    maxWidth: MAXWidth,
+                  },
+                ]}
+                source={{ uri: image }}
+              />
+            ))
+          ) : (
+            <Text style={styles.message}>{content}</Text>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -94,7 +126,24 @@ function MessengerGroupItems(props) {
           <Text style={styles.subText}>{timeSent}</Text>
         </View>
         <View style={styles.rightView}>
-          <Text style={styles.myMessage}>{content}</Text>
+          {isImage ? (
+            (console.log(imageHeight),
+            (
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageWidth,
+                    height: imageHeight,
+                    maxWidth: MAXWidth,
+                  },
+                ]}
+                source={{ uri: image }}
+              />
+            ))
+          ) : (
+            <Text style={styles.message}>{content}</Text>
+          )}
         </View>
       </View>
 
@@ -102,7 +151,6 @@ function MessengerGroupItems(props) {
     </TouchableOpacity>
   );
 }
-export default MessengerGroupItems;
 
 const styles = StyleSheet.create({
   container: {

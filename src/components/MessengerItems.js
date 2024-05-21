@@ -20,13 +20,15 @@ function MessengerItems(props) {
   const [image, setImage] = useState(null);
   const [path, setPath] = useState(null);
 
+  const MAXWidth = 245;
   const [imageWidth, setImageWidth] = useState(0);
   const [imageHeight, setImageHeight] = useState(0);
 
   const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
+      const temp = width > MAXWidth ? width / MAXWidth : 1;
       setImageWidth(width);
-      setImageHeight(height);
+      setImageHeight(height / temp);
     });
   };
 
@@ -45,8 +47,7 @@ function MessengerItems(props) {
           ? setIsImage(false)
           : (setIsImage(true),
             setImage(props.item.images[0].toString().split("-")[0]),
-            getImageSize(props.item.images[0].toString().split("-")[0])
-          );
+            getImageSize(props.item.images[0].toString().split("-")[0]));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -69,7 +70,20 @@ function MessengerItems(props) {
         </View>
         <View style={styles.leftView}>
           {isImage ? (
-            <Image style={styles.image} source={{ uri: image }} />
+            (console.log(imageHeight),
+            (
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageWidth,
+                    height: imageHeight,
+                    maxWidth: MAXWidth,
+                  },
+                ]}
+                source={{ uri: image }}
+              />
+            ))
           ) : (
             <Text style={styles.message}>{content}</Text>
           )}
@@ -84,8 +98,20 @@ function MessengerItems(props) {
         </View>
         <View style={styles.rightView}>
           {isImage ? (
-            <Image style={[styles.image, {width: imageWidth, height: imageHeight}]} source={{ uri: image }} />
-            //renderImage(image, imageWidth, imageHeight)
+            (console.log(imageHeight),
+            (
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageWidth,
+                    height: imageHeight,
+                    maxWidth: MAXWidth,
+                  },
+                ]}
+                source={{ uri: image }}
+              />
+            ))
           ) : (
             <Text style={styles.message}>{content}</Text>
           )}
@@ -125,11 +151,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    maxWidth: 245,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     borderRadius: 5,
-    borderWidth:3,
-    borderColor: colors.PrimaryBackground
+    borderWidth: 3,
+    borderColor: colors.PrimaryBackground,
   },
   leftView: {
     flexDirection: "row",

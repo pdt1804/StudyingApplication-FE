@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-  Text,
   View,
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  FlatList,
-  Image,
-  Button,
 } from "react-native";
 import { icons, colors, fontSizes, images } from "../constants";
 import Icon from "./MyIcon";
@@ -35,7 +31,6 @@ export default EnterMessageBar = (props) => {
   const [pickedImages, setPickedImages] = useState("");
   const [type, setType] = useState("");
   const [name, setName] = useState("");
-
 
   const [userNames, setUserNames] = useState([]);
 
@@ -82,15 +77,21 @@ export default EnterMessageBar = (props) => {
       return;
     }
 
-    //console.log(pickedImages)
-    const response = await blog_commentBlog(blogID, typedText, userNames, pickedImages, name, type);
+    const response = await blog_commentBlog(
+      blogID,
+      typedText,
+      userNames,
+      pickedImages,
+      name,
+      type
+    );
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
-    setPickedImages("")
-    setType("")
-    setName("")
+    setPickedImages("");
+    setType("");
+    setName("");
   };
 
   const handleSendMessage_Reply = async () => {
@@ -98,14 +99,21 @@ export default EnterMessageBar = (props) => {
       alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
-    const response = await blog_replyComment(commentID, typedText, userNames, pickedImages, name, type);
+    const response = await blog_replyComment(
+      commentID,
+      typedText,
+      userNames,
+      pickedImages,
+      name,
+      type
+    );
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
-    setPickedImages("")
-    setType("")
-    setName("")
+    setPickedImages("");
+    setType("");
+    setName("");
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -147,24 +155,14 @@ export default EnterMessageBar = (props) => {
   const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      //allowsMultipleSelection: true, T bất lực rồi !!
       quality: 1,
       allowsEditing: true,
-
-      /* mediaTypes: ImagePicker.MediaTypeOptions.All,  //MediaTypeOptions.All thì sẽ có luôn videos trong đấy
-      allowsEditing: true,  // đã multiple thì ko edit được
-      aspect: [4, 3],
-      quality: 1,
-      multiple: true, */
     });
 
     if (!result.canceled) {
-      //const uriList = result.assets.map((asset) => asset.uri);
-      //setPickedImages([...pickedImages, ...uriList]);
-      //setPickedImages([...uriList]);
-      await setPickedImages(result.assets[0].uri.toString())
-      await setType(result.assets[0].mimeType.toString())
-      await setName(result.assets[0].fileName.toString())
+      setPickedImages(result.assets[0].uri.toString());
+      setType(result.assets[0].mimeType.toString());
+      setName(result.assets[0].fileName.toString());
       return result.assets[0];
     }
   };
@@ -175,7 +173,7 @@ export default EnterMessageBar = (props) => {
       const response = await messageuser_uploadMultipleImages(
         friendUsername,
         file.uri,
-        file.fileName, 
+        file.fileName,
         file.mimeType
       );
 
@@ -188,19 +186,19 @@ export default EnterMessageBar = (props) => {
       );
 
       //alert("3")
-      setPickedImages([])
+      setPickedImages([]);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
   };
-  
+
   const handleUploadImagesForGroup = async () => {
     try {
       const file = await handleSelectImages();
       const response = await messagegroup_uploadMultipleImages(
-        await AsyncStorage.getItem('groupID'),
+        await AsyncStorage.getItem("groupID"),
         file.uri,
-        file.fileName, 
+        file.fileName,
         file.mimeType
       );
 
@@ -211,12 +209,12 @@ export default EnterMessageBar = (props) => {
       stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
 
       //alert("3")
-      setPickedImages([])
+      setPickedImages([]);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
   };
-  
+
   const handleUploadImages = async () => {
     if (actionType === 0 || actionType === "friend") {
       handleUploadImagesForFriend();
@@ -229,7 +227,7 @@ export default EnterMessageBar = (props) => {
     } else if (actionType === 4 || actionType === "chatbot") {
       handleSendMessage_Chatbot();
     }
-  }
+  };
 
   return (
     <View style={styles.container}>

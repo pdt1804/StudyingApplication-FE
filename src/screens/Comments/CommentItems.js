@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 
 function CommentItems(props) {
   const { onPress } = props;
-  let { commentID, dateComment, userComment, content, replies } = props.comment;
-  //const replyImages = props.comment.images
+  const { commentID, dateComment, userComment, content, replies, images } =
+    props.comment;
+
+  const replyImages = [];
+
+  if (images.length > 0) {
+    for (let i = 0; i < images.length; i++) {
+      const parts = images[i].toString().split("-");
+      replyImages.push(parts[0]);
+    }
+  }
 
   const getTime = () => {
     const date = new Date(dateComment);
@@ -38,6 +38,12 @@ function CommentItems(props) {
         <Text style={styles.contentText} numberOfLines={4}>
           {content}
         </Text>
+        <View style={{flexDirection: 'row'}}>
+          {replyImages.map((image, index) => (
+            <Image key={index} source={{ uri: image }} style={styles.image} />
+          ))}
+          <Image source={icons.activeBellAlarm} style={{margin: 10,width: 35, height: 35, alignSelf: 'center'}} />
+        </View>
       </View>
       <View style={styles.rightSideView}>
         <Text style={styles.rightSideText}>{getTime()}</Text>
@@ -51,7 +57,7 @@ export default CommentItems;
 const styles = StyleSheet.create({
   container: {
     minHeight: 65,
-    maxHeight: 150,
+    //maxHeight: 150,
     marginBottom: 15,
     flexDirection: "row",
   },
@@ -95,10 +101,12 @@ const styles = StyleSheet.create({
     marginTop: -10,
   },
   image: {
-    maxWidth: 245,
-    resizeMode: "contain",
+    width: 100,
+    height: 100,
+    resizeMode: "cover",
+    marginTop: 10,
     borderRadius: 5,
-    borderWidth: 3,
-    borderColor: colors.PrimaryBackground,
+    //borderWidth: 3,
+    //borderColor: colors.PrimaryBackground,
   },
 });

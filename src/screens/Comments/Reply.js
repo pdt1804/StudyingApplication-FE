@@ -12,7 +12,6 @@ import ReplyItems from "./ReplyItems";
 import { images, icons, colors, fontSizes } from "../../constants";
 import {
   UIHeader,
-  EnterMessageReplyBar,
   EnterMessageBar,
 } from "../../components";
 import { blog_getAllReplyInComment } from "../../api";
@@ -115,7 +114,6 @@ const Reply = (props) => {
         ))}
       </ScrollView>
 
-      {/* <EnterMessageReplyBar commentID={commentID} /> */}
       <EnterMessageBar commentID={commentID} actionType={'reply'}/>
     </View>
   );

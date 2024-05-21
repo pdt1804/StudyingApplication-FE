@@ -15,7 +15,11 @@ import {
   TextInputTransparent,
   TextInputMediumIcon,
 } from "../components";
-import { user_register, user_createAccountData, information_initialize } from "../api";
+import {
+  user_register,
+  user_createAccountData,
+  information_initialize,
+} from "../api";
 import CryptoJS from "crypto-js";
 import { RadioButton } from "react-native-paper";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
@@ -50,7 +54,7 @@ const Registration = (props) => {
   const [topics, setTopics] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      setTopics(await information_getAllTopics())
+      setTopics(await information_getAllTopics());
     };
     fetchData();
   }, [props.userName]);
@@ -68,8 +72,7 @@ const Registration = (props) => {
 
   //use for api
   const handleRegister = async () => {
-    if (await user_checkInfo(username, password, email, rePassword) == true)
-    {
+    if ((await user_checkInfo(username, password, email, rePassword)) == true) {
       setActiveStep(1);
       const result = await user_register(username, password, email, rePassword);
       if (result) {
@@ -81,15 +84,15 @@ const Registration = (props) => {
 
   //use for api: Registration
   const handleVerification_Registration = async () => {
-    // alert(
-    //   `Registration: otp từ hệ thống: ${systemOTP}, từ màn hình: ${inputOTP},`
-    // );
-
+    /* alert(
+      `Registration: otp từ hệ thống: ${systemOTP}, từ màn hình: ${inputOTP},`
+    );
+ */
     if (systemOTP == inputOTP) {
       const dataResponse = await user_createAccountData(newUser);
       if (dataResponse.status == 200 && dataResponse.data.jwtToken != null) {
-        setJwtToken(dataResponse.data.jwtToken)
-        setInfoID(dataResponse.data.infoID)
+        setJwtToken(dataResponse.data.jwtToken);
+        setInfoID(dataResponse.data.infoID);
         setActiveStep(2);
       } else {
         //unsuccessful
@@ -164,9 +167,16 @@ const Registration = (props) => {
     label: "Chọn topic (chủ đề) học tập",
     onSubmit: async () => {
       alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
-      AsyncStorage.setItem('username', jwtToken)
-      await information_initialize(yearOfBirth, gender, description, phoneNumber, selectedTopics, infoID)
-      navigate("MainBottomTab", { tabName: "UserProfile" })
+      AsyncStorage.setItem("username", jwtToken);
+      await information_initialize(
+        yearOfBirth,
+        gender,
+        description,
+        phoneNumber,
+        selectedTopics,
+        infoID
+      );
+      navigate("MainBottomTab", { tabName: "UserProfile" });
     },
     previousBtnText: "Quay Lại",
     finishBtnText: "Xong",
@@ -184,10 +194,15 @@ const Registration = (props) => {
         <ProgressSteps {...ProgressStepsStyle}>
           <ProgressStep {...Step_BasicInfo}>
             <View style={{ alignItems: "center" }}>
-              <Text style={[styles.stepAdditionalInfoTitle,{fontSize:fontSizes.h3}]}>
+              <Text
+                style={[
+                  styles.stepAdditionalInfoTitle,
+                  { fontSize: fontSizes.h3 },
+                ]}
+              >
                 Đăng ký tài khoản mới
               </Text>
-              
+
               <TextInputTransparent
                 inputMode={"text"}
                 icon={icons.personIcon}
@@ -249,7 +264,7 @@ const Registration = (props) => {
               <Text style={styles.stepAdditionalInfoTitle}>
                 Mã xác thực đã được gửi qua email bạn
               </Text>
-              
+
               <View style={styles.mainView}>
                 <TextInputMediumIcon
                   name={"Mã xác thực"}
@@ -352,7 +367,7 @@ const Registration = (props) => {
                     onPress={() => handlePressTopic(topic.topicID)}
                   >
                     <Image
-                      source={{uri: topic.image}}
+                      source={{ uri: topic.image }}
                       style={{
                         flex: 1,
                         width: "100%",
@@ -416,7 +431,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PrimaryContainer,
   },
   imageUIT: {
-    width: '90%',
+    width: "90%",
     //marginTop: "-50%",
     resizeMode: "contain",
     position: "absolute",
