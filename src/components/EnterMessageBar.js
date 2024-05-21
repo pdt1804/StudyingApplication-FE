@@ -7,15 +7,15 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  Button,
 } from "react-native";
 import { icons, colors, fontSizes } from "../constants";
 import Icon from "./MyIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  messenger_sendMessageForUser,
   messenger_sendMessageForGroup,
   messageuser_sendMessageForUser,
-  messageuser_uploadImage,
+  messageuser_uploadMultipleImages,
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
 //import ImagePicker from "react-native-image-picker";
@@ -29,7 +29,7 @@ export default EnterMessageBar = (props) => {
   const [typedText, setTypedText] = useState("");
 
   //testing...
-  const [pickedImages, setPickedImages] = useState(null);
+  const [pickedImages, setPickedImages] = useState([]);
 
   const handleSendMessage_Friend = async () => {
     if (typedText.length == 0) {
@@ -78,29 +78,38 @@ export default EnterMessageBar = (props) => {
   };
 
   //image
-  const handleSelectImage = async () => {
+  const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 1,
+
+      /* mediaTypes: ImagePicker.MediaTypeOptions.All,  //MediaTypeOptions.All thì sẽ có luôn videos trong đấy
+      allowsEditing: true,  // đã multiple thì ko edit được
       aspect: [4, 3],
       quality: 1,
-      multiple: true,
+      multiple: true, */
     });
 
     if (!result.canceled) {
-      const imagePath = result.assets[0].uri.toString();
-      setPickedImages(imagePath); // Update state
-      try {
-        const response = await messageuser_uploadImage(friendUsername,imagePath);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
+      const uriList = result.assets.map((asset) => asset.uri);
+      //setPickedImages([...pickedImages, ...uriList]);
+      setPickedImages([...uriList]);
+    }
+  };
+
+  const handleUploadImages = async () => {
+    try {
+      await handleSelectImages();
+      const response = await messageuser_uploadMultipleImages(friendUsername,pickedImages);
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleSelectImage}>
+      <TouchableOpacity onPress={handleUploadImages}>
         <Icon
           name={icons.priceTagIcon}
           size={25}

@@ -175,7 +175,9 @@ import {
   messageuser_getFriendID,
   messageuser_getSentUser,
   messageuser_checkSender,
-  messageuser_sendMessageForUser,messageuser_uploadImage,
+  messageuser_sendMessageForUser,
+  messageuser_uploadImage,
+  messageuser_uploadMultipleImages,
   messageuser_saveChatbotMessage,
 } from "./ReNewStyle/messageUserController";
 import {
@@ -345,6 +347,7 @@ export {
   messageuser_checkSender,
   messageuser_sendMessageForUser,
   messageuser_uploadImage,
+  messageuser_uploadMultipleImages,
   messageuser_saveChatbotMessage,
   notification_createNotification,
   notification_insertImage,
