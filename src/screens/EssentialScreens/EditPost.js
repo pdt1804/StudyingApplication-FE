@@ -25,6 +25,8 @@ const EditPost = (props) => {
   let { blogID, content, image, nameSubject, subjectID } = props.route.params;
 
   const [contentText, setContentText] = useState(content);
+  const [addImageRequests, setAddImageRequests] = useState([]); // STORE RESULT.ASSETS
+  const [removeImageRequests, setRemoveImageRequests] = useState([]); // STORE FILEPATH OF IMAGE OR VIDEO
 
   
   //Add/change image
@@ -71,7 +73,8 @@ const EditPost = (props) => {
       
       try {
 
-        setFilePath(result.assets[0].uri);
+        await setAddImageRequests(result.assets);
+        await setFilePath(result.assets[0].uri)
 
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -88,21 +91,52 @@ const EditPost = (props) => {
         return;
     }
 
+    console.log(addImageRequests)
+
     const formData = new FormData();
     formData.append('blogID', blogID);
     formData.append('content', contentText);
-  
-    const response = await axios.put(API_BASE_URL + '/api/v1/blog/updateBlog', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    });
+    //formData.append('addNewFiles', addImageRequests)
+    formData.append('removeOldFiles', removeImageRequests)
 
-    if (filePath != "images.blankImageLoading")
+    let response;
+
+    if (addImageRequests.length > 0) // Update này là update toàn bộ thông tin 
     {
-      uploadImage(filePath, blogID)
+      for (var i = 0; i < addImageRequests.length; i++)
+      {
+        const uri = addImageRequests[i].uri;
+        const name = addImageRequests[i].fileName;
+        const type = addImageRequests[i].type;
+
+        formData.append('addNewFiles', {
+          uri: uri,
+          name: name,
+          type: type,
+        })
+      }
+
+      response = await axios.put(API_BASE_URL + '/api/v1/blog/updateBlog', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
     }
+    else // Update này không thêm ảnh mới 
+    {
+      response = await axios.put(API_BASE_URL + '/api/v1/blog/updateBlogRemovingImage', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+    }
+
+    // if (filePath != "images.blankImageLoading")
+    // {
+    //   uploadImage(filePath, blogID)
+    // }
         
     if (response.status == 200)
     {

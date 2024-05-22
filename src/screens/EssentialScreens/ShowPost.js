@@ -186,12 +186,14 @@ const ShowPost = (props) => {
   };
 
   const ShowPicture = () => {
-    if (image == "icons.blankImageLoading") {
+    console.log(parts)
+
+    if (parts == null) {
       alert("Nội dung này không có ảnh");
       return;
     }
 
-    navigate("ShowPicture", { file: image });
+    navigate("ShowPicture", { file: parts[0] });
   };
 
   return (
