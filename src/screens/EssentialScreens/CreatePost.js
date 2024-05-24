@@ -9,30 +9,33 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader } from "../../components";
+import { UIHeader, Icon, CommonButton } from "../../components";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
+export default CreatePost = (props) => {
+  const { navigate, goBack } = props.navigation;
+  const { subjectID } = props.route.params;
 
-const CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
+  const [listSelectedImage, setListSelectedImage] = useState([
+    images.blankImageLoading,
+  ]);
 
-  const [filePath, setFilePath] = useState(images.blankImageLoading)
+  const MAXWidth = 245;
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
 
-
-  let { subjectID } = props.route.params;
-  const [assets, setAssets] = useState([]);
-  
-  //Add/change image
-  const handleImage = async () => {
-    alert("đổi hình thành công");
+  const getImageSize = (uri) => {
+    Image.getSize(uri, (width, height) => {
+      const temp = width > MAXWidth ? width / MAXWidth : 1;
+      setImageWidth(width);
+      setImageHeight(height / temp);
+    });
   };
-
-  //navigation
-  const { navigate, goBack } = props.navigation;
 
   //Quickly delete written content
   useEffect(() => {
@@ -47,11 +50,7 @@ const CreatePost = (props) => {
     }
   };
 
-
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const selectImage = async () => {
-
+  const handleSelectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -60,35 +59,25 @@ const CreatePost = (props) => {
     });
 
     if (!result.canceled) {
-      
       try {
-
-        //setFilePath(result.assets[0].uri);
-        setFilePath(result.assets[0].uri);
-        //console.log(result.assets[0])
-
-        for (let i = 0; i < result.assets.length; i++)
-        {
-          //assets.push(result.assets[i].uri);
-          //setAssets([...assets, result.assets[i]])
-          setAssets(result.assets)
-          console.log(result.assets)
-        }
-
-        const username = await AsyncStorage.getItem('username');
-
+        listSelectedImage[0] === images.blankImageLoading
+          ? setListSelectedImage([result.assets[0].uri])
+          : setListSelectedImage([...listSelectedImage, result.assets[0].uri]); //worked!!
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       }
     }
+  };
 
+  const handleRemoveImageFromList = async (index) => {
+    const newList = [...listSelectedImage];
+    newList.splice(index, 1);
+    setListSelectedImage(newList);
   };
 
   const handleCreatePost = async () => {
-
-    if (contentText.length == 0)
-    {
-      alert('Hãy nhập nội dung')
+    if (contentText.length == 0) {
+      alert("Hãy nhập nội dung");
       return;
     }
 
@@ -96,41 +85,40 @@ const CreatePost = (props) => {
     //   content: contentText,
     // };
 
-    var formData = new FormData()
-    formData.append('groupID', await AsyncStorage.getItem('groupID'))
-    formData.append('userNames', [])
-    formData.append('subjectID', subjectID)
-    formData.append('content', contentText)
+    var formData = new FormData();
+    formData.append("groupID", await AsyncStorage.getItem("groupID"));
+    formData.append("userNames", []);
+    formData.append("subjectID", subjectID);
+    formData.append("content", contentText);
 
     const response = await axios.post(
-      API_BASE_URL +
-        "/api/v1/blog/createNewBlog",
-        formData, {
+      API_BASE_URL + "/api/v1/blog/createNewBlog",
+      formData,
+      {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        }}
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+        },
+      }
     );
 
-    if (filePath != "icons.blankImageLoading")
-    {
-      for (let i = 0; i < assets.length; i++)
-      {
-        let url = assets[i].uri;
-        console.log(assets)
-        console.log(assets[i].uri)
-        console.log(assets[i].type)
-        console.log(assets[i].fileName)
+    if (true) {
+      for (let i = 0; i < listSelectedImage.length; i++) {
+        let url = listSelectedImage[i].uri;
+        console.log(listSelectedImage);
+        console.log(listSelectedImage[i].uri);
+        console.log(listSelectedImage[i].type);
+        console.log(listSelectedImage[i].fileName);
 
-        formData = new FormData()
-        formData.append('blogID', response.data)
+        formData = new FormData();
+        formData.append("blogID", response.data);
         formData.append("file", {
           url,
-          name: assets[i].fileName,
-          type: assets[i].type,
+          name: listSelectedImage[i].fileName,
+          type: listSelectedImage[i].type,
         });
 
-        uploadImage(assets[i].uri, response.data)
+        uploadImage(listSelectedImage[i].uri, response.data);
 
         // const uploadImage = await axios.post(
         //   API_BASE_URL +
@@ -140,14 +128,14 @@ const CreatePost = (props) => {
         //       'Content-Type': 'multipart/form-data',
         //       'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
         //     }}
-        // );    
+        // );
       }
     }
 
     // const formData = new FormData();
     // formData.append('blogID', response.data);
     // formData.append('file', filePath);
-  
+
     // const responseUpdateImage = await axios.post(API_BASE_URL + '/api/v1/blog/insertImageInBlog', formData, {
     //   headers: {
     //     'Content-Type': 'multipart/form-data',
@@ -159,15 +147,15 @@ const CreatePost = (props) => {
 
   const uploadImage = async (uri, blogID) => {
     const formData = new FormData();
-    
-    if(uri.toString())
-    formData.append('file', {
-      uri,
-      name: 'image.jpg',
-      type: 'image/jpg',
-    });
-    formData.append('blogID', blogID)
-  
+
+    if (uri.toString())
+      formData.append("file", {
+        uri,
+        name: "image.jpg",
+        type: "image/jpg",
+      });
+    formData.append("blogID", blogID);
+
     try {
       // const response = await fetch('YOUR_BACKEND_URL', {
       //   method: 'POST',
@@ -177,24 +165,27 @@ const CreatePost = (props) => {
       //   },
       // });
 
-      const response = await axios.post(API_BASE_URL + '/api/v1/blog/insertImageInBlog', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        },
-      });
+      const response = await axios.post(
+        API_BASE_URL + "/api/v1/blog/insertImageInBlog",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          },
+        }
+      );
 
-  
       if (response.status == 200) {
         const imageURL = await response.json();
-        console.log('URL của ảnh:', imageURL);
-        alert('Tạo thành công')
+        console.log("URL của ảnh:", imageURL);
+        alert("Tạo thành công");
         // Tiếp tục xử lý URL của ảnh ở đây
       } else {
-        console.log('Lỗi khi tải lên ảnh');
+        console.log("Lỗi khi tải lên ảnh");
       }
     } catch (error) {
-      console.log('Lỗi:', error);
+      console.log("Lỗi:", error);
     }
   };
 
@@ -212,7 +203,7 @@ const CreatePost = (props) => {
         }}
       />
 
-      <ScrollView /* content */ onTouchStart={handleTouch}>
+      <ScrollView onTouchStart={handleTouch}>
         <TextInput
           ref={textInputRef}
           style={styles.contentTextInput}
@@ -225,14 +216,34 @@ const CreatePost = (props) => {
           placeholder={"Soạn bài đăng. Điền vào đây..."}
           placeholderTextColor={colors.inactive}
         />
-        <TouchableOpacity style={styles.imgClickable} onPress={selectImage}>
-          <Image source={{uri: filePath}} style={styles.image} />
-        </TouchableOpacity>
+        {listSelectedImage.map((eachImage, index) => (
+          <View key={index} style={styles.imgView}>
+            <Image source={{ uri: eachImage }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            {listSelectedImage[0] === images.blankImageLoading ? (
+              <View />
+            ) : (
+              <TouchableOpacity
+                style={styles.redRemoveImg}
+                onPress={() => handleRemoveImageFromList(index)}
+              >
+                <Icon
+                  name={icons.cancelCircleIcon}
+                  size={55}
+                  color={colors.RedLightBackground}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        ))}
+        <CommonButton
+          onPress={handleSelectImage}
+          title={"+ Thêm ảnh +"}
+          styleContainer={styles.addImgBtn}
+        />
       </ScrollView>
     </View>
   );
 };
-export default CreatePost;
 
 const styles = StyleSheet.create({
   container: {
@@ -243,17 +254,30 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 30,
   },
+  imgView: {
+    marginBottom: 5,
+    marginHorizontal: 1,
+    paddingBottom: 7,
+    paddingRight: 17,
+  },
   image: {
     width: 350,
     height: 350,
     resizeMode: "cover",
-    margin: 15,
+    margin: 10,
     borderRadius: 5,
-    borderColor: "grey",
+    borderColor: colors.GrayBackground,
     borderWidth: 5,
     alignSelf: "center",
   },
-  imgClickable: {
-    backgroundColor: colors.transparentWhite,
+  redRemoveImg: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+  },
+  addImgBtn: {
+    marginTop: 0,
+    marginBottom: 30,
+    backgroundColor: colors.GrayBackground,
   },
 });

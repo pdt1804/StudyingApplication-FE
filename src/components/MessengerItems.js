@@ -70,20 +70,17 @@ function MessengerItems(props) {
         </View>
         <View style={styles.leftView}>
           {isImage ? (
-            (console.log(imageHeight),
-            (
-              <Image
-                style={[
-                  styles.image,
-                  {
-                    width: imageWidth,
-                    height: imageHeight,
-                    maxWidth: MAXWidth,
-                  },
-                ]}
-                source={{ uri: image }}
-              />
-            ))
+            <Image
+              style={[
+                styles.image,
+                {
+                  width: imageWidth,
+                  height: imageHeight,
+                  maxWidth: MAXWidth,
+                },
+              ]}
+              source={{ uri: image }}
+            />
           ) : (
             <Text style={styles.message}>{content}</Text>
           )}
@@ -98,20 +95,17 @@ function MessengerItems(props) {
         </View>
         <View style={styles.rightView}>
           {isImage ? (
-            (console.log(imageHeight),
-            (
-              <Image
-                style={[
-                  styles.image,
-                  {
-                    width: imageWidth,
-                    height: imageHeight,
-                    maxWidth: MAXWidth,
-                  },
-                ]}
-                source={{ uri: image }}
-              />
-            ))
+            <Image
+              style={[
+                styles.image,
+                {
+                  width: imageWidth,
+                  height: imageHeight,
+                  maxWidth: MAXWidth,
+                },
+              ]}
+              source={{ uri: image }}
+            />
           ) : (
             <Text style={styles.message}>{content}</Text>
           )}

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants/index";
 
-function CommonButton(props) {
-  const { onPress, title } = props;
+export default function CommonButton(props) {
+  const { onPress, title, styleContainer, styleText } = props;
 
   let fontSizeTitle = fontSizes.h4;
   if (title.length > 10) {
@@ -13,24 +13,22 @@ function CommonButton(props) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.container}
+      style={[styles.container, styleContainer]}
     >
       <Text
-        style={{
-          padding: 11,
-          fontSize: fontSizeTitle,
-          fontWeight: "bold",
-          color: colors.PrimaryObjects,
-        }}
+        style={[
+          {
+            fontSize: fontSizeTitle,
+          },
+          styles.defaultText,
+          styleText,
+        ]}
       >
         {title}
       </Text>
     </TouchableOpacity>
   );
 }
-
-export default CommonButton;
-
 
 const styles = StyleSheet.create({
   container: {
@@ -47,4 +45,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-})
+  defaultText: {
+    padding: 11,
+    fontWeight: "bold",
+    color: colors.PrimaryObjects,
+  },
+});
