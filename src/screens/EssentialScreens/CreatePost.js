@@ -71,7 +71,7 @@ const CreatePost = (props) => {
         {
           //assets.push(result.assets[i].uri);
           //setAssets([...assets, result.assets[i]])
-          setAssets(result.assets)
+          setAssets([...assets, result.assets[0]])
           console.log(result.assets)
         }
 

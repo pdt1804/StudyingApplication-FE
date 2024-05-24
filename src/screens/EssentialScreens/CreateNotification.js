@@ -20,6 +20,7 @@ const CreateNotification = (props) => {
   const [titleText, setTitleText] = useState("");
   const [contentText, setContentText] = useState("");
   const [path, setPath] = useState(null)
+  const [images, setimages] = useState([])
 
   const handleCreatePost = async () => {
     
@@ -35,35 +36,53 @@ const CreateNotification = (props) => {
       return;
     }
 
-    let notification = {
-      header: titleText,
-      content: contentText,
-      //image: path,
-    }
+    var formData = new FormData()
+    formData.append('header', titleText)
+    formData.append('content', contentText)
+    formData.append('groupID', await AsyncStorage.getItem('groupID'))
 
-    const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/create?groupID=" + await AsyncStorage.getItem('groupID'), notification, {
+    // khởi tạo thông báo mà không có hình ảnh
+    const response = await axios.post(API_BASE_URL + "/api/v1/notifycation/createWithoutFiles", formData, {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
       },
     })
 
-    if (path != null)
+    if (images.length > 0)
     {
-      uploadImage(path, response.data)
+      for (var i = 0; i < images.length; i++)
+      {
+        const uri = images[i].uri;
+        const name = images[i].fileName;
+        const type = images[i].type;
+
+        uploadImage(uri, name, type, response.data)
+      }
     }
 
+    if (response.status == 200)
+    {
+      alert("Tạo thành công") 
+    }
+    else
+    {
+      alert("không tạo thành công, vui lòng thử lại") 
+    }
 
-    alert("Tạo thành công")
     goBack();
   };
 
-  const uploadImage = async (uri, notificationID) => {
+  const uploadImage = async (uri, name, type, notificationID) => {
+    console.log(uri)
+    console.log(name)
+    console.log(type)
+
     const formData = new FormData();
     formData.append('image', {
-      uri,
-      name: 'image.jpg',
-      type: 'image/jpg',
+      uri: uri,
+      name: name,
+      type: type,
     });
     formData.append('notificationID', notificationID)
   
@@ -83,14 +102,15 @@ const CreateNotification = (props) => {
         },
       });
   
-      if (response.status == 200) {
-        const imageURL = await response.json();
-        console.log('URL của ảnh:', imageURL);
-        //alert('Đổi thành công')
-        // Tiếp tục xử lý URL của ảnh ở đây
-      } else {
-        console.log('Lỗi khi tải lên ảnh');
-      }
+      // if (response.status == 200) {
+      //   const imageURL = await response.json();
+      //   //console.log('URL của ảnh:', imageURL);
+      //   //alert('Đổi thành công')
+      //   // Tiếp tục xử lý URL của ảnh ở đây
+
+      // } else {
+      //   console.log('Lỗi khi tải lên ảnh');
+      // }
     } catch (error) {
       console.log('Lỗi:', error);
     }
@@ -127,6 +147,12 @@ const CreateNotification = (props) => {
       try {
 
         setPath(result.assets[0].uri);
+        await setimages([...images, result.assets[0]]);
+
+        // for (var i = 0; i < result.assets.length; i++)
+        // {
+        //   await setimages([...images, {uri: result.assets[i].uri, name: result.assets[i].fileName, type: result.assets[i].type}])
+        // }
 
       } catch (error) {
         console.error('Error uploading image:', error);

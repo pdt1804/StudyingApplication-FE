@@ -55,8 +55,16 @@ function ContentBox(props) {
 }
 
 const ShowNotification = (props) => {
-  let { header, content, notifycationType, dateSent, notifycationID, image } =
+  let { header, content, notifycationType, dateSent, notifycationID, images } =
     props.route.params.notification;
+
+  console.log(images)
+  var parts = null;
+
+  if (images.length > 0)
+  {
+    parts = images[0].toString().split('-')
+  }
 
   const date = new Date(dateSent);
   const hour = date.getHours();
@@ -133,7 +141,7 @@ const ShowNotification = (props) => {
   const { navigate, goBack } = props.navigation;
 
   const LoadItem = async () => {
-    alert("As")
+    //alert("As")
     try {
       if (item.documentID == -1) {
         var form = new FormData();
@@ -280,13 +288,13 @@ const ShowNotification = (props) => {
         />
         <TouchableOpacity onPress={ShowPicture}>
           <Image
-            source={{ uri: image != null ? image : null }}
+            source={{ uri: parts != null ? parts[0] : null }}
             style={styles.image}
           />
         </TouchableOpacity>
       </ScrollView>
 
-      <FloatingAction
+      {/* <FloatingAction
         actions={floatingActions}
         position="right"
         onPressItem={(name) => {
@@ -296,7 +304,7 @@ const ShowNotification = (props) => {
             deleleNotification()
           );
         }}
-      />
+      /> */}
     </View>
   );
 };
