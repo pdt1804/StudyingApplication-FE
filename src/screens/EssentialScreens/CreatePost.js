@@ -9,11 +9,19 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, Icon, CommonButton } from "../../components";
-import { API_BASE_URL } from "../../api/DomainAPI";
-import axios from "axios";
+import {
+  UIHeader,
+  Icon,
+  CommonButton,
+  RowSectionNavigate,
+  WhiteSlideBottomUp,
+} from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { blog_createNewBlog, blog_insertImageInBlog } from "../../api";
+
+//fake data
+const fakeData = ["user001", "user002", "user003", "user004"];
 
 export default CreatePost = (props) => {
   const { navigate, goBack } = props.navigation;
@@ -22,20 +30,7 @@ export default CreatePost = (props) => {
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
   const [listSelectedImage, setListSelectedImage] = useState([]);
-
-  const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [requesting, setRequesting] = useState(false);
-  const [imageHeight, setImageHeight] = useState(0);
-  const [assets, setAssets] = useState([])
-
-  const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      const temp = width > MAXWidth ? width / MAXWidth : 1;
-      setImageWidth(width);
-      setImageHeight(height / temp);
-    });
-  };
+  const [assets, setAssets] = useState([]);
 
   //Quickly delete written content
   useEffect(() => {
@@ -61,19 +56,9 @@ export default CreatePost = (props) => {
     if (!result.canceled) {
       try {
         // Thông - API
-        //setFilePath(result.assets[0].uri);
-        //setFilePath(result.assets[0].uri);
-        //console.log(result.assets[0])
-
-        for (let i = 0; i < result.assets.length; i++)
-        {
-          //assets.push(result.assets[i].uri);
-          //setAssets([...assets, result.assets[i]])
-          setAssets([...assets, result.assets[0]])
-          //console.log(result.assets)
+        for (let i = 0; i < result.assets.length; i++) {
+          setAssets([...assets, result.assets[0]]);
         }
-
-        const username = await AsyncStorage.getItem('username'); // Thông - API
 
         // Trí - giao diện
         listSelectedImage.length == 0
@@ -97,83 +82,80 @@ export default CreatePost = (props) => {
       alert("Hãy nhập nội dung");
       return;
     }
-
-    // let blog = {
-    //   content: contentText,
-    // };
-
-    var formData = new FormData();
-    formData.append("groupID", await AsyncStorage.getItem("groupID"));
-    formData.append("userNames", []);
-    formData.append("subjectID", subjectID);
-    formData.append("content", contentText);
-
-    const response = await axios.post(
-      API_BASE_URL + "/api/v1/blog/createNewBlog",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
-        },
-      }
+    const responseData = await blog_createNewBlog(
+      await AsyncStorage.getItem("groupID"),
+      [],
+      subjectID,
+      contentText
     );
-
-    console.log(listSelectedImage)
-
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
-        console.log(i)
-        let url = listSelectedImage[i].uri;
-        console.log(listSelectedImage);
-        console.log(listSelectedImage[i].uri);
-        console.log(listSelectedImage[i].type);
-        console.log(listSelectedImage[i].fileName);
-
-        uploadImage(listSelectedImage[i].uri, listSelectedImage[i].fileName, listSelectedImage[i].mimeType, response.data);
+        //console.log(i)
+        //console.log(listSelectedImage);
+        //console.log(listSelectedImage[i].uri);
+        //console.log(listSelectedImage[i].type);
+        //console.log(listSelectedImage[i].fileName);
+        let img = listSelectedImage[i];
+        try {
+          blog_insertImageInBlog(
+            img.uri,
+            img.fileName,
+            img.mimeType,
+            responseData
+          );
+          //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+        } catch (error) {
+          console.log("Lỗi:", error);
+        }
       }
     }
-
-    alert("Tạo thành công")
-
+    alert("Tạo thành công");
     goBack();
   };
 
-  const uploadImage = async (uri, name, type, blogID) => {
-    const formData = new FormData();
+  //*************** */
+  //tag tên ở đây - t chưa đụng vô API đâu nha, nhờ m cả đó :))
+  //*************** */
+  const [modalVisible, setModalVisible] = useState(false);
+  const [listTaggedUsernames, setListTaggedUsernames] = useState([]);
+  const [listMembersNotTagged, setListMembersNotTagged] = useState(fakeData);
 
-    if (uri.toString())
-      formData.append("file", {
-        uri: uri,
-        name: name,
-        type: type,
-      });
-    formData.append("blogID", blogID);
-
-    try {
-      const response = await axios.post(
-        API_BASE_URL + "/api/v1/blog/insertImageInBlog",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": "Bearer " + (await AsyncStorage.getItem("username")),
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        //const imageURL = await response.json();
-        //console.log("URL của ảnh:", imageURL);
-        //alert("Tạo thành công");
-        // Tiếp tục xử lý URL của ảnh ở đây
-      } else {
-        //console.log("Lỗi khi tải lên ảnh");
-      }
-    } catch (error) {
-      console.log("Lỗi:", error);
-    }
+  const handleAddTag = async (newName, index) => {
+    setListTaggedUsernames([...listTaggedUsernames, newName]);
+    const newList = [...listMembersNotTagged];
+    newList.splice(index, 1);
+    setListMembersNotTagged(newList);
   };
+
+  const handleRemoveTagFromList = async (nameUntag, index) => {
+    setListMembersNotTagged([...listMembersNotTagged, nameUntag]);
+    const newList = [...listTaggedUsernames];
+    newList.splice(index, 1);
+    setListTaggedUsernames(newList);
+  };
+
+  const renderContentAddTag = () => {
+    return (
+      <View>
+        {listMembersNotTagged.map((eachName, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleAddTag(eachName, index)}
+          >
+            {
+              //đoạn này là hiển thị tên/icon/avatar các kiểu nè
+              // t để tạm cái text ở đây, m ném vô username là được rồi
+              // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
+              <Text style={styles.notTagName_temp}>{eachName}</Text>
+            }
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+  //*************** */
+  // Hết những phần mới
+  //*************** */
 
   return (
     <View style={styles.container}>
@@ -188,6 +170,44 @@ export default CreatePost = (props) => {
           handleCreatePost();
         }}
       />
+
+      <WhiteSlideBottomUp
+        title={"Gắn thẻ thành viên"}
+        renderContent={renderContentAddTag}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+
+      <View style={styles.tagsInput_container}>
+        <RowSectionNavigate
+          icon={icons.atSignIcon}
+          text={"Gắn thẻ người khác"}
+          onPress={() => setModalVisible(true)}
+        />
+        <View style={styles.tags_container}>
+          {listTaggedUsernames.map((eachName, index) => (
+            <View key={index} style={styles.eachTag}>
+              <View style={styles.tagBox}>
+                <Text style={styles.tagBoxText}>{eachName}</Text>
+              </View>
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                }}
+                onPress={() => handleRemoveTagFromList(eachName, index)}
+              >
+                <Icon
+                  name={icons.cancelCircleIcon}
+                  size={20}
+                  color={colors.RedLightBackground}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </View>
 
       <ScrollView onTouchStart={handleTouch}>
         <TextInput
@@ -204,7 +224,7 @@ export default CreatePost = (props) => {
         />
         {listSelectedImage.map((eachImage, index) => (
           <View key={index} style={styles.imgView}>
-            <Image source={{ uri: eachImage.uri }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            <Image source={{ uri: eachImage.uri }} style={styles.image} />
             {listSelectedImage.length == 0 ? (
               <View />
             ) : (
@@ -222,7 +242,7 @@ export default CreatePost = (props) => {
           </View>
         ))}
         <CommonButton
-          onPress={handleSelectImage}
+          onPress={() => handleSelectImage}
           title={"+ Thêm ảnh +"}
           styleContainer={styles.addImgBtn}
         />
@@ -238,7 +258,7 @@ const styles = StyleSheet.create({
   },
   contentTextInput: {
     padding: 10,
-    marginTop: 30,
+    marginVertical: 30,
   },
   imgView: {
     marginBottom: 5,
@@ -265,5 +285,53 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 30,
     backgroundColor: colors.GrayBackground,
+  },
+  //
+  tagsInput_container: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginTop: 10,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.transparentWhite,
+  },
+  tags_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  eachTag: {
+    marginBottom: 5,
+    marginHorizontal: 1,
+    paddingBottom: 7,
+    paddingRight: 17,
+  },
+  tagBox: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  tagBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h7,
+  },
+  //
+  notTagName_temp: {
+    width: 350,
+    height: 50,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginTop: 10,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.transparentWhite,
   },
 });

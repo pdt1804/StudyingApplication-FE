@@ -5,6 +5,8 @@ import Icon from "./MyIcon";
 
 // PHẢI CÓ dòng này khi dùng:
 //    const [modalVisible, setModalVisible] = useState(false);
+//    const renderContent--- = () => {
+//      return (<View/>)}
 /*
 <WhiteSlideBottomUp
   title={"---"}
