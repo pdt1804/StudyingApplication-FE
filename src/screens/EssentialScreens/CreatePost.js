@@ -60,9 +60,26 @@ export default CreatePost = (props) => {
 
     if (!result.canceled) {
       try {
+        // Thông - API
+        //setFilePath(result.assets[0].uri);
+        setFilePath(result.assets[0].uri);
+        //console.log(result.assets[0])
+
+        for (let i = 0; i < result.assets.length; i++)
+        {
+          //assets.push(result.assets[i].uri);
+          //setAssets([...assets, result.assets[i]])
+          setAssets([...assets, result.assets[0]])
+          console.log(result.assets)
+        }
+
+        const username = await AsyncStorage.getItem('username'); // Thông - API
+
+        // Trí - giao diện
         listSelectedImage[0] === images.blankImageLoading
           ? setListSelectedImage([result.assets[0].uri])
           : setListSelectedImage([...listSelectedImage, result.assets[0].uri]); //worked!!
+        // Trí - giao diện
       } catch (error) {
         console.error("Error uploading image:", error);
       }
