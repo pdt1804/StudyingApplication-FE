@@ -21,13 +21,13 @@ export default CreatePost = (props) => {
 
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState("");
-  const [listSelectedImage, setListSelectedImage] = useState([
-    images.blankImageLoading,
-  ]);
+  const [listSelectedImage, setListSelectedImage] = useState([]);
 
   const MAXWidth = 245;
   const [imageWidth, setImageWidth] = useState(0);
+  const [requesting, setRequesting] = useState(false);
   const [imageHeight, setImageHeight] = useState(0);
+  const [assets, setAssets] = useState([])
 
   const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
@@ -62,7 +62,7 @@ export default CreatePost = (props) => {
       try {
         // Thông - API
         //setFilePath(result.assets[0].uri);
-        setFilePath(result.assets[0].uri);
+        //setFilePath(result.assets[0].uri);
         //console.log(result.assets[0])
 
         for (let i = 0; i < result.assets.length; i++)
@@ -70,15 +70,15 @@ export default CreatePost = (props) => {
           //assets.push(result.assets[i].uri);
           //setAssets([...assets, result.assets[i]])
           setAssets([...assets, result.assets[0]])
-          console.log(result.assets)
+          //console.log(result.assets)
         }
 
         const username = await AsyncStorage.getItem('username'); // Thông - API
 
         // Trí - giao diện
-        listSelectedImage[0] === images.blankImageLoading
-          ? setListSelectedImage([result.assets[0].uri])
-          : setListSelectedImage([...listSelectedImage, result.assets[0].uri]); //worked!!
+        listSelectedImage.length == 0
+          ? setListSelectedImage([result.assets[0]])
+          : setListSelectedImage([...listSelectedImage, result.assets[0]]); //worked!!
         // Trí - giao diện
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -119,87 +119,56 @@ export default CreatePost = (props) => {
       }
     );
 
-    if (true) {
+    console.log(listSelectedImage)
+
+    if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
+        console.log(i)
         let url = listSelectedImage[i].uri;
         console.log(listSelectedImage);
         console.log(listSelectedImage[i].uri);
         console.log(listSelectedImage[i].type);
         console.log(listSelectedImage[i].fileName);
 
-        formData = new FormData();
-        formData.append("blogID", response.data);
-        formData.append("file", {
-          url,
-          name: listSelectedImage[i].fileName,
-          type: listSelectedImage[i].type,
-        });
-
-        uploadImage(listSelectedImage[i].uri, response.data);
-
-        // const uploadImage = await axios.post(
-        //   API_BASE_URL +
-        //     "/api/v1/blog/uploadImage",
-        //     formData, {
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data',
-        //       'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        //     }}
-        // );
+        uploadImage(listSelectedImage[i].uri, listSelectedImage[i].fileName, listSelectedImage[i].mimeType, response.data);
       }
     }
 
-    // const formData = new FormData();
-    // formData.append('blogID', response.data);
-    // formData.append('file', filePath);
-
-    // const responseUpdateImage = await axios.post(API_BASE_URL + '/api/v1/blog/insertImageInBlog', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-    //   }});
+    alert("Tạo thành công")
 
     goBack();
   };
 
-  const uploadImage = async (uri, blogID) => {
+  const uploadImage = async (uri, name, type, blogID) => {
     const formData = new FormData();
 
     if (uri.toString())
       formData.append("file", {
-        uri,
-        name: "image.jpg",
-        type: "image/jpg",
+        uri: uri,
+        name: name,
+        type: type,
       });
     formData.append("blogID", blogID);
 
     try {
-      // const response = await fetch('YOUR_BACKEND_URL', {
-      //   method: 'POST',
-      //   body: formData,
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-
       const response = await axios.post(
         API_BASE_URL + "/api/v1/blog/insertImageInBlog",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+            "Authorization": "Bearer " + (await AsyncStorage.getItem("username")),
           },
         }
       );
 
       if (response.status == 200) {
-        const imageURL = await response.json();
-        console.log("URL của ảnh:", imageURL);
-        alert("Tạo thành công");
+        //const imageURL = await response.json();
+        //console.log("URL của ảnh:", imageURL);
+        //alert("Tạo thành công");
         // Tiếp tục xử lý URL của ảnh ở đây
       } else {
-        console.log("Lỗi khi tải lên ảnh");
+        //console.log("Lỗi khi tải lên ảnh");
       }
     } catch (error) {
       console.log("Lỗi:", error);
@@ -235,8 +204,8 @@ export default CreatePost = (props) => {
         />
         {listSelectedImage.map((eachImage, index) => (
           <View key={index} style={styles.imgView}>
-            <Image source={{ uri: eachImage }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
-            {listSelectedImage[0] === images.blankImageLoading ? (
+            <Image source={{ uri: eachImage.uri }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            {listSelectedImage.length == 0 ? (
               <View />
             ) : (
               <TouchableOpacity

@@ -14,6 +14,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from 'expo-image-picker';
+import { CommonButton } from "../../components";
 
 const CreateNotification = (props) => {
   const [blankContent, setBlankContent] = useState(true);
@@ -21,6 +22,7 @@ const CreateNotification = (props) => {
   const [contentText, setContentText] = useState("");
   const [path, setPath] = useState(null)
   const [images, setimages] = useState([])
+  const [listSelectedImage, setListSelectedImage] = useState([]);
 
   const handleCreatePost = async () => {
     
@@ -49,13 +51,13 @@ const CreateNotification = (props) => {
       },
     })
 
-    if (images.length > 0)
+    if (listSelectedImage.length > 0)
     {
-      for (var i = 0; i < images.length; i++)
+      for (var i = 0; i < listSelectedImage.length; i++)
       {
         const uri = images[i].uri;
         const name = images[i].fileName;
-        const type = images[i].type;
+        const type = images[i].mimeType;
 
         uploadImage(uri, name, type, response.data)
       }
@@ -149,6 +151,10 @@ const CreateNotification = (props) => {
         setPath(result.assets[0].uri);
         await setimages([...images, result.assets[0]]);
 
+        listSelectedImage.length == 0
+          ? setListSelectedImage([result.assets[0]])
+          : setListSelectedImage([...listSelectedImage, result.assets[0]]);
+
         // for (var i = 0; i < result.assets.length; i++)
         // {
         //   await setimages([...images, {uri: result.assets[i].uri, name: result.assets[i].fileName, type: result.assets[i].type}])
@@ -161,6 +167,11 @@ const CreateNotification = (props) => {
 
   };
   
+  const handleRemoveImageFromList = async (index) => {
+    const newList = [...listSelectedImage];
+    newList.splice(index, 1);
+    setListSelectedImage(newList);
+  };
 
   return (
     <View style={styles.container}>
@@ -200,10 +211,31 @@ const CreateNotification = (props) => {
           placeholder={"Soạn thông báo"}
           placeholderTextColor={colors.inactive}
         />
-        <TouchableOpacity style={styles.imgClickable} onPress={selectImage}>
-          <Image source={{uri: path}} style={styles.image} />
-        </TouchableOpacity>
       </ScrollView>
+      {listSelectedImage.map((eachImage, index) => (
+          <View key={index} style={styles.imgView}>
+            <Image source={{ uri: eachImage.uri }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            {listSelectedImage.length == 0 ? (
+              <View />
+            ) : (
+              <TouchableOpacity
+                style={styles.redRemoveImg}
+                onPress={() => handleRemoveImageFromList(index)}
+              >
+                <Icon
+                  name={icons.cancelCircleIcon}
+                  size={55}
+                  color={colors.RedLightBackground}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        ))}
+      <CommonButton
+          onPress={selectImage}
+          title={"+ Thêm ảnh +"}
+          styleContainer={styles.addImgBtn}
+        />
     </View>
   );
 };
@@ -239,5 +271,10 @@ const styles = StyleSheet.create({
   },
   imgClickable: {
     backgroundColor: colors.transparentWhite,
+  },
+  addImgBtn: {
+    marginTop: 0,
+    marginBottom: 30,
+    backgroundColor: colors.GrayBackground,
   },
 });

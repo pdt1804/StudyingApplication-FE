@@ -55,15 +55,15 @@ function ContentBox(props) {
 }
 
 const ShowNotification = (props) => {
-  let { header, content, notifycationType, dateSent, notifycationID, images } =
+  let { header, content, notifycationType, dateSent, notifycationID, files } =
     props.route.params.notification;
 
-  console.log(images)
+  console.log(files)
   var parts = null;
 
-  if (images.length > 0)
+  if (files.length > 0)
   {
-    parts = images[0].toString().split('-')
+    parts = files[0].url
   }
 
   const date = new Date(dateSent);
@@ -286,11 +286,27 @@ const ShowNotification = (props) => {
             LoadItem();
           }}
         />
-        <TouchableOpacity onPress={ShowPicture}>
+        {/* <TouchableOpacity onPress={ShowPicture}>
           <Image
             source={{ uri: parts != null ? parts[0] : null }}
             style={styles.image}
           />
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={ShowPicture}>
+          {files.map((eachFile, index) => (
+          <View key={index} style={styles.imgView}>
+            <Image source={{ uri: eachFile.url }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            {files.length == 0 ? (
+              <View />
+            ) : (
+              <TouchableOpacity
+                style={styles.redRemoveImg}
+                onPress={() => handleRemoveImageFromList(index)}
+              >
+              </TouchableOpacity>
+            )}
+          </View>
+        ))}
         </TouchableOpacity>
       </ScrollView>
 

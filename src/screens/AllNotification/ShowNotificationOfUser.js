@@ -18,7 +18,7 @@ import {
 } from "../../api";
 
 const ShowNotificationOfUser = (props) => {
-  let { header, content, notifycationType, dateSent, notifycationID, image } =
+  let { header, content, notifycationType, dateSent, notifycationID, files } =
     props.route.params.notification;
 
   const date = new Date(dateSent);
@@ -152,13 +152,21 @@ const ShowNotificationOfUser = (props) => {
         />
 
         <TouchableOpacity onPress={ShowPicture}>
-          <Icon
-            name={{ uri: image != null ? image : null }}
-            size={20}
-            color={colors.inactive}
-            style={styles.image}
-          />
-        </TouchableOpacity>
+          {files.map((eachFile, index) => (
+          <View key={index} style={styles.imgView}>
+            <Image source={{ uri: eachFile.url }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
+            {files.length == 0 ? (
+              <View />
+            ) : (
+              <TouchableOpacity
+                style={styles.redRemoveImg}
+                onPress={() => handleRemoveImageFromList(index)}
+              >
+              </TouchableOpacity>
+            )}
+          </View>
+        ))}
+        </TouchableOpacity> 
       </ScrollView>
     </View>
   );
