@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { icons, colors, fontSizes, images } from "../constants";
 import Icon from "./MyIcon";
+import { WhiteSlideBottomUp } from "./MyModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   messenger_sendMessageForGroup,
@@ -19,6 +20,9 @@ import {
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { messagegroup_uploadMultipleImages } from "../api/ReNewStyle/messageGroupController";
+
+//fake data
+const fakeData = ["user001", "user002", "user003", "user004"];
 
 export default EnterMessageBar = (props) => {
   //use for friend-MessageBar
@@ -52,6 +56,9 @@ export default EnterMessageBar = (props) => {
     });
   };
 
+  //*************** */
+  // message handler
+  //*************** */
   const handleSendMessage_Friend = async () => {
     if (typedText.length == 0) {
       alert("Hãy nhập tin nhắn");
@@ -169,7 +176,9 @@ export default EnterMessageBar = (props) => {
     }
   };
 
+  //*************** */
   //image picker
+  //*************** */
   const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -248,8 +257,98 @@ export default EnterMessageBar = (props) => {
     }
   };
 
+  //*************** */
+  //  tag members
+  //*************** */
+  const [modalVisible, setModalVisible] = useState(false);
+  const [listTaggedUsernames, setListTaggedUsernames] = useState([]);
+  const [listMembersNotTagged, setListMembersNotTagged] = useState(fakeData);
+
+  const isTagAble =
+    actionType === 2 ||
+    actionType === "comment" ||
+    actionType === 3 ||
+    actionType === "reply";
+
+  const handleAddTag = async (newName, index) => {
+    setListTaggedUsernames([...listTaggedUsernames, newName]);
+    const newList = [...listMembersNotTagged];
+    newList.splice(index, 1);
+    setListMembersNotTagged(newList);
+  };
+
+  const handleRemoveTagFromList = async (nameUntag, index) => {
+    setListMembersNotTagged([...listMembersNotTagged, nameUntag]);
+    const newList = [...listTaggedUsernames];
+    newList.splice(index, 1);
+    setListTaggedUsernames(newList);
+  };
+
+  const renderContentAddTag = () => {
+    return (
+      <View>
+        {listMembersNotTagged.map((eachName, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleAddTag(eachName, index)}
+          >
+            {
+              //đoạn này là hiển thị tên/icon/avatar các kiểu nè
+              // t để tạm cái text ở đây, m ném vô username là được rồi
+              // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
+              <Text style={styles.notTagName_temp}>{eachName}</Text>
+            }
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
+  const handleTagMembers = async () => {
+    isTagAble ? setModalVisible(true) : alert("Chức năng không khả dụng");
+  };
+
   return (
     <View style={styles.container}>
+      {isTagAble ? (
+        <View>
+          <WhiteSlideBottomUp
+            title={"Gắn thẻ thành viên"}
+            renderContent={renderContentAddTag}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+          />
+
+          <View style={styles.tagsInput_container}>
+            <View style={styles.tags_container}>
+              {listTaggedUsernames.map((eachName, index) => (
+                <View key={index} style={styles.eachTag}>
+                  <View style={styles.tagBox}>
+                    <Text style={styles.tagBoxText}>{eachName}</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                    }}
+                    onPress={() => handleRemoveTagFromList(eachName, index)}
+                  >
+                    <Icon
+                      name={icons.cancelCircleIcon}
+                      size={20}
+                      color={colors.RedLightBackground}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      ) : (
+        <View />
+      )}
+
       {pickedImages === "" ? (
         <View />
       ) : (
@@ -261,13 +360,26 @@ export default EnterMessageBar = (props) => {
         </View>
       )}
       <View style={styles.mainBar}>
-        <TouchableOpacity onPress={handleUploadImages}>
-          <Icon
-            name={icons.priceTagIcon}
-            size={25}
-            color={colors.PrimaryBackground}
-          />
-        </TouchableOpacity>
+        <View style={styles.tools_container}>
+          <TouchableOpacity onPress={handleUploadImages}>
+            <Icon
+              name={icons.priceTagIcon}
+              size={25}
+              color={colors.PrimaryBackground}
+            />
+          </TouchableOpacity>
+          {isTagAble ? (
+            <TouchableOpacity onPress={handleTagMembers}>
+              <Icon
+                name={icons.atSignIcon}
+                size={25}
+                color={colors.PrimaryBackground}
+              />
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
+        </View>
         <TextInput
           multiline={true}
           style={styles.textInput}
@@ -299,6 +411,7 @@ const styles = StyleSheet.create({
   },
   imgBar: {
     flexDirection: "row",
+    paddingTop: 5,
     paddingHorizontal: 10,
   },
   mainBar: {
@@ -310,7 +423,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
   },
   textInput: {
-    width: "75%",
+    flex: 1,
     color: "black",
     paddingStart: 10,
   },
@@ -327,5 +440,57 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 3,
     borderColor: colors.GrayBackground,
+  },
+  //
+  tools_container: {
+    flexDirection: "row",
+  },
+  //
+  tagsInput_container: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginTop: 10,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.transparentWhite,
+  },
+  tags_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  eachTag: {
+    marginBottom: 5,
+    marginHorizontal: 1,
+    paddingBottom: 7,
+    paddingRight: 17,
+  },
+  tagBox: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  tagBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h7,
+  },
+  //
+  notTagName_temp: {
+    width: 350,
+    height: 50,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginTop: 10,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.transparentWhite,
   },
 });
