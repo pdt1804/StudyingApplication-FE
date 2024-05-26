@@ -20,6 +20,8 @@ import {
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { messagegroup_uploadMultipleImages } from "../api/ReNewStyle/messageGroupController";
+import axios from "axios";
+import { API_BASE_URL } from "../api/DomainAPI";
 
 //fake data
 const fakeData = ["user001", "user002", "user003", "user004"];
@@ -55,6 +57,24 @@ export default EnterMessageBar = (props) => {
       }
     });
   };
+
+  const [listMembersNotTagged, setListMembersNotTagged] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+      setListMembersNotTagged(responses.data);
+      setUserNames(responses.data)
+      //console.log(listMembersNotTagged)
+    };
+
+    fetchData();
+  }, [props.userName]);
 
   //*************** */
   // message handler
@@ -102,21 +122,28 @@ export default EnterMessageBar = (props) => {
       return;
     }
 
+    const tags = [];
+    for (let i = 0; i < listTaggedUsernames.length; i++)
+    {
+      tags.push(listTaggedUsernames[i].userName)
+    }
+
     const response = await blog_commentBlog(
       blogID,
       typedText,
-      userNames,
-      pickedImages,
-      name,
-      type
+      tags,
     );
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
+
+    // ADD ảnh 
     setTypedText("");
     setPickedImages("");
     setType("");
     setName("");
+    setListTaggedUsernames([]);
+    setListMembersNotTagged(userNames)
   };
 
   const handleSendMessage_Reply = async () => {
@@ -124,13 +151,17 @@ export default EnterMessageBar = (props) => {
       alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
+
+    const tags = [];
+    for (let i = 0; i < listTaggedUsernames.length; i++)
+    {
+      tags.push(listTaggedUsernames[i].userName)
+    }
+
     const response = await blog_replyComment(
       commentID,
       typedText,
-      userNames,
-      pickedImages,
-      name,
-      type
+      tags,
     );
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
@@ -139,6 +170,8 @@ export default EnterMessageBar = (props) => {
     setPickedImages("");
     setType("");
     setName("");
+    setListTaggedUsernames([]);
+    setListMembersNotTagged(userNames)
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -262,7 +295,6 @@ export default EnterMessageBar = (props) => {
   //*************** */
   const [modalVisible, setModalVisible] = useState(false);
   const [listTaggedUsernames, setListTaggedUsernames] = useState([]);
-  const [listMembersNotTagged, setListMembersNotTagged] = useState(fakeData);
 
   const isTagAble =
     actionType === 2 ||
@@ -296,7 +328,7 @@ export default EnterMessageBar = (props) => {
               //đoạn này là hiển thị tên/icon/avatar các kiểu nè
               // t để tạm cái text ở đây, m ném vô username là được rồi
               // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
-              <Text style={styles.notTagName_temp}>{eachName}</Text>
+              <Text style={styles.notTagName_temp}>{eachName.information.fulName}</Text>
             }
           </TouchableOpacity>
         ))}
@@ -324,7 +356,7 @@ export default EnterMessageBar = (props) => {
               {listTaggedUsernames.map((eachName, index) => (
                 <View key={index} style={styles.eachTag}>
                   <View style={styles.tagBox}>
-                    <Text style={styles.tagBoxText}>{eachName}</Text>
+                    <Text style={styles.tagBoxText}>{eachName.information.fulName}</Text>
                   </View>
                   <TouchableOpacity
                     style={{

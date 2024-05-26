@@ -14,18 +14,20 @@ import { API_BASE_URL } from "../../api/DomainAPI";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { blog_insertImageInBlog } from "../../api";
 
 export default EditPost = (props) => {
   const { navigate, goBack } = props.navigation;
 
-  const { blogID, content, image, nameSubject, subjectID } = props.route.params;
+  const { blogID, content, files, nameSubject, subjectID } = props.route.params;
 
   const [blankContent, setBlankContent] = useState(true);
   const [contentText, setContentText] = useState(content);
-  const [listSelectedImage, setListSelectedImage] = useState(image.length === 0 ? [] : [image.toString().split("-")[0]]);
+  const [listSelectedImage, setListSelectedImage] = useState(files);
 
   const [addImageRequests, setAddImageRequests] = useState([]); // STORE RESULT.ASSETS
   const [removeImageRequests, setRemoveImageRequests] = useState([]); // STORE FILEPATH OF IMAGE OR VIDEO
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,9 +56,12 @@ export default EditPost = (props) => {
 
     if (!result.canceled) {
       try {
-        listSelectedImage[0] === images.blankImageLoading
-          ? setListSelectedImage([result.assets[0].uri])
-          : setListSelectedImage([...listSelectedImage, result.assets[0].uri]); //worked!!
+        listSelectedImage.length == 0
+          ? await setListSelectedImage([result.assets[0].uri])
+          : await setListSelectedImage([...listSelectedImage, result.assets[0].uri]); //worked!!
+        addImageRequests.length == 0
+          ? await setAddImageRequests([result.assets[0]])
+          : await setAddImageRequests([...addImageRequests, result.assets[0]])
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -65,8 +70,21 @@ export default EditPost = (props) => {
 
   const handleRemoveImageFromList = async (index) => {
     const newList = [...listSelectedImage];
+    const url = getImageAtIndex(index).url;
+    removeImageRequests.length == 0
+      ? await setRemoveImageRequests([url])
+      : await setRemoveImageRequests([...removeImageRequests, url])
     newList.splice(index, 1);
     setListSelectedImage(newList);
+  };
+
+  const getImageAtIndex = (index) => {
+    if (index >= 0 && index < listSelectedImage.length) {
+      return listSelectedImage[index];
+    } else {
+      console.error('Index out of bounds');
+      return null;
+    }
   };
 
   const handleUpdatePost = async () => {
@@ -75,32 +93,22 @@ export default EditPost = (props) => {
       return;
     }
 
+    console.log(blogID)
+    console.log(contentText)
     console.log(addImageRequests);
+    console.log(removeImageRequests);
 
     const formData = new FormData();
     formData.append("blogID", blogID);
     formData.append("content", contentText);
     //formData.append('addNewFiles', addImageRequests)
-    formData.append("removeOldFiles", removeImageRequests);
 
     let response;
 
-    if (addImageRequests.length > 0) {
+    if (removeImageRequests.length == 0) {
       // Update này là update toàn bộ thông tin
-      for (var i = 0; i < addImageRequests.length; i++) {
-        const uri = addImageRequests[i].uri;
-        const name = addImageRequests[i].fileName;
-        const type = addImageRequests[i].type;
-
-        formData.append("addNewFiles", {
-          uri: uri,
-          name: name,
-          type: type,
-        });
-      }
-
       response = await axios.put(
-        API_BASE_URL + "/api/v1/blog/updateBlog",
+        API_BASE_URL + "/api/v1/blog/updateBlogContent",
         formData,
         {
           headers: {
@@ -111,6 +119,7 @@ export default EditPost = (props) => {
       );
     } // Update này không thêm ảnh mới
     else {
+      formData.append("removeOldFiles", removeImageRequests);
       response = await axios.put(
         API_BASE_URL + "/api/v1/blog/updateBlogRemovingImage",
         formData,
@@ -121,6 +130,24 @@ export default EditPost = (props) => {
           },
         }
       );
+    }
+
+    if (addImageRequests.length > 0) {
+      for (let i = 0; i < addImageRequests.length; i++) {
+        let img = addImageRequests[i];
+        try {
+          const upload = await blog_insertImageInBlog(
+            img.uri,
+            img.fileName,
+            img.mimeType,
+            blogID
+          );
+          //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+          //alert(upload.status)
+        } catch (error) {
+          console.log("Lỗi:", error);
+        }
+      }
     }
 
     // if (filePath != "images.blankImageLoading")
@@ -213,7 +240,7 @@ export default EditPost = (props) => {
         />
         {listSelectedImage.map((eachImage, index) => (
           <View key={index} style={styles.imgView}>
-            <Image source={{ uri: eachImage }} style={styles.image} />
+            <Image source={{ uri: eachImage.url }} style={styles.image} />
             {listSelectedImage[0] === images.blankImageLoading ? (
               <View />
             ) : (

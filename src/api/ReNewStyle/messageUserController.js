@@ -68,7 +68,7 @@ export const messageuser_sendMessageForUser = async (
       },
     }
   );
-  return response.data;
+  return response;
 };
 
 //single image

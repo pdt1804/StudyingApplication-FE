@@ -208,6 +208,7 @@ export const blog_createNewBlog = async (
   formData.append("subjectID", subjectID);
   formData.append("content", contentText);
 
+  console.log(userNamesTagged)
   const response = await axios.post(
     API_BASE_URL + "/api/v1/blog/createNewBlog",
     formData,
@@ -301,11 +302,6 @@ export const blog_commentBlog = async (
   //   };
   // });
   const formData = new FormData();
-  formData.append("files", {
-    uri: uri,
-    name: name,
-    type: type,
-  });
   formData.append("blogID", blogID);
   formData.append("content", content);
   formData.append("userNames", userName);
@@ -320,6 +316,7 @@ export const blog_commentBlog = async (
       },
     }
   );
+
   return response;
 };
 
@@ -353,10 +350,7 @@ export const blog_deleteComment = async (commentID) => {
 export const blog_replyComment = async (
   commentID,
   content,
-  userName,
-  uri,
-  name,
-  type
+  userNames,
 ) => {
   // const imageList = uriList.map((uri) => {
   //   return {
@@ -366,14 +360,9 @@ export const blog_replyComment = async (
   //   };
   // });
   const formData = new FormData();
-  formData.append("files", {
-    uri: uri,
-    name: name,
-    type: type,
-  });
   formData.append("commentID", commentID);
   formData.append("content", content);
-  formData.append("userNames", userName);
+  formData.append("userNames", userNames);
   //formData.append("files", imageList);
 
   const response = await axios.post(

@@ -19,6 +19,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { blog_createNewBlog, blog_insertImageInBlog } from "../../api";
+import axios from "axios";
+import { API_BASE_URL } from "../../api/DomainAPI";
 
 //fake data
 const fakeData = ["user001", "user002", "user003", "user004"];
@@ -31,11 +33,35 @@ export default CreatePost = (props) => {
   const [contentText, setContentText] = useState("");
   const [listSelectedImage, setListSelectedImage] = useState([]);
   const [assets, setAssets] = useState([]);
+  const [listMembersNotTagged, setListMembersNotTagged] = useState([]);
 
   //Quickly delete written content
+  // useEffect(async () => {
+  //   contentText == "" ? setBlankContent(true) : setBlankContent(false);
+  //   const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+  //     headers: {
+  //       'Content-Type': 'application/json', 
+  //       'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+  //     },
+  //   });
+  //   setListMembersNotTagged(responses.data);
+  // });
+
   useEffect(() => {
-    contentText == "" ? setBlankContent(true) : setBlankContent(false);
-  });
+    const fetchData = async () => {
+      contentText == "" ? setBlankContent(true) : setBlankContent(false);
+      const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+        },
+      });
+      setListMembersNotTagged(responses.data);
+      //console.log(listMembersNotTagged)
+    };
+
+    fetchData();
+  }, [props.userName]);
 
   //Auto focus on TextInput when the screen is touched
   const textInputRef = useRef(null);
@@ -82,19 +108,21 @@ export default CreatePost = (props) => {
       alert("Hãy nhập nội dung");
       return;
     }
+
+    const tags = [];
+    for (let i = 0; i < listTaggedUsernames.length; i++)
+    {
+      tags.push(listTaggedUsernames[i].userName)
+    }
+
     const responseData = await blog_createNewBlog(
       await AsyncStorage.getItem("groupID"),
-      [],
+      tags,
       subjectID,
       contentText
     );
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
-        //console.log(i)
-        //console.log(listSelectedImage);
-        //console.log(listSelectedImage[i].uri);
-        //console.log(listSelectedImage[i].type);
-        //console.log(listSelectedImage[i].fileName);
         let img = listSelectedImage[i];
         try {
           blog_insertImageInBlog(
@@ -118,7 +146,6 @@ export default CreatePost = (props) => {
   //*************** */
   const [modalVisible, setModalVisible] = useState(false);
   const [listTaggedUsernames, setListTaggedUsernames] = useState([]);
-  const [listMembersNotTagged, setListMembersNotTagged] = useState(fakeData);
 
   const handleAddTag = async (newName, index) => {
     setListTaggedUsernames([...listTaggedUsernames, newName]);
@@ -146,7 +173,7 @@ export default CreatePost = (props) => {
               //đoạn này là hiển thị tên/icon/avatar các kiểu nè
               // t để tạm cái text ở đây, m ném vô username là được rồi
               // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
-              <Text style={styles.notTagName_temp}>{eachName}</Text>
+              <Text style={styles.notTagName_temp}>{eachName.information.fulName}</Text>
             }
           </TouchableOpacity>
         ))}
@@ -188,7 +215,7 @@ export default CreatePost = (props) => {
           {listTaggedUsernames.map((eachName, index) => (
             <View key={index} style={styles.eachTag}>
               <View style={styles.tagBox}>
-                <Text style={styles.tagBoxText}>{eachName}</Text>
+                <Text style={styles.tagBoxText}>{eachName.information.fulName}</Text>
               </View>
               <TouchableOpacity
                 style={{

@@ -178,9 +178,9 @@ const ShowPost = (props) => {
       navigate("EditPost", {
         blogID: blogID,
         content: content,
-        image: image,
-        nameSubject: nameSubject,
-        subjectID: subjectID,
+        files: files,
+        nameSubject: subject.nameSubject,
+        subjectID: subject.subjectID,
       });
     }
   };
