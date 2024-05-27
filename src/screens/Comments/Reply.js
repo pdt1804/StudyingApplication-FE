@@ -15,7 +15,7 @@ import { blog_getAllReplyInComment } from "../../api";
 const Reply = (props) => {
   const [replies, setReplies] = useState([]);
 
-  const { commentID, userComment, content, images } =
+  const { commentID, userComment, content, files } =
     props.route.params.comment;
   const { navigate, goBack } = props.navigation;
 
@@ -32,9 +32,9 @@ const Reply = (props) => {
     });
   };
 
-  if (images.length > 0) {
-    for (let i = 0; i < images.length; i++) {
-      const parts = images[i].toString().split("-")[0];
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      const parts = files[i].toString().split("-")[0];
       getImageSize(parts);
       commentImages.push(parts);
     }

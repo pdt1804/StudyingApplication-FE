@@ -240,6 +240,58 @@ export const blog_insertImage = async (blogID, file) => {
   return response;
 };
 
+export const blog_insertImageInComment = async (uri, name, type, commentID) => {
+  console.log(uri)
+  console.log(name)
+  console.log(type)
+
+  const formData = new FormData();
+  if (uri.toString())
+    formData.append("file", {
+      uri: uri,
+      name: name,
+      type: type,
+    });
+  formData.append("commentID", commentID);
+  const response = await axios.post(
+    API_BASE_URL + "/api/v1/blog/insertImageInComment",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
+export const blog_insertImageInReply = async (uri, name, type, replyID) => {
+  console.log(uri)
+  console.log(name)
+  console.log(type)
+
+  const formData = new FormData();
+  if (uri.toString())
+    formData.append("file", {
+      uri: uri,
+      name: name,
+      type: type,
+    });
+  formData.append("replyID", replyID);
+  const response = await axios.post(
+    API_BASE_URL + "/api/v1/blog/insertImageInReply",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
 export const blog_reSendNotificationForBlog = async (
   blogID,
   groupID,
