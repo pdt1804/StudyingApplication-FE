@@ -4,15 +4,14 @@ import { images, icons, colors, fontSizes } from "../../constants";
 
 function CommentItems(props) {
   const { onPress } = props;
-  const { commentID, dateComment, userComment, content, replies, images } =
+  const { commentID, dateComment, userComment, content, replies, files } =
     props.comment;
 
   const replyImages = [];
 
-  if (images.length > 0) {
-    for (let i = 0; i < images.length; i++) {
-      const parts = images[i].toString().split("-");
-      replyImages.push(parts[0]);
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      replyImages.push(files[i].url);
     }
   }
 

@@ -22,6 +22,7 @@ import * as ImagePicker from "expo-image-picker";
 import { messagegroup_uploadMultipleImages } from "../api/ReNewStyle/messageGroupController";
 import axios from "axios";
 import { API_BASE_URL } from "../api/DomainAPI";
+import { blog_insertImageInComment, blog_insertImageInReply } from "../api/ReNewStyle/blogController";
 
 //fake data
 const fakeData = ["user001", "user002", "user003", "user004"];
@@ -45,6 +46,8 @@ export default EnterMessageBar = (props) => {
   const MAXHeight = 45;
   const [imageWidth, setImageWidth] = useState(0);
   const [imageHeight, setImageHeight] = useState(0);
+
+  const [listSelectedImage, setListSelectedImage] = useState([])
 
   const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
@@ -133,6 +136,24 @@ export default EnterMessageBar = (props) => {
       typedText,
       tags,
     );
+
+    if (listSelectedImage.length > 0) {
+      for (let i = 0; i < listSelectedImage.length; i++) {
+        let img = listSelectedImage[i];
+        try {
+          blog_insertImageInComment(
+            img.uri,
+            img.fileName,
+            img.mimeType,
+            response.data
+          );
+          //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+        } catch (error) {
+          console.log("Lỗi:", error);
+        }
+      }
+    }
+
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
@@ -144,6 +165,7 @@ export default EnterMessageBar = (props) => {
     setName("");
     setListTaggedUsernames([]);
     setListMembersNotTagged(userNames)
+    setListSelectedImage([])
   };
 
   const handleSendMessage_Reply = async () => {
@@ -163,6 +185,24 @@ export default EnterMessageBar = (props) => {
       typedText,
       tags,
     );
+
+    console.log(listSelectedImage.length)
+    if (listSelectedImage.length > 0) {
+      for (let i = 0; i < listSelectedImage.length; i++) {
+        let img = listSelectedImage[i];
+        try {
+          blog_insertImageInReply(
+            img.uri,
+            img.fileName,
+            img.mimeType,
+            response.data
+          );
+          //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+        } catch (error) {
+          console.log("Lỗi:", error);
+        }
+      }
+    }
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
@@ -172,6 +212,7 @@ export default EnterMessageBar = (props) => {
     setName("");
     setListTaggedUsernames([]);
     setListMembersNotTagged(userNames)
+    setListSelectedImage([])
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -220,11 +261,14 @@ export default EnterMessageBar = (props) => {
     });
 
     if (!result.canceled) {
-      setPickedImages(result.assets[0].uri.toString());
-      getImageSize(result.assets[0].uri.toString());
-      setType(result.assets[0].mimeType.toString());
-      setName(result.assets[0].fileName.toString());
-      return result.assets[0];
+      //setPickedImages(result.assets[0].uri.toString());
+      //getImageSize(result.assets[0].uri.toString());
+      //setType(result.assets[0].mimeType.toString());
+      //setName(result.assets[0].fileName.toString());
+      listSelectedImage.length == 0
+          ? setListSelectedImage([result.assets[0]])
+          : setListSelectedImage([...listSelectedImage, result.assets[0]]);
+      //return result.assets[0];
     }
   };
 

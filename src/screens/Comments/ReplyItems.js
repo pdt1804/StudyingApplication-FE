@@ -4,7 +4,7 @@ import { images, icons, colors, fontSizes } from "../../constants";
 
 export default function ReplyItems(props) {
   const { navigate } = props;
-  const { userReplied, dateReplied, content, images } = props.reply;
+  const { userReplied, dateReplied, content, files } = props.reply;
 
   const replyImages = [];
   const MAXWidth = 245;
@@ -19,11 +19,10 @@ export default function ReplyItems(props) {
     });
   };
 
-  if (images.length > 0) {
-    for (let i = 0; i < images.length; i++) {
-      const parts = images[i].toString().split("-")[0];
-      getImageSize(parts)
-      replyImages.push(parts);
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      getImageSize(files[i].url)
+      replyImages.push(files[i].url);
     }
   }
 
