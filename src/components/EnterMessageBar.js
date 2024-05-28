@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Image,
+  ScrollView,
   TouchableOpacity,
   TextInput,
   StyleSheet,
@@ -23,10 +24,10 @@ import * as ImagePicker from "expo-image-picker";
 import { messagegroup_uploadMultipleImages, messagegroup_uploadImage } from "../api/ReNewStyle/messageGroupController";
 import axios from "axios";
 import { API_BASE_URL } from "../api/DomainAPI";
-import { blog_insertImageInComment, blog_insertImageInReply } from "../api/ReNewStyle/blogController";
-
-//fake data
-const fakeData = ["user001", "user002", "user003", "user004"];
+import {
+  blog_insertImageInComment,
+  blog_insertImageInReply,
+} from "../api/ReNewStyle/blogController";
 
 export default EnterMessageBar = (props) => {
   //use for friend-MessageBar
@@ -38,47 +39,40 @@ export default EnterMessageBar = (props) => {
   const { stompClient, actionType } = props;
 
   const [typedText, setTypedText] = useState("");
-  const [pickedImages, setPickedImages] = useState("");
-  const [type, setType] = useState("");
-  const [name, setName] = useState("");
-
   const [userNames, setUserNames] = useState([]);
 
   const MAXHeight = 45;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
-
-  const [listSelectedImage, setListSelectedImage] = useState([])
-
-  const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      if (height > MAXHeight) {
-        setImageWidth(width / (height / MAXHeight));
-        setImageHeight(MAXHeight);
-      } else {
-        setImageWidth(width);
-        setImageHeight(height);
-      }
-    });
-  };
-
+  const [listSelectedImage, setListSelectedImage] = useState([]);
   const [listMembersNotTagged, setListMembersNotTagged] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
-        headers: {
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        },
-      });
+      const responses = await axios.get(
+        API_BASE_URL +
+          "/api/v1/groupStudying/getAllUserInGroup?groupID=" +
+          (await AsyncStorage.getItem("groupID")),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+          },
+        }
+      );
       setListMembersNotTagged(responses.data);
-      setUserNames(responses.data)
+      setUserNames(responses.data);
       //console.log(listMembersNotTagged)
     };
 
     fetchData();
   }, [props.userName]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(listSelectedImage);
+    };
+
+    fetchData();
+  }, [listSelectedImage]);
 
   //*************** */
   // message handler
@@ -155,22 +149,17 @@ export default EnterMessageBar = (props) => {
   };
 
   const handleSendMessage_Comment = async () => {
-    if (typedText.length == 0 && pickedImages.length == 0) {
+    if (typedText.length == 0 && listSelectedImage.length === 0) {
       alert("Hãy nhập bình luận hoặc chọn ảnh");
       return;
     }
 
     const tags = [];
-    for (let i = 0; i < listTaggedUsernames.length; i++)
-    {
-      tags.push(listTaggedUsernames[i].userName)
+    for (let i = 0; i < listTaggedUsernames.length; i++) {
+      tags.push(listTaggedUsernames[i].userName);
     }
 
-    const response = await blog_commentBlog(
-      blogID,
-      typedText,
-      tags,
-    );
+    const response = await blog_commentBlog(blogID, typedText, tags);
 
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
@@ -193,35 +182,27 @@ export default EnterMessageBar = (props) => {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
 
-    // ADD ảnh 
+    // ADD ảnh
     setTypedText("");
-    setPickedImages("");
-    setType("");
-    setName("");
     setListTaggedUsernames([]);
-    setListMembersNotTagged(userNames)
-    setListSelectedImage([])
+    setListMembersNotTagged(userNames);
+    setListSelectedImage([]);
   };
 
   const handleSendMessage_Reply = async () => {
-    if (typedText.length == 0 && pickedImages.length == 0) {
+    if (typedText.length == 0 && listSelectedImage.length === 0) {
       alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
 
     const tags = [];
-    for (let i = 0; i < listTaggedUsernames.length; i++)
-    {
-      tags.push(listTaggedUsernames[i].userName)
+    for (let i = 0; i < listTaggedUsernames.length; i++) {
+      tags.push(listTaggedUsernames[i].userName);
     }
 
-    const response = await blog_replyComment(
-      commentID,
-      typedText,
-      tags,
-    );
+    const response = await blog_replyComment(commentID, typedText, tags);
 
-    console.log(listSelectedImage.length)
+    console.log(listSelectedImage.length);
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
         let img = listSelectedImage[i];
@@ -242,12 +223,9 @@ export default EnterMessageBar = (props) => {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
     setTypedText("");
-    setPickedImages("");
-    setType("");
-    setName("");
     setListTaggedUsernames([]);
-    setListMembersNotTagged(userNames)
-    setListSelectedImage([])
+    setListMembersNotTagged(userNames);
+    setListSelectedImage([]);
   };
 
   const handleSendMessage_Chatbot = async () => {
@@ -296,14 +274,9 @@ export default EnterMessageBar = (props) => {
     });
 
     if (!result.canceled) {
-      //setPickedImages(result.assets[0].uri.toString());
-      //getImageSize(result.assets[0].uri.toString());
-      //setType(result.assets[0].mimeType.toString());
-      //setName(result.assets[0].fileName.toString());
       listSelectedImage.length == 0
-          ? setListSelectedImage([result.assets[0]])
-          : setListSelectedImage([...listSelectedImage, result.assets[0]]);
-      //return result.assets[0];
+        ? setListSelectedImage([result.assets[0]])
+        : setListSelectedImage([...listSelectedImage, result.assets[0]]);
     }
   };
 
@@ -326,7 +299,7 @@ export default EnterMessageBar = (props) => {
       );
 
       //alert("3")
-      setPickedImages([]);
+      //setListSelectedImage([]);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -362,6 +335,7 @@ export default EnterMessageBar = (props) => {
       //alert("3")
       setPickedImages([]);
       setListSelectedImage([])
+      //setListSelectedImage([]);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -419,7 +393,9 @@ export default EnterMessageBar = (props) => {
               //đoạn này là hiển thị tên/icon/avatar các kiểu nè
               // t để tạm cái text ở đây, m ném vô username là được rồi
               // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
-              <Text style={styles.notTagName_temp}>{eachName.information.fulName}</Text>
+              <Text style={styles.notTagName_temp}>
+                {eachName.information.fulName}
+              </Text>
             }
           </TouchableOpacity>
         ))}
@@ -447,7 +423,9 @@ export default EnterMessageBar = (props) => {
               {listTaggedUsernames.map((eachName, index) => (
                 <View key={index} style={styles.eachTag}>
                   <View style={styles.tagBox}>
-                    <Text style={styles.tagBoxText}>{eachName.information.fulName}</Text>
+                    <Text style={styles.tagBoxText}>
+                      {eachName.information.fulName}
+                    </Text>
                   </View>
                   <TouchableOpacity
                     style={{
@@ -472,15 +450,29 @@ export default EnterMessageBar = (props) => {
         <View />
       )}
 
-      {pickedImages === "" ? (
+      {listSelectedImage.length === 0 ? (
         <View />
       ) : (
-        <View style={styles.imgBar}>
-          <Image
-            source={{ uri: pickedImages }}
-            style={[styles.image, { width: imageWidth, height: imageHeight }]}
-          />
-        </View>
+        <ScrollView horizontal={true} style={styles.imgBar}>
+          {listSelectedImage.map((eachImg, index) => (
+            <Image
+              key={index}
+              source={{ uri: eachImg.uri }}
+              style={[
+                styles.image,
+                {
+                  width:
+                    eachImg.height > MAXHeight
+                      ? eachImg.width / (eachImg.height / MAXHeight)
+                      : eachImg.width,
+                  height:
+                    eachImg.height > MAXHeight ? MAXHeight : eachImg.height,
+                },
+              ]}
+            />
+          ))}
+          <View style={styles.blankEndImgBar} />
+        </ScrollView>
       )}
       <View style={styles.mainBar}>
         <View style={styles.tools_container}>
@@ -533,9 +525,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparentWhite,
   },
   imgBar: {
-    flexDirection: "row",
     paddingTop: 5,
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 100,
+  },
+  blankEndImgBar: {
+    width: 20,
+    height: 20,
   },
   mainBar: {
     height: "auto",
@@ -560,6 +556,7 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: "contain",
+    marginHorizontal: 2,
     borderRadius: 5,
     borderWidth: 3,
     borderColor: colors.GrayBackground,

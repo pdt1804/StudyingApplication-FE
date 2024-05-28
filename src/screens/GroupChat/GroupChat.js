@@ -1,10 +1,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import TabYourGroups from "./Tabs/TabYourGroups";
-import TabSuggestions from "./Tabs/TabSuggestions";
 import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+import TabYourGroups from "./Tabs/TabYourGroups";
+import TabSuggestions from "./Tabs/TabSuggestions";
+import TabFindByTopics from "./Tabs/TabFindByTopics";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -42,6 +44,14 @@ function GroupChat(props) {
             component={TabSuggestions}
             options={{
               tabBarLabel: "Gợi ý nhóm",
+              tabBarLabelStyle: tabBarLabelStyles,
+            }}
+          />
+          <Tab.Screen
+            name="TabFindByTopics"
+            component={TabFindByTopics}
+            options={{
+              tabBarLabel: "Tìm kiếm theo chủ đề",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
