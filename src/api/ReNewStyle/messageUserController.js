@@ -72,14 +72,20 @@ export const messageuser_sendMessageForUser = async (
 };
 
 //single image
-export const messageuser_uploadImage = async (toUserName, uri) => {
+export const messageuser_uploadImage = async (uri, name, type, messID) => {
+  // console.log(uri)
+  // console.log(name)
+  // console.log(type)
+  // console.log(messID)
+
   const formData = new FormData();
   formData.append("file", {
-    uri,
-    name: "image.jpg",
-    type: "image/jpg",
+    uri: uri,
+    name: name,
+    type: type,
   });
-  formData.append("toUserName", toUserName);
+  formData.append("messID", messID);
+  
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
@@ -91,6 +97,8 @@ export const messageuser_uploadImage = async (toUserName, uri) => {
       },
     }
   );
+
+  //alert("response status: " + response.status)
 
   return response.data;
 };
@@ -118,6 +126,8 @@ export const messageuser_uploadMultipleImages = async (toUserName, uri, name, ty
   });
   formData.append("toUserName", toUserName);
 
+  alert("2")
+
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
     formData,
@@ -129,6 +139,7 @@ export const messageuser_uploadMultipleImages = async (toUserName, uri, name, ty
     }
   );
 
+  alert(response.status)
   return response.data;
 };
 
