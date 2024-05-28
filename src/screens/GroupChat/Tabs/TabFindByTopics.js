@@ -13,7 +13,9 @@ import TabFindByTopicsItems from "./TabFindByTopicsItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarTransparent, Icon } from "../../../components";
 import { Dropdown } from "react-native-element-dropdown";
-import { group_findGroupbyName, information_getAllTopics } from "../../../api";
+import { groupStudying_getAllGroupByTopics, group_findGroupbyName, information_getAllTopics } from "../../../api";
+import { groupStudying_getAllGroupByTopic } from "../../../api/ReNewStyle/groupStudyingController";
+
 
 function TabFindByTopics(props) {
   const { navigate, goBack } = props.navigation;
@@ -38,7 +40,7 @@ function TabFindByTopics(props) {
       if (searchText.length >= 1) {
         const response = await group_findGroupbyName(searchText);
         setGroups(response.data);
-        //setListTopics(await information_getAllTopics());
+        setListTopics(await information_getAllTopics());
         //setFilteredList(listTopics.map((topic) => ({ label: topic.topicName, value: topic.topicName })))
       } else {
         setGroups([]);
@@ -60,6 +62,15 @@ function TabFindByTopics(props) {
     );
   };
 
+  const selectTopic = async (item) => {
+    setSearchText(item.value);
+    setIsDropBarFocus(false);
+    console.log(item._index)
+    const response = await groupStudying_getAllGroupByTopic((item._index + 1));
+    setGroups(response.data)
+    console.log(response.data)
+  }
+
   return (
     <View style={styles.container}>
       <Dropdown
@@ -71,14 +82,13 @@ function TabFindByTopics(props) {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isDropBarFocus ? "Select item" : "..."}
+        placeholder={!isDropBarFocus ? "Select ritem" : "..."}
         searchPlaceholder="Search..."
         value={searchText}
         onFocus={() => setIsDropBarFocus(true)}
         onBlur={() => setIsDropBarFocus(false)}
         onChange={(item) => {
-          setSearchText(item.value);
-          setIsDropBarFocus(false);
+          selectTopic(item)
         }}
         renderLeftIcon={() => (
           <Icon

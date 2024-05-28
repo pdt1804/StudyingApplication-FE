@@ -279,6 +279,20 @@ export const groupStudying_getAllGroupByTopics = async (topics) => {
   return response.data;
 };
 
+export const groupStudying_getAllGroupByTopic = async (topic) => {
+
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/groupStudying/getAllGroupByTopic?topic=${topic}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response;
+};
+
 export const groupStudying_getAllRecommendedGroup = async () => {
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/groupStudying/getAllRecommendedGroup`,
