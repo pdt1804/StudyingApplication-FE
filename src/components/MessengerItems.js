@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { messenger_getSentUser, messenger_checkSender } from "../api";
 
 function MessengerItems(props) {
-  let { content, dateSent, id, images, status } = props.item;
+  let { content, dateSent, id, files, status } = props.item;
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
@@ -35,6 +35,7 @@ function MessengerItems(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //console.log(id)
         const response = await messenger_getSentUser(id);
 
         setAvatar(response.data.information.image);
@@ -46,8 +47,8 @@ function MessengerItems(props) {
         props.item.content
           ? setIsImage(false)
           : (setIsImage(true),
-            setImage(props.item.images[0].toString().split("-")[0]),
-            getImageSize(props.item.images[0].toString().split("-")[0]));
+            setImage(props.item.files[0].url),
+            getImageSize(props.item.files[0].url));
       } catch (error) {
         console.error("Error fetching data:", error);
       }

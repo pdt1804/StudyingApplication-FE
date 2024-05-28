@@ -22,6 +22,44 @@ export const messagegroup_sendMessage = async (messContent, groupID, files) => {
   return response.data;
 };
 
+export const messagegroup_uploadImage = async (uri, name, type, messID) => {
+  // console.log(uri)
+  // console.log(name)
+  // console.log(type)
+  // console.log(messID)
+
+  // alert("uri: " + uri)
+  // alert("name: " + name)
+  // alert("type: " + type)
+  // alert("messID: " + messID)
+
+
+  const formData = new FormData();
+  formData.append("file", {
+    uri: uri,
+    name: name,
+    type: type,
+  });
+  formData.append("messID", messID);
+  
+  //alert("2")
+
+  const response = await axios.post(
+    `${API_BASE_URL}/api/v1/messagegroup/uploadImage`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+
+  //alert("response status: " + response.status)
+
+  return response.data;
+};
+
 const generateRandomString = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';

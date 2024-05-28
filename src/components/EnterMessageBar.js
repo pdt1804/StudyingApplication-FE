@@ -17,9 +17,10 @@ import {
   messageuser_uploadMultipleImages,
   blog_commentBlog,
   blog_replyComment,
+  messageuser_uploadImage,
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
-import { messagegroup_uploadMultipleImages } from "../api/ReNewStyle/messageGroupController";
+import { messagegroup_uploadMultipleImages, messagegroup_uploadImage } from "../api/ReNewStyle/messageGroupController";
 import axios from "axios";
 import { API_BASE_URL } from "../api/DomainAPI";
 import { blog_insertImageInComment, blog_insertImageInReply } from "../api/ReNewStyle/blogController";
@@ -92,6 +93,23 @@ export default EnterMessageBar = (props) => {
       friendUsername
     );
     if (response.status == 200) {
+      if (listSelectedImage.length > 0) {
+        for (let i = 0; i < listSelectedImage.length; i++) {
+          let img = listSelectedImage[i];
+          try {
+            messageuser_uploadImage(
+              img.uri,
+              img.fileName,
+              img.type,
+              response.data
+            );
+            //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+          } catch (error) {
+            console.log("Lỗi:", error);
+          }
+        }
+      }
+
       const messagePayload = { groupID: friendID };
       stompClient.send(
         "/app/sendMessForUser",
@@ -109,7 +127,24 @@ export default EnterMessageBar = (props) => {
     }
     const response = await messenger_sendMessageForGroup(typedText);
     if (response.status == 200) {
-      //console.log("sending");
+      console.log(listSelectedImage.length);
+      if (listSelectedImage.length > 0) {
+        for (let i = 0; i < listSelectedImage.length; i++) {
+          let img = listSelectedImage[i];
+          try {
+            messagegroup_uploadImage(
+              img.uri,
+              img.fileName,
+              img.type,
+              response.data
+            );
+            //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
+          } catch (error) {
+            console.log("Lỗi:", error);
+          }
+        }
+      }
+
       const messagePayload = {
         groupID: parseInt(await AsyncStorage.getItem("groupID")),
       };
@@ -299,14 +334,25 @@ export default EnterMessageBar = (props) => {
 
   const handleUploadImagesForGroup = async () => {
     try {
-      const file = await handleSelectImages();
-      const response = await messagegroup_uploadMultipleImages(
-        await AsyncStorage.getItem("groupID"),
-        file.uri,
-        file.fileName,
-        file.mimeType
-      );
 
+      await handleSelectImages()
+
+      if (listSelectedImage.length > 0)
+      {
+        for (let i = 0; i < listSelectedImage.length; i++)
+        {
+          let uri = listSelectedImage[i].uri
+          let name = listSelectedImage[i].fileName
+          let type = listSelectedImage[i].type
+
+          const response = await messagegroup_uploadMultipleImages(
+            await AsyncStorage.getItem("groupID"),
+            uri,
+            name,
+            type,
+          );
+        }
+      }
       //alert("2")
       const messagePayload = {
         groupID: parseInt(await AsyncStorage.getItem("groupID")),
@@ -315,6 +361,7 @@ export default EnterMessageBar = (props) => {
 
       //alert("3")
       setPickedImages([]);
+      setListSelectedImage([])
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -322,9 +369,9 @@ export default EnterMessageBar = (props) => {
 
   const handleUploadImages = async () => {
     if (actionType === 0 || actionType === "friend") {
-      handleUploadImagesForFriend();
+      handleSelectImages();
     } else if (actionType === 1 || actionType === "group") {
-      handleUploadImagesForGroup();
+      handleSelectImages();
     } else if (actionType === 2 || actionType === "comment") {
       handleSelectImages();
     } else if (actionType === 3 || actionType === "reply") {

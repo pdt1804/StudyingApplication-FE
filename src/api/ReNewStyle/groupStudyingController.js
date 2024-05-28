@@ -266,6 +266,7 @@ export const groupStudying_getAllUserInGroup = async (groupID) => {
 };
 
 export const groupStudying_getAllGroupByTopics = async (topics) => {
+
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/groupStudying/getAllGroupByTopics?topics=${topics}`,
     {
