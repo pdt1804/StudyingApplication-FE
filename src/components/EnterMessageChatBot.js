@@ -42,16 +42,19 @@ function EnterMessageChatBot({OnPress}) {
 
     setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
 
-    const chatCompletion = await axios.post('https://api.openai.com/v1/chat/completions', {
-        messages: [{ role: 'user', content: content }],
-        model: 'gpt-3.5-turbo',
-        max_tokens: 100,
-    }, {
+    var formData = new FormData()
+    formData.append('messages', [{role: 'user', content: content}])
+    formData.append('model', 'gpt-3.5-turbo')
+    formData.append('max_tokens', 1000)
+
+    const chatCompletion = await axios.post('https://api.openai.com/v1/chat/completions', formData, {
         headers: {
-            'Authorization': 'Bearer sk-proj-HbtZMwoSuTsKB3N4080ZT3BlbkFJjvr3qHjhgrMdWTtzOaLQ',
-            'Content-Type': 'application/json',
-        },
+            'Authorization': 'Bearer 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',
+            'Content-Type': 'multipart/form-data',
+          },
     });
+
+    alert(chatCompletion.status)
 
     console.log("2")
 
