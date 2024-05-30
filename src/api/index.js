@@ -109,6 +109,8 @@ import {
   blog_replyComment,
   blog_updateReply,
   blog_deleteReply,
+  blog_insertImageInComment,
+  blog_insertImageInReply,
 } from "./ReNewStyle/blogController";
 import {
   document_getAllDocumentOfGroup,
@@ -172,6 +174,7 @@ import {
   messagegroup_sendMessage,
   messagegroup_loadMessageInGroup,
   messagegroup_getSentUserInGroup,
+  messagegroup_uploadImage,
 } from "./ReNewStyle/messageGroupController";
 import {
   messageuser_loadMessageforUser,
@@ -293,6 +296,8 @@ export {
   blog_replyComment,
   blog_updateReply,
   blog_deleteReply,
+  blog_insertImageInComment,
+  blog_insertImageInReply,
   document_getAllDocumentOfGroup,
   document_getDocumentById,
   document_addDocument,
@@ -346,6 +351,7 @@ export {
   messagegroup_sendMessage,
   messagegroup_loadMessageInGroup,
   messagegroup_getSentUserInGroup,
+  messagegroup_uploadImage,
   messageuser_loadMessageforUser,
   messageuser_getFriendID,
   messageuser_getSentUser,

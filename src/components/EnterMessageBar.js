@@ -13,21 +13,17 @@ import Icon from "./MyIcon";
 import { WhiteSlideBottomUp } from "./MyModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  messenger_sendMessageForGroup,
+  groupStudying_getAllUserInGroup,
   messageuser_sendMessageForUser,
-  messageuser_uploadMultipleImages,
-  blog_commentBlog,
-  blog_replyComment,
   messageuser_uploadImage,
+  messagegroup_sendMessage,
+  messagegroup_uploadImage,
+  blog_commentBlog,
+  blog_insertImageInComment,
+  blog_replyComment,
+  blog_insertImageInReply,
 } from "../api";
 import * as ImagePicker from "expo-image-picker";
-import { messagegroup_uploadMultipleImages, messagegroup_uploadImage } from "../api/ReNewStyle/messageGroupController";
-import axios from "axios";
-import { API_BASE_URL } from "../api/DomainAPI";
-import {
-  blog_insertImageInComment,
-  blog_insertImageInReply,
-} from "../api/ReNewStyle/blogController";
 
 export default EnterMessageBar = (props) => {
   //use for friend-MessageBar
@@ -47,19 +43,11 @@ export default EnterMessageBar = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const responses = await axios.get(
-        API_BASE_URL +
-          "/api/v1/groupStudying/getAllUserInGroup?groupID=" +
-          (await AsyncStorage.getItem("groupID")),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
-          },
-        }
+      const responsesData = await groupStudying_getAllUserInGroup(
+        await AsyncStorage.getItem("groupID")
       );
-      setListMembersNotTagged(responses.data);
-      setUserNames(responses.data);
+      setListMembersNotTagged(responsesData);
+      setUserNames(responsesData);
       //console.log(listMembersNotTagged)
     };
 
@@ -74,11 +62,22 @@ export default EnterMessageBar = (props) => {
     fetchData();
   }, [listSelectedImage]);
 
+  const isSendAble = () => {
+    return !(typedText.length === 0 && listSelectedImage.length === 0);
+  };
+
+  const refreshAll = () => {
+    setTypedText("");
+    setListTaggedUsernames([]);
+    setListMembersNotTagged(userNames);
+    setListSelectedImage([]);
+  };
+
   //*************** */
   // message handler
   //*************** */
   const handleSendMessage_Friend = async () => {
-    if (typedText.length == 0) {
+    if (!isSendAble()) {
       alert("Hãy nhập tin nhắn");
       return;
     }
@@ -103,7 +102,6 @@ export default EnterMessageBar = (props) => {
           }
         }
       }
-
       const messagePayload = { groupID: friendID };
       stompClient.send(
         "/app/sendMessForUser",
@@ -111,15 +109,15 @@ export default EnterMessageBar = (props) => {
         JSON.stringify(messagePayload)
       );
     }
-    setTypedText("");
+    refreshAll();
   };
 
   const handleSendMessage_Group = async () => {
-    if (typedText.length == 0) {
+    if (!isSendAble()) {
       alert("Hãy nhập tin nhắn");
       return;
     }
-    const response = await messenger_sendMessageForGroup(typedText);
+    const response = await messagegroup_sendMessage(typedText);
     if (response.status == 200) {
       console.log(listSelectedImage.length);
       if (listSelectedImage.length > 0) {
@@ -138,29 +136,25 @@ export default EnterMessageBar = (props) => {
           }
         }
       }
-
       const messagePayload = {
         groupID: parseInt(await AsyncStorage.getItem("groupID")),
       };
       stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
       //console.log("sent");
     }
-    setTypedText("");
+    refreshAll();
   };
 
   const handleSendMessage_Comment = async () => {
-    if (typedText.length == 0 && listSelectedImage.length === 0) {
+    if (!isSendAble()) {
       alert("Hãy nhập bình luận hoặc chọn ảnh");
       return;
     }
-
     const tags = [];
     for (let i = 0; i < listTaggedUsernames.length; i++) {
       tags.push(listTaggedUsernames[i].userName);
     }
-
     const response = await blog_commentBlog(blogID, typedText, tags);
-
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
         let img = listSelectedImage[i];
@@ -177,31 +171,22 @@ export default EnterMessageBar = (props) => {
         }
       }
     }
-
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
-
-    // ADD ảnh
-    setTypedText("");
-    setListTaggedUsernames([]);
-    setListMembersNotTagged(userNames);
-    setListSelectedImage([]);
+    refreshAll();
   };
 
   const handleSendMessage_Reply = async () => {
-    if (typedText.length == 0 && listSelectedImage.length === 0) {
+    if (!isSendAble()) {
       alert("Hãy nhập phản hồi hoặc chọn ảnh");
       return;
     }
-
     const tags = [];
     for (let i = 0; i < listTaggedUsernames.length; i++) {
       tags.push(listTaggedUsernames[i].userName);
     }
-
     const response = await blog_replyComment(commentID, typedText, tags);
-
     console.log(listSelectedImage.length);
     if (listSelectedImage.length > 0) {
       for (let i = 0; i < listSelectedImage.length; i++) {
@@ -222,30 +207,16 @@ export default EnterMessageBar = (props) => {
     if (response.status != 200) {
       alert("Lỗi mạng, không thể phản hồi bình luận");
     }
-    setTypedText("");
-    setListTaggedUsernames([]);
-    setListMembersNotTagged(userNames);
-    setListSelectedImage([]);
+    refreshAll();
   };
 
   const handleSendMessage_Chatbot = async () => {
-    if (typedText.length == 0) {
+    if (!isSendAble()) {
       alert("Hãy nhập tin nhắn");
       return;
     }
-    /* const response = await messageuser_sendMessageForUser(
-      typedText,
-      friendUsername
-    );
-    if (response.status == 200) {
-      const messagePayload = { groupID: friendID };
-      stompClient.send(
-        "/app/sendMessForUser",
-        {},
-        JSON.stringify(messagePayload)
-      );
-    } */
-    setTypedText("");
+    //thêm API tại đây
+    refreshAll();
   };
 
   //final handleVerification
@@ -280,79 +251,8 @@ export default EnterMessageBar = (props) => {
     }
   };
 
-  const handleUploadImagesForFriend = async () => {
-    try {
-      const file = await handleSelectImages();
-      const response = await messageuser_uploadMultipleImages(
-        friendUsername,
-        file.uri,
-        file.fileName,
-        file.mimeType
-      );
-
-      //alert("2")
-      const messagePayload = { groupID: friendID };
-      stompClient.send(
-        "/app/sendMessForUser",
-        {},
-        JSON.stringify(messagePayload)
-      );
-
-      //alert("3")
-      //setListSelectedImage([]);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
-
-  const handleUploadImagesForGroup = async () => {
-    try {
-
-      await handleSelectImages()
-
-      if (listSelectedImage.length > 0)
-      {
-        for (let i = 0; i < listSelectedImage.length; i++)
-        {
-          let uri = listSelectedImage[i].uri
-          let name = listSelectedImage[i].fileName
-          let type = listSelectedImage[i].type
-
-          const response = await messagegroup_uploadMultipleImages(
-            await AsyncStorage.getItem("groupID"),
-            uri,
-            name,
-            type,
-          );
-        }
-      }
-      //alert("2")
-      const messagePayload = {
-        groupID: parseInt(await AsyncStorage.getItem("groupID")),
-      };
-      stompClient.send("/app/sendMess", {}, JSON.stringify(messagePayload));
-
-      //alert("3")
-      setPickedImages([]);
-      setListSelectedImage([])
-      //setListSelectedImage([]);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
-
   const handleUploadImages = async () => {
-    if (actionType === 0 || actionType === "friend") {
-      handleSelectImages();
-    } else if (actionType === 1 || actionType === "group") {
-      handleSelectImages();
-    } else if (actionType === 2 || actionType === "comment") {
-      handleSelectImages();
-    } else if (actionType === 3 || actionType === "reply") {
-      handleSelectImages();
-    } else if (actionType === 4 || actionType === "chatbot") {
-      handleSendMessage_Chatbot();
-    }
+    handleSelectImages();
   };
 
   //*************** */

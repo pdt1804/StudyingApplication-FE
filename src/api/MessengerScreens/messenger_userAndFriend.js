@@ -112,7 +112,8 @@ export const messenger_receiveMessage = async () => {
 //-----------
 
 export const messenger_sendMessageForGroup = async (typedText) => {
-  var form = new FormData();
+  alert('đã chuyển')
+  /* var form = new FormData();
   form.append("messContent", typedText);
   form.append("groupID", await AsyncStorage.getItem("groupID"));
 
@@ -126,5 +127,5 @@ export const messenger_sendMessageForGroup = async (typedText) => {
       },
     }
   );
-  return response;
+  return response; */
 };

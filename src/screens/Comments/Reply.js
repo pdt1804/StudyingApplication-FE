@@ -21,21 +21,21 @@ const Reply = (props) => {
 
   const commentImages = [];
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
+  const [imageWidth, setImageWidth] = useState(300);
+  const [imageHeight, setImageHeight] = useState(300);
 
-  const getImageSize = (uri) => {
+  /* const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
       const temp = width > MAXWidth ? width / MAXWidth : 1;
       setImageWidth(width);
       setImageHeight(height / temp);
     });
-  };
+  }; */
 
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
-      const parts = files[i].toString().split("-")[0];
-      getImageSize(parts);
+      const parts = files[i].url;
+      //getImageSize(parts);
       commentImages.push(parts);
     }
   }

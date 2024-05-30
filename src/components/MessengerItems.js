@@ -21,8 +21,8 @@ function MessengerItems(props) {
   const [path, setPath] = useState(null);
 
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
+  const [imageWidth, setImageWidth] = useState(500);
+  const [imageHeight, setImageHeight] = useState(500);
 
   const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
@@ -47,8 +47,10 @@ function MessengerItems(props) {
         props.item.content
           ? setIsImage(false)
           : (setIsImage(true),
-            setImage(props.item.files[0].url),
-            getImageSize(props.item.files[0].url));
+          console.log(props.item)
+            //setImage(props.item.files[0].url)//,
+            //getImageSize(props.item.files[0].url)
+          );
       } catch (error) {
         console.error("Error fetching data:", error);
       }
