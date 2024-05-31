@@ -20,7 +20,7 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
     const [searchText,setSearchText] = useState('');
     const listRef = useRef(null);
   
-    const filteredData = data.filter(item => item.toLowerCase().includes(searchText.toLowerCase()));
+    const filteredData = data.filter(item => item.label.toString().toLowerCase().includes(searchText.toString().toLowerCase()));
   
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
@@ -33,7 +33,7 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
   
     const renderItem = ({ item }) => (
       <TouchableOpacity onPress={() => handleSelect(item)}>
-        <Text style={styles.dropdownItem}>{item}</Text>
+        <Text style={styles.dropdownItem}>{item.label}</Text>
       </TouchableOpacity>
     );
   
@@ -53,7 +53,7 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
               ref={listRef}
               data={filteredData}
               renderItem={renderItem}
-              keyExtractor={item => item}
+              keyExtractor={item => item.value}
               maxHeight={200} // Adjust maxHeight as needed
               showsVerticalScrollIndicator={false}
             />
@@ -73,10 +73,10 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
       fontSize: 16,
     },
     dropdown: {
-      position: 'absolute',
-      top: 40,
-      left: 0,
-      right: 0,
+      //position: 'absolute',
+      //top: 40,
+      //left: 0,
+      //right: 0,
       backgroundColor: '#fff',
       padding: 10,
       borderRadius: 5,
