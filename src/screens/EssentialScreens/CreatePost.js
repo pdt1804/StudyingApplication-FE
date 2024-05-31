@@ -129,6 +129,8 @@ export default CreatePost = (props) => {
             img.uri,
             img.fileName,
             img.mimeType,
+            img.width,
+            img.height,
             responseData
           );
           //uploadImage(img.uri, img.fileName, img.mimeType, responseData);

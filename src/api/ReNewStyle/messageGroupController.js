@@ -20,16 +20,16 @@ export const messagegroup_sendMessage = async (typedText) => {
   return response;
 };
 
-export const messagegroup_uploadImage = async (uri, name, type, messID) => {
+export const messagegroup_uploadImage = async (uri, name, type, width, height, messID) => {
   // console.log(uri)
   // console.log(name)
   // console.log(type)
   // console.log(messID)
 
-   alert("uri: " + uri)
-   alert("name: " + name)
-   alert("type: " + type)
-   alert("messID: " + messID)
+  //  alert("uri: " + uri)
+  //  alert("name: " + name)
+  //  alert("type: " + type)
+  //  alert("messID: " + messID)
 
 
   const formData = new FormData();
@@ -39,6 +39,8 @@ export const messagegroup_uploadImage = async (uri, name, type, messID) => {
     type: type,
   });
   formData.append("messID", messID);
+  formData.append("width", width)
+  formData.append("height", height)
   
   //alert("2")
 

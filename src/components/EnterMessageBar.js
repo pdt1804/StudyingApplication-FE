@@ -89,11 +89,14 @@ export default EnterMessageBar = (props) => {
       if (listSelectedImage.length > 0) {
         for (let i = 0; i < listSelectedImage.length; i++) {
           let img = listSelectedImage[i];
+          console.log(img)
           try {
             messageuser_uploadImage(
               img.uri,
               img.fileName,
               img.type,
+              img.width,
+              img.height,
               response.data
             );
             //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
@@ -128,6 +131,8 @@ export default EnterMessageBar = (props) => {
               img.uri,
               img.fileName,
               img.type,
+              img.width,
+              img.height,
               response.data
             );
             //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
@@ -163,6 +168,8 @@ export default EnterMessageBar = (props) => {
             img.uri,
             img.fileName,
             img.mimeType,
+            img.width,
+            img.height,
             response.data
           );
           //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
@@ -196,6 +203,8 @@ export default EnterMessageBar = (props) => {
             img.uri,
             img.fileName,
             img.mimeType,
+            img.width,
+            img.height,
             response.data
           );
           //uploadImage(img.uri, img.fileName, img.mimeType, responseData);

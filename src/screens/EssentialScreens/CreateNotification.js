@@ -58,8 +58,10 @@ const CreateNotification = (props) => {
         const uri = images[i].uri;
         const name = images[i].fileName;
         const type = images[i].mimeType;
+        const width = images[i].width;
+        const height = images[i].height;
 
-        uploadImage(uri, name, type, response.data)
+        uploadImage(uri, name, type, width, height, response.data)
       }
     }
 
@@ -75,7 +77,7 @@ const CreateNotification = (props) => {
     goBack();
   };
 
-  const uploadImage = async (uri, name, type, notificationID) => {
+  const uploadImage = async (uri, name, type, width, height, notificationID) => {
     console.log(uri)
     console.log(name)
     console.log(type)
@@ -87,6 +89,8 @@ const CreateNotification = (props) => {
       type: type,
     });
     formData.append('notificationID', notificationID)
+    formData.append("width", width)
+    formData.append("height", height)
   
     try {
       // const response = await fetch('YOUR_BACKEND_URL', {

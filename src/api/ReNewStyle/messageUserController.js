@@ -72,7 +72,7 @@ export const messageuser_sendMessageForUser = async (
 };
 
 //single image
-export const messageuser_uploadImage = async (uri, name, type, messID) => {
+export const messageuser_uploadImage = async (uri, name, type, width, height, messID) => {
   // console.log(uri)
   // console.log(name)
   // console.log(type)
@@ -85,6 +85,8 @@ export const messageuser_uploadImage = async (uri, name, type, messID) => {
     type: type,
   });
   formData.append("messID", messID);
+  formData.append("width", width)
+  formData.append("height", height)
   
 
   const response = await axios.post(
