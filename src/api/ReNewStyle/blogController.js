@@ -41,7 +41,7 @@ export const blog_getAllBlogByContent = async (groupID, input) => {
   return response;
 };
 
-export const blog_insertImageInBlog = async (uri, name, type, blogID) => {
+export const blog_insertImageInBlog = async (uri, name, type, width, height, blogID) => {
   const formData = new FormData();
   if (uri.toString())
     formData.append("file", {
@@ -50,6 +50,9 @@ export const blog_insertImageInBlog = async (uri, name, type, blogID) => {
       type: type,
     });
   formData.append("blogID", blogID);
+  formData.append("width", width)
+  formData.append("height", height)
+  
   const response = await axios.post(
     API_BASE_URL + "/api/v1/blog/insertImageInBlog",
     formData,
@@ -240,7 +243,7 @@ export const blog_insertImage = async (blogID, file) => {
   return response;
 };
 
-export const blog_insertImageInComment = async (uri, name, type, commentID) => {
+export const blog_insertImageInComment = async (uri, name, type, width, height, commentID) => {
   console.log(uri)
   console.log(name)
   console.log(type)
@@ -253,6 +256,9 @@ export const blog_insertImageInComment = async (uri, name, type, commentID) => {
       type: type,
     });
   formData.append("commentID", commentID);
+  formData.append("width", width)
+  formData.append("height", height)
+
   const response = await axios.post(
     API_BASE_URL + "/api/v1/blog/insertImageInComment",
     formData,
@@ -266,7 +272,7 @@ export const blog_insertImageInComment = async (uri, name, type, commentID) => {
   return response;
 };
 
-export const blog_insertImageInReply = async (uri, name, type, replyID) => {
+export const blog_insertImageInReply = async (uri, name, type, width, height, replyID) => {
   console.log(uri)
   console.log(name)
   console.log(type)
@@ -279,6 +285,9 @@ export const blog_insertImageInReply = async (uri, name, type, replyID) => {
       type: type,
     });
   formData.append("replyID", replyID);
+  formData.append("width", width)
+  formData.append("height", height)
+
   const response = await axios.post(
     API_BASE_URL + "/api/v1/blog/insertImageInReply",
     formData,
