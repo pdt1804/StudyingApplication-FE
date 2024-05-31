@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
+import { randomGenerateColor } from "../../../utilities";
 import { group_checkNewMessage } from "../../../api";
-
-const generateColor = () => {
-  const randomColor = Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0");
-  return `#${randomColor}`;
-};
 
 function TabYourGroupsItems(props) {
   let { nameGroup, imageGroup, newestMessage, status, groupID } = props.group;
@@ -42,7 +36,7 @@ function TabYourGroupsItems(props) {
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Image /** Avatar */
-        style={[styles.avatarImage, { borderColor: generateColor() }]}
+        style={[styles.avatarImage, { borderColor: randomGenerateColor() }]}
         source={{
           uri: imageGroup,
         }}

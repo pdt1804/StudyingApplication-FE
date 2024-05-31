@@ -7,8 +7,9 @@ import { API_BASE_URL } from "../api/DomainAPI";
 
 export default function MessengerGroupItems(props) {
   let { content, dateSent, id, user } = props.item;
+  let files = props.files;
 
-  const {navigate} = props;
+  const { navigate } = props;
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
@@ -23,50 +24,55 @@ export default function MessengerGroupItems(props) {
   const [sender, setSender] = useState("");
 
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
+  const [imageWidth, setImageWidth] = useState(500);
+  const [imageHeight, setImageHeight] = useState(500);
 
-  const getImageSize = (uri) => {
+  /* const getImageSize = (uri) => {
     Image.getSize(uri, (width, height) => {
       const temp = width > MAXWidth ? width / MAXWidth : 1;
       setImageWidth(width);
       setImageHeight(height / temp);
     });
-  };
+  }; */
 
   useEffect(() => {
     const fetchData = async () => {
+      //console.log(files[0].url)
+
       try {
-
-        //stompClient.subscribe("/user/public/queue/group/" + id, onReceived)
-
         setUsername(await AsyncStorage.getItem("username"));
         const response = await axios.get(
-          API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id
-        , {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
+          API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
         setImage(response.data.information.image);
         setSentUsername(response.data.userName);
 
-        const checkSender = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        })
+        const checkSender = await axios.get(
+          API_BASE_URL + "/api/v1/information/ExtractBearerToken",
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
         setSender(checkSender.data);
 
-        props.item.content
+        files.length > 0
           ? setIsImage(false)
           : (setIsImage(true),
-            setImage(props.item.images[0].toString().split("-")[0]),
-            getImageSize(props.item.images[0].toString().split("-")[0]));
+            setImage(props.item.images[0].toString().split("-")[0])); //,
+        //getImageSize(props.item.images[0].toString().split("-")[0])
       } catch (error) {
         console.error("Error fetching data:", error.message);
         setError("Error fetching data");
@@ -86,31 +92,36 @@ export default function MessengerGroupItems(props) {
   };
 
   const ShowProfile = async () => {
-    navigate("ShowProfile", { userReplied: user })
-  }
+    navigate("ShowProfile", { userReplied: user });
+  };
 
   return CheckIsSender() == false ? (
-    <TouchableOpacity /** isSender = false --> avatar > message */ style={styles.container} onPress={ShowProfile}>
+    <TouchableOpacity
+      /** isSender = false --> avatar > message */ style={styles.container}
+      onPress={ShowProfile}
+    >
       <Image style={styles.avatar} source={{ uri: image }} />
 
       <View style={styles.mainTextView}>
         <View style={styles.leftView}>
-          <Text style={styles.subText}>{user.information.fulName} | {timeSent}</Text>
+          <Text style={styles.subText}>
+            {user.information.fulName} | {timeSent}
+          </Text>
         </View>
         <View style={styles.leftView}>
-          {isImage ? (
-            (console.log(imageHeight),
-            (
+          {files.length > 0 ? (
+            files.map((file) => (
               <Image
                 style={[
                   styles.image,
                   {
-                    width: imageWidth,
-                    height: imageHeight,
-                    maxWidth: MAXWidth,
+                    width: 50,
+                    height: 50,
+                    //width: file.width,
+                    //height: file.height,
                   },
                 ]}
-                source={{ uri: image }}
+                source={{ uri: file.url }}
               />
             ))
           ) : (
@@ -120,25 +131,28 @@ export default function MessengerGroupItems(props) {
       </View>
     </TouchableOpacity>
   ) : (
-    <TouchableOpacity /** isSender = true --> message > avatar */ style={styles.container} onPress={ShowProfile}>
+    <TouchableOpacity
+      /** isSender = true --> message > avatar */ style={styles.container}
+      onPress={ShowProfile}
+    >
       <View style={styles.mainTextView}>
         <View style={styles.rightView}>
           <Text style={styles.subText}>{timeSent}</Text>
         </View>
         <View style={styles.rightView}>
-          {isImage ? (
-            (console.log(imageHeight),
-            (
+          {files.length > 0 ? (
+            files.map((file) => (
               <Image
                 style={[
                   styles.image,
                   {
-                    width: imageWidth,
-                    height: imageHeight,
-                    maxWidth: MAXWidth,
+                    width: 50,
+                    height: 50,
+                    //width: file.width,
+                    //height: file.height,
                   },
                 ]}
-                source={{ uri: image }}
+                source={{ uri: file.url }}
               />
             ))
           ) : (
@@ -183,7 +197,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
     paddingVertical: 7,
     paddingHorizontal: 7,
-    backgroundColor: 'rgb(231, 236, 242)',
+    backgroundColor: "rgb(231, 236, 242)",
     borderRadius: 10,
   },
   leftView: {

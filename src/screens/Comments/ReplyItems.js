@@ -7,21 +7,9 @@ export default function ReplyItems(props) {
   const { userReplied, dateReplied, content, files } = props.reply;
 
   const replyImages = [];
-  const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
-
-  const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      const temp = width > MAXWidth ? width / MAXWidth : 1;
-      setImageWidth(width);
-      setImageHeight(height / temp);
-    });
-  };
 
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
-      getImageSize(files[i].url)
       replyImages.push(files[i].url);
     }
   }
@@ -55,7 +43,7 @@ export default function ReplyItems(props) {
             <Image
               key={index}
               source={{ uri: image }}
-              style={[styles.image, { width: imageWidth, height: imageHeight }]}
+              style={[styles.image, { width: 300, height: 300 }]}
             />
           ))}
         </View>
