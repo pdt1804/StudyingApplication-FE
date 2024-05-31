@@ -96,7 +96,9 @@ export default function Messenger(props) {
       <View style={styles.displayView}>
         <ScrollView ref={scrollViewRef}>
           {chatHistory.map((eachItem) => (
-            <MessengerItems item={eachItem} key={eachItem.id} />
+            <MessengerItems item={eachItem} 
+            files={eachItem.files}
+            key={eachItem.id} />
           ))}
         </ScrollView>
 

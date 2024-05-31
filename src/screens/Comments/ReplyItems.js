@@ -12,6 +12,7 @@ export default function ReplyItems(props) {
   }
   const getHeight = (baseWidth, baseHeight) => {
     return baseWidth > MAXWidth ? baseHeight / (baseWidth / MAXWidth) : baseHeight
+
   }
 
   const getTime = () => {

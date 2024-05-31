@@ -25,6 +25,9 @@ function TabMessenger(props) {
       stompClient.connect({}, onConnected, onError);
       const chatData = await messenger_loadMessageInGroup();
       setChatHistory(chatData);
+
+      console.log(chatData[5].files[0].url)
+
     };
     fetchData();
   }, [props.userName, userName]);
@@ -56,6 +59,7 @@ function TabMessenger(props) {
         {chatHistory.map((eachItem) => (
           <MessengerGroupItems
             item={eachItem}
+            files={eachItem.files}
             key={eachItem.id}
             navigate={navigate}
             stompClient={stompClient}
