@@ -91,7 +91,7 @@ export default EnterMessageBar = (props) => {
           let img = listSelectedImage[i];
           console.log(img)
           try {
-            messageuser_uploadImage(
+            await messageuser_uploadImage(
               img.uri,
               img.fileName,
               img.type,
@@ -127,7 +127,7 @@ export default EnterMessageBar = (props) => {
         for (let i = 0; i < listSelectedImage.length; i++) {
           let img = listSelectedImage[i];
           try {
-            messagegroup_uploadImage(
+            await messagegroup_uploadImage(
               img.uri,
               img.fileName,
               img.type,
@@ -299,12 +299,11 @@ export default EnterMessageBar = (props) => {
             onPress={() => handleAddTag(eachName, index)}
           >
             {
-              //đoạn này là hiển thị tên/icon/avatar các kiểu nè
-              // t để tạm cái text ở đây, m ném vô username là được rồi
-              // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
-              <Text style={styles.notTagName_temp}>
+              <View style={styles.notTaggedContainer}>
+              <Image style={styles.notTaggedAvatar} source={{ uri: eachName.information.image }} />
+              <Text style={styles.notTaggedName}>
                 {eachName.information.fulName}
-              </Text>
+              </Text></View>
             }
           </TouchableOpacity>
         ))}
@@ -510,16 +509,31 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
   },
   //
-  notTagName_temp: {
-    width: 350,
-    height: 50,
-    paddingVertical: 5,
+  notTaggedContainer:{
+    flexDirection: 'row',
+    width: 400,
+    height: 55,
     paddingHorizontal: 10,
-    marginHorizontal: 5,
-    marginTop: 10,
     borderRadius: 12,
     borderWidth: 3,
     borderColor: colors.GrayContainer,
+    alignSelf: 'center',
+    alignItems: 'center',
     backgroundColor: colors.transparentWhite,
+  },
+  notTaggedAvatar: {
+    width: 35,
+    height: 35,
+    resizeMode: "cover",
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: colors.PrimaryBackground,
+  },
+  notTaggedName: {
+    paddingHorizontal: 10,
+    fontSize: fontSizes.h5,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    color: colors.GrayOnContainerAndFixed,
   },
 });

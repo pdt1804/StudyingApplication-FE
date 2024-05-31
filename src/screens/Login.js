@@ -11,7 +11,7 @@ import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
 import { user_login } from "../api";
 import CryptoJS from "crypto-js";
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const Login = (props) => {
   //navigation to/back
