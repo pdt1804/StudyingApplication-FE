@@ -6,12 +6,13 @@ export default function ReplyItems(props) {
   const { navigate } = props;
   const { userReplied, dateReplied, content, files } = props.reply;
 
-  const replyImages = [];
+  const MAXWidth = 245;
+  const getWidth = (baseWidth) => {
+    return baseWidth > MAXWidth ? MAXWidth : baseWidth
+  }
+  const getHeight = (baseWidth, baseHeight) => {
+    return baseWidth > MAXWidth ? baseHeight / (baseWidth / MAXWidth) : baseHeight
 
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      replyImages.push(files[i].url);
-    }
   }
 
   const getTime = () => {
@@ -39,11 +40,11 @@ export default function ReplyItems(props) {
         </Text>
         <Text style={styles.contentText}>{content}</Text>
         <View>
-          {replyImages.map((image, index) => (
+          {files.map((eachImage, index) => (
             <Image
               key={index}
-              source={{ uri: image }}
-              style={[styles.image, { width: 300, height: 300 }]}
+              source={{ uri: eachImage.url }}
+              style={[styles.image, { width: getWidth(eachImage.width), height: getHeight(eachImage.width, eachImage.height) }]}
             />
           ))}
         </View>
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
   image: {
     maxWidth: 245,
     resizeMode: "contain",
+    marginVertical:2,
     borderRadius: 5,
     //borderWidth: 3,
     //borderColor: colors.GrayBackground,

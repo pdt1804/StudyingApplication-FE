@@ -44,11 +44,11 @@ function EnterMessageChatBot({OnPress}) {
 
     const chatCompletion = await axios.post('https://api.openai.com/v1/chat/completions', {
         messages: [{ role: 'user', content: content }],
-        model: 'gpt-3.5-turbo',
+        model: 'dall-e-3',
         max_tokens: 100,
     }, {
         headers: {
-            'Authorization': 'Bearer sk-proj-HbtZMwoSuTsKB3N4080ZT3BlbkFJjvr3qHjhgrMdWTtzOaLQ',
+            'Authorization': 'sk-uitpublic-Go0Z8Irb6gQH2L3dWFZwT3BlbkFJzPie3OZfnUFiz1mVc3i1',
             'Content-Type': 'application/json',
         },
     });

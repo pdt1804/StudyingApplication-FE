@@ -16,24 +16,18 @@ export default function MessengerGroupItems(props) {
     date.getMonth() + 1
   }`;
 
-  const [isImage, setIsImage] = useState(false);
-  const [image, setImage] = useState(null);
-
+  const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState("");
   const [sentUsername, setSentUsername] = useState("");
   const [sender, setSender] = useState("");
 
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(500);
-  const [imageHeight, setImageHeight] = useState(500);
-
-  /* const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      const temp = width > MAXWidth ? width / MAXWidth : 1;
-      setImageWidth(width);
-      setImageHeight(height / temp);
-    });
-  }; */
+  const getWidth = (baseWidth) => {
+    return baseWidth > MAXWidth ? MAXWidth : baseWidth
+  }
+  const getHeight = (baseWidth, baseHeight) => {
+    return baseWidth > MAXWidth ? baseHeight / (baseWidth / MAXWidth) : baseHeight
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +46,7 @@ export default function MessengerGroupItems(props) {
           }
         );
 
-        setImage(response.data.information.image);
+        setAvatar(response.data.information.image);
         setSentUsername(response.data.userName);
 
         const checkSender = await axios.get(
@@ -68,11 +62,6 @@ export default function MessengerGroupItems(props) {
 
         setSender(checkSender.data);
 
-        files.length > 0
-          ? setIsImage(false)
-          : (setIsImage(true),
-            setImage(props.item.images[0].toString().split("-")[0])); //,
-        //getImageSize(props.item.images[0].toString().split("-")[0])
       } catch (error) {
         console.error("Error fetching data:", error.message);
         setError("Error fetching data");
@@ -96,12 +85,8 @@ export default function MessengerGroupItems(props) {
   };
 
   return CheckIsSender() == false ? (
-    <TouchableOpacity
-      /** isSender = false --> avatar > message */ style={styles.container}
-      onPress={ShowProfile}
-    >
-      <Image style={styles.avatar} source={{ uri: image }} />
-
+    <TouchableOpacity /** isSender = false --> avatar > message */ style={styles.container} onPress={ShowProfile}>
+      <Image style={styles.avatar} source={{ uri: avatar }} />
       <View style={styles.mainTextView}>
         <View style={styles.leftView}>
           <Text style={styles.subText}>
@@ -109,24 +94,28 @@ export default function MessengerGroupItems(props) {
           </Text>
         </View>
         <View style={styles.leftView}>
-          {files.length > 0 ? (
-            files.map((file) => (
-              <Image
-                style={[
-                  styles.image,
-                  {
-                    width: 50,
-                    height: 50,
-                    //width: file.width,
-                    //height: file.height,
-                  },
-                ]}
-                source={{ uri: file.url }}
-              />
-            ))
-          ) : (
-            <Text style={styles.message}>{content}</Text>
-          )}
+        <View>
+            <Text style={[styles.message, {textAlign: 'left'}]}>{content}</Text>
+            <View>
+              {props.item.files.length > 0 ? (
+                props.item.files.map((value, index) => (
+                  <Image
+                    key={index}
+                    style={[
+                      styles.image,
+                      {
+                        width: getWidth(value.width),
+                        height: getHeight(value.width, value.height),
+                        maxWidth: MAXWidth,
+                      },
+                    ]}
+                    source={{ uri: value.url }}
+                  />
+                ))
+              ) : (<View />
+              )}
+            </View>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -140,28 +129,32 @@ export default function MessengerGroupItems(props) {
           <Text style={styles.subText}>{timeSent}</Text>
         </View>
         <View style={styles.rightView}>
-          {files.length > 0 ? (
-            files.map((file) => (
-              <Image
-                style={[
-                  styles.image,
-                  {
-                    width: 50,
-                    height: 50,
-                    //width: file.width,
-                    //height: file.height,
-                  },
-                ]}
-                source={{ uri: file.url }}
-              />
-            ))
-          ) : (
-            <Text style={styles.message}>{content}</Text>
-          )}
+        <View>
+            <Text style={[styles.message, {textAlign: 'right'}]}>{content}</Text>
+            <View>
+              {props.item.files.length > 0 ? (
+                props.item.files.map((value, index) => (
+                  <Image
+                    key={index}
+                    style={[
+                      styles.image,
+                      {
+                        width: getWidth(value.width),
+                        height: getHeight(value.width, value.height),
+                        maxWidth: MAXWidth,
+                      },
+                    ]}
+                    source={{ uri: value.url }}
+                  />
+                ))
+              ) : (<View />
+              )}
+            </View>
+          </View>
         </View>
       </View>
 
-      <Image style={styles.avatar} source={{ uri: image }} />
+      <Image style={styles.avatar} source={{ uri: avatar }} />
     </TouchableOpacity>
   );
 }

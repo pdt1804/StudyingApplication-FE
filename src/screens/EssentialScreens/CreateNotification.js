@@ -215,8 +215,7 @@ const CreateNotification = (props) => {
           placeholder={"Soạn thông báo"}
           placeholderTextColor={colors.inactive}
         />
-      </ScrollView>
-      {listSelectedImage.map((eachImage, index) => (
+        {listSelectedImage.map((eachImage, index) => (
           <View key={index} style={styles.imgView}>
             <Image source={{ uri: eachImage.uri }} style={[styles.image,/* { width: imageWidth, height: imageHeight, maxWidth: MAXWidth, } */]} />
             {listSelectedImage.length == 0 ? (
@@ -240,6 +239,8 @@ const CreateNotification = (props) => {
           title={"+ Thêm ảnh +"}
           styleContainer={styles.addImgBtn}
         />
+      </ScrollView>
+      
     </View>
   );
 };
