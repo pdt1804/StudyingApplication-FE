@@ -6,24 +6,12 @@ export default function ReplyItems(props) {
   const { navigate } = props;
   const { userReplied, dateReplied, content, files } = props.reply;
 
-  const replyImages = [];
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(0);
-  const [imageHeight, setImageHeight] = useState(0);
-
-  const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      const temp = width > MAXWidth ? width / MAXWidth : 1;
-      setImageWidth(width);
-      setImageHeight(height / temp);
-    });
-  };
-
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      getImageSize(files[i].url)
-      replyImages.push(files[i].url);
-    }
+  const getWidth = (baseWidth) => {
+    return baseWidth > MAXWidth ? MAXWidth : baseWidth
+  }
+  const getHeight = (baseWidth, baseHeight) => {
+    return baseWidth > MAXWidth ? baseHeight / (baseWidth / MAXWidth) : baseHeight
   }
 
   const getTime = () => {
@@ -51,11 +39,11 @@ export default function ReplyItems(props) {
         </Text>
         <Text style={styles.contentText}>{content}</Text>
         <View>
-          {replyImages.map((image, index) => (
+          {files.map((eachImage, index) => (
             <Image
               key={index}
-              source={{ uri: image }}
-              style={[styles.image, { width: imageWidth, height: imageHeight }]}
+              source={{ uri: eachImage.url }}
+              style={[styles.image, { width: getWidth(eachImage.width), height: getHeight(eachImage.width, eachImage.height) }]}
             />
           ))}
         </View>
@@ -117,6 +105,7 @@ const styles = StyleSheet.create({
   image: {
     maxWidth: 245,
     resizeMode: "contain",
+    marginVertical:2,
     borderRadius: 5,
     //borderWidth: 3,
     //borderColor: colors.GrayBackground,

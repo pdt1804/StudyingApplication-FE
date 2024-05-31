@@ -19,25 +19,12 @@ const Reply = (props) => {
     props.route.params.comment;
   const { navigate, goBack } = props.navigation;
 
-  const commentImages = [];
   const MAXWidth = 245;
-  const [imageWidth, setImageWidth] = useState(300);
-  const [imageHeight, setImageHeight] = useState(300);
-
-  /* const getImageSize = (uri) => {
-    Image.getSize(uri, (width, height) => {
-      const temp = width > MAXWidth ? width / MAXWidth : 1;
-      setImageWidth(width);
-      setImageHeight(height / temp);
-    });
-  }; */
-
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      const parts = files[i].url;
-      //getImageSize(parts);
-      commentImages.push(parts);
-    }
+  const getWidth = (baseWidth) => {
+    return baseWidth > MAXWidth ? MAXWidth : baseWidth
+  }
+  const getHeight = (baseWidth, baseHeight) => {
+    return baseWidth > MAXWidth ? baseHeight / (baseWidth / MAXWidth) : baseHeight
   }
 
   useEffect(() => {
@@ -91,13 +78,14 @@ const Reply = (props) => {
             </Text>
             <Text style={styles.contentText}>{content}</Text>
             <View>
-              {commentImages.map((image, index) => (
+              {files.map((eachImage, index) => (
                 <Image
                   key={index}
-                  source={{ uri: image }}
+                  source={{ uri: eachImage.url }}
                   style={[
                     styles.image,
-                    { width: imageWidth, height: imageHeight },
+                    { width: getWidth(eachImage.width), height: getHeight(eachImage.width, eachImage.height) },
+                    //{ width: 50, height: 50 }
                   ]}
                 />
               ))}
@@ -159,6 +147,7 @@ const styles = StyleSheet.create({
   image: {
     maxWidth: 245,
     resizeMode: "contain",
+    marginVertical:2,
     borderRadius: 5,
     //borderWidth: 3,
     //borderColor: colors.PrimaryBackground,
