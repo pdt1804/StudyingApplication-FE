@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 
-function CommentItems(props) {
+export default function CommentItems(props) {
   const { onPress } = props;
   const { commentID, dateComment, userComment, content, replies, files } =
     props.comment;
@@ -50,7 +50,6 @@ function CommentItems(props) {
     </TouchableOpacity>
   );
 }
-export default CommentItems;
 
 const styles = StyleSheet.create({
   container: {

@@ -19,6 +19,8 @@ import { WhiteSlideBottomUp } from "./MyModal";
 import IconRating from "./IconRating";
 import { ReviewItems, NewReviewInput } from "./Review";
 
+import Dropdown from "./MyDropdown";
+
 export {
   CommonButton,
   UIHeader,
@@ -42,4 +44,6 @@ export {
   IconRating,
   ReviewItems,
   NewReviewInput,
+  //
+  Dropdown,
 };

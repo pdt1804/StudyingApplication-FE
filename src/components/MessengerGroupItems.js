@@ -7,8 +7,9 @@ import { API_BASE_URL } from "../api/DomainAPI";
 
 export default function MessengerGroupItems(props) {
   let { content, dateSent, id, user } = props.item;
+  let files = props.files;
 
-  const {navigate} = props;
+  const { navigate } = props;
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
@@ -30,31 +31,37 @@ export default function MessengerGroupItems(props) {
 
   useEffect(() => {
     const fetchData = async () => {
+      //console.log(files[0].url)
+
       try {
-
-        //stompClient.subscribe("/user/public/queue/group/" + id, onReceived)
-
         setUsername(await AsyncStorage.getItem("username"));
         const response = await axios.get(
-          API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id
-        , {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
+          API_BASE_URL + "/api/v1/messagegroup/getSentUserInGroup?messID=" + id,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
         setAvatar(response.data.information.image);
         setSentUsername(response.data.userName);
 
-        const checkSender = await axios.get(API_BASE_URL + "/api/v1/information/ExtractBearerToken", {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        })
+        const checkSender = await axios.get(
+          API_BASE_URL + "/api/v1/information/ExtractBearerToken",
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + (await AsyncStorage.getItem("username")),
+            },
+          }
+        );
 
         setSender(checkSender.data);
+
       } catch (error) {
         console.error("Error fetching data:", error.message);
         setError("Error fetching data");
@@ -74,16 +81,17 @@ export default function MessengerGroupItems(props) {
   };
 
   const ShowProfile = async () => {
-    navigate("ShowProfile", { userReplied: user })
-  }
+    navigate("ShowProfile", { userReplied: user });
+  };
 
   return CheckIsSender() == false ? (
     <TouchableOpacity /** isSender = false --> avatar > message */ style={styles.container} onPress={ShowProfile}>
       <Image style={styles.avatar} source={{ uri: avatar }} />
-
       <View style={styles.mainTextView}>
         <View style={styles.leftView}>
-          <Text style={styles.subText}>{user.information.fulName} | {timeSent}</Text>
+          <Text style={styles.subText}>
+            {user.information.fulName} | {timeSent}
+          </Text>
         </View>
         <View style={styles.leftView}>
         <View>
@@ -112,7 +120,10 @@ export default function MessengerGroupItems(props) {
       </View>
     </TouchableOpacity>
   ) : (
-    <TouchableOpacity /** isSender = true --> message > avatar */ style={styles.container} onPress={ShowProfile}>
+    <TouchableOpacity
+      /** isSender = true --> message > avatar */ style={styles.container}
+      onPress={ShowProfile}
+    >
       <View style={styles.mainTextView}>
         <View style={styles.rightView}>
           <Text style={styles.subText}>{timeSent}</Text>
@@ -179,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
     paddingVertical: 7,
     paddingHorizontal: 7,
-    backgroundColor: 'rgb(231, 236, 242)',
+    backgroundColor: "rgb(231, 236, 242)",
     borderRadius: 10,
   },
   leftView: {

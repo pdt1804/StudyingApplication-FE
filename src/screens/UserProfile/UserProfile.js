@@ -15,6 +15,7 @@ import {
   RowSectionDisplay,
   RowSectionNavigate,
 } from "../../components";
+import { randomGenerateColor } from "../../utilities";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -164,36 +165,37 @@ export default function UserProfile(props) {
       <UIHeader title={"Hồ sơ"} />
 
       <ScrollView>
-        <View>
-          <View style={styles.profileView}>
-            <View>
-              <TouchableOpacity onPress={ShowPicture}>
-                <Image source={{ uri: image }} style={styles.profileImage} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={selectImage} style={styles.button}>
-                <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={styles.profileUsername}>{fulname}</Text>
-              <Text style={styles.profileDescription} numberOfLines={4}>
-                {description}
-              </Text>
-            </View>
+        <View style={styles.profileView}>
+          <View>
+            <TouchableOpacity onPress={ShowPicture}>
+              <Image source={{ uri: image }} style={styles.profileImage} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={selectImage} style={styles.button}>
+              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
+            </TouchableOpacity>
           </View>
+          <View>
+            <Text style={styles.profileUsername}>{fulname}</Text>
+            <Text style={styles.profileDescription} numberOfLines={4}>
+              {description}
+            </Text>
+          </View>
+        </View>
 
-          <RowSectionTitle
-            text={"Chủ đề yêu thích"}
-            styles={{ marginTop: 20 }}
-          />
+        <RowSectionTitle text={"Chủ đề yêu thích"} styles={{ marginTop: 20 }} />
 
-          <ScrollView contentContainerStyle={styles.topics_container}>
-            {topics.map((topicName, index) => (
-              <View style={styles.eachTopicBox} key={index}>
-                <Text style={styles.eachTopicBoxText}>{topicName}</Text>
-              </View>
-            ))}
-          </ScrollView>
+        <View style={styles.topics_container}>
+          {topics.map((topicName, index) => (
+            <View
+              style={[
+                styles.eachTopicBox,
+                { borderColor: randomGenerateColor() },
+              ]}
+              key={index}
+            >
+              <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+            </View>
+          ))}
         </View>
 
         <RowSectionTitle
@@ -283,9 +285,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginBottom: 5,
-    marginHorizontal: 3,
+    marginHorizontal: 2,
     borderRadius: 12,
-    borderWidth: 1,
+    borderWidth: 3,
     borderColor: colors.GrayContainer,
     backgroundColor: colors.GrayObjects,
   },

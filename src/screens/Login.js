@@ -10,10 +10,8 @@ import {
 import { images, icons, colors, fontSizes } from "../constants/index";
 import { CommonButton, Icon } from "../components";
 import { user_login } from "../api";
-import CryptoJS from "crypto-js";
 
 const Login = (props) => {
-  //navigation to/back
   const { navigate, goBack, push } = props.navigation;
 
   //Login component and function, use for api

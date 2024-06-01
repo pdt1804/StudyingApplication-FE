@@ -6,7 +6,8 @@ import { messenger_getSentUser, messenger_checkSender } from "../api";
 //import ListImage from "react-native-paper/lib/typescript/components/List/ListImage";
 
 function MessengerItems(props) {
-  let { content, dateSent, id, files, status } = props.item;
+  let { content, dateSent, id, status } = props.item;
+  const files = props.files
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1

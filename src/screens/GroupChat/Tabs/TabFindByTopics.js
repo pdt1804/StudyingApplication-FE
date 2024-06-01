@@ -11,101 +11,52 @@ import {
 } from "react-native";
 import TabFindByTopicsItems from "./TabFindByTopicsItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { SearchBarTransparent, Icon } from "../../../components";
-import { Dropdown } from "react-native-element-dropdown";
-import { groupStudying_getAllGroupByTopics, group_findGroupbyName, information_getAllTopics } from "../../../api";
+import { Dropdown } from "../../../components";
+import {
+  groupStudying_getAllGroupByTopics,
+  group_findGroupbyName,
+  information_getAllTopics,
+} from "../../../api";
 import { groupStudying_getAllGroupByTopic } from "../../../api/ReNewStyle/groupStudyingController";
-
 
 function TabFindByTopics(props) {
   const { navigate, goBack } = props.navigation;
   const [groups, setGroups] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const [listTopics, setListTopics] = useState([]);
 
   const [isDropBarFocus, setIsDropBarFocus] = useState(false);
 
   useEffect(() => {
-    fetchDataGroups();
-    const intervalId = setInterval(fetchDataGroups, 1000);
-    return () => clearInterval(intervalId);
-  }, [searchText]);
-
-  useEffect(() => {
     fetchDataTopics();
   }, []); // empty means run only once
-
-  const fetchDataGroups = async () => {
-    try {
-      if (searchText.length >= 1) {
-        const response = await group_findGroupbyName(searchText);
-        setGroups(response.data);
-        setListTopics(await information_getAllTopics());
-        //setFilteredList(listTopics.map((topic) => ({ label: topic.topicName, value: topic.topicName })))
-      } else {
-        setGroups([]);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Error fetching data");
-      setLoading(false);
-    }
-  };
 
   const fetchDataTopics = async () => {
     const topics = await information_getAllTopics();
     setListTopics(
       topics.map((topic) => ({
         label: topic.topicName,
-        value: topic.topicName,
+        value: topic.topicID,
       }))
     );
   };
 
   const selectTopic = async (item) => {
-    setSearchText(item.value);
     setIsDropBarFocus(false);
-    console.log(item._index)
-    const response = await groupStudying_getAllGroupByTopic((item._index + 1));
-    setGroups(response.data)
-    console.log(response.data)
-  }
+    const response = await groupStudying_getAllGroupByTopic(item.value);
+    setGroups(response.data);
+  };
 
   return (
     <View style={styles.container}>
       <Dropdown
-        style={[styles.dropdown, isDropBarFocus && { borderColor: "blue" }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
         data={listTopics}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isDropBarFocus ? "Select ritem" : "..."}
-        searchPlaceholder="Search..."
-        value={searchText}
-        onFocus={() => setIsDropBarFocus(true)}
-        onBlur={() => setIsDropBarFocus(false)}
-        onChange={(item) => {
-          selectTopic(item)
+        onSelect={(item) => {
+          selectTopic(item);
         }}
-        renderLeftIcon={() => (
-          <Icon
-            name={icons.searchIcon}
-            size={20}
-            color={isDropBarFocus ? "blue" : "black"}
-          />
-        )}
       />
-
-      <Text>{searchText}</Text>
 
       <ScrollView>
         {groups
-          .filter((eachGroup) =>
-            eachGroup.nameGroup.toLowerCase().includes(searchText.toLowerCase())
-          )
           .map((eachGroup) => (
             <TabFindByTopicsItems
               group={eachGroup}
