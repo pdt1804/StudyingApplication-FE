@@ -34,9 +34,13 @@ function MessengerBotItems(props) {
           },
         });
 
+        console.log(response.data.information.image)
+
         setResponse(response.data);
-        setImage(response.data.information.image);
+        await setImage(response.data.information.image);
         setSentUsername(response.data.userName);
+
+        console.log(image)
                 
       } catch (error) {
         console.error('Error fetching data:', error);

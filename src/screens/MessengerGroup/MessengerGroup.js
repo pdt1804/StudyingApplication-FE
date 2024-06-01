@@ -78,7 +78,7 @@ function MessengerGroup(props) {
   }, [props.userName]);
 
   const ShowGroupInfo = async () => {
-    navigate("GroupInfo");
+    navigate("GroupInfo", {id: await AsyncStorage.getItem('groupID')});
   };
 
   const goBackToGroupList = async () => {

@@ -76,7 +76,7 @@ function MessageBot(props) {
           ))}
         </ScrollView>
   
-        <EnterMessageChatBot/>
+        <EnterMessageChatBot fetchData={fetchData()}/>
       </SafeAreaView>
     </View>
   );
