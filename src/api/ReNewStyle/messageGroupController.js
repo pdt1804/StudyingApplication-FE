@@ -55,7 +55,7 @@ export const messagegroup_uploadImage = async (uri, name, type, width, height, m
     }
   );
 
-  alert("response status: " + response.status)
+  //alert("response status: " + response.status)
 
   return response.data;
 };

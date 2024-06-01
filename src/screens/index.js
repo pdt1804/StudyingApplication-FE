@@ -7,6 +7,7 @@ import ResetPassword from "./ResetPassword";
 import UserProfile from "./UserProfile/UserProfile";
 import SettingProfile from "./UserProfile/SettingProfile";
 import ResetPasswordInSetting from "./UserProfile/ResetPasswordInSetting";
+import GroupInfoForViewer from "./MessengerGroup/GroupInformationForViewer";
 
 import GroupChat from "./GroupChat/GroupChat";
 import MessengerGroup from "./MessengerGroup/MessengerGroup";
@@ -61,6 +62,7 @@ export {
   MessengerGroup,
   CreatePost,
   CreateNotification,
+  GroupInfoForViewer,
   ShowPost,
   ShowNotification,
   ResetPasswordInSetting,
