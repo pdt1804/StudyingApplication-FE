@@ -111,7 +111,7 @@ function TabFindByTopics(props) {
               group={eachGroup}
               key={eachGroup.groupID}
               onPress={() => {
-                navigate("GroupSuggestionInfo", { user: eachGroup });
+                navigate("GroupInfo", {id: eachGroup.groupID});
               }}
             />
           ))}

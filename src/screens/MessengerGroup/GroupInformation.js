@@ -46,6 +46,7 @@ const SubInfo = ({ icon, text }) => {
 function GroupInfo(props) {
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
+  const { id } = props.route.params
 
   const [group, setGroup] = useState("");
   const [username, setUsername] = useState(null);
@@ -71,9 +72,7 @@ function GroupInfo(props) {
 
   const fetchData = async () => {
     try {
-      const responseDataGroup = await groupStudying_findGroupbyId(
-        await AsyncStorage.getItem("groupID")
-      );
+      const responseDataGroup = await groupStudying_findGroupbyId(id);
       setGroup(responseDataGroup);
       setUsername(responseDataGroup.leaderOfGroup.userName);
       setExtractToken(await information_ExtractBearerToken());
