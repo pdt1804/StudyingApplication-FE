@@ -4,15 +4,11 @@ import { images, icons, colors, fontSizes } from "../constants";
 import Icon from "./MyIcon";
 
 // PHẢI CÓ dòng này khi dùng:
-//    const [modalVisible, setModalVisible] = useState(false);
-//    const renderContent--- = () => {
-//      return (<View/>)}
 /*
-<WhiteSlideBottomUp
-  title={"---"}
-  renderContent={renderContent---}
-  modalVisible={modalVisible}
-  setModalVisible={setModalVisible}
+<Dropdown
+  data={LIST_THAT_HAS_ONLY_lable_value}
+  selectedValue={ --- } //optional
+  onSelect={(item) => { --- }}
 />
 */
 export default function Dropdown({ data, selectedValue, onSelect }) {
@@ -40,13 +36,13 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={toggleDropdown}>
-          <Text style={styles.selectedText}>{selectedValue || 'Select'}</Text>
+          <Text style={styles.selectedText}>{selectedValue || '☆☆☆ Chọn 1 chủ đề ☆☆☆'}</Text>
         </TouchableOpacity>
         {isOpen && (
           <View style={styles.dropdown}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search..."
+              placeholder="Nhập tên Chủ Đề muốn tìm..."
               onChangeText={setSearchText}
             />
             <FlatList
@@ -70,6 +66,7 @@ export default function Dropdown({ data, selectedValue, onSelect }) {
       padding: 10,
     },
     selectedText: {
+      textAlign: 'center',
       fontSize: 16,
     },
     dropdown: {

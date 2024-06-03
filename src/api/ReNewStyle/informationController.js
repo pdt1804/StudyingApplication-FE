@@ -94,11 +94,11 @@ export const information_AddTopic = async (topics, infoID) => {
     }
   );
 
-  return response
+  return response;
 };
 
 export const information_RemoveTopic = async (topics, infoID) => {
-  console.log(topics)
+  console.log(topics);
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/information/RemoveTopic?topics=${topics}&infoID=${infoID}`,
     {},
@@ -109,7 +109,7 @@ export const information_RemoveTopic = async (topics, infoID) => {
       },
     }
   );
-  
+
   return response;
 };
 

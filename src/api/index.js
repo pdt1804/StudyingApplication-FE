@@ -72,9 +72,6 @@ import {
 import {
   messenger_getFriendID,
   messenger_loadMessageforUser,
-  messenger_getSentUser,
-  messenger_checkSender,
-  messenger_sendMessageForUser,
   messenger_loadMessageInGroup,
   messenger_receiveMessage,
   messenger_sendMessageForGroup,
@@ -263,9 +260,6 @@ export {
   //
   messenger_getFriendID,
   messenger_loadMessageforUser,
-  messenger_getSentUser,
-  messenger_checkSender,
-  messenger_sendMessageForUser,
   messenger_loadMessageInGroup,
   messenger_receiveMessage,
   messenger_sendMessageForGroup,

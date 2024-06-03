@@ -31,6 +31,7 @@ export const messageuser_getSentUser = async (messID) => {
     `${API_BASE_URL}/api/v1/messageUser/getSentUser?messID=${messID}`,
     {
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
@@ -72,7 +73,14 @@ export const messageuser_sendMessageForUser = async (
 };
 
 //single image
-export const messageuser_uploadImage = async (uri, name, type, width, height, messID) => {
+export const messageuser_uploadImage = async (
+  uri,
+  name,
+  type,
+  width,
+  height,
+  messID
+) => {
   // console.log(uri)
   // console.log(name)
   // console.log(type)
@@ -85,9 +93,8 @@ export const messageuser_uploadImage = async (uri, name, type, width, height, me
     type: type,
   });
   formData.append("messID", messID);
-  formData.append("width", width)
-  formData.append("height", height)
-  
+  formData.append("width", width);
+  formData.append("height", height);
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
@@ -105,20 +112,16 @@ export const messageuser_uploadImage = async (uri, name, type, width, height, me
   return response.data;
 };
 
-const generateRandomString = (length) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-};
-
 //multiple image
-export const messageuser_uploadMultipleImages = async (toUserName, uri, name, type) => {
-  console.log(uri)
-  console.log(name)
-  console.log(type)
+export const messageuser_uploadMultipleImages = async (
+  toUserName,
+  uri,
+  name,
+  type
+) => {
+  console.log(uri);
+  console.log(name);
+  console.log(type);
 
   const formData = new FormData();
   formData.append("file", {
@@ -128,7 +131,7 @@ export const messageuser_uploadMultipleImages = async (toUserName, uri, name, ty
   });
   formData.append("toUserName", toUserName);
 
-  alert("2")
+  alert("2");
 
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/messageUser/uploadImage`,
@@ -136,15 +139,14 @@ export const messageuser_uploadMultipleImages = async (toUserName, uri, name, ty
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        "Authorization": "Bearer " + (await AsyncStorage.getItem("username")),
+        Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
   );
 
-  alert(response.status)
+  alert(response.status);
   return response.data;
 };
-
 
 //chatbot
 export const messageuser_saveChatbotMessage = async (messContent) => {
