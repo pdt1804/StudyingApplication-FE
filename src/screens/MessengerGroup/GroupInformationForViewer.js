@@ -43,7 +43,7 @@ const SubInfo = ({ icon, text }) => {
   );
 };
 
-function GroupInfo(props) {
+function GroupInfoForViewer(props) {
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
   const { id } = props.route.params
@@ -249,9 +249,9 @@ function GroupInfo(props) {
             <TouchableOpacity onPress={handleShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={handelSelectImage} style={styles.button}>
+            {/* <TouchableOpacity onPress={handelSelectImage} style={styles.button}>
               <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View>
             <Text style={styles.profileUsername}>{nameGroup}</Text>
@@ -271,7 +271,7 @@ function GroupInfo(props) {
         </View>
       </View>
 
-      <NewReviewInput onSubmit={handleSubmitNewReview} />
+      {/* <NewReviewInput onSubmit={handleSubmitNewReview} /> */}
 
       <View style={styles.listReviewContainer}>
         <FlatList
@@ -283,7 +283,7 @@ function GroupInfo(props) {
     </View>
   );
 }
-export default GroupInfo;
+export default GroupInfoForViewer;
 
 const styles = StyleSheet.create({
   container: {

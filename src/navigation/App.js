@@ -15,6 +15,7 @@ import {
   ShowPost,
   ShowNotification,
   ResetPasswordInSetting,
+  GroupInfoForViewer,
   ShowProfileFriend,
   ShowProfileRequest,
   ShowProfileStranger,
@@ -62,6 +63,7 @@ function App(props) {
         <Stack.Screen name="GroupSuggestionInfo" component={GroupSuggestionInfo} />
         <Stack.Screen name="ShowPicture" component={ShowPicture} />
         <Stack.Screen name="ShowProfile" component={ShowProfile} />
+        <Stack.Screen name="GroupInfoForViewer" component={GroupInfoForViewer} />
         
         <Stack.Screen name="CreatePost" component={CreatePost} />
         <Stack.Screen name="CreateNotification" component={CreateNotification} />

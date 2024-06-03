@@ -26,7 +26,7 @@ function TabMessenger(props) {
       const chatData = await messenger_loadMessageInGroup();
       setChatHistory(chatData);
 
-      console.log(chatData[5].files[0].url)
+      //console.log(chatData[5].files[0].url)
 
     };
     fetchData();

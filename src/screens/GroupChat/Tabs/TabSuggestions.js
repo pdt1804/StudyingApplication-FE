@@ -38,16 +38,26 @@ function TabSuggestions(props) {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
+    //const intervalId = setInterval(fetchData, 1000);
     // // Hủy interval khi component bị unmounted
-    return () => clearInterval(intervalId);
+    //return () => clearInterval(intervalId);
   }, [searchText]);
+
+  const findGroupByText = async (text) => {
+    console.log(text)
+    if (text.length >= 1) {
+      const response = await group_findGroupbyName(text);
+      setGroups(response.data);
+    } else {
+      setGroups([]);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <SearchBarTransparent
         searchBarOnChangeText={(text) => {
-          setSearchText(text);
+          findGroupByText(text);
         }}
       />
 
@@ -61,7 +71,7 @@ function TabSuggestions(props) {
               group={eachGroup}
               key={eachGroup.groupID}
               onPress={() => {
-                navigate("GroupSuggestionInfo", { user: eachGroup });
+                navigate("GroupInfoForViewer", {id: eachGroup.groupID});
               }}
             />
           ))}

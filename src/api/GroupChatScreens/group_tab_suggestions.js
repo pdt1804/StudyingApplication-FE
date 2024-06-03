@@ -7,10 +7,12 @@ export const group_findGroupbyName = async (nameGroup) => {
     `${API_BASE_URL}/api/v1/groupStudying/findGroupbyName?nameGroup=${nameGroup}`,
     {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
       },
     }
   );
+
+  //alert(response.data)
   return response;
 };
