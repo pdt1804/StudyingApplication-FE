@@ -11,7 +11,7 @@ import {
 import { images, icons, colors, fontSize } from "../constants";
 import { API_BASE_URL } from "../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+//import { GoogleGenerativeAI } from "@google/generative-ai";
 
 function EnterMessageChatBot({fetchData}) {
 

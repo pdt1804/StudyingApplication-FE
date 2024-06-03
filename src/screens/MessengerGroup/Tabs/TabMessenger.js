@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { EnterMessageBar, MessengerGroupItems } from "../../../components";
+import React, { useState, useEffect } from "react";
+import { View, FlatList, StyleSheet } from "react-native";
+import { EnterMessageBar, MessengerItems } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../../../api/DomainAPI";
 import SockJS from "sockjs-client";
@@ -14,23 +14,22 @@ function TabMessenger(props) {
   const { navigate } = props.navigation;
 
   const [chatHistory, setChatHistory] = useState([]);
-  const [userName, setUserName] = useState(null);
-
   const [socket, setSocket] = useState(new SockJS(API_BASE_URL + "/ws"));
+
   let stompClient = over(socket);
 
+  const fetchData = async () => {
+    stompClient.connect({}, onConnected, onError);
+    const chatData = await messenger_loadMessageInGroup();
+    setChatHistory(chatData);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setUserName((await AsyncStorage.getItem("username")).toString());
-      stompClient.connect({}, onConnected, onError);
-      const chatData = await messenger_loadMessageInGroup();
-      setChatHistory(chatData);
-
-      //console.log(chatData[5].files[0].url)
-
-    };
-    fetchData();
-  }, [props.userName, userName]);
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [props.userName]);
 
   const onConnected = async () => {
     stompClient.subscribe(
@@ -43,29 +42,26 @@ function TabMessenger(props) {
     alert("Error");
   };
 
-  const onReceivedMessage = async (message) => {
+  const onReceivedMessage = async () => {
     const chatData = await messenger_receiveMessage();
     setChatHistory(chatData);
   };
 
-  const scrollViewRef = useRef();
-  useEffect(() => {
-    scrollViewRef.current.scrollToEnd({ animated: false });
-  }, [chatHistory]);
-
   return (
     <View style={styles.displayView}>
-      <ScrollView ref={scrollViewRef}>
-        {chatHistory.map((eachItem) => (
-          <MessengerGroupItems
-            item={eachItem}
-            files={eachItem.files}
-            key={eachItem.id}
+      <FlatList
+        data={chatHistory}
+        keyExtractor={(item) => item.id}
+        inverted
+        renderItem={({ item }) => (
+          <MessengerItems
+            kind={"group"}
+            item={item}
+            files={item.files}
             navigate={navigate}
-            stompClient={stompClient}
           />
-        ))}
-      </ScrollView>
+        )}
+      />
 
       <EnterMessageBar stompClient={stompClient} actionType={"group"} />
     </View>

@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../constants";
 import {
   messageuser_getSentUser,
+  messagegroup_getSentUserInGroup,
   information_ExtractBearerToken as messageuser_checkSender,
 } from "../api";
 
 import { LoadingFullScreen } from "./MyLoadingScreen";
 
-function MessengerItems(props) {
-  let { content, dateSent, id, status, files } = props.item;
+export default function MessengerItems(props) {
+  const { content, dateSent, id, status } = props.item;
+  const files = props.files;
+
+  //Dùng kind để phân biệt giữa chat-user và chat-group
+  //chat-user: "user" hoặc bỏ trống
+  //chat-group: "group"
+  const kind = props.kind;
+  const user = kind === "group" ? props.item.user : {information: {fulName: ""}};
+  const navigate = kind === "group" ? props.navigate : null;
 
   const date = new Date(dateSent);
   const timeSent = `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${
     date.getMonth() + 1
   }`;
+
+  const blueText = kind === "group" ? `${user.information.fulName} | ` + timeSent : timeSent
+
 
   const [isLoading, setIsLoading] = useState(true);
   const [avatar, setAvatar] = useState(null);
@@ -35,10 +47,19 @@ function MessengerItems(props) {
     return sender == sentUsername ? styles.sender : styles.notSender;
   };
 
+  const ShowProfile =
+    kind === "group"
+      ? async () => {
+          navigate("ShowProfile", { userReplied: user });
+        }
+      : () => alert("Chức năng không khả dụng");
+
   const fetchData = async () => {
     try {
-      const responseData = await messageuser_getSentUser(id);
-      //
+      const responseData =
+        kind === "group"
+          ? await messagegroup_getSentUserInGroup(id)
+          : await messageuser_getSentUser(id);
       setAvatar(responseData.information.image);
       setSentUsername(responseData.userName);
       //
@@ -60,11 +81,11 @@ function MessengerItems(props) {
   }
 
   return content != "" && files.length == 0 ? ( //Có dòng này để các tin nhắn kiểu ko có text cũng ko có hình sẽ ko hiển thị
-    <View style={[styles.container, getMessageStyle()]}>
+    <TouchableOpacity style={[styles.container, getMessageStyle()]} onPress={ShowProfile}>
       <Image style={styles.avatarContainer} source={{ uri: avatar }} />
 
       <View style={styles.messageContainer}>
-        <Text style={[styles.timeSent, getMessageStyle()]}>{timeSent}</Text>
+        <Text style={[styles.timeSent, getMessageStyle()]}>{blueText}</Text>
         <View style={[styles.content, getMessageStyle()]}>
           {content != "" ? (
             <Text style={styles.message}>{content}</Text>
@@ -91,12 +112,11 @@ function MessengerItems(props) {
           )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   ) : (
     <View />
   );
 }
-export default MessengerItems;
 
 const styles = StyleSheet.create({
   container: {

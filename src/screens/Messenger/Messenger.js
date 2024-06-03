@@ -12,7 +12,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, EnterMessageBar, MessengerItems, LoadingFullScreen } from "../../components";
+import {
+  UIHeader,
+  EnterMessageBar,
+  MessengerItems,
+  LoadingFullScreen,
+} from "../../components";
 import { API_BASE_URL } from "../../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SockJS from "sockjs-client";
@@ -35,7 +40,6 @@ export default function Messenger(props) {
       stompClient.connect({}, onConnected, onError);
       //--
       const response = await messenger_loadMessageforUser(friendUsername);
-      console.log(response.data)
       setChatHistory(response.data);
       //--
       setIsLoading(false);
@@ -80,9 +84,7 @@ export default function Messenger(props) {
   };
 
   if (isLoading) {
-    return (
-      <LoadingFullScreen/>
-    );
+    return <LoadingFullScreen />;
   }
 
   return (
@@ -103,7 +105,9 @@ export default function Messenger(props) {
           data={chatHistory}
           keyExtractor={(item) => item.id}
           inverted
-          renderItem={({ item }) => ( <MessengerItems item={item} files={item.files} /> )}
+          renderItem={({ item }) => (
+            <MessengerItems item={item} files={item.files} />
+          )}
         />
 
         <EnterMessageBar
