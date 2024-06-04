@@ -11,7 +11,9 @@ import { LoadingFullScreen } from "./MyLoadingScreen";
 
 export default function MessengerItems(props) {
   const { content, dateSent, id, status } = props.item;
-  const files = props.files;
+  const files = props.item.files;
+  console.log("---------------------")
+  console.log(files)
 
   //Dùng kind để phân biệt giữa chat-user và chat-group
   //chat-user: "user" hoặc bỏ trống
@@ -80,7 +82,7 @@ export default function MessengerItems(props) {
     return <LoadingFullScreen />;
   }
 
-  return content != "" && files.length == 0 ? ( //Có dòng này để các tin nhắn kiểu ko có text cũng ko có hình sẽ ko hiển thị
+  return true ? ( //Có dòng này để các tin nhắn kiểu ko có text cũng ko có hình sẽ ko hiển thị
     <TouchableOpacity style={[styles.container, getMessageStyle()]} onPress={ShowProfile}>
       <Image style={styles.avatarContainer} source={{ uri: avatar }} />
 

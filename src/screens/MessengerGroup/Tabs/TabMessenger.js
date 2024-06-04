@@ -22,13 +22,16 @@ function TabMessenger(props) {
     stompClient.connect({}, onConnected, onError);
     const chatData = await messenger_loadMessageInGroup();
     setChatHistory(chatData);
+    // console.log("-----------------------------------------------------------------")
+    // console.log(chatData.fi)
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 1000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(() => {
+    //   fetchData();
+    // }, 1000);
+    // return () => clearInterval(intervalId);
+    fetchData();
   }, [props.userName]);
 
   const onConnected = async () => {
