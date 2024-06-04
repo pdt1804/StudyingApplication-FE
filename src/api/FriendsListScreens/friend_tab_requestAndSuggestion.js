@@ -49,20 +49,6 @@ export const friend_getAllInvitationFriendList = async () => {
 //-----------
 // items
 
-export const friend_addFriend = async (receivedUserName) => {
-  const response = await axios.post(
-    `${API_BASE_URL}/api/v1/friendship/addFriend`,
-    { receivedUserName: receivedUserName },
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + (await AsyncStorage.getItem('username')),
-      },
-    }
-  );
-  return response;
-};
-
 export const friend_undoInvitationFriend = async (receivedUserName) => {
   const response = await axios.post(
     `${API_BASE_URL}/api/v1/friendship/undoInvitationFriend`,

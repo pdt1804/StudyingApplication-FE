@@ -9,100 +9,87 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { UIHeader, CommonButton, DoubleCommonButton } from "../../../components";
-import { API_BASE_URL } from "../../../api/DomainAPI";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  UIHeader,
+  RowSectionTitle,
+  SubInfoHorizontal,
+  FloatingButtonSingle,
+  FloatingButtonDouble,
+} from "../../../components";
+import { randomGenerateColor } from "../../../utilities";
 
-function GroupOption(props) {
-  const { text } = props;
-
-  return (
-    <View style={styles.groupOptionsView}>
-      <Text style={styles.groupOptionsText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionViewOnly(props) {
-  const { icon, text } = props;
-
-  return (
-    <View style={styles.eachOptionView}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionNavigate(props) {
-  const { icon, text, onPress } = props;
-
-  return (
-    <TouchableOpacity style={styles.eachOptionView} onPress={onPress}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-      <View style={{ flex: 1 }} />
-      <Image source={icons.chevronRightIcon} style={styles.eachOptionIcon} />
-    </TouchableOpacity>
-  );
-}
-
-const generateColor = () => {
-  const randomColor = Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0");
-  return `#${randomColor}`;
-};
-
-const ShowProfile = (props) => {
-  
-  let { userName, email } = props.route.params.userReplied;
-  let { image, fulName, phoneNumber, yearOfBirth, gender } = props.route.params.userReplied.information;
-
-  if (image == null)
-  {
-    image = "https://static.vecteezy.com/system/resources/previews/019/243/593/original/illustration-realistic-cute-blue-person-icon-3d-creative-isolated-on-background-vector.jpg";
-  }
-
-  //navigation
+export default ShowProfile = (props) => {
   const { navigate, goBack } = props.navigation;
+  let { image, fulName, description, yearOfBirth, gender, topics } =
+    props.route.params.userReplied.information;
 
-  //handle button here  
-  const handleButton = async () => {}
+  let topicNames = topics.map((item) => item.topicName);
 
-  const AddFriend = async () => {
-
-    const response = await axios.post(API_BASE_URL + "/api/v1/friendship/addFriend?sentUserName=" + await AsyncStorage.getItem('username') + "&receivedUserName=" + userName)
-    goBack();
-
+  if (image == null) {
+    image = images.blankAvatarForRegistration;
   }
-  
-  const ShowPicture = () => {
-    navigate("ShowPicture", {file: image})
-  }
+
+  //handle button here
+  const handleNavigateChatUser = () => {
+    alert("tính năng không khả dụng");
+  };
+
+  const handleShowPicture = () => {
+    alert("tính năng không khả dụng");
+    //navigate("ShowPicture", {file: image})
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View /* the top color */ style={styles.colorView} />
+        <View style={styles.colorView} />
         <View style={styles.mainView}>
-          <View /* Profile picture */ style={styles.profileView}>
-            <TouchableOpacity style={styles.profileView} onPress={ShowPicture}>
+          <View style={styles.profileView}>
+            <TouchableOpacity onPress={handleShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
-              <Text style={styles.profileUsername}>{fulName}</Text>
             </TouchableOpacity>
+            <Text style={styles.profileUsername}>{fulName}</Text>
+            <Text style={styles.description}>{description}</Text>
+            <View style={styles.userInfoContainer}>
+              <SubInfoHorizontal
+                icon={icons.genderEqualityIcon}
+                title={"Giới tính"}
+                text={gender}
+              />
+              <SubInfoHorizontal
+                icon={icons.birthdayCakeIcon}
+                title={"Năm sinh"}
+                text={yearOfBirth}
+              />
+            </View>
+
+            <RowSectionTitle
+              text={"Chủ đề yêu thích"}
+              styles={{ marginTop: 20 }}
+            />
+
+            <View style={styles.topics_container}>
+              {topicNames.map((topicName, index) => (
+                <View
+                  style={[
+                    styles.eachTopicBox,
+                    { borderColor: randomGenerateColor() },
+                  ]}
+                  key={index}
+                >
+                  <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+                </View>
+              ))}
+            </View>
           </View>
-
-          <GroupOption text={"Thông tin tài khoản"} />
-
-          <EachOptionViewOnly icon={icons.phoneIcon} text={"Số điện thoại: " + (phoneNumber == 0 ? "chưa cập nhật" : (0 + phoneNumber))} />
-          <EachOptionViewOnly icon={icons.emailIcon} text={"Email: " + (email != null ? email : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={icons.personIcon} text={"Giới tính: " + (gender != null ? gender : "chưa cập nhật")} />
-          <EachOptionViewOnly icon={icons.documentBlackIcon} text={"Năm sinh: " + (yearOfBirth == 0 ? "chưa cập nhật" : yearOfBirth)} />
-
         </View>
       </ScrollView>
+
+      <FloatingButtonSingle
+        icon={icons.activeChatMessageIcon}
+        text={"Nhắn tin"}
+        onPress={handleNavigateChatUser}
+      />
 
       <UIHeader
         title={null}
@@ -118,71 +105,77 @@ const ShowProfile = (props) => {
     </View>
   );
 };
-export default ShowProfile;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.backgroundWhite,
+    backgroundColor: colors.PrimaryContainer,
   },
+  //
   UIHeaderMainStyle: {
     top: 0,
     position: "absolute",
     backgroundColor: null,
   },
   UIHeaderIconStyle: { tintColor: colors.inactive },
-  mainView: {
-    flex: 1,
-    marginTop: 290,
-  },
+  //
   colorView: {
-    height: 400,
+    height: 275,
     top: 0,
     left: 0,
     right: 0,
     position: "absolute",
-    backgroundColor: generateColor(),
+    backgroundColor: randomGenerateColor(),
+  },
+  mainView: {
+    marginTop: 190,
   },
   profileView: {
-    height: 200,
     alignItems: "center",
+    marginBottom: 15,
   },
   profileImage: {
     width: 140,
     height: 140,
     resizeMode: "cover",
-    margin: 15,
-    borderRadius: 90,
-    borderColor: "white",
+    borderRadius: 75,
     borderWidth: 5,
+    borderColor: colors.PrimaryContainer,
   },
   profileUsername: {
-    color: "black",
-    fontSize: fontSizes.h6,
+    color: colors.PrimaryOnContainerAndFixed,
+    fontSize: fontSizes.h4,
+    fontWeight: "bold",
   },
-  groupOptionsView: {
-    height: 50,
-    marginStart: 12,
-    justifyContent: "center",
-  },
-  groupOptionsText: {
-    fontSize: fontSizes.h7,
-    color: colors.noImportantText,
-    paddingStart: 10,
-  },
-  eachOptionView: {
+  //
+  userInfoContainer: {
     flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
+    marginTop: 5,
   },
-  eachOptionIcon: {
-    width: 20,
-    height: 20,
-    marginStart: 10,
+  description: {
+    color: colors.PrimaryOnContainerAndFixed,
+    fontSize: fontSizes.h7,
+    marginVertical: 10,
   },
-  eachOptionText: {
-    fontSize: fontSizes.h6,
-    color: "black",
-    paddingStart: 15,
+  //
+  topics_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  eachTopicBox: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 5,
+    marginHorizontal: 2,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  eachTopicBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h7,
   },
 });

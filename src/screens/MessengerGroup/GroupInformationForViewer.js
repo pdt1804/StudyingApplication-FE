@@ -15,12 +15,11 @@ import {
 import { images, icons, colors, fontSizes } from "../../constants";
 import {
   UIHeader,
-  RowSectionTitle,
-  RowSectionNavigate,
   ReviewItems,
   NewReviewInput,
+  ReviewFinalViewOnly,
   Icon,
-  WhiteSlideBottomUp,
+  SubInfoVertical,
 } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
@@ -34,26 +33,12 @@ import {
   review_createReview,
 } from "../../api";
 
-const SubInfo = ({ icon, text }) => {
-  return (
-    <View style={styles.subInfoContainer}>
-      <Icon name={icon} size={25} color={colors.GrayOnContainerAndFixed} />
-      <Text style={styles.subInfoText}>{text}</Text>
-    </View>
-  );
-};
-
 function GroupInfoForViewer(props) {
   //navigation to/back
   const { navigate, goBack, push } = props.navigation;
-  const { id } = props.route.params
+  const { id } = props.route.params;
 
-  const [group, setGroup] = useState("");
-  const [username, setUsername] = useState(null);
-  const [extractToken, setExtractToken] = useState(null);
   const [topics, setTopics] = useState([]);
-
-  const [groupID, setGroupID] = useState(null);
   const [image, setImage] = useState(null);
   const [nameGroup, setNameGroup] = useState(null);
   const [leaderOfGroup, setLeaderOfGroup] = useState("");
@@ -61,9 +46,6 @@ function GroupInfoForViewer(props) {
   const [dateCreated, setDateCreated] = useState("");
 
   const [reviews, setReviews] = useState([]);
-  const [checkReviewed, setCheckReviewed] = useState(true);
-
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -73,11 +55,6 @@ function GroupInfoForViewer(props) {
   const fetchData = async () => {
     try {
       const responseDataGroup = await groupStudying_findGroupbyId(id);
-      setGroup(responseDataGroup);
-      setUsername(responseDataGroup.leaderOfGroup.userName);
-      setExtractToken(await information_ExtractBearerToken());
-
-      setGroupID(responseDataGroup.groupID);
       setImage(responseDataGroup.image);
       setNameGroup(responseDataGroup.nameGroup);
       setLeaderOfGroup(responseDataGroup.leaderOfGroup.fulName);
@@ -93,10 +70,6 @@ function GroupInfoForViewer(props) {
       );
       setReviews(responseDataReviews);
 
-      setCheckReviewed(
-        await review_checkUserReview(await AsyncStorage.getItem("groupID"))
-      );
-
       setTopics(responseDataGroup.topics.map((item) => item.topicName));
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -110,137 +83,18 @@ function GroupInfoForViewer(props) {
     }
   };
 
-  const handleLeaveGroup = async () => {
-    try {
-      setModalVisible(false);
-      const isCurrentUserLeader = username === extractToken;
-      if (isCurrentUserLeader && numberOfMembers > 1) {
-        alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
-        return; // Exit function early if leader needs to change
-      }
-      const response = await groupStudying_deleteGroup(group.groupID);
-      if (response.status === 200) {
-        //await AsyncStorage.removeItem('groupID');
-        navigate("MainBottomTab", { tabName: "GroupChat" });
-      }
-    } catch (error) {
-      console.error("Error leaving group:", error);
-    }
-  };
-
-  const handelSelectImage = async () => {
-    if (username == extractToken) {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.canceled) {
-        setImage(result.assets[0].uri.toString());
-        try {
-          var imagePath = result.assets[0].uri.toString();
-          handleUploadImage(imagePath);
-        } catch (error) {
-          console.error("Error uploading image:", error);
-        }
-      }
-    } else {
-      alert("Bạn không phải trưởng nhóm.");
-    }
-  };
-
-  const handleUploadImage = async (uri) => {
-    groupStudying_changeAvatarGroup(uri, groupID);
-  };
-
-  const handleChangeInformationGroup = async () => {
-    if (username == extractToken) {
-      setModalVisible(false);
-      navigate("GroupInformationDetail", { group: group });
-    } else {
-      alert("Bạn không phải trưởng nhóm.");
-    }
-  };
-
-  const handleMembersInGroup = async () => {
-    if (username == extractToken) {
-      setModalVisible(false);
-      navigate("MembersInGroup");
-    } else {
-      alert("Bạn không phải trưởng nhóm.");
-    }
-  };
-
-  const handleAddMembers = async () => {
-    if (username == extractToken) {
-      setModalVisible(false);
-      navigate("AddMember");
-    } else {
-      alert("Bạn không phải trưởng nhóm.");
-    }
-  };
-
   const handleShowPicture = () => {
     navigate("ShowPicture", { file: image });
-  };
-
-  const handleSubmitNewReview = (newReviewContent, newStarRatingPoint) => {
-    checkReviewed
-      ? alert("bạn đã review rồi")
-      : (alert("review thành công"),
-        review_createReview(groupID, newStarRatingPoint, newReviewContent));
-  };
-
-  const renderContentCreateGroup = () => {
-    return (
-      <View>
-        <RowSectionNavigate
-          icon={icons.personIcon}
-          text={"Đổi thông tin nhóm"}
-          onPress={handleChangeInformationGroup}
-        />
-
-        <RowSectionNavigate
-          icon={icons.keyIcon}
-          text={"Thêm thành viên"}
-          onPress={handleAddMembers}
-        />
-
-        <RowSectionNavigate
-          icon={icons.keyIcon}
-          text={"Danh sách thành viên"}
-          onPress={handleMembersInGroup}
-        />
-        <RowSectionNavigate
-          icon={icons.exportIcon}
-          text={"Rời nhóm"}
-          onPress={handleLeaveGroup}
-        />
-      </View>
-    );
   };
 
   return (
     <View style={styles.container}>
       <UIHeader
-        title={"Thiết lập"}
+        title={"Xem nhóm"}
         leftIconName={icons.backIcon}
-        rightIconName={icons.menuIcon}
         onPressLeftIcon={() => {
           goBack();
         }}
-        onPressRightIcon={() => {
-          setModalVisible(true);
-        }}
-      />
-
-      <WhiteSlideBottomUp
-        title={"Cài đặt nhóm"}
-        renderContent={renderContentCreateGroup}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        style={{ marginTop: "20%" }}
       />
 
       <View>
@@ -249,16 +103,13 @@ function GroupInfoForViewer(props) {
             <TouchableOpacity onPress={handleShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={handelSelectImage} style={styles.button}>
-              <Text style={styles.buttonText}>Thay đổi ảnh</Text>
-            </TouchableOpacity> */}
           </View>
           <View>
             <Text style={styles.profileUsername}>{nameGroup}</Text>
             <View style={styles.profileDescription}>
-              <SubInfo icon={icons.leaderIcon} text={leaderOfGroup} />
-              <SubInfo icon={icons.groupIcon} text={numberOfMembers} />
-              <SubInfo icon={icons.calendarIcon} text={dateCreated} />
+              <SubInfoVertical icon={icons.leaderIcon} text={leaderOfGroup} />
+              <SubInfoVertical icon={icons.groupIcon} text={numberOfMembers} />
+              <SubInfoVertical icon={icons.calendarIcon} text={dateCreated} />
             </View>
             <View style={styles.topics_container}>
               {topics.map((topicName, index) => (
@@ -271,7 +122,8 @@ function GroupInfoForViewer(props) {
         </View>
       </View>
 
-      {/* <NewReviewInput onSubmit={handleSubmitNewReview} /> */}
+      {/* điểm rating là ở dòng này nha, chỗ số 4.4 á */}
+      <ReviewFinalViewOnly currentRatingPoint={4.4} />
 
       <View style={styles.listReviewContainer}>
         <FlatList

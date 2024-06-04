@@ -58,13 +58,7 @@ function TabSuggestions(props) {
             invitation={item}
             onPress={() => {
               navigate("ShowProfileStranger", {
-                userName: item.userName,
-                image: item.information.image,
-                fulName: item.information.fulName,
-                phoneNumber: item.information.phoneNumber,
-                gender: item.information.gender,
-                yearOfBirth: item.information.yearOfBirth,
-                email: item.email,
+                user: item
               });
             }}
           />

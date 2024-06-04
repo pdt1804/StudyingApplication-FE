@@ -10,13 +10,15 @@ import {
   RowSectionDisplay,
   RowSectionNavigate,
 } from "./RowSection";
+import { SubInfoVertical, SubInfoHorizontal } from "./SubInfo";
 import { TextInputMediumIcon, TextInputTransparent } from "./MyInput";
 import { SubjectBox, ContentBox } from "./MySubjectAndContentBox";
 import { SearchBarAndButton, SearchBarTransparent } from "./MySearchBars";
 import { WhiteSlideBottomUp } from "./MyModal";
+import { FloatingButtonSingle, FloatingButtonDouble } from "./MyFloatingButton";
 
 import IconRating from "./IconRating";
-import { ReviewItems, NewReviewInput } from "./Review";
+import { ReviewItems, NewReviewInput, ReviewFinalViewOnly } from "./Review";
 
 import Dropdown from "./MyDropdown";
 
@@ -33,6 +35,8 @@ export {
   RowSectionTitle,
   RowSectionDisplay,
   RowSectionNavigate,
+  SubInfoVertical,
+  SubInfoHorizontal,
   TextInputMediumIcon,
   TextInputTransparent,
   SubjectBox,
@@ -40,10 +44,13 @@ export {
   SearchBarAndButton,
   SearchBarTransparent,
   WhiteSlideBottomUp,
+  FloatingButtonSingle,
+  FloatingButtonDouble,
   //
   IconRating,
   ReviewItems,
   NewReviewInput,
+  ReviewFinalViewOnly,
   //
   Dropdown,
   //

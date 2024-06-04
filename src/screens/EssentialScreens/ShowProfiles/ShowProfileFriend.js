@@ -9,175 +9,115 @@ import {
   StyleSheet,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { UIHeader, CommonButton } from "../../../components";
-import axios from "axios";
-import { API_BASE_URL } from "../../../api/DomainAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  UIHeader,
+  RowSectionTitle,
+  SubInfoHorizontal,
+  FloatingButtonSingle,
+  FloatingButtonDouble,
+} from "../../../components";
+import { randomGenerateColor } from "../../../utilities";
+import { information_GetUser, friendship_deleteFriend } from "../../../api";
 
-function GroupOption(props) {
-  const { text } = props;
-
-  return (
-    <View style={styles.groupOptionsView}>
-      <Text style={styles.groupOptionsText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionViewOnly(props) {
-  const { icon, text } = props;
-
-  return (
-    <View style={styles.eachOptionView}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-    </View>
-  );
-}
-
-function EachOptionNavigate(props) {
-  const { icon, text, onPress } = props;
-
-  return (
-    <TouchableOpacity style={styles.eachOptionView} onPress={onPress}>
-      <Image source={icon} style={styles.eachOptionIcon} />
-      <Text style={styles.eachOptionText}>{text}</Text>
-      <View style={{ flex: 1 }} />
-      <Image source={icons.chevronRightIcon} style={styles.eachOptionIcon} />
-    </TouchableOpacity>
-  );
-}
-
-const generateColor = () => {
-  const randomColor = Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0");
-  return `#${randomColor}`;
-};
-
-const ShowProfileFriend = (props) => {
+export default ShowProfileFriend = (props) => {
   let { friendUsername } = props.route.params;
 
   //navigation
   const { navigate, goBack } = props.navigation;
 
-  const [fulName, setFulName] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [gender, setGender] = useState("")
-  const [email, setEmail] = useState("")
-  const [yearOfBirth, setYearOfBirth] = useState("")
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(images.blankAvatarForRegistration);
+  const [fulName, setFulName] = useState("Tên người dùng");
+  const [description, setDescription] = useState("Hãy mô tả về bạn...");
+  const [yearOfBirth, setYearOfBirth] = useState("0000");
+  const [gender, setGender] = useState("Không xác định");
+  //const [topics, setTopics] = useState([]);
+  const [topicNames, setTopicNames] = useState([]);
 
-
+  const fetchData = async () => {
+    try {
+      const responseData = await information_GetUser(friendUsername);
+      const userInfo = responseData.information;
+      setImage(userInfo.image);
+      setFulName(userInfo.fulName);
+      setDescription(userInfo.description);
+      setYearOfBirth(userInfo.yearOfBirth);
+      setGender(userInfo.gender);
+      //setTopics(userInfo.topics)
+      setTopicNames(userInfo.topics.map((item) => item.topicName));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const response = await axios.get(API_BASE_URL + "/api/v1/information/GetUser?userName=" + friendUsername, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        });
-
-        setFulName(response.data.information.fulName);
-        setImage(response.data.information.image)
-
-        if (response.data.email == null)
-        {
-          setEmail('chưa cập nhật');
-        }
-        else
-        {
-          setEmail(response.data.email);
-        }
-
-        if (response.data.information.phoneNumber == 0)
-        {
-          setPhoneNumber('chưa cập nhật')
-        }
-        else
-        {
-          setPhoneNumber("0"+response.data.information.phoneNumber);
-        }
-
-        if (response.data.information.gender == null)
-        {
-          setGender('chưa cập nhật')
-        }
-        else
-        {
-          setGender("0"+response.data.information.gender);
-        }
-
-        if (response.data.information.yearOfBirth == 0)
-        {
-          setYearOfBirth('chưa cập nhật')
-        }
-        else
-        {
-          setYearOfBirth(response.data.information.yearOfBirth);
-        }
-                
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [props.userName]);
 
-
-  //handle button here  
-  const DeleteFriend = async () => {
-
-    const response = await axios.delete(API_BASE_URL + "/api/v1/friendship/deleteFriend/" + friendUsername, {
-      withCredentials: true,
-      headers: {
-        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-      },
-    })
-    
-    if (response.status)
-    {
-      alert('Xoá bạn thành công')
-      navigate('MainBottomTab', {tabName: "Friends"})
+  //handle button here
+  const handleDeleteFriend = async () => {
+    const response = friendship_deleteFriend(friendUsername);
+    if (response.status) {
+      alert("Xoá bạn thành công");
+      navigate("MainBottomTab", { tabName: "Friends" });
     }
+  };
 
-  }
-
-  const ShowPicture = () => {
-    navigate("ShowPicture", {file: image})
-  }
+  const handleShowPicture = () => {
+    alert("tính năng không khả dụng");
+    //navigate("ShowPicture", {file: image})
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View /* the top color */ style={styles.colorView} />
+        <View style={styles.colorView} />
         <View style={styles.mainView}>
-          <View /* Profile picture */ style={styles.profileView}>
-            <TouchableOpacity style={styles.profileView} onPress={ShowPicture}>
+          <View style={styles.profileView}>
+            <TouchableOpacity onPress={handleShowPicture}>
               <Image source={{ uri: image }} style={styles.profileImage} />
-              <Text style={styles.profileUsername}>{fulName}</Text>
             </TouchableOpacity>
+            <Text style={styles.profileUsername}>{fulName}</Text>
+            <Text style={styles.description}>{description}</Text>
+            <View style={styles.userInfoContainer}>
+              <SubInfoHorizontal
+                icon={icons.genderEqualityIcon}
+                title={"Giới tính"}
+                text={gender}
+              />
+              <SubInfoHorizontal
+                icon={icons.birthdayCakeIcon}
+                title={"Năm sinh"}
+                text={yearOfBirth}
+              />
+            </View>
+
+            <RowSectionTitle
+              text={"Chủ đề yêu thích"}
+              styles={{ marginTop: 20 }}
+            />
+
+            <View style={styles.topics_container}>
+              {topicNames.map((topicName, index) => (
+                <View
+                  style={[
+                    styles.eachTopicBox,
+                    { borderColor: randomGenerateColor() },
+                  ]}
+                  key={index}
+                >
+                  <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+                </View>
+              ))}
+            </View>
           </View>
-
-          <GroupOption text={"Thông tin tài khoản"} />
-
-          <EachOptionViewOnly icon={icons.phoneIcon} text={"Số điện thoại: " + phoneNumber} />
-          <EachOptionViewOnly icon={icons.emailIcon} text={"Email: " + email} />
-          <EachOptionViewOnly icon={icons.personIcon} text={"Giới tính: " + gender} />
-          <EachOptionViewOnly icon={icons.documentBlackIcon} text={"Năm sinh: " + yearOfBirth} />
-
-          <CommonButton
-            onPress={DeleteFriend}
-            title={"Huỷ kết bạn".toUpperCase()}
-          />
         </View>
       </ScrollView>
+
+      <FloatingButtonSingle
+        icon={icons.trashCanIcon}
+        text={"Hủy kết bạn"}
+        onPress={handleDeleteFriend}
+      />
 
       <UIHeader
         title={null}
@@ -193,71 +133,77 @@ const ShowProfileFriend = (props) => {
     </View>
   );
 };
-export default ShowProfileFriend;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.backgroundWhite,
+    backgroundColor: colors.PrimaryContainer,
   },
+  //
   UIHeaderMainStyle: {
     top: 0,
     position: "absolute",
     backgroundColor: null,
   },
   UIHeaderIconStyle: { tintColor: colors.inactive },
-  mainView: {
-    flex: 1,
-    marginTop: 290,
-  },
+  //
   colorView: {
-    height: 400,
+    height: 275,
     top: 0,
     left: 0,
     right: 0,
     position: "absolute",
-    backgroundColor: generateColor(),
+    backgroundColor: randomGenerateColor(),
+  },
+  mainView: {
+    marginTop: 190,
   },
   profileView: {
-    height: 200,
     alignItems: "center",
+    marginBottom: 15,
   },
   profileImage: {
     width: 140,
     height: 140,
     resizeMode: "cover",
-    margin: 15,
-    borderRadius: 90,
-    borderColor: "white",
+    borderRadius: 75,
     borderWidth: 5,
+    borderColor: colors.PrimaryContainer,
   },
   profileUsername: {
-    color: "black",
-    fontSize: fontSizes.h6,
+    color: colors.PrimaryOnContainerAndFixed,
+    fontSize: fontSizes.h4,
+    fontWeight: "bold",
   },
-  groupOptionsView: {
-    height: 50,
-    marginStart: 12,
-    justifyContent: "center",
-  },
-  groupOptionsText: {
-    fontSize: fontSizes.h7,
-    color: colors.noImportantText,
-    paddingStart: 10,
-  },
-  eachOptionView: {
+  //
+  userInfoContainer: {
     flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
+    marginTop: 5,
   },
-  eachOptionIcon: {
-    width: 20,
-    height: 20,
-    marginStart: 10,
+  description: {
+    color: colors.PrimaryOnContainerAndFixed,
+    fontSize: fontSizes.h7,
+    marginVertical: 10,
   },
-  eachOptionText: {
-    fontSize: fontSizes.h6,
-    color: "black",
-    paddingStart: 15,
+  //
+  topics_container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  eachTopicBox: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 5,
+    marginHorizontal: 2,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  eachTopicBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h7,
   },
 });

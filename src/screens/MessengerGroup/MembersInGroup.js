@@ -93,14 +93,8 @@ function MembersInGroup(props) {
               invitation={eachInvitation}
               key={eachInvitation.information.infoID}
               onPress={() => {
-                navigate("ShowProfileMember", { 
-                  userName: eachInvitation.userName,
-                  image: eachInvitation.information.image, 
-                  fulName: eachInvitation.information.fulName, 
-                  phoneNumber: eachInvitation.information.phoneNumber, 
-                  gender: eachInvitation.information.gender, 
-                  yearOfBirth: eachInvitation.information.yearOfBirth,
-                  email: eachInvitation.email 
+                navigate("ShowProfileMember", {
+                  user: eachInvitation
                 });
               }}
               onPressButtonLeft={()=> {

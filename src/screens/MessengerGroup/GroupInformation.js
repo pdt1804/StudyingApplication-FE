@@ -21,6 +21,7 @@ import {
   NewReviewInput,
   Icon,
   WhiteSlideBottomUp,
+  SubInfoVertical,
 } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
@@ -33,15 +34,6 @@ import {
   review_getAllReviewOfGroup,
   review_createReview,
 } from "../../api";
-
-const SubInfo = ({ icon, text }) => {
-  return (
-    <View style={styles.subInfoContainer}>
-      <Icon name={icon} size={25} color={colors.GrayOnContainerAndFixed} />
-      <Text style={styles.subInfoText}>{text}</Text>
-    </View>
-  );
-};
 
 function GroupInfo(props) {
   //navigation to/back
@@ -256,9 +248,9 @@ function GroupInfo(props) {
           <View>
             <Text style={styles.profileUsername}>{nameGroup}</Text>
             <View style={styles.profileDescription}>
-              <SubInfo icon={icons.leaderIcon} text={leaderOfGroup} />
-              <SubInfo icon={icons.groupIcon} text={numberOfMembers} />
-              <SubInfo icon={icons.calendarIcon} text={dateCreated} />
+              <SubInfoVertical icon={icons.leaderIcon} text={leaderOfGroup} />
+              <SubInfoVertical icon={icons.groupIcon} text={numberOfMembers} />
+              <SubInfoVertical icon={icons.calendarIcon} text={dateCreated} />
             </View>
             <View style={styles.topics_container}>
               {topics.map((topicName, index) => (

@@ -53,16 +53,6 @@ function MessageBot(props) {
       fetchData(); // Gọi lần đầu tiên khi component được render
     }, [props.userName]);
 
-  function LoadUserInformation()
-  {
-    navigate("ShowProfileFriend", { friendUsername: friendUsername })
-  }
-
-  const SendMessage = async () => {
-
-
-  }
-
   return (
     <View style={styles.container}>
       <UIHeader

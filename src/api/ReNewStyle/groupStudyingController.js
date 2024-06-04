@@ -208,15 +208,17 @@ export const groupStudying_changeAvatarGroup = async (uri, groupID) => {
 };
 
 export const groupStudying_changeLeaderofGroup = async (
-  newUserName,
-  groupID
+  newUserName
 ) => {
+  var form = new FormData();
+  form.append("newUserName", newUserName);
+  form.append("groupID", await AsyncStorage.getItem("groupID"));
+  //
   const response = await axios.put(
-    `${API_BASE_URL}/api/v1/groupStudying/changeLeaderofGroup?newUserName=${newUserName}&groupID=${groupID}`,
-    {},
+    `${API_BASE_URL}/api/v1/groupStudying/changeLeaderofGroup`,
+    form,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }

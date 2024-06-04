@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { friend_addFriend } from "../../../api";
+import { friendship_addFriend } from "../../../api";
 
 function TabSuggestionsItems(props) {
   let { image, fulName } = props.invitation.information;
@@ -15,7 +15,7 @@ function TabSuggestionsItems(props) {
   const [buttonName, setButtonName] = useState("Thêm bạn bè");
   const handleAddFriend = async () => {
     if (buttonName == "Thêm bạn bè") {
-      const response = await friend_addFriend(userName);
+      const response = await friendship_addFriend(userName);
       setButtonName("Đã gửi lời mời kết bạn");
     }
   };

@@ -76,7 +76,7 @@ export const NewReviewInput = ({ onSubmit }) => {
       : newStarRatingPoint == 5
       ? (emoFace = icons.review5)
       : (emoFace = icons.review0);
-      return emoFace
+    return emoFace;
   };
 
   const emoColor = () => {
@@ -92,7 +92,7 @@ export const NewReviewInput = ({ onSubmit }) => {
       : newStarRatingPoint == 5
       ? (emoColor = colors.rating5)
       : (emoColor = colors.rating0);
-      return emoColor
+    return emoColor;
   };
 
   return (
@@ -124,6 +124,58 @@ export const NewReviewInput = ({ onSubmit }) => {
       >
         <Text style={styles.newReviewButtonText}>Gửi đánh giá</Text>
       </TouchableOpacity>
+    </View>
+  );
+};
+
+export const ReviewFinalViewOnly = ({ currentRatingPoint }) => {
+  const emoFace = () => {
+    let emoFace = icons.review0;
+    currentRatingPoint <= 1
+      ? (emoFace = icons.review1)
+      : currentRatingPoint <= 2
+      ? (emoFace = icons.review2)
+      : currentRatingPoint <= 3
+      ? (emoFace = icons.review3)
+      : currentRatingPoint <= 4
+      ? (emoFace = icons.review4)
+      : currentRatingPoint <= 5
+      ? (emoFace = icons.review5)
+      : (emoFace = icons.review0);
+    return emoFace;
+  };
+
+  const emoColor = () => {
+    let emoColor = colors.rating0;
+    currentRatingPoint <= 1
+      ? (emoColor = colors.rating1)
+      : currentRatingPoint <= 2
+      ? (emoColor = colors.rating2)
+      : currentRatingPoint <= 3
+      ? (emoColor = colors.rating3)
+      : currentRatingPoint <= 4
+      ? (emoColor = colors.rating4)
+      : currentRatingPoint <= 5
+      ? (emoColor = colors.rating5)
+      : (emoColor = colors.rating0);
+    return emoColor;
+  };
+
+  return (
+    <View style={styles.newReviewInputContainer}>
+      <View style={styles.newReviewRatingContainer}>
+        {/* <Text style={styles.currentRatingPoint}>{currentRatingPoint}</Text> */}
+        <IconRating
+          currentRating={currentRatingPoint}
+          max={5}
+          viewOnly={true}
+          starSize={45}
+          starColor={'gold'}
+          starsContainerStyle={{ marginBottom: 10 }}
+          eachStarContainerStyle={{ marginHorizontal: 1 }}
+        />
+        <Icon name={emoFace()} size={50} color={emoColor()} />
+      </View>
     </View>
   );
 };
@@ -213,4 +265,12 @@ const styles = StyleSheet.create({
     color: colors.RedContainer,
     fontSize: fontSizes.h7,
   },
+  //final view only
+  currentRatingPoint: {
+    marginLeft: 10,
+    fontSize: fontSizes.h1,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    textAlign: 'center',
+  }
 });

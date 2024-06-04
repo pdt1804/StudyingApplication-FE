@@ -101,8 +101,8 @@ export const friendship_deleteFriend = async (userName) => {
   const response = await axios.delete(
     `${API_BASE_URL}/api/v1/friendship/deleteFriend/${userName}`,
     {
+      withCredentials: true,
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
