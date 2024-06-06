@@ -18,12 +18,11 @@ import {
 } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { blog_createNewBlog, blog_insertImageInBlog } from "../../api";
-import axios from "axios";
-import { API_BASE_URL } from "../../api/DomainAPI";
-
-//fake data
-const fakeData = ["user001", "user002", "user003", "user004"];
+import {
+  groupStudying_getAllUserInGroup,
+  blog_createNewBlog,
+  blog_insertImageInBlog,
+} from "../../api";
 
 export default CreatePost = (props) => {
   const { navigate, goBack } = props.navigation;
@@ -35,33 +34,22 @@ export default CreatePost = (props) => {
   const [assets, setAssets] = useState([]);
   const [listMembersNotTagged, setListMembersNotTagged] = useState([]);
 
-  //Quickly delete written content
-  // useEffect(async () => {
-  //   contentText == "" ? setBlankContent(true) : setBlankContent(false);
-  //   const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
-  //     headers: {
-  //       'Content-Type': 'application/json', 
-  //       'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-  //     },
-  //   });
-  //   setListMembersNotTagged(responses.data);
-  // });
+  const fetchData = async () => {
+    const responsesData = await groupStudying_getAllUserInGroup(
+      await AsyncStorage.getItem("groupID")
+    );
+    setListMembersNotTagged(responsesData);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      contentText == "" ? setBlankContent(true) : setBlankContent(false);
-      const responses = await axios.get(API_BASE_URL + "/api/v1/groupStudying/getAllUserInGroup?groupID=" + await AsyncStorage.getItem('groupID'), {
-        headers: {
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-        },
-      });
-      setListMembersNotTagged(responses.data);
-      //console.log(listMembersNotTagged)
-    };
-
     fetchData();
   }, [props.userName]);
+
+  //Quickly delete written content
+  useEffect(() => {
+    contentText == "" ? setBlankContent(true) : setBlankContent(false);
+    console.log(contentText)
+  }, [contentText]);
 
   //Auto focus on TextInput when the screen is touched
   const textInputRef = useRef(null);
@@ -110,9 +98,8 @@ export default CreatePost = (props) => {
     }
 
     const tags = [];
-    for (let i = 0; i < listTaggedUsernames.length; i++)
-    {
-      tags.push(listTaggedUsernames[i].userName)
+    for (let i = 0; i < listTaggedUsernames.length; i++) {
+      tags.push(listTaggedUsernames[i].userName);
     }
 
     const responseData = await blog_createNewBlog(
@@ -133,7 +120,6 @@ export default CreatePost = (props) => {
             img.height,
             responseData
           );
-          //uploadImage(img.uri, img.fileName, img.mimeType, responseData);
         } catch (error) {
           console.log("Lỗi:", error);
         }
@@ -144,7 +130,7 @@ export default CreatePost = (props) => {
   };
 
   //*************** */
-  //tag tên ở đây - t chưa đụng vô API đâu nha, nhờ m cả đó :))
+  //tag tên ở đây
   //*************** */
   const [modalVisible, setModalVisible] = useState(false);
   const [listTaggedUsernames, setListTaggedUsernames] = useState([]);
@@ -172,19 +158,21 @@ export default CreatePost = (props) => {
             onPress={() => handleAddTag(eachName, index)}
           >
             {
-              //đoạn này là hiển thị tên/icon/avatar các kiểu nè
-              // t để tạm cái text ở đây, m ném vô username là được rồi
-              // Khi gọi api lên mà có thêm đầy đủ avatar, thông tin cá nhân các kiểu thì t chỉnh sửa lại sau.
-              <Text style={styles.notTagName_temp}>{eachName.information.fulName}</Text>
+              <View style={styles.notTaggedContainer}>
+                <Image
+                  style={styles.notTaggedAvatar}
+                  source={{ uri: eachName.information.image }}
+                />
+                <Text style={styles.notTaggedName}>
+                  {eachName.information.fulName}
+                </Text>
+              </View>
             }
           </TouchableOpacity>
         ))}
       </View>
     );
   };
-  //*************** */
-  // Hết những phần mới
-  //*************** */
 
   return (
     <View style={styles.container}>
@@ -217,7 +205,9 @@ export default CreatePost = (props) => {
           {listTaggedUsernames.map((eachName, index) => (
             <View key={index} style={styles.eachTag}>
               <View style={styles.tagBox}>
-                <Text style={styles.tagBoxText}>{eachName.information.fulName}</Text>
+                <Text style={styles.tagBoxText}>
+                  {eachName.information.fulName}
+                </Text>
               </View>
               <TouchableOpacity
                 style={{
@@ -362,5 +352,33 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: colors.GrayContainer,
     backgroundColor: colors.transparentWhite,
+  },
+  //
+  notTaggedContainer: {
+    flexDirection: "row",
+    width: 375,
+    height: 55,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 3,
+    borderColor: colors.GrayContainer,
+    alignSelf: "center",
+    alignItems: "center",
+    backgroundColor: colors.transparentWhite,
+  },
+  notTaggedAvatar: {
+    width: 35,
+    height: 35,
+    resizeMode: "cover",
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: colors.PrimaryBackground,
+  },
+  notTaggedName: {
+    paddingHorizontal: 10,
+    fontSize: fontSizes.h5,
+    fontWeight: "bold",
+    fontStyle: "italic",
+    color: colors.GrayOnContainerAndFixed,
   },
 });

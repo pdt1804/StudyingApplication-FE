@@ -48,7 +48,6 @@ export default EnterMessageBar = (props) => {
       );
       setListMembersNotTagged(responsesData);
       setUserNames(responsesData);
-      //console.log(listMembersNotTagged)
     };
 
     fetchData();
@@ -89,7 +88,7 @@ export default EnterMessageBar = (props) => {
       if (listSelectedImage.length > 0) {
         for (let i = 0; i < listSelectedImage.length; i++) {
           let img = listSelectedImage[i];
-          console.log(img)
+          console.log(img);
           try {
             await messageuser_uploadImage(
               img.uri,
@@ -300,10 +299,14 @@ export default EnterMessageBar = (props) => {
           >
             {
               <View style={styles.notTaggedContainer}>
-              <Image style={styles.notTaggedAvatar} source={{ uri: eachName.information.image }} />
-              <Text style={styles.notTaggedName}>
-                {eachName.information.fulName}
-              </Text></View>
+                <Image
+                  style={styles.notTaggedAvatar}
+                  source={{ uri: eachName.information.image }}
+                />
+                <Text style={styles.notTaggedName}>
+                  {eachName.information.fulName}
+                </Text>
+              </View>
             }
           </TouchableOpacity>
         ))}
@@ -509,16 +512,16 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.h7,
   },
   //
-  notTaggedContainer:{
-    flexDirection: 'row',
-    width: 400,
+  notTaggedContainer: {
+    flexDirection: "row",
+    width: 375,
     height: 55,
     paddingHorizontal: 10,
     borderRadius: 12,
     borderWidth: 3,
     borderColor: colors.GrayContainer,
-    alignSelf: 'center',
-    alignItems: 'center',
+    alignSelf: "center",
+    alignItems: "center",
     backgroundColor: colors.transparentWhite,
   },
   notTaggedAvatar: {
@@ -532,8 +535,8 @@ const styles = StyleSheet.create({
   notTaggedName: {
     paddingHorizontal: 10,
     fontSize: fontSizes.h5,
-    fontWeight: 'bold',
-    fontStyle: 'italic',
+    fontWeight: "bold",
+    fontStyle: "italic",
     color: colors.GrayOnContainerAndFixed,
   },
 });
