@@ -8,8 +8,7 @@ export default Icon = ({ name, size, color, style }) => (
       {
         width: size,
         height: size,
-        marginRight: 10,
-        marginLeft: 10,
+        marginHorizontal: 10,
         tintColor: color,
       },
       style,
@@ -20,9 +19,9 @@ export default Icon = ({ name, size, color, style }) => (
 /** quick use: **
 
 <Icon
-name={icons.---}
-size={---}
-color={colors.---}
+name={icons.--- }
+size={ --- }
+color={colors.--- }
 />
 
 */

@@ -1,178 +1,187 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_BASE_URL } from "../../../api/DomainAPI";
+import { Icon } from "../../../components";
+import { randomGenerateColor } from "../../../utilities";
+import { groupStudying_joinInGroup } from "../../../api";
 
-const generateColor = () => {
-  const randomColor = Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, '0');
-  return `#${randomColor}`;
-};
-
-function TabFindByTopicsItems(props) {
-  let { nameGroup, imageGroup, groupID, passWord } = props.group;
-
-  const [nameTask, setNameTask] = useState('Tham gia');
-
-  const [editPassword, setEditPassword] = useState('');
-
+export default function TabFindByTopicsItems(props) {
+  let { nameGroup, imageGroup, groupID, passWord, topics } = props.group;
   const { onPress } = props;
- 
-  const showTextInputAlert = () => {
+
+  const [isJoined, setIsJoined] = useState(false);
+  const [topicNames, setTopicNames] = useState(
+    topics.map((item) => item.topicName)
+  );
+
+  /*   const showTextInputAlert = () => {
     Alert.prompt(
-      'Xác thực mật khẩu',
-      'Nhập mật khẩu nhóm:',
+      "Xác thực mật khẩu",
+      "Nhập mật khẩu nhóm:",
       [
         {
-          text: 'Hủy',
-          style: 'cancel',
+          text: "Hủy",
+          style: "cancel",
         },
         {
-          text: 'OK',
+          text: "OK",
           onPress: async (text) => {
             if (text === passWord) {
               const response = await axios.post(
                 API_BASE_URL +
-                  '/api/v1/groupStudying/joinInGroup?groupID=' +
-                  groupID, {
-                    headers: {
-                      'Content-Type': 'multipart/form-data',
-                      'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-                    },
-                  }
+                  "/api/v1/groupStudying/joinInGroup?groupID=" +
+                  groupID,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization:
+                      "Bearer " + (await AsyncStorage.getItem("username")),
+                  },
+                }
               );
               if (response.status === 200) {
-                setNameTask('Đã tham gia');
+                setNameTask("Đã tham gia");
               }
             } else {
-              alert('Nhập sai mật khẩu nhóm');
+              alert("Nhập sai mật khẩu nhóm");
             }
           },
         },
       ],
-      'plain-text',
-      '',
-      'default'
+      "plain-text",
+      "",
+      "default"
     );
-  };
-  
+  }; */
 
   const handleJoinGroup = async () => {
-    
-    if (passWord == "")
-    {
-      if (nameTask == "Tham gia")
-      {
-        const response = await axios.post(API_BASE_URL + "/api/v1/groupStudying/joinInGroup", { groupID: groupID },{
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
-          },
-        })
-        if (response.status == 200)
-        {
-          setNameTask('Đã tham gia')
+    if (isJoined) {
+      alert("Bạn đã tham gia nhóm này rồi");
+    } else {
+      if (passWord == "") {
+        const response = await groupStudying_joinInGroup(groupID);
+        if (response.status == 200) {
+          setIsJoined(true);
         }
-      }
-    }
-    else
-    {
-      if (nameTask == "Tham gia")
-      {
-        showTextInputAlert();
+      } else {
+        alert("nhập mật khẩu");
+        //showTextInputAlert();
       }
     }
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image /** Avatar */
-        style={[styles.avatarImage, {borderColor: generateColor()}]}
-        source={{
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      <Icon
+        name={{
           uri: imageGroup,
         }}
+        size={55}
+        color={null}
+        style={[styles.avatarImage, { borderColor: randomGenerateColor() }]}
       />
-      <View style={styles.rightArea}>
-        <Text /** Name */ style={styles.nameText} numberOfLines={1}>
+      <View style={{ width: isJoined ? "40%" : "46%" }}>
+        <Text numberOfLines={1} style={styles.textNameGroup}>
           {nameGroup}
         </Text>
-        <View style={styles.buttonsView}>
-          <TouchableOpacity
-            onPress={handleJoinGroup}
-            style={[styles.buttons, styles.addFriend]}
-          >
-            <Text
-              style={[styles.buttonsText, styles.addFriend]}
-            >
-              {nameTask}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {isJoined ? (
+          <View />
+        ) : (
+          <View style={styles.topics_container}>
+            {topicNames.map((topicName, index) => (
+              <View style={styles.eachTopicBox} key={index}>
+                <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
+      <TouchableOpacity
+        onPress={handleJoinGroup}
+        style={[
+          styles.buttons,
+          isJoined ? { backgroundColor: colors.GrayContainer } : null,
+        ]}
+      >
+        <Text
+          style={[
+            styles.buttonsText,
+            isJoined ? { color: colors.SecondaryOnContainerAndFixed } : null,
+          ]}
+        >
+          {isJoined ? "Đã tham gia" : "Tham gia"}
+        </Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 }
-export default TabFindByTopicsItems;
 
 const styles = StyleSheet.create({
   container: {
-    height: 90,
-    marginVertical: "2%",
-    marginHorizontal: "4%",
-    paddingStart: 10,
     flexDirection: "row",
+    width: "95%",
+    minHeight: 65,
+    paddingRight: 5,
+    marginVertical: 2,
+    alignSelf: "center",
+    justifyContent: "space-between",
     borderRadius: 10,
+    borderBottomWidth: 1,
     borderColor: colors.inactive,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderWidth: 1,
-    backgroundColor: colors.ShadowedItems,
+    alignItems: "center",
   },
   avatarImage: {
-    width: 65,
-    height: 65,
     resizeMode: "cover",
     borderRadius: 10,
-    marginRight: 15,
-    alignSelf: "center",
     borderWidth: 3,
   },
-  nameText: {
-    marginTop: 10,
-    color: "black",
+  textNameGroup: {
+    justifyContent: "flex-start",
+    color: colors.PrimaryOnContainerAndFixed,
+    fontSize: fontSizes.h7,
     fontWeight: "bold",
-    fontSize: fontSizes.h5,
   },
-  rightArea: {
-    flex: 1,
-    flexDirection: "column",
-  },
-  buttonsView: {
-    width: "90%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
+  //
   buttons: {
-    paddingHorizontal: 20,
-    marginVertical: 5,
-
+    paddingHorizontal: 10,
     borderRadius: 8,
-    backgroundColor: "lightgray",
-
+    backgroundColor: colors.SecondaryBackground,
     justifyContent: "center",
     alignItems: "center",
   },
-  addFriend: {
-    color: "white",
-    backgroundColor: "blue",
-  },
   buttonsText: {
     padding: 5,
-    fontSize: fontSizes.h6,
+    fontSize: fontSizes.h5,
     fontWeight: "bold",
-    color: "black",
+    color: colors.SecondaryObjects,
+  },
+  //topics
+  topics_container: {
+    marginTop: 5,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  eachTopicBox: {
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    marginBottom: 5,
+    marginHorizontal: 3,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: colors.GrayContainer,
+    backgroundColor: colors.GrayObjects,
+  },
+  eachTopicBoxText: {
+    color: colors.GrayOnContainerAndFixed,
+    textAlign: "center",
+    fontSize: fontSizes.h8 * 0.8,
   },
 });

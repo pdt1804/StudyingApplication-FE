@@ -226,9 +226,9 @@ export const groupStudying_changeLeaderofGroup = async (
 };
 
 export const groupStudying_joinInGroup = async (groupID) => {
-  const response = await axios.post(
-    `${API_BASE_URL}/api/v1/groupStudying/joinInGroup?groupID=${groupID}`,
-    {},
+   const response = await axios.post(
+    `${API_BASE_URL}/api/v1/groupStudying/joinInGroup`,
+    {groupID: groupID},
     {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -236,6 +236,7 @@ export const groupStudying_joinInGroup = async (groupID) => {
       },
     }
   );
+  return response;
 };
 
 export const groupStudying_addFriendInGroup = async (

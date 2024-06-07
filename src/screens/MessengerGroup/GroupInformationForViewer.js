@@ -2,35 +2,23 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  TextInput,
-  Button,
   Image,
   TouchableOpacity,
-  ScrollView,
   FlatList,
-  SafeAreaView,
   StyleSheet,
-  Alert,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 import {
   UIHeader,
   ReviewItems,
-  NewReviewInput,
   ReviewFinalViewOnly,
-  Icon,
   SubInfoVertical,
 } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import {
-  information_ExtractBearerToken,
   groupStudying_findGroupbyId,
-  groupStudying_deleteGroup,
-  groupStudying_changeAvatarGroup,
-  review_checkUserReview,
   review_getAllReviewOfGroup,
-  review_createReview,
 } from "../../api";
 
 function GroupInfoForViewer(props) {
