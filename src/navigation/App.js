@@ -29,7 +29,6 @@ import {
   Reply,
   ShowNotificationOfUser,
   EditPost,
-  GroupSuggestionInfo,
   ShowPicture,
   ShowProfile,
 } from '../screens';
@@ -57,7 +56,6 @@ function App(props) {
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
         <Stack.Screen name="ResetPasswordInSetting" component={ResetPasswordInSetting} />
-        <Stack.Screen name="GroupSuggestionInfo" component={GroupSuggestionInfo} />
         <Stack.Screen name="ShowPicture" component={ShowPicture} />
         <Stack.Screen name="ShowProfile" component={ShowProfile} />
         <Stack.Screen name="GroupInfoForViewer" component={GroupInfoForViewer} />

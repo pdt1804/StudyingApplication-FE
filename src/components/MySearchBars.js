@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   //-------------------
   //SearchBarTransparent
   sbt_searchBarView: {
-    height: "7%",
+    height: 50,
     paddingHorizontal: 7,
     flexDirection: "row",
     paddingTop: 10,

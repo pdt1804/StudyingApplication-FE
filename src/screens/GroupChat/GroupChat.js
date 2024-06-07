@@ -35,7 +35,7 @@ function GroupChat(props) {
             name="TabYourGroups"
             component={TabYourGroups}
             options={{
-              tabBarLabel: "Đã tham gia",
+              tabBarLabel: "Của Bạn",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
@@ -43,7 +43,7 @@ function GroupChat(props) {
             name="TabSuggestions"
             component={TabSuggestions}
             options={{
-              tabBarLabel: "Gợi ý nhóm",
+              tabBarLabel: "Gợi ý",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
@@ -51,7 +51,7 @@ function GroupChat(props) {
             name="TabFindByTopics"
             component={TabFindByTopics}
             options={{
-              tabBarLabel: "Tìm kiếm theo chủ đề",
+              tabBarLabel: "Tìm Kiếm",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />

@@ -62,7 +62,7 @@ export const groupStudying_findGroupbyName = async (nameGroup) => {
     `${API_BASE_URL}/api/v1/groupStudying/findGroupbyName?nameGroup=${nameGroup}`,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }
@@ -301,7 +301,7 @@ export const groupStudying_getAllRecommendedGroup = async () => {
     `${API_BASE_URL}/api/v1/groupStudying/getAllRecommendedGroup`,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }

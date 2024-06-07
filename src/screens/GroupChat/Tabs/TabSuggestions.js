@@ -9,49 +9,32 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabSuggestionsItems from "./TabSuggestionsItems";
+import TabFindByTopicsItems from "./TabFindByTopicsItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { SearchBarTransparent } from "../../../components";
-import { group_findGroupbyName } from "../../../api";
+import { SearchBarTransparent, RowSectionTitle } from "../../../components";
+import {
+  groupStudying_findGroupbyName,
+  groupStudying_getAllRecommendedGroup,
+} from "../../../api";
 
-function TabSuggestions(props) {
-  const [groups, setGroups] = useState([]);
-  const [searchText, setSearchText] = useState("");
-
-  //navigation to/back
+export default function TabSuggestions(props) {
   const { navigate, goBack } = props.navigation;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (searchText.length >= 1) {
-          const response = await group_findGroupbyName(searchText);
-          setGroups(response.data);
-        } else {
-          setGroups([]);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-    //const intervalId = setInterval(fetchData, 1000);
-    // // Hủy interval khi component bị unmounted
-    //return () => clearInterval(intervalId);
-  }, [searchText]);
+  const [groups, setGroups] = useState([]);
 
   const findGroupByText = async (text) => {
-    console.log(text)
-    if (text.length >= 1) {
-      const response = await group_findGroupbyName(text);
-      setGroups(response.data);
+    if (text.length > 0) {
+      const responseData = await groupStudying_findGroupbyName(text);
+      setGroups(responseData);
     } else {
-      setGroups([]);
+      const responseData = await groupStudying_getAllRecommendedGroup();
+      setGroups(responseData);
     }
-  }
+  };
+
+  useEffect(() => {
+    findGroupByText("");
+  }, []); // để [] là chỉ chạy 1 lần, cần chạy cái này để lấy danh sách recommend đầu tiên đã.
 
   return (
     <View style={styles.container}>
@@ -61,29 +44,30 @@ function TabSuggestions(props) {
         }}
       />
 
-      <ScrollView>
-        {groups
-          .filter((eachGroup) =>
-            eachGroup.nameGroup.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((eachGroup) => (
-            <TabSuggestionsItems
-              group={eachGroup}
-              key={eachGroup.groupID}
-              onPress={() => {
-                navigate("GroupInfoForViewer", {id: eachGroup.groupID});
-              }}
-            />
-          ))}
-      </ScrollView>
+      <RowSectionTitle
+        text={"☆☆☆ Các nhóm phù hợp với bạn ☆☆☆"}
+        style={styles.rowSectionTitle}
+      />
+
+      <FlatList
+        data={groups}
+        renderItem={({ item }) => (
+          <TabFindByTopicsItems
+            group={item}
+            onPress={() => navigate("GroupInfoForViewer", { id: item.groupID })}
+          />
+        )}
+        keyExtractor={(item) => item.groupID}
+        extraData={navigate}
+      />
     </View>
   );
 }
-export default TabSuggestions;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },
+  rowSectionTitle: { alignSelf: "center", marginStart: 0 },
 });

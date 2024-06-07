@@ -4,9 +4,9 @@ import { images, icons, colors, fontSizes } from "../constants";
 import Icon from "./MyIcon";
 
 export const RowSectionTitle = (props) => {
-  const { text } = props;
+  const { text, style } = props;
   return (
-    <View style={styles.containerTitle}>
+    <View style={[styles.containerTitle, style]}>
       <Text style={styles.titleText}>{text}</Text>
     </View>
   );
