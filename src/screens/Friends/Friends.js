@@ -6,7 +6,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 import TabYourFriends from "./Tabs/TabYourFriends";
 import TabFriendRequests from "./Tabs/TabFriendRequests";
-import TabSentRequests from "./Tabs/TabSentRequests";
 import TabSuggestions from "./Tabs/TabSuggestions";
 
 const Tab = createMaterialTopTabNavigator();
@@ -46,14 +45,6 @@ function Friends(props) {
             component={TabFriendRequests}
             options={{
               tabBarLabel: "Lời Mời",
-              tabBarLabelStyle: tabBarLabelStyles,
-            }}
-          />
-          <Tab.Screen
-            name="TabSentRequests"
-            component={TabSentRequests}
-            options={{
-              tabBarLabel: "Kết Bạn",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
