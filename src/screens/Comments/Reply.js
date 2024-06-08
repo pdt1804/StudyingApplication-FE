@@ -43,8 +43,6 @@ const Reply = (props) => {
       setReplies(responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Error fetching data");
-      setLoading(false);
     }
   };
 

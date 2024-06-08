@@ -116,8 +116,6 @@ export default function TabSettingTopics(props) {
         console.log(favTopics);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
       }
     };
 

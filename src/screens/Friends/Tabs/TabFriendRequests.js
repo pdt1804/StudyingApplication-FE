@@ -26,8 +26,6 @@ export default function TabSuggestions(props) {
       setMySentInvitation((await friend_getAllSentInvitationList()).data);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Error fetching data");
-      setLoading(false);
     }
   };
 

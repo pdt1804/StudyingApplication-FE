@@ -46,8 +46,6 @@ function MembersInGroup(props) {
 
           } catch (error) {
             console.error('Error fetching data:', error);
-            setError('Error fetching data');
-            setLoading(false);
           }
         };
     
