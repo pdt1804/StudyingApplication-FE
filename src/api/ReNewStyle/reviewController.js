@@ -20,7 +20,7 @@ export const review_getAllReviewOfGroup = async (groupID) => {
     `${API_BASE_URL}/api/v1/review/getAllReviewOfGroup?groupID=${groupID}`,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + (await AsyncStorage.getItem("username")),
       },
     }

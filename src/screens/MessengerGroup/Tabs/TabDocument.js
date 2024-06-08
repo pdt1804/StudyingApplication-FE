@@ -49,9 +49,9 @@ export default function TabDocument(props) {
           return;
         }
 
-        console.log(fileResult);
-        console.log(fileResult.assets[0].uri);
-        console.log(fileResult.assets[0].name);
+        // console.log(fileResult);
+        // console.log(fileResult.assets[0].uri);
+        // console.log(fileResult.assets[0].name);
 
         const response = await group_addDocument(fileResult);
         if (response.status == 200) {

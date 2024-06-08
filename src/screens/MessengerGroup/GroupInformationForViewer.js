@@ -34,6 +34,7 @@ function GroupInfoForViewer(props) {
   const [dateCreated, setDateCreated] = useState("");
 
   const [reviews, setReviews] = useState([]);
+  const [points, setPoints] = useState(0)
 
   useEffect(() => {
     fetchData();
@@ -56,9 +57,18 @@ function GroupInfoForViewer(props) {
       const responseDataReviews = await review_getAllReviewOfGroup(
         await AsyncStorage.getItem("groupID")
       );
-      setReviews(responseDataReviews);
+      await setReviews(responseDataReviews);
+      //console.log(reviews)
 
       setTopics(responseDataGroup.topics.map((item) => item.topicName));
+
+      var total = 0;
+      for (let i = 0; i < responseDataReviews.length; i++)
+      {
+        total += responseDataReviews[i].rating;
+      }
+      setPoints(total / responseDataReviews.length);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -111,7 +121,7 @@ function GroupInfoForViewer(props) {
       </View>
 
       {/* điểm rating là ở dòng này nha, chỗ số 4.4 á */}
-      <ReviewFinalViewOnly currentRatingPoint={4.4} />
+      <ReviewFinalViewOnly currentRatingPoint={points} />
 
       <View style={styles.listReviewContainer}>
         <FlatList

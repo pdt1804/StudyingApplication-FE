@@ -306,5 +306,5 @@ export const groupStudying_getAllRecommendedGroup = async () => {
       },
     }
   );
-  return response.data;
+  return response;
 };

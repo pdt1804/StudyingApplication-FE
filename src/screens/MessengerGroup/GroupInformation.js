@@ -83,7 +83,8 @@ function GroupInfo(props) {
       const responseDataReviews = await review_getAllReviewOfGroup(
         await AsyncStorage.getItem("groupID")
       );
-      setReviews(responseDataReviews);
+      await setReviews(responseDataReviews);
+      console.log(responseDataReviews)
 
       setCheckReviewed(
         await review_checkUserReview(await AsyncStorage.getItem("groupID"))
