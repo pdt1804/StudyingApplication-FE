@@ -12,10 +12,12 @@ import {
 import TabSuggestionsItems from "./TabSuggestionsItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarTransparent } from "../../../components";
-import { group_findGroupbyName } from "../../../api";
+import { groupStudying_getAllRecommendedGroup, group_findGroupbyName } from "../../../api";
 
 function TabSuggestions(props) {
   const [groups, setGroups] = useState([]);
+  const [recommendedGroup, setRecommendedGroup] = useState([]);
+
   const [searchText, setSearchText] = useState("");
 
   //navigation to/back
@@ -24,12 +26,8 @@ function TabSuggestions(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (searchText.length >= 1) {
-          const response = await group_findGroupbyName(searchText);
-          setGroups(response.data);
-        } else {
-          setGroups([]);
-        }
+        setRecommendedGroup((await groupStudying_getAllRecommendedGroup()).data)
+        setGroups((await groupStudying_getAllRecommendedGroup()).data)
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data");
@@ -41,7 +39,7 @@ function TabSuggestions(props) {
     //const intervalId = setInterval(fetchData, 1000);
     // // Hủy interval khi component bị unmounted
     //return () => clearInterval(intervalId);
-  }, [searchText]);
+  }, [props.userName]);
 
   const findGroupByText = async (text) => {
     console.log(text)
@@ -49,7 +47,10 @@ function TabSuggestions(props) {
       const response = await group_findGroupbyName(text);
       setGroups(response.data);
     } else {
-      setGroups([]);
+      //setGroups([]);
+      await setGroups(recommendedGroup)
+      console.log(recommendedGroup)
+
     }
   }
 
