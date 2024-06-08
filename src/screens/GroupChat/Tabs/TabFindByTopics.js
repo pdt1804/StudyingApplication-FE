@@ -9,7 +9,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabFindByTopicsItems from "./TabFindByTopicsItems";
+import TabSuggestAndFindItems from "./TabSuggestAndFindItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { Dropdown } from "../../../components";
 import {
@@ -58,7 +58,7 @@ function TabFindByTopics(props) {
       <ScrollView>
         {groups
           .map((eachGroup) => (
-            <TabFindByTopicsItems
+            <TabSuggestAndFindItems
               group={eachGroup}
               key={eachGroup.groupID}
               onPress={() => {
