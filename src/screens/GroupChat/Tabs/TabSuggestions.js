@@ -18,23 +18,46 @@ import {
 } from "../../../api";
 
 export default function TabSuggestions(props) {
+  const [groups, setGroups] = useState([]);
+  const [recommendedGroup, setRecommendedGroup] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
+  const [title, setTitle] = useState("☆☆☆ Các nhóm phù hợp với bạn ☆☆☆")
+
+  //navigation to/back
   const { navigate, goBack } = props.navigation;
 
-  const [groups, setGroups] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setRecommendedGroup(await groupStudying_getAllRecommendedGroup())
+        setGroups(await groupStudying_getAllRecommendedGroup())
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    //const intervalId = setInterval(fetchData, 1000);
+    // // Hủy interval khi component bị unmounted
+    //return () => clearInterval(intervalId);
+  }, [props.userName]);
 
   const findGroupByText = async (text) => {
-    if (text.length > 0) {
-      const responseData = await groupStudying_findGroupbyName(text);
-      setGroups(responseData);
+    if (text.length >= 1) {
+      //console.log(text)
+      const response = await groupStudying_findGroupbyName(text);
+      await setGroups(response);
+      setTitle("Kết quả tìm kiếm: " + text)
     } else {
-      const responseData = await groupStudying_getAllRecommendedGroup();
-      setGroups(responseData);
+      //setGroups([]);
+      await setGroups(recommendedGroup)
+      console.log(recommendedGroup)
+      setTitle("☆☆☆ Các nhóm phù hợp với bạn ☆☆☆")
     }
-  };
-
-  useEffect(() => {
-    findGroupByText("");
-  }, []); // để [] là chỉ chạy 1 lần, cần chạy cái này để lấy danh sách recommend đầu tiên đã.
+  }
 
   return (
     <View style={styles.container}>
@@ -45,7 +68,7 @@ export default function TabSuggestions(props) {
       />
 
       <RowSectionTitle
-        text={"☆☆☆ Các nhóm phù hợp với bạn ☆☆☆"}
+        text={title}
         style={styles.rowSectionTitle}
       />
 
