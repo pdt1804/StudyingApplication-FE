@@ -41,7 +41,6 @@ import TabDiscussionFiltered from "./MessengerGroup/Tabs/TabDiscussionFiltered";
 import Comment from "./Comments/Comment";
 import Reply from "./Comments/Reply";
 import MessageBot from "./Chatbot/MessageBot";
-import GroupSuggestionInfo from "./GroupChat/GroupSuggestionsInformation";
 
 export {
   Login,
@@ -77,6 +76,5 @@ export {
   ShowNotificationOfUser,
   EditPost,
   MessageBot,
-  GroupSuggestionInfo,
   ShowPicture,
 };

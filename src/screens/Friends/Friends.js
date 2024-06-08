@@ -1,12 +1,11 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { colors, fontSizes } from "../../constants";
+import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import TabYourFriends from "./Tabs/TabYourFriends";
 import TabFriendRequests from "./Tabs/TabFriendRequests";
-import TabSentRequests from "./Tabs/TabSentRequests";
 import TabSuggestions from "./Tabs/TabSuggestions";
 
 const Tab = createMaterialTopTabNavigator();
@@ -20,7 +19,7 @@ const ScreenOptions = ({ route }) => ({
 });
 
 const tabBarLabelStyles = {
-  fontSize: fontSizes.h8 * 0.82,
+  fontSize: fontSizes.h6,
 };
 
 function Friends(props) {
@@ -37,7 +36,7 @@ function Friends(props) {
             name="TabYourFriends"
             component={TabYourFriends}
             options={{
-              tabBarLabel: "Đã kết bạn",
+              tabBarLabel: "Bạn Bè",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
@@ -45,15 +44,7 @@ function Friends(props) {
             name="TabFriendRequests"
             component={TabFriendRequests}
             options={{
-              tabBarLabel: "Lời mời kết bạn",
-              tabBarLabelStyle: tabBarLabelStyles,
-            }}
-          />
-          <Tab.Screen
-            name="TabSentRequests"
-            component={TabSentRequests}
-            options={{
-              tabBarLabel: "Lời mời đã gửi",
+              tabBarLabel: "Lời Mời",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />
@@ -61,7 +52,7 @@ function Friends(props) {
             name="TabSuggestions"
             component={TabSuggestions}
             options={{
-              tabBarLabel: "Gợi ý mới",
+              tabBarLabel: "Gợi Ý",
               tabBarLabelStyle: tabBarLabelStyles,
             }}
           />

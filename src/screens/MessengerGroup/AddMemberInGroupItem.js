@@ -15,6 +15,9 @@ function AddMemberInGroupItem(props) {
   const [friendUsername, setFriendUsername] = useState(userName)
 
 
+  const [isAlreadyAddedInGroup, setIsAlreadyAddedInGroup] = useState(false);
+
+
   const handleAddInGroup = async () => {
     
     var form = new FormData();
@@ -31,6 +34,7 @@ function AddMemberInGroupItem(props) {
     if (response.status == 200)
     {
         alert('Thêm thành công')
+        setIsAlreadyAddedFriend(true);
     }
 
   };
@@ -38,26 +42,35 @@ function AddMemberInGroupItem(props) {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Image /** Avatar */
+      <Image
         style={styles.avatarImage}
         source={{
           uri: image,
         }}
       />
       <View style={styles.rightArea}>
-        <Text /** Name */ style={styles.nameText} numberOfLines={1}>
+        <Text style={styles.nameText} numberOfLines={1}>
           {fulName}
         </Text>
         <View style={styles.buttonsView}>
-          {/* <TouchableOpacity
-            onPress={handleAddFriend}
-            style={[styles.buttons, styles.addFriend]}
-          >
-            <Text style={[styles.buttonsText, styles.addFriend]}>Nhóm trưởng</Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity onPress={handleAddInGroup} style={styles.buttons}>
-            <Text style={styles.buttonsText}>Thêm vào nhóm</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleAddInGroup}
+              style={[
+                styles.buttons,
+                styles.buttonSingle,
+                {
+                  backgroundColor: isAlreadyAddedInGroup
+                    ? colors.GrayBackground
+                    : colors.PrimaryBackground,
+                },
+              ]}
+            >
+              <Text style={styles.buttonsText}>
+                {isAlreadyAddedInGroup
+                  ? "Đã thêm vào nhóm"
+                  : "Thêm vào nhóm"}
+              </Text>
+            </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
@@ -75,7 +88,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.inactive,
     borderWidth: 1,
-    elevation: 5,
+    borderColor: "black",
+    borderWidth: 1,
     backgroundColor: colors.ShadowedItems,
   },
   avatarImage: {
@@ -99,31 +113,26 @@ const styles = StyleSheet.create({
   },
   buttonsView: {
     width: "90%",
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
+  //
   buttons: {
-    paddingHorizontal: 20,
     marginVertical: 5,
-
-    marginRight: 30,
-    borderRadius: 8,
-    backgroundColor: "blue",
-
-    justifyContent: "center",
     alignItems: "center",
-    width: 270,
+    borderRadius: 8,
   },
-  addFriend: {
-    paddingHorizontal:10,
-    color: "white",
-    backgroundColor: "blue",
+  buttonSingle: {
+    width: "99%",
   },
+  buttonDouble: {
+    width: "45%",
+  },
+  //
   buttonsText: {
     padding: 7,
-    paddingVertical:7,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    color: colors.PrimaryObjects,
     fontSize: fontSizes.h7,
     fontWeight: "bold",
-    color: "white",
   },
 });

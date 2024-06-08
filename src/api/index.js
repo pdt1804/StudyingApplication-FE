@@ -51,7 +51,6 @@ import {
   group_getAllGroupofUser,
   group_checkNewMessage,
 } from "./GroupChatScreens/group_tab_yourGroups";
-import { group_findGroupbyName } from "./GroupChatScreens/group_tab_suggestions";
 
 //FriendsListScreens
 import {
@@ -245,7 +244,6 @@ export {
   group_getAllBlog,
   group_getAllGroupofUser,
   group_checkNewMessage,
-  group_findGroupbyName,
   //
   friend_getAllFriendList,
   friend_checkNewMessage,

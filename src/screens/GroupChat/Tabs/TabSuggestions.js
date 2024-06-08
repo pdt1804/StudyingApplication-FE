@@ -9,9 +9,9 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabSuggestionsItems from "./TabSuggestionsItems";
+import TabFindByTopicsItems from "./TabFindByTopicsItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { SearchBarTransparent } from "../../../components";
+import { SearchBarTransparent, RowSectionTitle } from "../../../components";
 import { groupStudying_getAllRecommendedGroup, group_findGroupbyName } from "../../../api";
 
 function TabSuggestions(props) {
@@ -20,9 +20,11 @@ function TabSuggestions(props) {
 
   const [searchText, setSearchText] = useState("");
 
-  //navigation to/back
+
+export default function TabSuggestions(props) {
   const { navigate, goBack } = props.navigation;
 
+//<<<<<<< Tesing-Expo
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,19 +42,30 @@ function TabSuggestions(props) {
     // // Hủy interval khi component bị unmounted
     //return () => clearInterval(intervalId);
   }, [props.userName]);
+// =======
+//   const [groups, setGroups] = useState([]);
+// >>>>>>> Tesing-expo
 
   const findGroupByText = async (text) => {
-    console.log(text)
-    if (text.length >= 1) {
-      const response = await group_findGroupbyName(text);
-      setGroups(response.data);
+    if (text.length > 0) {
+      const responseData = await groupStudying_findGroupbyName(text);
+      setGroups(responseData);
     } else {
+//<<<<<<< Tesing-Expo
       //setGroups([]);
       await setGroups(recommendedGroup)
       console.log(recommendedGroup)
 
+// =======
+//       const responseData = await groupStudying_getAllRecommendedGroup();
+//       setGroups(responseData);
+// >>>>>>> Tesing-expo
     }
-  }
+  };
+
+  useEffect(() => {
+    findGroupByText("");
+  }, []); // để [] là chỉ chạy 1 lần, cần chạy cái này để lấy danh sách recommend đầu tiên đã.
 
   return (
     <View style={styles.container}>
@@ -62,29 +75,30 @@ function TabSuggestions(props) {
         }}
       />
 
-      <ScrollView>
-        {groups
-          .filter((eachGroup) =>
-            eachGroup.nameGroup.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((eachGroup) => (
-            <TabSuggestionsItems
-              group={eachGroup}
-              key={eachGroup.groupID}
-              onPress={() => {
-                navigate("GroupInfoForViewer", {id: eachGroup.groupID});
-              }}
-            />
-          ))}
-      </ScrollView>
+      <RowSectionTitle
+        text={"☆☆☆ Các nhóm phù hợp với bạn ☆☆☆"}
+        style={styles.rowSectionTitle}
+      />
+
+      <FlatList
+        data={groups}
+        renderItem={({ item }) => (
+          <TabFindByTopicsItems
+            group={item}
+            onPress={() => navigate("GroupInfoForViewer", { id: item.groupID })}
+          />
+        )}
+        keyExtractor={(item) => item.groupID}
+        extraData={navigate}
+      />
     </View>
   );
 }
-export default TabSuggestions;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },
+  rowSectionTitle: { alignSelf: "center", marginStart: 0 },
 });
