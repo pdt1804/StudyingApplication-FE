@@ -14,7 +14,7 @@ function MessengerBotItems(props) {
     date.getMonth() + 1
   }`;
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("images");
 
   const [username, setUsername] = useState("")
   const [sentUsername, setSentUsername] = useState("")

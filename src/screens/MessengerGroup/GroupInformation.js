@@ -179,7 +179,7 @@ function GroupInfo(props) {
 
   const handleSubmitNewReview = (newReviewContent, newStarRatingPoint) => {
     checkReviewed
-      ? alert("bạn đã review rồi")
+      ? alert("Bạn đã review rồi")
       : (alert("review thành công"),
         review_createReview(groupID, newStarRatingPoint, newReviewContent));
   };
@@ -269,7 +269,7 @@ function GroupInfo(props) {
         <FlatList
           data={reviews}
           renderItem={({ item }) => <ReviewItems {...item} />}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.reviewID}
         />
       </View>
     </View>

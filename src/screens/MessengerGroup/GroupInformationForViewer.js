@@ -53,10 +53,8 @@ function GroupInfoForViewer(props) {
         date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
       );
 
-      const responseDataReviews = await review_getAllReviewOfGroup(
-        await AsyncStorage.getItem("groupID")
-      );
-      setReviews(responseDataReviews);
+      setReviews(await review_getAllReviewOfGroup(id));
+      console.log(reviews)
 
       setTopics(responseDataGroup.topics.map((item) => item.topicName));
     } catch (error) {
@@ -117,7 +115,7 @@ function GroupInfoForViewer(props) {
         <FlatList
           data={reviews}
           renderItem={({ item }) => <ReviewItems {...item} />}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.reviewID}
         />
       </View>
     </View>
