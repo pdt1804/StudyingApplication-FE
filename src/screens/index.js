@@ -11,6 +11,7 @@ import GroupInfoForViewer from "./MessengerGroup/GroupInformationForViewer";
 
 import GroupChat from "./GroupChat/GroupChat";
 import MessengerGroup from "./MessengerGroup/MessengerGroup";
+import ChatbotScreen from "./Chatbot/ChatbotScreen";
 
 import Friends from "./Friends/Friends";
 import ShowPicture from "./EssentialScreens/ShowPicture";
@@ -46,6 +47,7 @@ export {
   Login,
   ShowProfile,
   Registration,
+  ChatbotScreen,
   ForgetPassword,
   Verification,
   ResetPassword,

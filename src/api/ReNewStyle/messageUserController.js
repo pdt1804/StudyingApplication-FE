@@ -26,6 +26,19 @@ export const messageuser_getFriendID = async (toUserName) => {
   return response.data;
 };
 
+
+export const messageuser_getGroupDataRetrieving = async () => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/messageUser/getGroupData`,
+    {
+      headers: {
+        'Authorization': "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response.data;
+};
+
 export const messageuser_getSentUser = async (messID) => {
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/messageUser/getSentUser?messID=${messID}`,

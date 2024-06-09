@@ -22,6 +22,18 @@ export const information_getAllTopics = async () => {
   return response.data;
 };
 
+export const information_getAllChatbots = async () => {
+  const response = await axios.get(
+    `${API_BASE_URL}/api/v1/information/getAllChatbots`,
+    {
+      headers: {
+        'Authorization': "Bearer " + (await AsyncStorage.getItem("username")),
+      },
+    }
+  );
+  return response.data;
+};
+
 export const information_getAllUnfavourateTopics = async (infoID) => {
   const response = await axios.get(
     `${API_BASE_URL}/api/v1/information/getAllUnfavourateTopics?infoID=${infoID}`,

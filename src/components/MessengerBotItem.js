@@ -34,8 +34,6 @@ function MessengerBotItems(props) {
           },
         });
 
-        console.log(response.data.information.image)
-
         setResponse(response.data);
         await setImage(response.data.information.image);
         setSentUsername(response.data.userName);
@@ -52,7 +50,7 @@ function MessengerBotItems(props) {
 
   const CheckIsSender = () => {
 
-    if (sentUsername == "Chatbot")
+    if (sentUsername.toString().startsWith("Chatbot"))
     {
       return false;
     }
@@ -64,7 +62,7 @@ function MessengerBotItems(props) {
 
   return CheckIsSender() == false ? (
     <View /** isSender = false --> avatar > message */ style={styles.container}>
-      <Image style={styles.avatar} source={{ uri: 'https://icon-library.com/images/bot-icon/bot-icon-5.jpg' }} />
+      <Image style={styles.avatar} source={{ uri: image }} />
 
       <View style={styles.mainTextView}>
       <View style={styles.leftView}>

@@ -28,6 +28,9 @@ function MessageBot(props) {
 
   //navigation
   const { navigation, route } = props;
+
+  const { userName, information } = props.route.params.chatbot;
+
   //function of navigation to/back
   const { navigate, goBack } = navigation;
 
@@ -37,13 +40,14 @@ function MessageBot(props) {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/loadMessageforUser?toUserName=Chatbot", {
+        const response = await axios.get(API_BASE_URL + "/api/v1/messageUser/loadMessageforUser?toUserName=" + userName, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
           },
         });
         setChatHistory(response.data);
+        //console.log(chatHistory)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -56,7 +60,12 @@ function MessageBot(props) {
   return (
     <View style={styles.container}>
       <UIHeader
-        title="Hỏi đáp"
+        title={information.fulName}
+        leftIconName={icons.backIcon}
+        rightIconName={null}
+        onPressLeftIcon={() => {
+          goBack();
+        }}
       />
 
       <SafeAreaView style={styles.displayView}>
@@ -66,7 +75,7 @@ function MessageBot(props) {
           ))}
         </ScrollView>
   
-        <EnterMessageChatBot fetchData={fetchData()}/>
+        <EnterMessageChatBot userName={userName} fetchData={fetchData()}/>
       </SafeAreaView>
     </View>
   );

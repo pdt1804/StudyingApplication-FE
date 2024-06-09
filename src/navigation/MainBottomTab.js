@@ -5,7 +5,7 @@ import {
   GroupChat,
   Friends,
   AllNotification,
-  MessageBot,
+  ChatbotScreen,
 } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { images, icons, colors, fontSizes } from "../constants";
@@ -76,7 +76,7 @@ export default function MainBottomTab(props) {
       />
       <Tab.Screen
         name="MessageBot"
-        component={MessageBot}
+        component={ChatbotScreen}
         options={{
           tabBarLabel: "Hỏi đáp",
           tabBarLabelStyle: tabBarLabelStyles,

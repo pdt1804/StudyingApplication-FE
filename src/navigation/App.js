@@ -11,6 +11,7 @@ import {
   MessengerGroup,
   SettingProfile,
   CreatePost,
+  ChatbotScreen,
   CreateNotification,
   ShowPost,
   ShowNotification,
@@ -30,6 +31,7 @@ import {
   ShowNotificationOfUser,
   EditPost,
   ShowPicture,
+  MessageBot,
   ShowProfile,
 } from '../screens';
 import MainBottomTab from './MainBottomTab';
@@ -52,6 +54,7 @@ function App(props) {
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
         <Stack.Screen name="MainBottomTab" component={MainBottomTab} />
+        <Stack.Screen name="ChatbotScreen" component={ChatbotScreen} />
         <Stack.Screen name="Messenger" component={Messenger} />
         <Stack.Screen name="MessengerGroup" component={MessengerGroup} />
         <Stack.Screen name="SettingProfile" component={SettingProfile} />
@@ -63,6 +66,7 @@ function App(props) {
         <Stack.Screen name="CreatePost" component={CreatePost} />
         <Stack.Screen name="CreateNotification" component={CreateNotification} />
         
+        <Stack.Screen name="MessageBot" component={MessageBot} />
         <Stack.Screen name="EditPost" component={EditPost} />
         <Stack.Screen name="ShowPost" component={ShowPost} />
         <Stack.Screen name="ShowDocument" component={ShowDocument} />
