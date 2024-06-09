@@ -6553,6 +6553,11 @@ react-native-fs@^2.20.0:
     base-64 "^0.1.0"
     utf8 "^3.0.0"
 
+react-native-openai@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-openai/-/react-native-openai-0.6.1.tgz#336724b39ce13a94be6a2a7eb9a3eb8d8c03fc63"
+  integrity sha512-KG9exGI3cKl8BoNJByvac8d/INa8hfXGtmS8ChSU9QAkn95+hks3ZlxyWbaba47WoEbsewo/1qpUbRI/0sQDbA==
+
 react-native-pager-view@6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.3.0.tgz#7e734e84b1692f877591335373f6fd92f0d67aa6"

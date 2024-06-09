@@ -13,10 +13,15 @@ import { API_BASE_URL } from "../api/DomainAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { messageuser_getGroupDataRetrieving } from "../api/ReNewStyle/messageUserController";
+import OpenAI from "openai";
 
 function EnterMessageChatBot({fetchData, userName}) {
 
   const genAI = new GoogleGenerativeAI("AIzaSyCzEjk1hNBglnMZU6tXItqyqGuxucVp2Mk");
+
+  const openAI = new OpenAI({
+    apiKey: 'sk-proj-r83MPEt46Hz5wUSbbWmiT3BlbkFJGc9UgntnrwSIkdj8LNIx',
+  });
 
   const [typedText, setTypedText] = useState("");
 
@@ -28,6 +33,10 @@ function EnterMessageChatBot({fetchData, userName}) {
     else if (userName == "Chatbot-Application")
     {
       SendMessageByApplicationData()
+    }
+    else if (userName == "Chatbot-OpenAI")
+    {
+      SendMessageByOpenAI()
     }
 
   };
@@ -130,6 +139,82 @@ function EnterMessageChatBot({fetchData, userName}) {
 
     fetchData;
   }
+  
+  const SendMessageByOpenAI = async () => {
+
+    alert("Xin lỗi, tài khoản đã hết tiền, vui lòng chọn service khác.")
+    return;
+
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập tin nhắn")
+      return;
+    }
+
+    var form = new FormData()
+    form.append('toUserName', userName)
+    form.append('messContent', typedText)
+
+    const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+    
+    var content = typedText;
+
+    setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
+
+    const chatbot = await openAI.chat.create({
+      messages: [
+        {
+          role: 'user',
+          content: content,
+        },
+      ],
+      model: 'gpt-3.5-turbo',
+    });
+
+    console.log(chatbot)
+
+    const result = await axios.post(
+      API_URL,
+      {
+        model: 'GPT-3.5',
+        messages: [
+          {
+            role: 'user',
+            content: content
+          }
+        ],
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log(result.data.choices[0].message.content)
+
+    var formData = new FormData()
+    formData.append("messContent", result.data.choices[0].message.content)
+    formData.append("chatbotUserName", userName)
+
+    const saveChatbotMessage = await axios.post(API_BASE_URL + "/api/v1/messageUser/saveChatbotMessage", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    setTypedText(""); 
+
+    fetchData;
+  }
+
   return (
     <View style={styles.container}>
       <TextInput
