@@ -74,8 +74,6 @@ export default function TabYourGroups(props) {
       navigate("MessengerGroup", { group: eachGroup });
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Error fetching data");
-      setLoading(false);
     }
   };
 

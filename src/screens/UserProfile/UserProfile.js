@@ -39,9 +39,6 @@ export default function UserProfile(props) {
 
   const [topics, setTopics] = useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const setEverything = (
     username,
     fulname,
@@ -103,8 +100,6 @@ export default function UserProfile(props) {
         //console.log(image);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
       }
     };
 
@@ -112,7 +107,7 @@ export default function UserProfile(props) {
 
     const intervalId = setInterval(fetchData, 3000);
     return () => clearInterval(intervalId);
-  }, [props.userName, loading]);
+  }, [props.userName]);
 
   useEffect(() => {
     (async () => {

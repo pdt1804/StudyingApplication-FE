@@ -9,7 +9,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import TabFindByTopicsItems from "./TabFindByTopicsItems";
+import TabSuggestAndFindItems from "./TabSuggestAndFindItems";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { SearchBarTransparent, RowSectionTitle } from "../../../components";
 import {
@@ -75,7 +75,7 @@ export default function TabSuggestions(props) {
       <FlatList
         data={groups}
         renderItem={({ item }) => (
-          <TabFindByTopicsItems
+          <TabSuggestAndFindItems
             group={item}
             onPress={() => navigate("GroupInfoForViewer", { id: item.groupID })}
           />

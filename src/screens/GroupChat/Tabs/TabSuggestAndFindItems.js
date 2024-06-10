@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
   Image,
+  FlatList,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { Icon } from "../../../components";
 import { randomGenerateColor } from "../../../utilities";
 import { groupStudying_joinInGroup } from "../../../api";
 
-export default function TabFindByTopicsItems(props) {
+export default function TabSuggestAndFindItems(props) {
   let { nameGroup, imageGroup, groupID, passWord, topics } = props.group;
   const { onPress } = props;
 
@@ -78,15 +78,17 @@ export default function TabFindByTopicsItems(props) {
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Icon
-        name={{
-          uri: imageGroup,
-        }}
-        size={55}
-        color={null}
-        style={[styles.avatarImage, { borderColor: randomGenerateColor() }]}
-      />
+    <View /* onPress={onPress} */ style={styles.container}>
+      <TouchableOpacity onPress={onPress}>
+        <Icon
+          name={{
+            uri: imageGroup,
+          }}
+          size={55}
+          color={null}
+          style={[styles.avatarImage, { borderColor: randomGenerateColor() }]}
+        />
+      </TouchableOpacity>
       <View style={{ width: isJoined ? "40%" : "46%" }}>
         <Text numberOfLines={1} style={styles.textNameGroup}>
           {nameGroup}
@@ -94,13 +96,17 @@ export default function TabFindByTopicsItems(props) {
         {isJoined ? (
           <View />
         ) : (
-          <View style={styles.topics_container}>
-            {topicNames.map((topicName, index) => (
-              <View style={styles.eachTopicBox} key={index}>
-                <Text style={styles.eachTopicBoxText}>{topicName}</Text>
+          <FlatList
+            horizontal={true}
+            data={topicNames}
+            renderItem={({ item }) => (
+              <View style={styles.eachTopicBox}>
+                <Text style={styles.eachTopicBoxText}>{item}</Text>
               </View>
-            ))}
-          </View>
+            )}
+            keyExtractor={(item) => item} // Assuming unique topic names
+            style={{ marginEnd: 10 }}
+          />
         )}
       </View>
       <TouchableOpacity
@@ -119,7 +125,7 @@ export default function TabFindByTopicsItems(props) {
           {isJoined ? "Đã tham gia" : "Tham gia"}
         </Text>
       </TouchableOpacity>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -170,10 +176,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   eachTopicBox: {
-    paddingVertical: 3,
+    height: 25,
+    //paddingVertical: 3,
     paddingHorizontal: 5,
-    marginBottom: 5,
+    marginVertical: 5,
     marginHorizontal: 3,
+    justifyContent: "center",
     borderRadius: 6,
     borderWidth: 2,
     borderColor: colors.GrayContainer,

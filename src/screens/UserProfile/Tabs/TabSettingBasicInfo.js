@@ -57,8 +57,6 @@ export default function TabSettingBasicInfo(props) {
         setGender(response.information.gender);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
       }
     };
 
