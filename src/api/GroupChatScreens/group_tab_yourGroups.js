@@ -28,3 +28,16 @@ export const group_checkNewMessage = async (groupID) => {
   );
   return response;
 };
+
+export const group_getLastMessageOfGroup = async (groupID) => {
+  const response = await axios.get(
+    API_BASE_URL + "/api/v1/groupStudying/getLastMessageOfGroup?groupID=" + groupID,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (await AsyncStorage.getItem('username')),
+      },
+    }
+  );
+  return response;
+};

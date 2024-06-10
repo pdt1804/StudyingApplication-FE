@@ -74,12 +74,12 @@ export default function ChatbotScreen(props) {
 
   return (
     <View style={styles.container}>
-      <UIHeader title={"Góc tự học"} />
+      <UIHeader title={"Góc tự học".toUpperCase()} />
 
       <View style={styles.blank} />
 
       <FlatList
-        data={fakeChatbots} //Chỗ fakeChatbots này m sửa lại thành chatbots là oke nha
+        data={chatbots} //Chỗ fakeChatbots này m sửa lại thành chatbots là oke nha
         numColumns={2}
         renderItem={({ item, index }) => (
           <ChatbotItems

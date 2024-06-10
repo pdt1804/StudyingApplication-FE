@@ -36,7 +36,17 @@ function EnterMessageChatBot({fetchData, userName}) {
     }
     else if (userName == "Chatbot-OpenAI")
     {
-      SendMessageByOpenAI()
+      //SendMessageByOpenAI()
+      alert("Xin lỗi, tài khoản đã hết tiền, vui lòng chọn service khác.")
+    }
+    else if (userName == "Chatbot-JasperAI")
+    {
+      // SendMessageByJasperAI();
+      alert("Xin lỗi, tài khoản đã hết tiền, vui lòng chọn service khác.")
+    }
+    else if (userName == "Chatbot-WitAI")
+    {
+      SendMessageByWitAI()
     }
 
   };
@@ -142,8 +152,77 @@ function EnterMessageChatBot({fetchData, userName}) {
   
   const SendMessageByOpenAI = async () => {
 
-    alert("Xin lỗi, tài khoản đã hết tiền, vui lòng chọn service khác.")
-    return;
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập tin nhắn")
+      return;
+    }
+
+    var form = new FormData()
+    form.append('toUserName', userName)
+    form.append('messContent', typedText)
+
+    const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+    
+    var content = typedText;
+
+    setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
+
+    const chatbot = await openAI.chat.create({
+      messages: [
+        {
+          role: 'user',
+          content: content,
+        },
+      ],
+      model: 'gpt-3.5-turbo',
+    });
+
+    console.log(chatbot)
+
+    const result = await axios.post(
+      API_URL,
+      {
+        model: 'GPT-3.5',
+        messages: [
+          {
+            role: 'user',
+            content: content
+          }
+        ],
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log(result.data.choices[0].message.content)
+
+    var formData = new FormData()
+    formData.append("messContent", result.data.choices[0].message.content)
+    formData.append("chatbotUserName", userName)
+
+    const saveChatbotMessage = await axios.post(API_BASE_URL + "/api/v1/messageUser/saveChatbotMessage", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    setTypedText(""); 
+
+    fetchData;
+  }
+
+  const SendMessageByJasperAI = async () => {
 
     if (typedText.length == 0)
     {
@@ -201,6 +280,58 @@ function EnterMessageChatBot({fetchData, userName}) {
 
     var formData = new FormData()
     formData.append("messContent", result.data.choices[0].message.content)
+    formData.append("chatbotUserName", userName)
+
+    const saveChatbotMessage = await axios.post(API_BASE_URL + "/api/v1/messageUser/saveChatbotMessage", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+
+    setTypedText(""); 
+
+    fetchData;
+  }
+
+  const SendMessageByWitAI = async () => {
+    if (typedText.length == 0)
+    {
+      alert("Hãy nhập tin nhắn")
+      return;
+    }
+
+    var form = new FormData()
+    form.append('toUserName', userName)
+    form.append('messContent', typedText)
+
+    const request = await axios.post(API_BASE_URL + "/api/v1/messageUser/sendMessageForUser", form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('username'),
+      },
+    })
+    
+    var content = typedText;
+
+    setTypedText(typedText + ' (Hệ thống đang soạn câu trả lời...)')
+
+    const API_URL = `https://api.wit.ai/message?v=20240610&q=${encodeURIComponent(content)}`;
+    
+    const result = await axios.get(API_URL, {
+      headers: {
+        'Authorization': `Bearer PURCHBYJ4IOHM36V6I6V6ZUHD64UJJ4A`,
+      },
+    });
+
+    // curl \
+    // -H "Authorization: Bearer PURCHBYJ4IOHM36V6I6V6ZUHD64UJJ4A" \
+    //   "https://api.wit.ai/message?v=20240610&q="
+
+    console.log(result.data);
+
+    var formData = new FormData()
+    formData.append("messContent", result.data)
     formData.append("chatbotUserName", userName)
 
     const saveChatbotMessage = await axios.post(API_BASE_URL + "/api/v1/messageUser/saveChatbotMessage", formData, {

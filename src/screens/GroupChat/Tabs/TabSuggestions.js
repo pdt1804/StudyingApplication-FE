@@ -48,8 +48,8 @@ export default function TabSuggestions(props) {
   const findGroupByText = async (text) => {
     if (text.length >= 1) {
       //console.log(text)
-      const response = await groupStudying_findGroupbyName(text);
-      await setGroups(response);
+      //const response = await groupStudying_findGroupbyName(text);
+      await setGroups(await groupStudying_findGroupbyName(text));
       setTitle("Kết quả tìm kiếm: " + text)
     } else {
       //setGroups([]);

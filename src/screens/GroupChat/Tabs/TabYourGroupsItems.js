@@ -4,17 +4,21 @@ import { images, icons, colors, fontSizes } from "../../../constants";
 import { Icon } from "../../../components";
 import { randomGenerateColor } from "../../../utilities";
 import { group_checkNewMessage } from "../../../api";
+import { group_getLastMessageOfGroup } from "../../../api/GroupChatScreens/group_tab_yourGroups";
 
 export default function TabYourGroupsItems(props) {
   let { nameGroup, imageGroup, groupID } = props.group;
   const { onPress } = props;
 
   const [isNewNotification, setIsNewNotification] = useState(false);
-  const [newestMessage, setNewestMessage] = useState('Tin nhắn mới nhất')
+  const [newestMessage, setNewestMessage] = useState(null)
 
   const checkNewNotification = async () => {
     const response = await group_checkNewMessage(groupID);
     setIsNewNotification(response.data === true);
+
+    const responseNewestMessage = await group_getLastMessageOfGroup(groupID);
+    setNewestMessage(responseNewestMessage.data);
   };
 
   useEffect(() => {
@@ -26,24 +30,40 @@ export default function TabYourGroupsItems(props) {
     onPress();
   };
 
-  const handleLeaveGroup = () => {
-    Alert.alert(
-      'Bạn muốn rời nhóm?',
-      '',
-      [
-        {
-          text: 'Hủy',
-          onPress: () => Alert.alert('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Xác nhận',
-          onPress: () => Alert.alert('Oke Pressed'),
-          style: 'default',
-        },
-      ],
-    );
-  };
+  // const LeaveGroup = async () => {
+  //   try {
+  //     const isCurrentUserLeader = username === extractToken;
+  //     if (isCurrentUserLeader && numberOfMembers > 1) {
+  //       alert("Vui lòng đổi nhóm trưởng trước khi rời nhóm");
+  //       return; // Exit function early if leader needs to change
+  //     }
+  //     const response = await groupStudying_deleteGroup(groupID);
+  //     if (response.status === 200) {
+  //       //await AsyncStorage.removeItem('groupID');
+  //       //navigate("MainBottomTab", { tabName: "GroupChat" });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error leaving group:", error);
+  //   }
+  // };
+
+  // const handleLeaveGroup = () => {
+  //   Alert.alert(
+  //     'Bạn muốn rời nhóm?',
+  //     '',
+  //     [
+  //       {
+  //         text: 'Hủy',
+  //         style: 'cancel',
+  //       },
+  //       {
+  //         text: 'Rời nhóm',
+  //         onPress: () => LeaveGroup(),
+  //         style: 'destructive',
+  //       },
+  //     ],
+  //   );
+  // };
 
   return (
     <TouchableOpacity onPress={handlePress} style={[styles.container,isNewNotification ? styles.newNotificationContainer : null,]}>
@@ -71,12 +91,12 @@ export default function TabYourGroupsItems(props) {
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={handleLeaveGroup} style={styles.menuIcon}>
+      {/* <TouchableOpacity onPress={handleLeaveGroup} style={styles.menuIcon}>
       <Icon
         name={icons.exportIcon}
         size={36}
         color={colors.RedLightBackground}
-      /></TouchableOpacity>
+      /></TouchableOpacity> */}
     </TouchableOpacity>
   );
 }
@@ -110,7 +130,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    paddingRight: 50,
+    paddingRight: 20,
   },
   textNameGroup: {
     color: colors.PrimaryOnContainerAndFixed,
