@@ -1,83 +1,104 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { Text, View, FlatList, StyleSheet } from "react-native";
 import ChatbotItems from "./ChatbotItems";
 import { images, icons, colors, fontSizes } from "../../constants";
-import { UIHeader, Icon, SearchBarTransparent } from "../../components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { notifications_getAllByUserName } from "../../api";
+import { UIHeader } from "../../components";
+import {} from "../../api";
 import { information_getAllChatbots } from "../../api/ReNewStyle/informationController";
 
-function ChatbotScreen(props) {
+const fakeChatbots = [
+  {
+    information: {
+      infoID: "001",
+      fulName: "ChatGPT",
+      image:
+        "https://media.istockphoto.com/id/1445426863/vector/chat-bot-vector-logo-design-concept.jpg?s=612x612&w=0&k=20&c=XDdfzS4lNW9yxQ0BQGZq9KMLL4bJ8ywXlYdAhBSuoCA=",
+    },
+  },
+  {
+    information: {
+      infoID: "002",
+      fulName: "Jasper",
+      image:
+        "https://yt3.googleusercontent.com/8KsKNUVsjq-IDdVVTYhrdInCuXmpjyLbO7eZtdvefqmV5whXfoSJXOHBMcvhGkNMAspVFZwrGQ=s900-c-k-c0x00ffffff-no-rj",
+    },
+  },
+  {
+    information: {
+      infoID: "003",
+      fulName: "GrammarlyGO",
+      image:
+        "https://images.ctfassets.net/lzny33ho1g45/1NjQCojVUOEArrfYSZtJSH/312c3f71ad0a2ea395980352de0339d0/grammarly.jpg",
+    },
+  },
+  {
+    information: {
+      infoID: "004",
+      fulName: "Copy.ai",
+      image:
+        "https://th.bing.com/th/id/OIP.Jx_5R1nZTBbOnrxCPI9cCwHaHa?pid=ImgDetMain",
+    },
+  },
+  {
+    information: {
+      infoID: "005",
+      fulName: "Copilot",
+      image:
+        "https://www.eway-crm.com/wp-content/uploads/2023/12/Copilot-studio_Obalka.jpg",
+    },
+  },
+];
+
+export default function ChatbotScreen(props) {
+  const { navigate, goBack, push } = props.navigation;
+
   const [chatbots, setChatbots] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setChatbots(await information_getAllChatbots())
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      setChatbots(await information_getAllChatbots());
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Error fetching data");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [props.userName]);
 
-  //use for search bar (textInput)
-  const [searchText, setSearchText] = useState("");
-
-  //navigation to/back
-  const { navigate, goBack, push } = props.navigation;
-
   const navigateToChatbotScreen = (chatbot) => {
-    push("MessageBot", {chatbot: chatbot})
-  }
+    push("MessageBot", { chatbot: chatbot });
+  };
 
   return (
     <View style={styles.container}>
       <UIHeader title={"Góc tự học"} />
 
-      <SearchBarTransparent
-        searchBarOnChangeText={(text) => {
-          setSearchText(text);
-        }}
-      />
+      <View style={styles.blank} />
 
-      <ScrollView>
-        {chatbots
-          .filter((eachChatbot) =>
-              eachChatbot.information.fulName
-              .toLowerCase()
-              .includes(searchText.toLowerCase())
-          )
-          .map((eachChatbot) => (
-            <ChatbotItems
-              chatbot={eachChatbot}
-              key={eachChatbot.information.infoID}
-              onPress={() => navigateToChatbotScreen(eachChatbot)}
-            />
-          ))}
-      </ScrollView>
+      <FlatList
+        data={fakeChatbots} //Chỗ fakeChatbots này m sửa lại thành chatbots là oke nha
+        numColumns={2}
+        renderItem={({ item, index }) => (
+          <ChatbotItems
+            chatbot={item}
+            key={index}
+            onPress={() => navigateToChatbotScreen(item)}
+          />
+        )}
+      />
     </View>
   );
 }
-export default ChatbotScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundWhite,
+  },
+  blank: {
+    height: "3%",
   },
 });

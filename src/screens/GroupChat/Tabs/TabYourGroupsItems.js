@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, Image, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
 import { Icon } from "../../../components";
 import { randomGenerateColor } from "../../../utilities";
@@ -10,6 +10,7 @@ export default function TabYourGroupsItems(props) {
   const { onPress } = props;
 
   const [isNewNotification, setIsNewNotification] = useState(false);
+  const [newestMessage, setNewestMessage] = useState('Tin nhắn mới nhất')
 
   const checkNewNotification = async () => {
     const response = await group_checkNewMessage(groupID);
@@ -25,8 +26,27 @@ export default function TabYourGroupsItems(props) {
     onPress();
   };
 
+  const handleLeaveGroup = () => {
+    Alert.alert(
+      'Bạn muốn rời nhóm?',
+      '',
+      [
+        {
+          text: 'Hủy',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Xác nhận',
+          onPress: () => Alert.alert('Oke Pressed'),
+          style: 'default',
+        },
+      ],
+    );
+  };
+
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={[styles.container,isNewNotification ? styles.newNotificationContainer : null,]}>
       <View style={styles.leftContainer}>
         <Icon
           name={{
@@ -36,21 +56,27 @@ export default function TabYourGroupsItems(props) {
           color={null}
           style={[styles.avatarImage, { borderColor: randomGenerateColor() }]}
         />
-        <Text
-          numberOfLines={2}
-          style={[
-            styles.textNameGroup,
-            isNewNotification ? styles.newNotification : null,
-          ]}
-        >
-          {nameGroup}
-        </Text>
+        <View style={styles.textContainer}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.textNameGroup,
+              isNewNotification ? styles.newNotification : null,
+            ]}
+          >
+            {nameGroup}
+          </Text>
+          <Text numberOfLines={1} style={[styles.newestMessage,isNewNotification ? styles.newNotification : null,]}>
+            {newestMessage}
+          </Text>
+        </View>
       </View>
+      <TouchableOpacity onPress={handleLeaveGroup} style={styles.menuIcon}>
       <Icon
-        name={icons.menuIcon}
+        name={icons.exportIcon}
         size={36}
-        color={colors.GrayBackground}
-      />
+        color={colors.RedLightBackground}
+      /></TouchableOpacity>
     </TouchableOpacity>
   );
 }
@@ -68,6 +94,11 @@ const styles = StyleSheet.create({
     borderColor: colors.inactive,
     alignItems: "center",
   },
+  newNotificationContainer:{
+    borderWidth: 3,
+    borderColor: colors.SecondaryBackground,
+    backgroundColor: colors.SecondaryContainer,
+  },
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -77,12 +108,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 3,
   },
+  textContainer: {
+    flex: 1,
+    paddingRight: 50,
+  },
   textNameGroup: {
-    width: "60%",
     color: colors.PrimaryOnContainerAndFixed,
     fontSize: fontSizes.h5,
   },
   newNotification: {
     fontWeight: "bold",
+    color: colors.PrimaryOnContainerAndFixed,
+  },
+  newestMessage: {
+    color: colors.noImportantText,
+    fontSize: fontSizes.h7,
+  },
+  menuIcon: {
+    position: "absolute",
+    right: 0,
   },
 });
