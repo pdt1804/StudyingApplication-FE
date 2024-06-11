@@ -90,8 +90,7 @@ const Reply = (props) => {
                       {
                         width: getWidth(eachImage.width),
                         height: getHeight(eachImage.width, eachImage.height),
-                      },
-                      //{ width: 50, height: 50 }
+                      }
                     ]}
                   />
                 </TouchableOpacity>

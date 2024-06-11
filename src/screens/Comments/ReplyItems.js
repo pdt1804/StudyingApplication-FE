@@ -26,6 +26,10 @@ export default function ReplyItems(props) {
     navigate("ShowProfile", { userReplied: userReplied });
   };
 
+  const handleShowPicture = () => {
+    navigate("ShowPicture", { files: files });
+  };
+
   return (
     <TouchableOpacity style={styles.container} onPress={ShowProfile}>
       <Image
@@ -41,11 +45,18 @@ export default function ReplyItems(props) {
         <Text style={styles.contentText}>{content}</Text>
         <View>
           {files.map((eachImage, index) => (
-            <Image
-              key={index}
-              source={{ uri: eachImage.url }}
-              style={[styles.image, { width: getWidth(eachImage.width), height: getHeight(eachImage.width, eachImage.height) }]}
-            />
+                <TouchableOpacity key={index} onPress={() => handleShowPicture()}>
+                  <Image
+                    source={{ uri: eachImage.url }}
+                    style={[
+                      styles.image,
+                      {
+                        width: getWidth(eachImage.width),
+                        height: getHeight(eachImage.width, eachImage.height),
+                      }
+                    ]}
+                  />
+                </TouchableOpacity>
           ))}
         </View>
       </View>
