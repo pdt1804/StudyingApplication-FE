@@ -7,7 +7,7 @@ import {
   TextInput,
   ScrollView,
   StyleSheet,
-  Alert,
+  Alert,FlatList,Dimensions,
 } from "react-native";
 import { images, icons, colors, fontSizes } from "../../constants";
 import { UIHeader } from "../../components";
@@ -17,18 +17,27 @@ import { decode } from "base-64";
 import PdfReader from "rn-pdf-reader-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const ShowPicture = (props) => {
-  let { file } = props.route.params;
-
-  const [content, setContent] = useState("");
-
-  const [username, setUsername] = useState("")
-
-  const [group, setGroup] = useState("")
-
-  //navigation
   const { navigate, goBack } = props.navigation;
+  let { file, files } = props.route.params;
+
+  const { width, height } = Dimensions.get('window');
+  const MAXWidth = width-10;
+  const getWidth = (baseWidth) => {
+    if(baseWidth == 0) {
+      return MAXWidth
+    }
+    return baseWidth > MAXWidth ? MAXWidth : baseWidth;
+  };
+  const getHeight = (baseWidth, baseHeight) => {
+    if(baseHeight == 0) {
+      return MAXWidth
+    }
+    return baseWidth > MAXWidth
+      ? baseHeight / (baseWidth / MAXWidth)
+      : baseHeight;
+  };
+
   return (
     <View style={styles.container}>
       <UIHeader
@@ -40,9 +49,45 @@ const ShowPicture = (props) => {
         }}
         onPressRightIcon={null}
       />
-      <PdfReader source={{ uri: file}}>
+      {console.log(files)}
+      
+      <FlatList
+          data={files}
+          renderItem={({item}) => {
+            return (
+              <Image
+            source={{ uri: item.url }}
+            style={[
+              styles.image,
+              {
+                width: getWidth(item.width),
+                height: getHeight(item.width, item.height),
+                maxWidth: MAXWidth,
+              },
+            ]}
+          />
+            );
+          }}
+          keyExtractor={item => item.publicId}
+          style={{flex: 1}}/>
+      {/* <ScrollView style={styles.scrollViewContainer}>
+        {files.map((eachImage, index) => (
+          <Image
+            key={index}
+            source={{ uri: eachImage.url }}
+            style={[
+              styles.image,
+              {
+                width: getWidth(eachImage.width),
+                height: getHeight(eachImage.width, eachImage.height),
+              },
+            ]}
+          />
+        ))}
+      </ScrollView> */}
+      {/* <PdfReader source={{ uri: file}}>
 
-      </PdfReader>
+      </PdfReader> */}
     </View>
   );
 };
@@ -53,25 +98,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundWhite,
   },
-  contentTextInput: {
-    paddingStart: 15,
-    padding: 10,
-    fontSize: fontSizes.h6,
+  scrollViewContainer: {
+    alignItems: "center",
   },
-  titleTextInput: {
-    paddingStart: 15,
-    padding: 10,
-    borderColor: colors.inactive,
-    borderBottomWidth: 1,
-    fontSize: fontSizes.h5,
-    fontWeight: '500',
-  },
-  titleTextInputTitle: {
-    paddingStart: 15,
-    padding: 10,
-    borderColor: colors.inactive,
-    borderBottomWidth: 1,
-    fontSize: fontSizes.h5,
-    fontWeight: '500',
+  //
+  image: {
+    resizeMode: "contain",
+    marginVertical: 2,
+    borderRadius: 5,
+    alignSelf: 'center',
   },
 });

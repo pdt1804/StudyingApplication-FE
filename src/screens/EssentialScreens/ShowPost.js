@@ -193,7 +193,7 @@ const ShowPost = (props) => {
       return;
     }
 
-    navigate("ShowPicture", { file: parts[0] });
+    navigate("ShowPicture", { files: files });
   };
 
   return (
