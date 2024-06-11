@@ -24,6 +24,7 @@ export const group_addDocument = async (fileResult) => {
         type: fileResult.assets[0].mimeType,
       });
     formData.append('groupID', await AsyncStorage.getItem('groupID'));
+    formData.append('fileName', fileResult.assets[0].name);
 
     const response = await axios.post(API_BASE_URL + "/api/v1/document/addDocument", formData, {
         headers: {

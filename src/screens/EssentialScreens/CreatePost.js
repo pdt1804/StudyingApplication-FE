@@ -261,7 +261,7 @@ export default CreatePost = (props) => {
           </View>
         ))}
         <CommonButton
-          onPress={() => handleSelectImage}
+          onPress={() => handleSelectImage()}
           title={"+ Thêm ảnh +"}
           styleContainer={styles.addImgBtn}
         />
