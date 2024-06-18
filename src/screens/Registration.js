@@ -133,13 +133,13 @@ const Registration = (props) => {
 
   //style of Step_BasicInfo
   const Step_BasicInfo = {
-    label: "Thông tin tài khoản",
+    label: "",
     removeBtnRow: true,
   };
 
   //style of Step_OTP
   const Step_OTP = {
-    label: "Nhập OTP",
+    label: "",
     removeBtnRow: true,
   };
 
@@ -164,7 +164,7 @@ const Registration = (props) => {
 
   //style of Step_AdditionalInfo_3
   const Step_AdditionalInfo_3 = {
-    label: "Chọn topic (chủ đề) học tập",
+    label: "",
     onSubmit: async () => {
       alert("Đăng ký thành công, hãy đăng nhập và trải nghiệm");
       AsyncStorage.setItem("username", jwtToken);
@@ -281,7 +281,7 @@ const Registration = (props) => {
             </View>
           </ProgressStep>
 
-          <ProgressStep {...Step_AdditionalInfo_1} label="Giới tính">
+          <ProgressStep {...Step_AdditionalInfo_1} label="">
             <View style={styles.stepAdditionalInfoView}>
               <Text style={styles.stepAdditionalInfoTitle}>
                 Giới tính của bạn là gì?
@@ -307,7 +307,7 @@ const Registration = (props) => {
             </View>
           </ProgressStep>
 
-          <ProgressStep {...Step_AdditionalInfo_2} label="Số điện thoại">
+          <ProgressStep {...Step_AdditionalInfo_2} label="">
             <View style={styles.stepAdditionalInfoView}>
               <Text style={styles.stepAdditionalInfoTitle}>
                 Số điện thoại của bạn là gì?
@@ -324,7 +324,7 @@ const Registration = (props) => {
             </View>
           </ProgressStep>
 
-          <ProgressStep {...Step_AdditionalInfo_2} label="Năm sinh">
+          <ProgressStep {...Step_AdditionalInfo_2} label="">
             <View style={styles.stepAdditionalInfoView}>
               <Text style={styles.stepAdditionalInfoTitle}>
                 Năm sinh của bạn là gì?

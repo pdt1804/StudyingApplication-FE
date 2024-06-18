@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { images, icons, colors, fontSizes } from "../../../constants";
-import { SearchBarAndButton } from "../../../components";
+import { SearchBarAndButton, LoadingFullScreen } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabDocumentItem from "./TabDocumentItem";
 import * as DocumentPicker from "expo-document-picker";
@@ -21,6 +21,8 @@ export default function TabDocument(props) {
   const [documents, setDocuments] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       const groupID = await AsyncStorage.getItem("groupID");
@@ -31,6 +33,8 @@ export default function TabDocument(props) {
       setUserName(extractToken.data);
       setDocuments(responseDocument.data);
       setGroup(responseGroup.data);
+
+      setIsLoading(false)
     };
 
     fetchData();
@@ -53,6 +57,8 @@ export default function TabDocument(props) {
         console.log(fileResult.assets[0].uri);
         console.log(fileResult.assets[0].name);
 
+        setIsLoading(true)
+
         const response = await group_addDocument(fileResult);
         if (response.status == 200) {
           alert("Thêm tài liệu thành công");
@@ -66,6 +72,12 @@ export default function TabDocument(props) {
       alert("Bạn không phải trưởng nhóm");
     }
   };
+
+  if (isLoading) {
+    return (
+      <LoadingFullScreen/>
+    );
+  }
 
   return (
     <View style={styles.container}>

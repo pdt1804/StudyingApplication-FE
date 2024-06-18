@@ -84,12 +84,12 @@ export default ShowProfile = (props) => {
           </View>
         </View>
       </ScrollView>
-
+{/* 
       <FloatingButtonSingle
         icon={icons.activeChatMessageIcon}
         text={"Nhắn tin"}
         onPress={handleNavigateChatUser}
-      />
+      /> */}
 
       <UIHeader
         title={null}

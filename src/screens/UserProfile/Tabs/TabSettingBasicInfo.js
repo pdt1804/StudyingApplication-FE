@@ -14,6 +14,17 @@ import { CommonButton, TextInputMediumIcon } from "../../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { user_getUser, information_updateInformation } from "../../../api";
 
+const genders = [
+  {
+    lable: 'nam' ,
+    value: 'nam',
+  },
+  {
+    lable: 'nu' ,
+    value: 'nam',
+  },
+] 
+
 export default function TabSettingBasicInfo(props) {
   //function of navigation to/back
   const { navigate, goBack, push } = props.navigation;
@@ -115,6 +126,13 @@ export default function TabSettingBasicInfo(props) {
             placeholder={"Nhập giới tính của bạn"}
             onChangeText={(p) => setGender(p)}
           />
+
+{/* 
+<Dropdown
+  data={LIST_THAT_HAS_ONLY_lable_value}
+  selectedValue={ --- } //optional
+  onSelect={(item) => { --- }}
+/> */}
 
           <CommonButton
             onPress={handleSettings}

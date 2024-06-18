@@ -247,12 +247,13 @@ export default EnterMessageBar = (props) => {
   //*************** */
   const handleSelectImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
       allowsEditing: true,
     });
 
     if (!result.canceled) {
+      console.log(result.assets[0])
       listSelectedImage.length == 0
         ? setListSelectedImage([result.assets[0]])
         : setListSelectedImage([...listSelectedImage, result.assets[0]]);

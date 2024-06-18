@@ -69,11 +69,14 @@ function MessageBot(props) {
       />
 
       <SafeAreaView style={styles.displayView}>
-        <ScrollView>
-          {chatHistory.map((eachItem) => (
-            <MessengerBotItems item={eachItem} key={eachItem.id} />
-          ))}
-        </ScrollView>
+      <FlatList
+          data={chatHistory}
+          keyExtractor={(item) => item.id}
+          inverted
+          renderItem={({ item }) => (
+            <MessengerItems item={item} files={item.files} />
+          )}
+        />
   
         <EnterMessageChatBot userName={userName} fetchData={fetchData()}/>
       </SafeAreaView>

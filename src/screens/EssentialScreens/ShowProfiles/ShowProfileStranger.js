@@ -89,12 +89,12 @@ export default ShowProfileStranger = (props) => {
           </View>
         </View>
       </ScrollView>
-
+{/* 
       <FloatingButtonSingle
         icon={icons.personCircleIcon}
         text={"Thêm bạn"}
         onPress={handleAddFriend}
-      />
+      /> */}
 
       <UIHeader
         title={null}
